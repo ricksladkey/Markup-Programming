@@ -169,7 +169,7 @@
                         <Border Margin="1" BorderThickness="5" BorderBrush="LightGray" Height="100" Width="95">
                             <Grid Background="Pink">
 
-                                <!-- this says using the data context for the layout root, -->
+                                <!-- this says: using the data context for the layout root, -->
                                 <!-- call the SelectCommand.Execute when the MouseLeftButtonDown -->
                                 <!-- event is raised, passing it the selected post -->
                                 <p:Operation.Attach>

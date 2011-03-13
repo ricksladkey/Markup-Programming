@@ -70,6 +70,9 @@ namespace Markup.Programming.Core
             engine.Trace(TraceFlags.Events, "Event: {0}, sender {1}", registeredEventName, engine.Sender);
             engine.SetContext(ContextProperty, ContextPath);
             OnHandler(engine);
+            // XXX: Not right.
+            if (engine.EventArgs is RoutedEventArgs)
+                (engine.EventArgs as RoutedEventArgs).Handled = true;
         }
 
         protected virtual void OnHandler(Engine engine)
