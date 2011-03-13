@@ -74,9 +74,14 @@ namespace Markup.Programming.Core
             get { for (int i = stack.Count - 1; i >= 0; i--) yield return stack[i]; }
         }
 
+        public string GetName(IComponent component)
+        {
+            return "p:" + component.GetType().Name;
+        }
+
         private void PushFrame(IComponent caller)
         {
-            stack.Add(new StackFrame { Caller = caller });
+            stack.Add(new StackFrame(this, caller));
             TraceStack("PushFrame: {0}", caller.GetType().Name);
 
             // Attempt to set the default context.

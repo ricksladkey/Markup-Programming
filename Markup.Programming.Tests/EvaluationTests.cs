@@ -29,6 +29,7 @@ namespace Markup.Programming.Tests
             Test.ExpressionTest(true, new Op { Value1 = 1, Operator = Operator.Is, Value2 = typeof(int) });
             Test.ExpressionTest(false, new Op { Value1 = 1.0, Operator = Operator.Is, Value2 = typeof(int) });
             Test.ExpressionTest(true, new Op { Value1 = new Dog(), Operator = Operator.Is, Value2 = typeof(Animal) });
+            Test.ExpressionTest(false, new Op { Value1 = new Animal(), Operator = Operator.Is, Value2 = typeof(Dog) });
         }
 
         [TestMethod]

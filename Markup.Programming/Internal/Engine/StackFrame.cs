@@ -13,10 +13,12 @@ namespace Markup.Programming.Core
     /// and should remain that way.
     /// </summary>
 #if DEBUG
-    [DebuggerDisplay("Caller = {Caller}, AssociatedObject = {Caller.AssociatedObject}")]
+    [DebuggerDisplay("Caller = {CallerName}, AssociatedObject = {Caller.AssociatedObject}")]
 #endif
     public class StackFrame
     {
+        public StackFrame(Engine engine, IComponent caller) { Engine = engine; Caller = caller; }
+
         [Flags]
         public enum FrameFlags
         {
@@ -26,7 +28,9 @@ namespace Markup.Programming.Core
             Scope = 0x4, // a scope frame blocks lexical name lookups, e.g. a call
         }
 
-        public IComponent Caller { get; set; }
+        public Engine Engine { get; private set; }
+        public IComponent Caller { get; private set; }
+        public string CallerName { get { return Engine.GetName(Caller); } }
         public FrameFlags Flags { get; set; }
         public IDictionary<string, object> Parameters { get; set; }
         public IList<object> YieldedValues { get; set; }

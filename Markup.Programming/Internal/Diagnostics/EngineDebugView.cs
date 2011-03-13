@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using System.Windows;
+using System.Diagnostics;
 
 namespace Markup.Programming.Core
 {
@@ -12,9 +13,8 @@ namespace Markup.Programming.Core
 
         public EngineDebugView(Engine engine) { this.engine = engine; }
 
+        [DebuggerBrowsable(DebuggerBrowsableState.RootHidden)]
         StackFrame[] BackTrace { get { return engine.StackBackwards.ToArray(); } }
-
-        //DependencyObject[] AssociatedObjects { get { return engine.StackBackwards.Select(frame => frame.Caller.AssociatedObject).ToArray(); } }
     }
 
 #endif
