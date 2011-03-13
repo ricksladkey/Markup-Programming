@@ -1,0 +1,30 @@
+﻿<UserControl
+    x:Class="Markup.Programming.Samples.DynamicButton"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+    xmlns:p="http://programmability.codeplex.com/"
+    Height="300" Width="300">
+    <Grid>
+        <StackPanel Name="ContentHost">
+            <Button Content="Add">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="Click">
+                        <p:Block>
+                            <p:Set ParameterName="Children">
+                                <p:Get Context="{Binding ElementName=ContentHost}" PropertyName="Children"/>
+                            </p:Set>
+                            <p:Set ParameterName="Child">
+                                <p:Object TypeName="Button">
+                                    <p:Property PropertyName="Content" Value="Click Me!"/>
+                                    <p:Property PropertyName="Opacity" Value="0.5"/>
+                                </p:Object>
+                            </p:Set>
+                            <p:Call Path="$Children.Add" ParameterPath="$Child"/>
+                        </p:Block>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </Button>
+        </StackPanel>
+    </Grid>
+</UserControl>

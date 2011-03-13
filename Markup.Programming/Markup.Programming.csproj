@@ -1,0 +1,252 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{9F21204C-4A09-4D4A-9008-6678C55F8530}</ProjectGuid>
+    <OutputType>library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Markup.Programming</RootNamespace>
+    <AssemblyName>Markup.Programming</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <WarningLevel>4</WarningLevel>
+    <ExpressionBlendVersion>4.0.20901.0</ExpressionBlendVersion>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\bin\WPF4\Debug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>..\bin\WPF4\Debug\Markup.Programming.xml</DocumentationFile>
+    <NoWarn>1591</NoWarn>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>..\bin\WPF4\Release\</OutputPath>
+    <DefineConstants>
+    </DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>..\bin\WPF4\Release\Markup.Programming.xml</DocumentationFile>
+    <NoWarn>1591</NoWarn>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug - Emulate Silverlight|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>..\bin\WPF4 Emulating Silverlight\Debug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;EMULATE_SILVERLIGHT</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <CodeAnalysisLogFile>..\bin\WPF4\Debug\Markup.Programming.dll.CodeAnalysisLog.xml</CodeAnalysisLogFile>
+    <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
+    <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSetDirectories>;c:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\\Rule Sets</CodeAnalysisRuleSetDirectories>
+    <CodeAnalysisIgnoreBuiltInRuleSets>false</CodeAnalysisIgnoreBuiltInRuleSets>
+    <CodeAnalysisRuleDirectories>;c:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\FxCop\\Rules</CodeAnalysisRuleDirectories>
+    <CodeAnalysisIgnoreBuiltInRules>false</CodeAnalysisIgnoreBuiltInRules>
+    <NoWarn>1591</NoWarn>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug - Full Tracing|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>..\bin\WPF4 Standalone\Debug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;FULL_TRACING</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <CodeAnalysisLogFile>..\bin\WPF4\Debug\Markup.Programming.dll.CodeAnalysisLog.xml</CodeAnalysisLogFile>
+    <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
+    <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSetDirectories>;c:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\\Rule Sets</CodeAnalysisRuleSetDirectories>
+    <CodeAnalysisIgnoreBuiltInRuleSets>false</CodeAnalysisIgnoreBuiltInRuleSets>
+    <CodeAnalysisRuleDirectories>;c:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\FxCop\\Rules</CodeAnalysisRuleDirectories>
+    <CodeAnalysisIgnoreBuiltInRules>false</CodeAnalysisIgnoreBuiltInRules>
+    <NoWarn>1591</NoWarn>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug - Standalone|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\Debug - Standalone\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;STANDALONE</DefineConstants>
+    <DocumentationFile>..\bin\WPF4\Debug\Markup.Programming.XML</DocumentationFile>
+    <NoWarn>1591</NoWarn>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <CodeAnalysisLogFile>..\bin\WPF4\Debug\Markup.Programming.dll.CodeAnalysisLog.xml</CodeAnalysisLogFile>
+    <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
+    <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSetDirectories>;c:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\\Rule Sets</CodeAnalysisRuleSetDirectories>
+    <CodeAnalysisIgnoreBuiltInRuleSets>true</CodeAnalysisIgnoreBuiltInRuleSets>
+    <CodeAnalysisRuleDirectories>;c:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\FxCop\\Rules</CodeAnalysisRuleDirectories>
+    <CodeAnalysisIgnoreBuiltInRules>true</CodeAnalysisIgnoreBuiltInRules>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug - System.Windows.Interactivity|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\Debug - System.Windows.Interactivity\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;INTERACTIVITY</DefineConstants>
+    <DocumentationFile>..\bin\WPF4\Debug\Markup.Programming.XML</DocumentationFile>
+    <NoWarn>1591</NoWarn>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <CodeAnalysisLogFile>..\bin\WPF4\Debug\Markup.Programming.dll.CodeAnalysisLog.xml</CodeAnalysisLogFile>
+    <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
+    <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSetDirectories>;c:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\\Rule Sets</CodeAnalysisRuleSetDirectories>
+    <CodeAnalysisIgnoreBuiltInRuleSets>false</CodeAnalysisIgnoreBuiltInRuleSets>
+    <CodeAnalysisRuleDirectories>;c:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\FxCop\\Rules</CodeAnalysisRuleDirectories>
+    <CodeAnalysisIgnoreBuiltInRules>false</CodeAnalysisIgnoreBuiltInRules>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Windows.Interactivity, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Xaml">
+      <RequiredTargetFramework>4.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="WindowsBase" />
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Internal\Diagnostics\CollectionDebugView.cs" />
+    <Compile Include="Internal\Components\ActiveComponent.cs" />
+    <Compile Include="Internal\Components\PassiveComponent.cs" />
+    <Compile Include="Internal\Components\AttachableComponent.cs" />
+    <Compile Include="Internal\Components\IAttachedObject.cs" />
+    <Compile Include="Markup\Handlers\Handler.cs" />
+    <Compile Include="Markup\Inter.cs" />
+    <Compile Include="Internal\Components\PassiveAttachableComponent.cs" />
+    <Compile Include="Internal\Components\ActiveAttachableComponent.cs" />
+    <Compile Include="Internal\Language\HandlerBase.cs" />
+    <Compile Include="Markup\Language\Enumerations\AssignmentOperator.cs" />
+    <Compile Include="Markup\Language\Enumerations\BuiltinFunction.cs" />
+    <Compile Include="Markup\Handlers\CallHandler.cs" />
+    <Compile Include="Markup\Language\Statements\Case.cs" />
+    <Compile Include="Internal\Engine\Builtin.cs" />
+    <Compile Include="Internal\Engine\CallImplementor.cs" />
+    <Compile Include="Internal\Language\ConditionalValueStatement.cs" />
+    <Compile Include="Internal\Dynamic\DynamicObservableCollection.cs" />
+    <Compile Include="Internal\Language\HiddenExpression.cs" />
+    <Compile Include="Internal\Interfaces\ICaller.cs" />
+    <Compile Include="Internal\Interfaces\IHiddenExpression.cs" />
+    <Compile Include="Internal\Interfaces\IProcessor.cs" />
+    <Compile Include="Internal\Collections\NameTypePair.cs" />
+    <Compile Include="Internal\Collections\NameValuePair.cs" />
+    <Compile Include="Internal\Language\StatementBase.cs" />
+    <Compile Include="Internal\Collections\StatementCollectionBase.cs" />
+    <Compile Include="Internal\Language\ArgumentsExpression.cs" />
+    <Compile Include="Markup\Language\Statements\Block.cs" />
+    <Compile Include="Markup\Language\Expressions\Call.cs" />
+    <Compile Include="Internal\Collections\StatementCollection.cs" />
+    <Compile Include="Markup\Language\Statements\Break.cs" />
+    <Compile Include="Internal\Collections\ComponentCollection.cs" />
+    <Compile Include="Internal\Collections\ComponentCollectionBase.cs" />
+    <Compile Include="Internal\Engine\Configuration.cs" />
+    <Compile Include="Internal\Diagnostics\DictionaryDebugView.cs" />
+    <Compile Include="Internal\Interfaces\IProvideValue.cs" />
+    <Compile Include="Internal\Language\Accessor.cs" />
+    <Compile Include="Internal\Components\ResourceObject.cs" />
+    <Compile Include="Internal\Components\BindingCapableObject.cs" />
+    <Compile Include="Internal\Language\BlockExpression.cs" />
+    <Compile Include="Internal\Engine\ExpressionOrValue.cs" />
+    <Compile Include="Internal\Dynamic\DynamicObject.cs" />
+    <Compile Include="Internal\Engine\ExecutionHelper.cs" />
+    <Compile Include="Internal\Collections\NameDictionary.cs" />
+    <Compile Include="Internal\Collections\SmallDictionary.cs" />
+    <Compile Include="Internal\Engine\StackFrame.cs" />
+    <Compile Include="Internal\Language\ArgumentsExpressionWithType.cs" />
+    <Compile Include="Internal\Engine\ThrowHelper.cs" />
+    <Compile Include="Internal\Language\TypedExpession.cs" />
+    <Compile Include="Internal\Language\ParameterBlock.cs" />
+    <Compile Include="Internal\Language\UntypedValueBlock.cs" />
+    <Compile Include="Internal\Engine\Engine.cs" />
+    <Compile Include="Internal\Engine\TypeHelper.cs" />
+    <Compile Include="Internal\Dynamic\DynamicObjectBase.cs" />
+    <Compile Include="Internal\Dynamic\DynamicTypeHelper.cs" />
+    <Compile Include="Internal\Interfaces\IExpression.cs" />
+    <Compile Include="Internal\Interfaces\IProvideProperties.cs" />
+    <Compile Include="Internal\Interfaces\IStatement.cs" />
+    <Compile Include="Internal\Language\UntypedValueStatement.cs" />
+    <Compile Include="Internal\Language\ValueBlock.cs" />
+    <Compile Include="Markup\Language\Statements\For.cs" />
+    <Compile Include="Markup\Language\Statements\ForEach.cs" />
+    <Compile Include="Markup\Language\Expressions\InlineFunction.cs" />
+    <Compile Include="Markup\Language\Support\Command.cs" />
+    <Compile Include="Markup\Language\Expressions\GetItem.cs" />
+    <Compile Include="Markup\Language\Expressions\Iterator.cs" />
+    <Compile Include="Markup\Language\Enumerations\Operator.cs" />
+    <Compile Include="Markup\Language\Expressions\Get.cs" />
+    <Compile Include="Markup\Language\Expressions\SetItem.cs" />
+    <Compile Include="Markup\Language\Statements\Switch.cs" />
+    <Compile Include="Markup\Language\Expressions\Collection.cs" />
+    <Compile Include="Markup\Language\Expressions\Object.cs" />
+    <Compile Include="Markup\Language\Expressions\TypeVal.cs" />
+    <Compile Include="Markup\Language\Statements\When.cs" />
+    <Compile Include="Internal\Collections\FunctionCollection.cs" />
+    <Compile Include="Internal\Components\IComponent.cs" />
+    <Compile Include="Internal\Collections\ParameterCollection.cs" />
+    <Compile Include="Internal\Engine\TraceHelper.cs" />
+    <Compile Include="Internal\Language\ValueStatement.cs" />
+    <Compile Include="Markup\Language\Statements\Function.cs" />
+    <Compile Include="Markup\Language\Statements\If.cs" />
+    <Compile Include="Markup\Language\Statements\Import.cs" />
+    <Compile Include="Markup\Resources\MarkupCommandBinding.cs" />
+    <Compile Include="Markup\Resources\MarkupConverter.cs" />
+    <Compile Include="Internal\Engine\OperatorHelper.cs" />
+    <Compile Include="Markup\Handlers\AttachedHandler.cs" />
+    <Compile Include="Internal\Collections\ExpressionCollection.cs" />
+    <Compile Include="Markup\Language\Statements\Module.cs" />
+    <Compile Include="Markup\Language\Expressions\New.cs" />
+    <Compile Include="Markup\Language\Expressions\Op.cs" />
+    <Compile Include="Internal\Language\ExpressionBase.cs" />
+    <Compile Include="Markup\Resources\MarkupCommand.cs" />
+    <Compile Include="Internal\Collections\PropertyCollection.cs" />
+    <Compile Include="Markup\Language\Support\Parameter.cs" />
+    <Compile Include="Markup\Language\Statements\Return.cs" />
+    <Compile Include="Internal\Dynamic\PropertyInfoProvider.cs" />
+    <Compile Include="Markup\Language\Support\Property.cs" />
+    <Compile Include="Internal\Engine\PathHelper.cs" />
+    <Compile Include="Markup\Resources\MarkupObject.cs" />
+    <Compile Include="Markup\Resources\MarkupCollection.cs" />
+    <Compile Include="Markup\Language\Expressions\Set.cs" />
+    <Compile Include="Internal\Language\Statement.cs" />
+    <Compile Include="Internal\Collections\ActiveComponentCollection.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Markup\Language\Expressions\Val.cs" />
+    <Compile Include="Markup\Handlers\DataChangedHandler.cs" />
+    <Compile Include="Markup\Language\Statements\While.cs" />
+    <AppDesigner Include="Properties\" />
+    <Compile Include="Markup\Language\Statements\Yield.cs" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

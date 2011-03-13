@@ -1,0 +1,7 @@
+<OutOfBrowserSettings ShortName="Markup.Programming.Silverlight.Sandbox Application" EnableGPUAcceleration="False" ShowInstallMenuItem="True">
+  <OutOfBrowserSettings.Blurb>Markup.Programming.Silverlight.Sandbox Application on your desktop; at home, at work or on the go.</OutOfBrowserSettings.Blurb>
+  <OutOfBrowserSettings.WindowSettings>
+    <WindowSettings Title="Markup.Programming.Silverlight.Sandbox Application" />
+  </OutOfBrowserSettings.WindowSettings>
+  <OutOfBrowserSettings.Icons />
+</OutOfBrowserSettings>

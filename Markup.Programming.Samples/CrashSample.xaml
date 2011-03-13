@@ -1,0 +1,33 @@
+﻿<UserControl
+    x:Class="Markup.Programming.Samples.CrashSample"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+    xmlns:p="http://programmability.codeplex.com/"
+    Height="300" Width="300">
+    <Grid>
+        <Button Content="Crash Me!">
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="Click">
+                    <p:Block ContextPath="">
+                        <p:If Value="True">
+                            <p:If.Then>
+                                <p:When>
+                                    <p:Val Value="True"/>
+                                    <p:Block>
+                                        <p:Switch Value="2">
+                                            <p:Case Value="1"/>
+                                            <p:Set ParameterName="xyzzy" Value="42"/>
+                                            <p:Case Value="2"/>
+                                            <p:GetItem Index="0"/>
+                                        </p:Switch>
+                                    </p:Block>
+                                </p:When>
+                            </p:If.Then>
+                        </p:If>
+                    </p:Block>
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
+        </Button>
+    </Grid>
+</UserControl>

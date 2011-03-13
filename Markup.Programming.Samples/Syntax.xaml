@@ -1,0 +1,164 @@
+﻿
+<!--***** NOTA BENE: THIS COMPILES BUT DOES NOT RUN ***** -->
+<!--*****       FOR EXPLANTORY PURPOSES ONLY        ***** -->
+<!--*****   THAT SAID, PLENTY OF GOOD STUFF BELOW   ***** -->
+
+<UserControl
+    x:Class="Markup.Programming.Samples.Syntax"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+    xmlns:p="http://programmability.codeplex.com/"
+    xmlns:sys="clr-namespace:System;assembly=mscorlib"
+    Height="300" Width="300">
+    <Grid>
+        <Grid.Resources>
+
+            <!-- Resources so we can refer to them later. -->
+            <SolidColorBrush Color="Blue" x:Key="BlueBrush"/>
+
+            <!-- a module is a function library -->
+            <p:Module x:Key="SyntaxFunctions">
+                
+                <!--
+                
+                Everything in the ValueSamples function produces a value.
+                That is to say they are all expressions.  Mastering
+                expressions is an basic skill as expressions are
+                used in almost all statements.
+                
+                -->
+                <p:Function FunctionName="ValueSamples">
+
+                    <!-- sample values using ordinary XAML syntax -->
+                    <p:Val Value="An ordinary string"/>
+                    <p:Val Value="{StaticResource BlueBrush}"/>
+                    <p:Val Value="{Binding ElementName=Button}"/>
+                    <p:Val Value="{Binding FirstName}"/>
+                    
+                    <!-- use parameter value indirection -->
+                    <p:Val Path="$I"/>
+
+                    <!-- explicit type conversion -->
+                    <p:Val Value="42" Type="sys:Int32"/>
+                    
+                    <!-- syntax without conversion -->
+                    <p:Val>
+                        <sys:Int32>42</sys:Int32>
+                    </p:Val>
+                    
+                    <!-- supply types as values -->
+                    <p:TypeVal Value="sys:Int32"/>
+                    <p:Val Value="{x:Type sys:Int32}"/>
+                    <p:Val>
+                        <x:Type TypeName="sys:Int32"/>
+                    </p:Val>
+
+                    <!-- use get accessors -->
+                    <p:Get ParameterName="I"/>
+                    <p:Get Source="{StaticResource BlueBrush}"/>
+                    <p:Get Context="{StaticResource BlueBrush}" PropertyName="Color"/>
+                    <p:Get Path="$C" PropertyName="Count"/>
+                    <p:Get Context="{Binding ElementName=Button}" DependencyProperty="Button.Command"/>
+                    
+                    <!-- use set accessors -->
+                    <p:Set ParameterName="S" Value="New Value"/>
+                    <p:Set Target="{Binding FirstName, Mode=TwoWay}" Value="Bill"/>
+                    <p:Set Target="{Binding}" PropertyName="FirstName" Value="Bill"/>
+                    <p:Set Path="$C" PropertyName="Count" Value="10"/>
+                    <p:Set Operator="Increment" Path="$C" PropertyName="Total"/>
+
+                    <!-- use item accessor for arrays, collections and dictionaries -->
+                    <p:GetItem Path="$X" Index="0"/>
+                    <p:GetItem Path="$X" IndexPath="$I"/>
+                    <p:GetItem Path="$Array3D">
+                        <p:Val Path="$I"/>
+                        <p:Val Path="$J"/>
+                        <p:Val Path="$K"/>
+                    </p:GetItem>
+
+                    <!-- all accessors can use context and context is inherited -->
+                    <p:Val Context="{StaticResource BlueBrush}">
+                        <p:Get PropertyName="Color"/>
+                    </p:Val>
+
+                    <!-- use operators with optional conversions -->
+                    <p:Op Value1="abc" Operator="Plus" Value2="def"/>
+                    <p:Op Type="sys:Int32" Value1="2" Operator="Times" Value2="2"/>
+                    <p:Op Type="sys:Boolean" Operator="Not" Value="True"/>
+                    
+                    <!-- use binary operator with one or two parameters -->
+                    <p:Op Path1="$I" Operator="LessThan" Value2="10"/>
+                    <p:Op Path1="$I" Operator="LessThan" Path2="$J"/>
+                        
+                    <!-- use operators in params mode -->
+                    <p:Op Operator="Plus">
+                        <p:Val Type="sys:Int32" Value="1"/>
+                        <p:Val Type="sys:Int32" Value="2"/>
+                        <p:Val Type="sys:Int32" Value="3"/>
+                    </p:Op>
+                    
+                    <!-- use short-circuit operators to avoid crashes -->
+                    <p:Op Operator="AndAnd">
+                        <p:Op Operator="NotIsNull" Path="$P"/>
+                        <p:Get Path="$P" PropertyName="IsReady"/>
+                    </p:Op>
+
+                    <!-- create a dynamic object -->
+                    <p:Object>
+                        <p:Property PropertyName="FirstName" Value="Bill"/>
+                        <p:Property PropertyName="LastName" Value="Smith"/>
+                    </p:Object>
+                    
+                    <!-- create a traditional object -->
+                    <p:Object Type="Button">
+                        <p:Property PropertyName="Content" Value="Click Me!"/>
+                        <p:Property PropertyName="Opacity" Value="0.5"/>
+                    </p:Object>
+
+                    <!-- don't be seduced into thinking this is static -->
+                    <!-- it is a brand new object with new computed values -->
+                    <p:Object Type="Button">
+                        <p:Property PropertyName="Content" Value="{Binding Firstname}"/>
+                        <p:Property PropertyName="Opacity">
+                            <p:Op Operator="Divide">
+                                <p:Get Context="{Binding ElementName=Button}" PropertyName="Opacity"/>
+                                <p:Val Value="2"/>
+                            </p:Op>
+                        </p:Property>
+                    </p:Object>
+
+                    <!-- create a smart generic observable collection -->
+                    <p:Collection>
+                        <p:Val Value="abc"/>
+                        <p:Val Value="def"/>
+                        <p:Val Value="ghi"/>
+                    </p:Collection>
+
+                    <!-- filter collections using iterators -->
+                    <p:Iterator>
+                        <p:ForEach ParameterName="Operator">
+                            <p:ForEach.Value>
+                                <p:Call Type="sys:Enum" StaticMethodName="GetValues">
+                                    <p:TypeVal Value="p:Operator"/>
+                                </p:Call>
+                            </p:ForEach.Value>
+                            <p:Yield Path="$Operator">
+                                <p:Yield.When>
+                                    <p:Call Path="$Operator" MethodName="Contains">
+                                        <p:Val Value="Bitwise"/>
+                                    </p:Call>
+                                </p:Yield.When>
+                            </p:Yield>
+                        </p:ForEach>
+                    </p:Iterator>
+                    
+                </p:Function>
+            </p:Module>
+        </Grid.Resources>
+
+        <!-- normal XAML elements for this page -->
+        <Button Name="Button" Content="Click Me"/>
+        
+    </Grid>
+</UserControl>

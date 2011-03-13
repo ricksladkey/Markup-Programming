@@ -1,0 +1,50 @@
+﻿<UserControl
+    x:Class="Markup.Programming.Samples.ForLoops"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+    xmlns:p="http://programmability.codeplex.com/"
+    xmlns:sys="clr-namespace:System;assembly=mscorlib"
+    Height="300" Width="300">
+    <Grid>
+        <StackPanel>
+            <Button Content="Standard For">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="Click">
+                        <p:For ParameterName="I" TypeName="Int32">
+                            <p:For.Value>
+                                <p:Val Value="0"/>
+                            </p:For.Value>
+                            <p:For.While>
+                                <p:Op Path1="$I" Operator="LessThan" Value2="3"/>
+                            </p:For.While>
+                            <p:For.Next>
+                                <p:Set Path="$I" Operator="Increment" />
+                            </p:For.Next>
+                            <p:Call Path=":MessageBox.Show">
+                                <p:Call Path=":String.Format">
+                                    <p:Val Value="I = {0}"/>
+                                    <p:Get Path="$I"/>
+                                </p:Call>
+                            </p:Call>
+                        </p:For>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </Button>
+            <Button Content="Simplied For">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="Click">
+                        <p:For ParameterName="I" Value="0" UpperLimit="3" Increment="1">
+                            <p:Call Path=":MessageBox.Show">
+                                <p:Call Path=":String.Format">
+                                    <p:Val Value="I = {0}"/>
+                                    <p:Get Path="$I"/>
+                                </p:Call>
+                            </p:Call>
+                        </p:For>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </Button>
+        </StackPanel>
+    </Grid>
+</UserControl>

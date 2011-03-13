@@ -1,0 +1,44 @@
+﻿<UserControl
+    x:Class="Markup.Programming.Samples.TableOfSquares"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:p="http://programmability.codeplex.com/"
+    Height="300" Width="300">
+    <UserControl.Resources>
+        <p:MarkupObject x:Key="ViewModel">
+            <p:Property PropertyName="Table">
+                <p:Iterator>
+                    <p:For ParameterName="I" Value="0" UpperLimit="5" Increment="1">
+                        <p:Yield>
+                            <p:Object>
+                                <p:Property PropertyName="Number" Path="$I"/>
+                                <p:Property PropertyName="Square">
+                                    <p:Op Path1="$I" Operator="Times" Path2="$I"/>
+                                </p:Property>
+                                <p:Property PropertyName="Sqrt">
+                                    <p:Call Path=":Math.Sqrt">
+                                        <p:Get Path="$I"/>
+                                    </p:Call>
+                                </p:Property>
+                            </p:Object>
+                        </p:Yield>
+                    </p:For>
+                </p:Iterator>
+            </p:Property>
+        </p:MarkupObject>
+    </UserControl.Resources>
+    <Grid DataContext="{StaticResource ViewModel}">
+        <StackPanel>
+            <ListView ItemsSource="{Binding Table}">
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn DisplayMemberBinding="{Binding Number}"/>
+                        <GridViewColumn DisplayMemberBinding="{Binding Square}"/>
+                        <GridViewColumn DisplayMemberBinding="{Binding Sqrt}"/>
+                    </GridView>
+                </ListView.View>
+            </ListView>
+            <DataGrid ItemsSource="{Binding Table}"/>
+        </StackPanel>
+    </Grid>
+</UserControl>

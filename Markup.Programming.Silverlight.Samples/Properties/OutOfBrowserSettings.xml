@@ -1,0 +1,7 @@
+<OutOfBrowserSettings ShortName="Markup.Programming.Silverlight.Samples Application" EnableGPUAcceleration="False" ShowInstallMenuItem="True">
+  <OutOfBrowserSettings.Blurb>Markup.Programming.Silverlight.Samples Application on your desktop; at home, at work or on the go.</OutOfBrowserSettings.Blurb>
+  <OutOfBrowserSettings.WindowSettings>
+    <WindowSettings Title="Markup.Programming.Silverlight.Samples Application" />
+  </OutOfBrowserSettings.WindowSettings>
+  <OutOfBrowserSettings.Icons />
+</OutOfBrowserSettings>
