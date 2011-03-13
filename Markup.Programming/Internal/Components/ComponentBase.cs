@@ -4,7 +4,7 @@ using System.Windows;
 
 namespace Markup.Programming.Core
 {
-    public class AttachableComponent : BindingCapableObject, IComponent
+    public class ComponentBase : BindingCapableObject, IComponent
     {
         private DependencyObject associatedObject;
 

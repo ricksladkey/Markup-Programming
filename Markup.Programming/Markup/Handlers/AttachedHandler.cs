@@ -12,7 +12,7 @@ namespace Markup.Programming
         protected override void OnAttached()
         {
             base.OnAttached();
-            InvokePassiveComponents(null, null);
+            ExecuteBody(null, null);
         }
     }
 }

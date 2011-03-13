@@ -131,8 +131,7 @@
     <Compile Include="Internal\Diagnostics\CollectionDebugView.cs" />
     <Compile Include="Internal\Components\PrimitiveActiveComponent.cs" />
     <Compile Include="Internal\Components\PrimitivePassiveComponent.cs" />
-    <Compile Include="Internal\Components\AttachableComponent.cs" />
-    <Compile Include="Internal\Components\IAttachedObject.cs" />
+    <Compile Include="Internal\Components\ComponentBase.cs" />
     <Compile Include="Markup\Handlers\Handler.cs" />
     <Compile Include="Markup\Operation.cs" />
     <Compile Include="Internal\Language\HandlerBase.cs" />
@@ -228,7 +227,7 @@
     <Compile Include="Markup\Resources\MarkupCollection.cs" />
     <Compile Include="Markup\Language\Expressions\Set.cs" />
     <Compile Include="Internal\Language\Statement.cs" />
-    <Compile Include="Internal\Collections\ActiveComponentCollection.cs" />
+    <Compile Include="Internal\Collections\HandlerCollection.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>

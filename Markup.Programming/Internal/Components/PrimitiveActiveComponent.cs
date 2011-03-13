@@ -4,7 +4,7 @@ namespace Markup.Programming.Core
 {
 #if !INTERACTIVITY
     [ContentProperty("Body")]
-    public abstract class PrimitiveActiveComponent : AttachableComponent
+    public abstract class PrimitiveActiveComponent : ComponentBase
     {
         public PrimitiveActiveComponent()
         {
@@ -30,9 +30,14 @@ namespace Markup.Programming.Core
             foreach (var component in Body) component.Attach(AssociatedObject);
         }
 
-        protected void InvokePassiveComponents(object sender, object e)
+        protected void ExecuteBody(object sender, object e)
         {
             new Engine(sender, e).With(this, engine => Body.Execute(engine));
+        }
+
+        protected void ExecuteBody(Engine engine)
+        {
+            Body.Execute(engine);
         }
     }
 #else
@@ -40,9 +45,14 @@ namespace Markup.Programming.Core
     using System.Windows.Interactivity; // portable
     public class PrimitiveActiveComponent : TriggerBase<DependencyObject>, IComponent
     {
-        protected void InvokePassiveComponents(object sender, object e)
+        protected void ExecuteBody(object sender, object e)
         {
             InvokeActions(e);
+        }
+
+        protected void ExecuteBody(Engine engine)
+        {
+            InvokeActions(engine.EventArgs);
         }
     }
 #endif

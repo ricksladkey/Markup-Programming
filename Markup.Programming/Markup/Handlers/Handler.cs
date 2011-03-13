@@ -22,11 +22,7 @@ namespace Markup.Programming
 
         protected override void OnHandler(Engine engine)
         {
-#if INTERACTIVITY
-            InvokeActions(engine.EventArgs);
-#else
-            Body.Execute(engine);
-#endif
+            ExecuteBody(engine);
         }
     }
 }

@@ -23,7 +23,7 @@ namespace Markup.Programming
 
         private void OnValueChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
-            InvokePassiveComponents(sender, e);
+            ExecuteBody(sender, e);
         }
     }
 }

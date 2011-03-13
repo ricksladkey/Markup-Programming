@@ -2,7 +2,7 @@
 namespace Markup.Programming.Core
 {
 #if !INTERACTIVITY
-    public abstract class PrimitivePassiveComponent : AttachableComponent
+    public abstract class PrimitivePassiveComponent : ComponentBase
     {
     }
 #else
