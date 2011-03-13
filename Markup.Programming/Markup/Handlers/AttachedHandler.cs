@@ -7,7 +7,7 @@ namespace Markup.Programming
     /// attached to its associated object.  This is in general before the
     /// associated object is loaded.
     /// </summary>
-    public class AttachedHandler : HandlerBase
+    public class AttachedHandler : Handler
     {
         protected override void OnAttached()
         {

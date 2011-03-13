@@ -45,7 +45,7 @@
         </Grid.RowDefinitions>
         <ComboBox ItemsSource="{Binding Samples}" Grid.Row="0">
             <p:Operation.Attach>
-                <p:Handler EventName="SelectionChanged">
+                <p:EventHandler Path="SelectionChanged">
                     <p:Block>
                         <p:Set ParameterName="Children">
                             <p:Get Context="{Binding ElementName=ContentHost}" PropertyName="Children"/>
@@ -59,7 +59,7 @@
                             </p:Get>
                         </p:Call>
                     </p:Block>
-                </p:Handler>
+                </p:EventHandler>
             </p:Operation.Attach>
             <ComboBox.ItemTemplate>
                 <DataTemplate>

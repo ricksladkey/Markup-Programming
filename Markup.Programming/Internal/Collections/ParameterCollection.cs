@@ -10,9 +10,6 @@ namespace Markup.Programming.Core
     /// A ParameterCollection is a collection of Parameter objects.
     /// Note that it is not a component.
     /// </summary>
-#if DEBUG
-    [DebuggerDisplay("Parameters = {Count}"), DebuggerTypeProxy(typeof(CollectionDebugView))]
-#endif
     public class ParameterCollection : List<Parameter>
     {
     }

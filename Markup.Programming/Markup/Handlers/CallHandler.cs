@@ -10,7 +10,7 @@ namespace Markup.Programming
     /// event is raised.
     /// </summary>
     [ContentProperty("Arguments")]
-    public class CallHandler : HandlerBase, ICaller
+    public class CallHandler : Handler, ICaller
     {
         private CallImplementor<CallHandler> implementor;
 
@@ -136,7 +136,7 @@ namespace Markup.Programming
             return fields;
         }
 
-        protected override void OnHandler(Engine engine)
+        protected override void OnEventHandler(Engine engine)
         {
             implementor.Call(engine);
         }

@@ -8,9 +8,6 @@ namespace Markup.Programming.Core
     /// A NameDictionary implements IDictionary
     /// and supplies NameValuePair-base constructors.
     /// </summary>
-#if DEBUG
-    [DebuggerDisplay("Parameters = {Count}"), DebuggerTypeProxy(typeof(DictionaryEntryDebugView))]
-#endif
     public class NameDictionary : SmallDictionary<string, object>
     {
         public NameDictionary(params NameValuePair[] pairs)

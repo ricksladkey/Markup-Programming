@@ -24,7 +24,7 @@ namespace Markup.Programming
                 return result;
             }
 
-            public event EventHandler CanExecuteChanged;
+            public event System.EventHandler CanExecuteChanged;
 
             protected void OnCanExecuteChanged()
             {

@@ -66,13 +66,13 @@ namespace Markup.Programming
         }
 
 #if SILVERLIGHT
-        public event EventHandler CanExecuteChanged;
+        public event System.EventHandler CanExecuteChanged;
         private void OnCanExecuteChanged()
         {
             if (CanExecuteChanged != null) CanExecuteChanged(this, new EventArgs());
         }
 #else
-        public event EventHandler CanExecuteChanged
+        public event System.EventHandler CanExecuteChanged
         {
             add { CommandManager.RequerySuggested += value; }
             remove { CommandManager.RequerySuggested -= value; }

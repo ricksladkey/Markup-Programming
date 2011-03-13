@@ -8,7 +8,7 @@
         <StackPanel Name="ContentHost">
             <Button Content="Add">
                 <p:Operation.Attach>
-                    <p:Handler EventName="Click">
+                    <p:EventHandler Path="Click">
                         <p:Block>
                             <p:Set ParameterName="Children">
                                 <p:Get Context="{Binding ElementName=ContentHost}" PropertyName="Children"/>
@@ -21,7 +21,7 @@
                             </p:Set>
                             <p:Call Path="$Children.Add" ParameterPath="$Child"/>
                         </p:Block>
-                    </p:Handler>
+                    </p:EventHandler>
                 </p:Operation.Attach>
             </Button>
         </StackPanel>

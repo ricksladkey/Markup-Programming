@@ -9,7 +9,7 @@ namespace Markup.Programming
     /// change notification will cause the handler to be raised.  The event
     /// args will be of type DependencyPropertyChangedEventArgs.
     /// </summary>
-    public class DataChangedHandler : HandlerBase
+    public class DataChangedHandler : Handler
     {
         public object Value
         {

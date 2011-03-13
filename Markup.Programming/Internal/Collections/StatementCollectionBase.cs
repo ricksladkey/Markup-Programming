@@ -14,9 +14,6 @@ namespace Markup.Programming.Core
     /// causes various forms of trouble.
     /// </summary>
     /// <typeparam name="T">The type of statement</typeparam>
-#if DEBUG
-    [DebuggerDisplay("Statements = {Count}"), DebuggerTypeProxy(typeof(CollectionDebugView))]
-#endif
     public abstract class StatementCollectionBase<T> : ComponentCollection<T> where T : Statement
     {
         public void Execute(Engine engine)

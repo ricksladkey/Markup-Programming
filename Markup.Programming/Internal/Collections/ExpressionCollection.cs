@@ -13,9 +13,6 @@ namespace Markup.Programming.Core
     /// this would be a collection of IExpression but FreezableCollection
     /// doesn't allow that.
     /// </summary>
-#if DEBUG
-    [DebuggerDisplay("Expressions = {Count}"), DebuggerTypeProxy(typeof(CollectionDebugView))]
-#endif
     public class ExpressionCollection : ComponentCollection<ExpressionBase>
     {
         public object[] Evaluate(Engine engine)

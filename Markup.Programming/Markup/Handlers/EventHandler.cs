@@ -1,10 +1,9 @@
 ﻿using Markup.Programming.Core;
 using System.Windows;
-using System.Windows.Markup;
 
 namespace Markup.Programming
 {
-    public class Handler : HandlerBase
+    public class EventHandler : Handler
     {
         public string Path
         {
@@ -13,7 +12,7 @@ namespace Markup.Programming
         }
 
         public static readonly DependencyProperty PathProperty =
-            DependencyProperty.Register("Path", typeof(string), typeof(Handler), null);
+            DependencyProperty.Register("Path", typeof(string), typeof(EventHandler), null);
 
         protected override void OnAttached()
         {
@@ -21,7 +20,7 @@ namespace Markup.Programming
             new Engine().With(this, engine => RegisterHandler(engine, Path));
         }
 
-        protected override void OnHandler(Engine engine)
+        protected override void OnEventHandler(Engine engine)
         {
             ExecuteBody(engine);
         }

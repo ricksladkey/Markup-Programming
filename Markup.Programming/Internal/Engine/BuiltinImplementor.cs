@@ -6,14 +6,14 @@ using System.Text;
 namespace Markup.Programming.Core
 {
     /// <summary>
-    /// The Builtin class contains functions that can be called
+    /// The BuiltinImplementor class implements functions that can be called
     /// natively from markup programming.
     /// </summary>
-    public class Builtin
+    public class BuiltinImplementor
     {
         private Engine engine;
 
-        public Builtin(Engine engine)
+        public BuiltinImplementor(Engine engine)
         {
             this.engine = engine;
         }

@@ -20,11 +20,11 @@
                 <!-- Standard way -->
 
                 <p:Operation.Attach>
-                    <p:Handler EventName="MouseLeftButtonDown">
+                    <p:EventHandler Path="MouseLeftButtonDown">
                         <p:Call Path=":MessageBox.Show">
                             <p:Val Value="Hello, world!"/>
                         </p:Call>
-                    </p:Handler>
+                    </p:EventHandler>
                 </p:Operation.Attach>
                 
             </Rectangle>

@@ -7,7 +7,7 @@
     <Grid>
         <Button Content="Crash Me!">
             <p:Operation.Attach>
-                <p:Handler EventName="Click">
+                <p:EventHandler Path="Click">
                     <p:Block ContextPath="">
                         <p:If Value="True">
                             <p:If.Then>
@@ -25,7 +25,7 @@
                             </p:If.Then>
                         </p:If>
                     </p:Block>
-                </p:Handler>
+                </p:EventHandler>
             </p:Operation.Attach>
         </Button>
     </Grid>

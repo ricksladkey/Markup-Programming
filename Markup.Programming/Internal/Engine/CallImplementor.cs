@@ -47,8 +47,8 @@ namespace Markup.Programming.Core
 
         private object CallBuiltinFunction(Engine engine, object[] args)
         {
-            var builtin = new Builtin(engine);
-            return CallMethod(caller.BuiltinFunction.ToString(), false, typeof(Builtin), builtin, args, engine);
+            var builtin = new BuiltinImplementor(engine);
+            return CallMethod(caller.BuiltinFunction.ToString(), false, typeof(BuiltinImplementor), builtin, args, engine);
         }
 
         private object CallMethod(Engine engine, object[] args)

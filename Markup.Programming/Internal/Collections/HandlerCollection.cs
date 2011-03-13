@@ -8,12 +8,9 @@ using System.Diagnostics;
 namespace Markup.Programming.Core
 {
     /// <summary>
-    /// An HandlerCollection is a collection of ActiveComponent items.
+    /// An HandlerCollection is a collection of Handler items.
     /// </summary>
-#if DEBUG
-    [DebuggerDisplay("Handlers = {Count}"), DebuggerTypeProxy(typeof(CollectionDebugView))]
-#endif
-    public class HandlerCollection : ComponentCollection<PrimitiveActiveComponent>
+    public class HandlerCollection : ComponentCollection<Handler>
     {
     }
 }

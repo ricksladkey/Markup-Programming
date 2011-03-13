@@ -4,7 +4,7 @@ using System.Reflection;
 
 namespace Markup.Programming.Core
 {
-    public abstract class HandlerBase : PrimitiveActiveComponent, IComponent
+    public abstract class Handler : PrimitiveActiveComponent, IComponent
     {
         public object Context
         {
@@ -15,7 +15,7 @@ namespace Markup.Programming.Core
         public string ContextPath { get; set; }
 
         public static readonly DependencyProperty ContextProperty =
-            DependencyProperty.Register("Context", typeof(object), typeof(HandlerBase), null);
+            DependencyProperty.Register("Context", typeof(object), typeof(Handler), null);
 
         public string EventName
         {
@@ -24,7 +24,7 @@ namespace Markup.Programming.Core
         }
 
         public static readonly DependencyProperty EventNameProperty =
-            DependencyProperty.Register("EventName", typeof(string), typeof(HandlerBase), null);
+            DependencyProperty.Register("EventName", typeof(string), typeof(Handler), null);
 
         protected override void OnAttached()
         {
@@ -48,7 +48,7 @@ namespace Markup.Programming.Core
         }
 
         private string registeredEventName;
-        private static MethodInfo handlerMethodInfo = typeof(HandlerBase).GetMethod("Handler");
+        private static MethodInfo handlerMethodInfo = typeof(Handler).GetMethod("EventHandler");
 
         protected void RegisterHandler(Engine engine, string alternateEventName)
         {
@@ -60,22 +60,22 @@ namespace Markup.Programming.Core
                 Delegate.CreateDelegate(eventInfo.EventHandlerType, this, handlerMethodInfo));
         }
 
-        public void Handler(object sender, object args)
+        public void EventHandler(object sender, object args)
         {
-            new Engine(sender, args).With(this, engine => Handler(engine));
+            new Engine(sender, args).With(this, engine => EventHandler(engine));
         }
 
-        private void Handler(Engine engine)
+        private void EventHandler(Engine engine)
         {
             engine.Trace(TraceFlags.Events, "Event: {0}, sender {1}", registeredEventName, engine.Sender);
             engine.SetContext(ContextProperty, ContextPath);
-            OnHandler(engine);
+            OnEventHandler(engine);
             // XXX: Not right.
             if (engine.EventArgs is RoutedEventArgs)
                 (engine.EventArgs as RoutedEventArgs).Handled = true;
         }
 
-        protected virtual void OnHandler(Engine engine)
+        protected virtual void OnEventHandler(Engine engine)
         {
         }
     }

@@ -16,7 +16,7 @@ namespace Markup.Programming.Samples
             return true;
         }
 
-        public event EventHandler CanExecuteChanged;
+        public event System.EventHandler CanExecuteChanged;
 
         protected void OnCanExecuteChanged()
         {

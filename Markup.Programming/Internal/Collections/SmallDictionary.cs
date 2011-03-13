@@ -15,6 +15,9 @@ namespace Markup.Programming.Core
     /// </summary>
     /// <typeparam name="TKey">The dictionary key</typeparam>
     /// <typeparam name="TValue">The dicttionary value</typeparam>
+#if DEBUG
+    [DebuggerDisplay("Parameters = {Count}"), DebuggerTypeProxy(typeof(DictionaryEntryDebugView))]
+#endif
     public class SmallDictionary<TKey, TValue> : IDictionary<TKey, TValue> where TKey : IEquatable<TKey>
     {
         private List<KeyValuePair<TKey, TValue>> pairs = new List<KeyValuePair<TKey, TValue>>();

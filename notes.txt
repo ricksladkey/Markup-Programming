@@ -1,13 +1,12 @@
     xmlns:p="http://programmability.codeplex.com/markup/programming"
 
-- Operation.Attach
-- rename namespace
+- fix EngineDebugView
 - find alternative to BackTrace, e.g. an entire engine debug proxy
+- add all-markup sample equivalent of one method two bindings
+- fix routed events
 - handle Call.Parameter for function calls
 - write macro to format comment region
-- write macro to remove unused usings
 - rename MarkupObject to ResourceObject, etc.
-- rewrite EventTrigger: the current one silent fails if the event name doesn't exist
 - review how to handle For type
 - change For: Operator plus Limit and Increment defaults to 1
 - add types to function parameters, and report them at call time
@@ -55,5 +54,5 @@
 - read local DP value: this.ReadLocalValue(dependencyProperty) == DependencyProperty.UnsetValue
 - Add ToString for MarkupObject
 - ToString with details for a composite object doesn't refresh its binding properly
-- why does p:Handler work with CLR event only as long as they aren't FrameworkElements
+- why does p:EventHandler work with CLR event only as long as they aren't FrameworkElements
 - consider not changing associated object in TemplatePart and VisualTree

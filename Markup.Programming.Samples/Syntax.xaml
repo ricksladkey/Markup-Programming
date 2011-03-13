@@ -156,8 +156,19 @@
             </p:Module>
         </Grid.Resources>
 
-        <!-- normal XAML elements for this page -->
-        <Button Name="Button" Content="Click Me"/>
+        <Button Content="Click Me">
+            <p:Operation.Attach>
+                <p:CallHandler EventName="Click!:MessageBox.Show"/>
+            </p:Operation.Attach>
+        </Button>
+
+        <Button Content="Click Me">
+            <p:Operation.Attach>
+                <p:EventHandler Path="Click">
+                    <p:Call Path=":MessageBox.Show" Parameter="Hellow, world!"/>
+                </p:EventHandler>
+            </p:Operation.Attach>
+        </Button>
         
     </Grid>
 </UserControl>
