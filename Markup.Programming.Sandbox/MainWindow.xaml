@@ -10,22 +10,22 @@
 
                 <!-- Short form -->
                 
-                <p:Inter.Active>
+                <p:Operation.Attach>
                     <p:CallHandler Path="MouseLeftButtonDown!:MessageBox.Show" Parameter="Hello, world!"/>
-                </p:Inter.Active>
+                </p:Operation.Attach>
                 
             </Rectangle>
             <Rectangle Fill="Red">
                 
                 <!-- Standard way -->
 
-                <p:Inter.Active>
+                <p:Operation.Attach>
                     <p:Handler EventName="MouseLeftButtonDown">
                         <p:Call Path=":MessageBox.Show">
                             <p:Val Value="Hello, world!"/>
                         </p:Call>
                     </p:Handler>
-                </p:Inter.Active>
+                </p:Operation.Attach>
                 
             </Rectangle>
         </UniformGrid>

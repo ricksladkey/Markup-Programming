@@ -3,7 +3,7 @@ using System;
 
 namespace Markup.Programming.Core
 {
-    public abstract class HandlerBase : ActiveComponent, IComponent
+    public abstract class HandlerBase : PrimitiveActiveComponent, IComponent
     {
         public object Context
         {

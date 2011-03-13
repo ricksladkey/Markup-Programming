@@ -9,7 +9,7 @@ namespace Markup.Programming.Core
     /// An IStatement is an IProcessor that performs an operation
     /// without a result.
     /// </summary>
-    public interface IStatement : IComponent
+    public interface IStatement : IProcessor
     {
         void Execute(Engine engine);
     }

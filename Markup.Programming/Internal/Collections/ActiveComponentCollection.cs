@@ -13,7 +13,7 @@ namespace Markup.Programming.Core
 #if DEBUG
     [DebuggerDisplay("ActiveComponents = {Count}"), DebuggerTypeProxy(typeof(CollectionDebugView))]
 #endif
-    public class ActiveComponentCollection : ComponentCollection<ActiveComponent>
+    public class ActiveComponentCollection : ComponentCollection<PrimitiveActiveComponent>
     {
     }
 }

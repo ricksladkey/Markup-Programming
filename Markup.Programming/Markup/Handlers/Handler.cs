@@ -4,7 +4,6 @@ using System.Windows.Markup;
 
 namespace Markup.Programming
 {
-    [ContentProperty("Body")]
     public class Handler : HandlerBase
     {
         public string Path

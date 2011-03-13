@@ -27,7 +27,7 @@ namespace Markup.Programming.Tests
             var statement = new Set { PropertyName = "String2" };
             BindingOperations.SetBinding(statement, Set.ContextProperty, new Binding());
             BindingOperations.SetBinding(statement, Set.ValueProperty, new Binding("String1"));
-            Inter.GetActive(window).Add(new AttachedHandler { Actions = { statement } });
+            Operation.GetAttach(window).Add(new AttachedHandler { Actions = { statement } });
             Assert.AreEqual("Test", viewModel["String1"]);
             Assert.AreEqual("Test", viewModel["String2"]);
         }

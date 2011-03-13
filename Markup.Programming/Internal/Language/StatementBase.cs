@@ -9,7 +9,7 @@ namespace Markup.Programming.Core
     /// associated with attaching and evalution that are applicable
     /// to all executable objects such as statements and expressions.
     /// </summary>
-    public abstract class StatementBase : PassiveComponent, IStatement
+    public abstract class StatementBase : PrimitivePassiveComponent, IStatement
     {
         public object Context
         {
@@ -41,11 +41,6 @@ namespace Markup.Programming.Core
                 engine.Trace(TraceFlags.Parameter, "Setting context = {0}", context);
                 engine.DefineParameter(Engine.ContextParameter, context);
             }
-        }
-
-        protected override void Invoke(object parameter)
-        {
-            Execute(new Engine(parameter));
         }
 
         public void Execute(Engine engine)

@@ -19,7 +19,7 @@ namespace Markup.Programming.Tests
         {
             var handler = new AttachedHandler();
             foreach (var statement in statements) handler.Actions.Add(statement);
-            Inter.GetActive(target).Add(handler);
+            Operation.GetAttach(target).Add(handler);
         }
 
         public static void TargetBinder(Set statement)

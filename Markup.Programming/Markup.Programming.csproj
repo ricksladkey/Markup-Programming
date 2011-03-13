@@ -129,14 +129,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Internal\Diagnostics\CollectionDebugView.cs" />
-    <Compile Include="Internal\Components\ActiveComponent.cs" />
-    <Compile Include="Internal\Components\PassiveComponent.cs" />
+    <Compile Include="Internal\Components\PrimitiveActiveComponent.cs" />
+    <Compile Include="Internal\Components\PrimitivePassiveComponent.cs" />
     <Compile Include="Internal\Components\AttachableComponent.cs" />
     <Compile Include="Internal\Components\IAttachedObject.cs" />
     <Compile Include="Markup\Handlers\Handler.cs" />
-    <Compile Include="Markup\Inter.cs" />
-    <Compile Include="Internal\Components\PassiveAttachableComponent.cs" />
-    <Compile Include="Internal\Components\ActiveAttachableComponent.cs" />
+    <Compile Include="Markup\Operation.cs" />
     <Compile Include="Internal\Language\HandlerBase.cs" />
     <Compile Include="Markup\Language\Enumerations\AssignmentOperator.cs" />
     <Compile Include="Markup\Language\Enumerations\BuiltinFunction.cs" />

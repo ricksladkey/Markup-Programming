@@ -2,6 +2,8 @@
     xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
     xmlns:p="http://programmability.codeplex.com/"
 
+- Operation.Attach
+- rename namespace
 - find alternative to BackTrace, e.g. an entire engine debug proxy
 - handle Call.Parameter for function calls
 - write macro to format comment region
