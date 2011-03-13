@@ -62,7 +62,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug - Full Tracing|AnyCPU'">
     <DebugSymbols>true</DebugSymbols>
-    <OutputPath>..\bin\WPF4 Standalone\Debug\</OutputPath>
+    <OutputPath>..\bin\WPF4 Full Tracing\Debug\</OutputPath>
     <DefineConstants>TRACE;DEBUG;FULL_TRACING</DefineConstants>
     <DebugType>full</DebugType>
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -97,7 +97,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug - System.Windows.Interactivity|AnyCPU'">
     <DebugSymbols>true</DebugSymbols>
-    <OutputPath>bin\Debug - System.Windows.Interactivity\</OutputPath>
+    <OutputPath>..\bin\WPF4 System.Windows.Interactivity\Debug\</OutputPath>
     <DefineConstants>TRACE;DEBUG;INTERACTIVITY</DefineConstants>
     <DocumentationFile>..\bin\WPF4\Debug\Markup.Programming.XML</DocumentationFile>
     <NoWarn>1591</NoWarn>

@@ -46,11 +46,13 @@ namespace Markup.Programming.Core
             }
         }
 
+        private string registeredEventName;
+
         protected void RegisterHandler(Engine engine, string alternateEventName)
         {
             var context = AssociatedObject;
-            var eventName = EventName ?? alternateEventName;
-            var eventInfo = context.GetType().GetEvent(eventName);
+            var registeredEventName = EventName ?? alternateEventName;
+            var eventInfo = context.GetType().GetEvent(registeredEventName);
             var methodInfo = this.GetType().GetMethod("Handler");
             eventInfo.AddEventHandler(context,
                 Delegate.CreateDelegate(eventInfo.EventHandlerType, this, methodInfo));
@@ -58,7 +60,13 @@ namespace Markup.Programming.Core
 
         public void Handler(object sender, object args)
         {
-            new Engine(sender, args).With(this, engine => OnHandler(engine));
+            new Engine(sender, args).With(this, engine => Handler(engine));
+        }
+
+        private void Handler(Engine engine)
+        {
+            engine.Trace(TraceFlags.Events, "Event: {0}, sender {1}", registeredEventName, engine.Sender);
+            OnHandler(engine);
         }
 
         protected virtual void OnHandler(Engine engine)

@@ -17,6 +17,7 @@ namespace Markup.Programming.Core
         Parameter = 0x8,
         Call = 0x10,
         Path = 0x20,
+        Events = 0x40,
         All = 0xff,
     }
 

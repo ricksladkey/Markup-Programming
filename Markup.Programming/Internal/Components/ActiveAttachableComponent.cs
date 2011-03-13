@@ -19,8 +19,6 @@ namespace Markup.Programming.Core
             set { SetValue(BodyProperty, value); }
         }
 
-        public StatementCollection Actions { get { return Body; } }
-
         public static readonly DependencyProperty BodyProperty =
             DependencyProperty.Register("Body", typeof(StatementCollection), typeof(ActiveAttachableComponent), null);
 
@@ -33,6 +31,11 @@ namespace Markup.Programming.Core
         {
             new Engine(sender, e).With(this, engine => Body.Execute(engine));
         }
+
+        /// <summary>
+        /// Compatbility API.
+        /// </summary>
+        public StatementCollection Actions { get { return Body; } }
     }
 }
 

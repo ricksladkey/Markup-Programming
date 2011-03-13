@@ -1,8 +1,10 @@
 ﻿using Markup.Programming.Core;
 using System.Windows;
+using System.Windows.Markup;
 
 namespace Markup.Programming
 {
+    [ContentProperty("Body")]
     public class Handler : HandlerBase
     {
         public string Path
@@ -21,7 +23,11 @@ namespace Markup.Programming
 
         protected override void OnHandler(Engine engine)
         {
+#if INTERACTIVITY
+            InvokeActions(engine.EventArgs);
+#else
             Body.Execute(engine);
+#endif
         }
     }
 }
