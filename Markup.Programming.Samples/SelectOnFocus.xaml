@@ -8,9 +8,9 @@
         <StackPanel>
             <TextBox Text="Normal TextBox"/>
             <TextBox Text="SelectOnFocus TextBox">
-                <p:Attach.Operations>
+                <p:Attached.Operations>
                     <p:CallHandler Path="PreviewGotKeyboardFocus!$AssociatedObject.SelectAll"/>
-                </p:Attach.Operations>
+                </p:Attached.Operations>
             </TextBox>
         </StackPanel>
     </Grid>

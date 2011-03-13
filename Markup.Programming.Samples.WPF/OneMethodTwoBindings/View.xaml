@@ -10,20 +10,18 @@
     <Window.DataContext>
         <Binding Source="{StaticResource ViewModel}"/>
     </Window.DataContext>
-    <Grid>
-        <StackPanel>
-            <Button Content="Match Boy with Girl">
-                <p:Attach.Operations>
-                    <p:CallHandler Path="Click!Match">
-                        <p:Get Source="{Binding SelectedValue, ElementName=Boys}"/>
-                        <p:Get Source="{Binding SelectedValue, ElementName=Girls}"/>
-                    </p:CallHandler>
-                </p:Attach.Operations>
-            </Button>
-            <UniformGrid Columns="2">
-                <ListBox Name="Boys" ItemsSource="{Binding Boys}"/>
-                <ListBox Name="Girls" ItemsSource="{Binding Girls}"/>
-            </UniformGrid>
-        </StackPanel>
-    </Grid>
+    <StackPanel>
+        <Button Content="Match Boy with Girl">
+            <p:Attached.Operations>
+                <p:CallHandler Path="Click!Match">
+                    <p:Get Source="{Binding SelectedValue, ElementName=Boys}"/>
+                    <p:Get Source="{Binding SelectedValue, ElementName=Girls}"/>
+                </p:CallHandler>
+            </p:Attached.Operations>
+        </Button>
+        <UniformGrid Columns="2">
+            <ListBox Name="Boys" ItemsSource="{Binding Boys}"/>
+            <ListBox Name="Girls" ItemsSource="{Binding Girls}"/>
+        </UniformGrid>
+    </StackPanel>
 </Window>

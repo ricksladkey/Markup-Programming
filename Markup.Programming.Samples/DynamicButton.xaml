@@ -7,7 +7,7 @@
     <Grid>
         <StackPanel Name="ContentHost">
             <Button Content="Add">
-                <p:Attach.Operations>
+                <p:Attached.Operations>
                     <p:EventHandler Path="Click">
                         <p:Block>
                             <p:Set ParameterName="Children">
@@ -22,7 +22,7 @@
                             <p:Call Path="$Children.Add" ParameterPath="$Child"/>
                         </p:Block>
                     </p:EventHandler>
-                </p:Attach.Operations>
+                </p:Attached.Operations>
             </Button>
         </StackPanel>
     </Grid>

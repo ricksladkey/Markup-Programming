@@ -3,7 +3,7 @@ using Markup.Programming.Core;
 
 namespace Markup.Programming
 {
-    public static class Attach
+    public static class Attached
     {
         public static HandlerCollection GetOperations(DependencyObject obj)
         {
@@ -14,8 +14,8 @@ namespace Markup.Programming
         }
 
         internal static readonly DependencyProperty OperationsProperty =
-            DependencyProperty.RegisterAttached("InternalOperations", typeof(HandlerCollection), typeof(Attach),
-             new PropertyMetadata(null, Attach.OnOperationsChanged));
+            DependencyProperty.RegisterAttached("InternalOperations", typeof(HandlerCollection), typeof(Attached),
+             new PropertyMetadata(null, Attached.OnOperationsChanged));
 
         private static void OnOperationsChanged(object sender, DependencyPropertyChangedEventArgs e)
         {

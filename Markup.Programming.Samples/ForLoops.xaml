@@ -8,7 +8,7 @@
     <Grid>
         <StackPanel>
             <Button Content="Standard For">
-                <p:Attach.Operations>
+                <p:Attached.Operations>
                     <p:EventHandler Path="Click">
                         <p:For ParameterName="I" TypeName="Int32">
                             <p:For.Value>
@@ -28,10 +28,10 @@
                             </p:Call>
                         </p:For>
                     </p:EventHandler>
-                </p:Attach.Operations>
+                </p:Attached.Operations>
             </Button>
             <Button Content="Simplied For">
-                <p:Attach.Operations>
+                <p:Attached.Operations>
                     <p:EventHandler Path="Click">
                         <p:For ParameterName="I" Value="0" UpperLimit="3" Increment="1">
                             <p:Call Path=":MessageBox.Show">
@@ -42,7 +42,7 @@
                             </p:Call>
                         </p:For>
                     </p:EventHandler>
-                </p:Attach.Operations>
+                </p:Attached.Operations>
             </Button>
         </StackPanel>
     </Grid>
