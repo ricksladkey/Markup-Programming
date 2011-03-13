@@ -26,7 +26,7 @@ namespace Markup.Programming
         public MarkupObject()
         {
             Properties = new PropertyCollection();
-            Provider = new PropertyInfoProvider(this, this.GetType());
+            Implementor = new TypeDescriptorImplementor(this, this.GetType());
             propertyStore = new Dictionary<string, object>();
         }
 
@@ -37,11 +37,11 @@ namespace Markup.Programming
         }
 
         // This looks unusual but it hooks all the gets below.
-        private PropertyInfoProvider provider;
-        private PropertyInfoProvider Provider
+        private TypeDescriptorImplementor implementor;
+        private TypeDescriptorImplementor Implementor
         {
-            get { TryToAttach(); return provider; }
-            set { provider = value; }
+            get { TryToAttach(); return implementor; }
+            set { implementor = value; }
         }
 
         private Dictionary<string, object> propertyStore;
@@ -66,7 +66,7 @@ namespace Markup.Programming
 
         public override string ToString()
         {
-            return DynamicObjectHelper.ToString(this, "MarkupObject");
+            return DynamicHelper.ToString(this, "MarkupObject");
         }
 
     #region IProvidePropertyInfo Members
@@ -86,18 +86,18 @@ namespace Markup.Programming
 
     #region ICumstomTypeTypeDescriptor
 
-        public AttributeCollection GetAttributes() { return Provider.GetAttributes(); }
-        public string GetClassName() { return Provider.GetClassName(); }
-        public string GetComponentName() { return Provider.GetComponentName(); }
-        public TypeConverter GetConverter() { return Provider.GetConverter(); }
-        public PropertyDescriptor GetDefaultProperty() { return Provider.GetDefaultProperty(); }
-        public object GetEditor(System.Type editorBaseType) { return Provider.GetEditor(editorBaseType); }
-        public EventDescriptor GetDefaultEvent() { return Provider.GetDefaultEvent(); }
-        public EventDescriptorCollection GetEvents(System.Attribute[] attributes) { return Provider.GetEvents(attributes); }
-        public EventDescriptorCollection GetEvents() { return Provider.GetEvents(); }
-        public object GetPropertyOwner(PropertyDescriptor pd) { return Provider.GetPropertyOwner(pd); }
-        public PropertyDescriptorCollection GetProperties(System.Attribute[] attributes) { return Provider.GetProperties(attributes); }
-        public PropertyDescriptorCollection GetProperties() { return Provider.GetProperties(); }
+        public AttributeCollection GetAttributes() { return Implementor.GetAttributes(); }
+        public string GetClassName() { return Implementor.GetClassName(); }
+        public string GetComponentName() { return Implementor.GetComponentName(); }
+        public TypeConverter GetConverter() { return Implementor.GetConverter(); }
+        public PropertyDescriptor GetDefaultProperty() { return Implementor.GetDefaultProperty(); }
+        public object GetEditor(System.Type editorBaseType) { return Implementor.GetEditor(editorBaseType); }
+        public EventDescriptor GetDefaultEvent() { return Implementor.GetDefaultEvent(); }
+        public EventDescriptorCollection GetEvents(System.Attribute[] attributes) { return Implementor.GetEvents(attributes); }
+        public EventDescriptorCollection GetEvents() { return Implementor.GetEvents(); }
+        public object GetPropertyOwner(PropertyDescriptor pd) { return Implementor.GetPropertyOwner(pd); }
+        public PropertyDescriptorCollection GetProperties(System.Attribute[] attributes) { return Implementor.GetProperties(attributes); }
+        public PropertyDescriptorCollection GetProperties() { return Implementor.GetProperties(); }
 
         #endregion
 

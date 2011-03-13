@@ -28,7 +28,7 @@ namespace Markup.Programming.Tests
         {
             Test.ExpressionTest(true, new Op { Value1 = 1, Operator = Operator.Is, Value2 = typeof(int) });
             Test.ExpressionTest(false, new Op { Value1 = 1.0, Operator = Operator.Is, Value2 = typeof(int) });
-            Test.ExpressionTest(true, new Op { Value1 = new For(), Operator = Operator.Is, Value2 = typeof(Block) });
+            Test.ExpressionTest(true, new Op { Value1 = new Dog(), Operator = Operator.Is, Value2 = typeof(Animal) });
         }
 
         [TestMethod]
@@ -89,9 +89,9 @@ namespace Markup.Programming.Tests
             // Create an collection with an iterator and check that
             // the collection has the correct type and contents 
             // and the deduced generic type is the minimum base class.
-            var item1 = new For();
-            var item2 = new Block();
-            Test.ExpressionTest(new ObservableCollection<Block> { item1, item2 },
+            var item1 = new Dog();
+            var item2 = new Animal();
+            Test.ExpressionTest(new ObservableCollection<Animal> { item1, item2 },
                 new Iterator
                 {
                     Body =

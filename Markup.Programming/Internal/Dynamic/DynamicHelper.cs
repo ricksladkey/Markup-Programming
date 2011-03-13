@@ -1,23 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Reflection;
 using System.Reflection.Emit;
 using System.Threading;
-using System.Diagnostics;
 
 namespace Markup.Programming.Core
 {
     /// <summary>
-    /// The DynamicObjectHelper is used to create dynamic types and objects.
+    /// The DynamicHelper is used to create dynamic objects and types.
     /// Unfortunately practically no method for dynamic properties works on
     /// Silverlight and so we must resort to literally emitting
     /// intermediate language and creating new types.  Luckily by using
     /// a base class this can be confined to just a few opcodes per
     /// getter and setter.
     /// </summary>
-    public static class DynamicObjectHelper
+    public static class DynamicHelper
     {
         private static MethodInfo getItemMethodInfo = typeof(DynamicObjectBase).GetProperty("Item").GetGetMethod();
         private static MethodInfo setItemMethodInfo = typeof(DynamicObjectBase).GetProperty("Item").GetSetMethod();

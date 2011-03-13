@@ -5,6 +5,10 @@ using System.Text;
 
 namespace Markup.Programming.Tests
 {
+    public class Animal { }
+
+    public class Dog : Animal { }
+
     public class BasicViewModel
     {
         public object Object1 { get; set; }

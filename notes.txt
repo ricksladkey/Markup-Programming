@@ -1,5 +1,6 @@
     xmlns:p="http://programmability.codeplex.com/markup/programming"
 
+- fix auto-evaluation of langauge elements
 - fix EngineDebugView
 - find alternative to BackTrace, e.g. an entire engine debug proxy
 - add all-markup sample equivalent of one method two bindings

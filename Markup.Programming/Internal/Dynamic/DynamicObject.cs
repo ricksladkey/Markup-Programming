@@ -21,25 +21,25 @@ namespace Markup.Programming.Core
                 PropertyStore = new Dictionary<string, object>(),
             };
 
-        private PropertyInfoProvider provider;
-        public DynamicObject() { provider = new PropertyInfoProvider(this, this.GetType()); }
+        private TypeDescriptorImplementor implementor;
+        public DynamicObject() { implementor = new TypeDescriptorImplementor(this, this.GetType()); }
 
-        public AttributeCollection GetAttributes() { return provider.GetAttributes(); }
-        public string GetClassName() { return provider.GetClassName(); }
-        public string GetComponentName() { return provider.GetComponentName(); }
-        public TypeConverter GetConverter() { return provider.GetConverter(); }
-        public PropertyDescriptor GetDefaultProperty() { return provider.GetDefaultProperty(); }
-        public object GetEditor(System.Type editorBaseType) { return provider.GetEditor(editorBaseType); }
-        public EventDescriptor GetDefaultEvent() { return provider.GetDefaultEvent(); }
-        public EventDescriptorCollection GetEvents(System.Attribute[] attributes) { return provider.GetEvents(attributes); }
-        public EventDescriptorCollection GetEvents() { return provider.GetEvents(); }
-        public object GetPropertyOwner(PropertyDescriptor pd) { return provider.GetPropertyOwner(pd); }
-        public PropertyDescriptorCollection GetProperties(System.Attribute[] attributes) { return provider.GetProperties(attributes); }
-        public PropertyDescriptorCollection GetProperties() { return provider.GetProperties(); }
+        public AttributeCollection GetAttributes() { return implementor.GetAttributes(); }
+        public string GetClassName() { return implementor.GetClassName(); }
+        public string GetComponentName() { return implementor.GetComponentName(); }
+        public TypeConverter GetConverter() { return implementor.GetConverter(); }
+        public PropertyDescriptor GetDefaultProperty() { return implementor.GetDefaultProperty(); }
+        public object GetEditor(System.Type editorBaseType) { return implementor.GetEditor(editorBaseType); }
+        public EventDescriptor GetDefaultEvent() { return implementor.GetDefaultEvent(); }
+        public EventDescriptorCollection GetEvents(System.Attribute[] attributes) { return implementor.GetEvents(attributes); }
+        public EventDescriptorCollection GetEvents() { return implementor.GetEvents(); }
+        public object GetPropertyOwner(PropertyDescriptor pd) { return implementor.GetPropertyOwner(pd); }
+        public PropertyDescriptorCollection GetProperties(System.Attribute[] attributes) { return implementor.GetProperties(attributes); }
+        public PropertyDescriptorCollection GetProperties() { return implementor.GetProperties(); }
 
         public override string ToString()
         {
-            return DynamicObjectHelper.ToString(this, "Object");
+            return DynamicHelper.ToString(this, "Object");
         }
     }
 }

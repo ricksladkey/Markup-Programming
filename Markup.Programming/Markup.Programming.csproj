@@ -179,7 +179,7 @@
     <Compile Include="Internal\Engine\Engine.cs" />
     <Compile Include="Internal\Engine\TypeHelper.cs" />
     <Compile Include="Internal\Dynamic\DynamicObjectBase.cs" />
-    <Compile Include="Internal\Dynamic\DynamicObjectHelper.cs" />
+    <Compile Include="Internal\Dynamic\DynamicHelper.cs" />
     <Compile Include="Internal\Interfaces\IExpression.cs" />
     <Compile Include="Internal\Interfaces\IProvideProperties.cs" />
     <Compile Include="Internal\Interfaces\IStatement.cs" />
@@ -220,7 +220,7 @@
     <Compile Include="Internal\Collections\PropertyCollection.cs" />
     <Compile Include="Markup\Language\Support\Parameter.cs" />
     <Compile Include="Markup\Language\Statements\Return.cs" />
-    <Compile Include="Internal\Dynamic\PropertyInfoProvider.cs" />
+    <Compile Include="Internal\Dynamic\TypeDescriptorImplementor.cs" />
     <Compile Include="Markup\Language\Support\Property.cs" />
     <Compile Include="Internal\Engine\PathHelper.cs" />
     <Compile Include="Markup\Resources\MarkupObject.cs" />

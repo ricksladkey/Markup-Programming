@@ -7,15 +7,15 @@ using System.ComponentModel;
 namespace Markup.Programming.Core
 {
     /// <summary>
-    /// A PropertyInforProvider implements the hard labor of
+    /// A TypeDescriptorImplementor implements the hard labor of
     /// ICustomTypeDescriptor so that client class can just
     /// create a provider and then forward all all the
     /// ICustomTypeDescriptor interface methods to the
     /// provider.  It uses the bridge pattern.
     /// </summary>
-    public class PropertyInfoProvider : ICustomTypeDescriptor
+    public class TypeDescriptorImplementor : ICustomTypeDescriptor
     {
-        public PropertyInfoProvider(IProvideProperties component, Type componentType)
+        public TypeDescriptorImplementor(IProvideProperties component, Type componentType)
         {
             Component = component;
             ComponentType = componentType;
