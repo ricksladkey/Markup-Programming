@@ -1,6 +1,6 @@
     xmlns:sys="clr-namespace:System;assembly=mscorlib"
     xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
-    xmlns:p="http://programmability.codeplex.com/"
+    xmlns:p="http://programmability.codeplex.com/markup/programming"
 
 - Operation.Attach
 - rename namespace
