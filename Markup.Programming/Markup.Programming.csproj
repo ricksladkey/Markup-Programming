@@ -116,7 +116,6 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Data" />
-    <Reference Include="System.Windows.Interactivity, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -132,6 +131,7 @@
     <Compile Include="Internal\Components\PrimitiveActiveComponent.cs" />
     <Compile Include="Internal\Components\PrimitivePassiveComponent.cs" />
     <Compile Include="Internal\Components\ComponentBase.cs" />
+    <Compile Include="Internal\Diagnostics\EngineDebugView.cs" />
     <Compile Include="Markup\Handlers\Handler.cs" />
     <Compile Include="Markup\Operation.cs" />
     <Compile Include="Internal\Language\HandlerBase.cs" />
@@ -179,7 +179,7 @@
     <Compile Include="Internal\Engine\Engine.cs" />
     <Compile Include="Internal\Engine\TypeHelper.cs" />
     <Compile Include="Internal\Dynamic\DynamicObjectBase.cs" />
-    <Compile Include="Internal\Dynamic\DynamicTypeHelper.cs" />
+    <Compile Include="Internal\Dynamic\DynamicObjectHelper.cs" />
     <Compile Include="Internal\Interfaces\IExpression.cs" />
     <Compile Include="Internal\Interfaces\IProvideProperties.cs" />
     <Compile Include="Internal\Interfaces\IStatement.cs" />

@@ -30,7 +30,7 @@ namespace Markup.Programming.Core
     /// It is lightweight enough to be created and discard at will.
     /// </summary>
 #if DEBUG
-    [DebuggerDisplay("Frames = {stack.Count}")]
+    [DebuggerDisplay("Frames = {stack.Count}"), DebuggerTypeProxy(typeof(EngineDebugView))]
 #endif
     public class Engine
     {
@@ -316,6 +316,17 @@ namespace Markup.Programming.Core
             return path != null ? GetPath(path) : Context;
         }
 
+        public void SetContext(DependencyProperty property, string path)
+        {
+            var caller = CurrentFrame.Caller as DependencyObject;
+            if (caller.GetValue(property) != null || path != null || PathHelper.HasBinding(caller, property))
+            {
+                var context = Evaluate(property, path);
+                Trace(TraceFlags.Parameter, "Setting context = {0}", context);
+                DefineParameter(Engine.ContextParameter, context);
+            }
+        }
+
         public object GetPath(string path)
         {
             if (path.Length == 0) return null;
@@ -515,12 +526,5 @@ namespace Markup.Programming.Core
                 return bestCaller;
             }
         }
-
-#if DEBUG
-
-        private List<StackFrame> BackTrace { get { return StackBackwards.ToList(); } }
-
-#endif
-
     }
 }

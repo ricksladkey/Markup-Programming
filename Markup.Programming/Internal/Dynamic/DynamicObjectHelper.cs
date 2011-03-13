@@ -10,14 +10,14 @@ using System.Diagnostics;
 namespace Markup.Programming.Core
 {
     /// <summary>
-    /// The DynamicTypeHelper is used to create dynamic types and objects.
+    /// The DynamicObjectHelper is used to create dynamic types and objects.
     /// Unfortunately practically no method for dynamic properties works on
     /// Silverlight and so we must resort to literally emitting
     /// intermediate language and creating new types.  Luckily by using
     /// a base class this can be confined to just a few opcodes per
     /// getter and setter.
     /// </summary>
-    public static class DynamicTypeHelper
+    public static class DynamicObjectHelper
     {
         private static MethodInfo getItemMethodInfo = typeof(DynamicObjectBase).GetProperty("Item").GetGetMethod();
         private static MethodInfo setItemMethodInfo = typeof(DynamicObjectBase).GetProperty("Item").GetSetMethod();
@@ -92,6 +92,15 @@ namespace Markup.Programming.Core
                 propertyBuilder.SetSetMethod(setMethodBuilder);
             }
             return typeBuilder.CreateType();
+        }
+
+        public static string ToString(IProvideProperties component, string name)
+        {
+            var propertyInfo = component.PropertyInfo;
+            if (propertyInfo == null) return name + ": [Initializing]";
+            var text = propertyInfo.Count() == 0 ? "" :
+                propertyInfo.Skip(1).Aggregate(propertyInfo.First().Name, (current, next) => current + ", " + next.Name);
+            return name + ": " + text;
         }
     }
 }

@@ -16,7 +16,7 @@ namespace Markup.Programming.Core
     {
         protected override object OnProcess(Engine engine)
         {
-            SetContext(engine);
+            engine.SetContext(ContextProperty, ContextPath);
             OnExecute(engine);
             return null;
         }

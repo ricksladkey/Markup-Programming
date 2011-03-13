@@ -9,7 +9,7 @@ namespace Markup.Programming.Core
     /// and supplies NameValuePair-base constructors.
     /// </summary>
 #if DEBUG
-    [DebuggerDisplay("Parameters = {Count}"), DebuggerTypeProxy(typeof(SmallDictionaryDebugView))]
+    [DebuggerDisplay("Parameters = {Count}"), DebuggerTypeProxy(typeof(DictionaryEntryDebugView))]
 #endif
     public class NameDictionary : SmallDictionary<string, object>
     {

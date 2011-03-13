@@ -1,12 +1,13 @@
-﻿#if DEBUG
-
-using System.Linq;
+﻿using System.Linq;
 using System.Diagnostics;
 using System.Collections;
 using System.Collections.Generic;
 
 namespace Markup.Programming.Core
 {
+
+#if DEBUG
+
     public class CollectionDebugView
     {
         public CollectionDebugView(IEnumerable collection)
@@ -28,6 +29,7 @@ namespace Markup.Programming.Core
             foreach (object item in collection) yield return item;
         }
     }
-}
 
 #endif
+
+}

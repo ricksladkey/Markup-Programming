@@ -2,14 +2,13 @@
     x:Class="Markup.Programming.Samples.HelloWorld"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
     xmlns:p="http://programmability.codeplex.com/markup/programming"
     Height="300" Width="300">
     <Grid>
         <Rectangle Fill="Red">
-            <i:Interaction.Triggers>
+            <p:Operation.Attach>
                 <p:CallHandler Path="MouseLeftButtonDown!:MessageBox.Show" Parameter="Hello, world!"/>
-            </i:Interaction.Triggers>
+            </p:Operation.Attach>
         </Rectangle>
     </Grid>
 </UserControl>

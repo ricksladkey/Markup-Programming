@@ -65,7 +65,7 @@ namespace Markup.Programming
                 foreach (var pair in pairs) PathHelper.SetProperty(target, pair.Name, pair.Value);
                 return target;
             }
-            return DynamicTypeHelper.CreateObject(ref dynamicType, pairs);
+            return DynamicObjectHelper.CreateObject(ref dynamicType, pairs);
         }
     }
 }

@@ -14,6 +14,13 @@ namespace Markup.Programming.Core
     /// </summary>
     public class DynamicObject : DynamicObjectBase, ICustomTypeDescriptor
     {
+        public static DynamicObject Empty =
+            new DynamicObject
+            {
+                PropertyInfo = new NameTypePair[0],
+                PropertyStore = new Dictionary<string, object>(),
+            };
+
         private PropertyInfoProvider provider;
         public DynamicObject() { provider = new PropertyInfoProvider(this, this.GetType()); }
 
@@ -30,11 +37,9 @@ namespace Markup.Programming.Core
         public PropertyDescriptorCollection GetProperties(System.Attribute[] attributes) { return provider.GetProperties(attributes); }
         public PropertyDescriptorCollection GetProperties() { return provider.GetProperties(); }
 
-        public static DynamicObject Empty =
-            new DynamicObject
-            {
-                PropertyInfo = new NameTypePair[0],
-                PropertyStore = new Dictionary<string,object>(),
-            };
+        public override string ToString()
+        {
+            return DynamicObjectHelper.ToString(this, "Object");
+        }
     }
 }

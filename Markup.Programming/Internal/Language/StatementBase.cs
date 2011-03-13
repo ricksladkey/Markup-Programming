@@ -33,16 +33,6 @@ namespace Markup.Programming.Core
             ExecutionHelper.Attach(this, properties);
         }
 
-        protected void SetContext(Engine engine)
-        {
-            if (Context != null || ContextPath != null || PathHelper.HasBinding(this, ContextProperty))
-            {
-                var context = engine.Evaluate(ContextProperty, ContextPath);
-                engine.Trace(TraceFlags.Parameter, "Setting context = {0}", context);
-                engine.DefineParameter(Engine.ContextParameter, context);
-            }
-        }
-
         public void Execute(Engine engine)
         {
             Process(engine);

@@ -17,6 +17,7 @@ namespace Markup.Programming
 
         protected override void OnAttached()
         {
+            base.OnAttached();
             new Engine().With(this, engine => RegisterHandler(engine, Path));
         }
 

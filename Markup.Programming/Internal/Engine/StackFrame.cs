@@ -13,7 +13,7 @@ namespace Markup.Programming.Core
     /// and should remain that way.
     /// </summary>
 #if DEBUG
-    [DebuggerDisplay("Caller = {Caller}, Flags = {Flags}")]
+    [DebuggerDisplay("Caller = {Caller}, AssociatedObject = {Caller.AssociatedObject}")]
 #endif
     public class StackFrame
     {

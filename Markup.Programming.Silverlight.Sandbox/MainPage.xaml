@@ -11,8 +11,8 @@
     <Grid x:Name="LayoutRoot" Background="White">
         <StackPanel Name="ContentHost">
             <Button Content="Add">
-                <i:Interaction.Triggers>
-                    <i:EventTrigger EventName="Click">
+                <p:Operation.Attach>
+                    <p:Handler EventName="Click">
                         <p:Block>
                             <p:Set ParameterName="Children">
                                 <p:Get Context="{Binding ElementName=ContentHost}" PropertyName="Children"/>
@@ -27,8 +27,8 @@
                                 <p:Get Path="$Child"/>
                             </p:Call>
                         </p:Block>
-                    </i:EventTrigger>
-                </i:Interaction.Triggers>
+                    </p:Handler>
+                </p:Operation.Attach>
             </Button>
         </StackPanel>
     </Grid>

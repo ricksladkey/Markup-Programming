@@ -19,7 +19,7 @@ namespace Markup.Programming
 
     [ContentProperty("Properties")]
 #if DEBUG
-    [DebuggerDisplay("Properties = {Properties.Count}"), DebuggerTypeProxy(typeof(DictionaryDebugView))]
+    [DebuggerDisplay("Properties = {Properties.Count}"), DebuggerTypeProxy(typeof(PropertyInfoDebugView))]
 #endif
     public class MarkupObject : ResourceObject, INotifyPropertyChanged, IProvideProperties, ICustomTypeDescriptor
     {
@@ -66,10 +66,7 @@ namespace Markup.Programming
 
         public override string ToString()
         {
-            if (propertyInfo == null) return "MarkupObject: [Initializing]";
-            var text = propertyInfo.Length == 0 ? "" :
-                propertyInfo.Skip(1).Aggregate(propertyInfo[0].Name, (current, next) => current + ", " + next.Name);
-            return string.Format("MarkupObject: " + text);
+            return DynamicObjectHelper.ToString(this, "MarkupObject");
         }
 
     #region IProvidePropertyInfo Members

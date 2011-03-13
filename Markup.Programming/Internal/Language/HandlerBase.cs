@@ -1,5 +1,6 @@
 ﻿using System.Windows;
 using System;
+using System.Reflection;
 
 namespace Markup.Programming.Core
 {
@@ -47,15 +48,16 @@ namespace Markup.Programming.Core
         }
 
         private string registeredEventName;
+        private static MethodInfo handlerMethodInfo = typeof(HandlerBase).GetMethod("Handler");
 
         protected void RegisterHandler(Engine engine, string alternateEventName)
         {
             var context = AssociatedObject;
-            var registeredEventName = EventName ?? alternateEventName;
+            registeredEventName = EventName ?? alternateEventName;
             var eventInfo = context.GetType().GetEvent(registeredEventName);
-            var methodInfo = this.GetType().GetMethod("Handler");
+            if (eventInfo == null) ThrowHelper.Throw("no such event: " + registeredEventName);
             eventInfo.AddEventHandler(context,
-                Delegate.CreateDelegate(eventInfo.EventHandlerType, this, methodInfo));
+                Delegate.CreateDelegate(eventInfo.EventHandlerType, this, handlerMethodInfo));
         }
 
         public void Handler(object sender, object args)
@@ -66,6 +68,7 @@ namespace Markup.Programming.Core
         private void Handler(Engine engine)
         {
             engine.Trace(TraceFlags.Events, "Event: {0}, sender {1}", registeredEventName, engine.Sender);
+            engine.SetContext(ContextProperty, ContextPath);
             OnHandler(engine);
         }
 

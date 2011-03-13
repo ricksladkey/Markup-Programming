@@ -1,6 +1,4 @@
-﻿#if DEBUG
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,6 +7,9 @@ using System.Collections;
 
 namespace Markup.Programming.Core
 {
+
+#if DEBUG
+
     public class DictionaryDebugView
     {
         [DebuggerDisplay("{value}", Name = "{key}")]
@@ -52,10 +53,10 @@ namespace Markup.Programming.Core
         }
     }
 
-    public class SmallDictionaryDebugView : DictionaryDebugView
+    public class DictionaryEntryDebugView : DictionaryDebugView
     {
         private IEnumerable collection;
-        public SmallDictionaryDebugView(IEnumerable collection) { this.collection = collection; }
+        public DictionaryEntryDebugView(IEnumerable collection) { this.collection = collection; }
 
         [DebuggerBrowsable(DebuggerBrowsableState.RootHidden)]
         public override KeyValuePair[] Pairs
@@ -68,6 +69,7 @@ namespace Markup.Programming.Core
             }
         }
     }
-}
 
 #endif
+
+}
