@@ -46,19 +46,17 @@
         <ComboBox ItemsSource="{Binding Samples}" Grid.Row="0">
             <p:Operation.Attach>
                 <p:EventHandler Path="SelectionChanged">
-                    <p:Block>
-                        <p:Set ParameterName="Children">
-                            <p:Get Context="{Binding ElementName=ContentHost}" PropertyName="Children"/>
-                        </p:Set>
-                        <p:Call Path="$Children.Clear"/>
-                        <p:Call Path="$Children.Add">
-                            <p:Get PropertyName="Control">
-                                <p:GetItem Context="{Binding Samples}">
-                                    <p:Get Path="$AssociatedObject.SelectedIndex"/>
-                                </p:GetItem>
-                            </p:Get>
-                        </p:Call>
-                    </p:Block>
+                    <p:Set ParameterName="Children">
+                        <p:Get Context="{Binding ElementName=ContentHost}" PropertyName="Children"/>
+                    </p:Set>
+                    <p:Call Path="$Children.Clear"/>
+                    <p:Call Path="$Children.Add">
+                        <p:Get Path="Control">
+                            <p:GetItem Path="Samples">
+                                <p:Get Path="$AssociatedObject.SelectedIndex"/>
+                            </p:GetItem>
+                        </p:Get>
+                    </p:Call>
                 </p:EventHandler>
             </p:Operation.Attach>
             <ComboBox.ItemTemplate>

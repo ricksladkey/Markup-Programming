@@ -78,7 +78,7 @@
 
                     <!-- all accessors can use context and context is inherited -->
                     <p:Val Context="{StaticResource BlueBrush}">
-                        <p:Get PropertyName="Color"/>
+                        <p:Get Path="Color"/>
                     </p:Val>
 
                     <!-- use operators with optional conversions -->
