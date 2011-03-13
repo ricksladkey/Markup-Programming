@@ -13,12 +13,12 @@
     <Grid>
         <StackPanel>
             <Button Content="Match Boy with Girl">
-                <p:Operation.Attach>
+                <p:Attach.Operations>
                     <p:CallHandler Path="Click!Match">
                         <p:Get Source="{Binding SelectedValue, ElementName=Boys}"/>
                         <p:Get Source="{Binding SelectedValue, ElementName=Girls}"/>
                     </p:CallHandler>
-                </p:Operation.Attach>
+                </p:Attach.Operations>
             </Button>
             <UniformGrid Columns="2">
                 <ListBox Name="Boys" ItemsSource="{Binding Boys}"/>

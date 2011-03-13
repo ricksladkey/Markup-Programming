@@ -133,7 +133,7 @@
     <Compile Include="Internal\Components\ComponentBase.cs" />
     <Compile Include="Internal\Diagnostics\EngineDebugView.cs" />
     <Compile Include="Markup\Handlers\EventHandler.cs" />
-    <Compile Include="Markup\Operation.cs" />
+    <Compile Include="Markup\Attach.cs" />
     <Compile Include="Internal\Language\Handler.cs" />
     <Compile Include="Markup\Language\Enumerations\AssignmentOperator.cs" />
     <Compile Include="Markup\Language\Enumerations\BuiltinFunction.cs" />

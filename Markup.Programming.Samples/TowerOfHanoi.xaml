@@ -172,12 +172,12 @@
                                 <!-- this says: using the data context for the layout root, -->
                                 <!-- call the SelectCommand.Execute when the MouseLeftButtonDown -->
                                 <!-- event is raised, passing it the selected post -->
-                                <p:Operation.Attach>
+                                <p:Attach.Operations>
                                     <p:CallHandler
                                         Context="{Binding DataContext, ElementName=LayoutRoot}"
                                         Path="MouseLeftButtonDown!SelectCommand.Execute"
                                         Parameter="{Binding}"/>
-                                </p:Operation.Attach>
+                                </p:Attach.Operations>
                                 
                                 <Rectangle Margin="0,5,0,0" Width="10" Fill="Brown" HorizontalAlignment="Center"/>
                                 <ItemsControl ItemsSource="{Binding}" ItemsPanel="{StaticResource PanelTemplate}" ItemTemplate="{StaticResource DiskTemplate}" VerticalAlignment="Bottom"/>

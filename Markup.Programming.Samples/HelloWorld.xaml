@@ -6,9 +6,9 @@
     Height="300" Width="300">
     <Grid>
         <Rectangle Fill="Red">
-            <p:Operation.Attach>
+            <p:Attach.Operations>
                 <p:CallHandler Path="MouseLeftButtonDown!:MessageBox.Show" Parameter="Hello, world!"/>
-            </p:Operation.Attach>
+            </p:Attach.Operations>
         </Rectangle>
     </Grid>
 </UserControl>
