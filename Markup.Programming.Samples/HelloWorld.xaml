@@ -7,7 +7,7 @@
     <Grid>
         <Rectangle Fill="Red">
             <p:Attached.Operations>
-                <p:CallHandler Path="MouseLeftButtonDown!:MessageBox.Show" Parameter="Hello, world!"/>
+                <p:CallHandler Path="MouseLeftButtonDown.:MessageBox.Show" Parameter="Hello, world!"/>
             </p:Attached.Operations>
         </Rectangle>
     </Grid>

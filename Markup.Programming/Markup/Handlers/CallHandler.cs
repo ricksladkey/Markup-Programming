@@ -131,9 +131,9 @@ namespace Markup.Programming
 
         private string[] GetFields()
         {
-            var fields = Path.Split('!');
-            if (fields.Length != 2) ThrowHelper.Throw("missing event");
-            return fields;
+            int m = Path.IndexOf('.');
+            if (m == -1) ThrowHelper.Throw("missing event");
+            return new string[] { Path.Substring(0, m), Path.Substring(m + 1) };
         }
 
         protected override void OnEventHandler(Engine engine)

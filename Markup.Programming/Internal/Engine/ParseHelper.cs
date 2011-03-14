@@ -150,7 +150,7 @@ namespace Markup.Programming.Core
                 }
                 switch (c)
                 {
-                    case '$': case '[': case ']': case '!': case '.':
+                    case '$': case '[': case ']': case '.':
                         tokens.Enqueue(c.ToString());
                         ++i;
                         continue;
