@@ -50,13 +50,7 @@
                         <p:Get Context="{Binding ElementName=ContentHost}" PropertyName="Children"/>
                     </p:Set>
                     <p:Call Path="$Children.Clear"/>
-                    <p:Call Path="$Children.Add">
-                        <p:Get Path="Control">
-                            <p:GetItem Path="Samples">
-                                <p:Get Path="$AssociatedObject.SelectedIndex"/>
-                            </p:GetItem>
-                        </p:Get>
-                    </p:Call>
+                    <p:Call Path="$Children.Add" ParameterPath="Samples[$AssociatedObject.SelectedIndex].Control"/>
                 </p:EventHandler>
             </p:Attached.Operations>
             <ComboBox.ItemTemplate>

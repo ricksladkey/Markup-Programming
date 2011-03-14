@@ -334,65 +334,12 @@ namespace Markup.Programming.Core
 
         public object GetPath(string path)
         {
-            if (path.Length == 0) return null;
-            if (path.Length == 1 && path[0] == '.') return Context;
-            var names = path.Split('.');
-            var context = Context;
-            foreach (var name in names) context = GetElement(context, name);
-            return context;
+            return ParseHelper.ParseGet(path).Evaluate(this);
         }
 
         public object SetPath(string path, object value)
         {
-            var names = path.Split('.');
-            var m = names.Length - 1;
-            var context = Context;
-            foreach (var name in names.Take(m)) context = GetElement(context, name);
-            SetElement(context, names[m], value);
-            return value;
-        }
-
-        private object GetElement(object context, string element)
-        {
-            if (element.Contains('['))
-            {
-                var fields = SplitItem(element);
-                context = GetProperty(context, fields[0]);
-                return Evaluate(Operator.GetItem, context, fields[1]);
-            }
-            return GetProperty(context, element);
-        }
-
-        private object GetProperty(object context, string property)
-        {
-            if (property[0] == '$') return LookupParameter(property.Substring(1));
-            var value = PathHelper.GetProperty(context, property);
-            Trace(TraceFlags.Path, "Path: {0} -> {1} -> {2}", context, property, value);
-            return value;
-        }
-
-        private void SetElement(object context, string element, object value)
-        {
-            if (element.Contains('['))
-            {
-                var fields = SplitItem(element);
-                context = GetProperty(context, fields[0]);
-                Evaluate(Operator.GetItem, context, fields[1]);
-            }
-            SetProperty(context, element, value);
-        }
-
-        private void SetProperty(object context, string property, object value)
-        {
-            if (property[0] == '$') DefineParameterInParentScope(property.Substring(1), value);
-            else PathHelper.SetProperty(context, property, value);
-        }
-
-        private string[] SplitItem(string element)
-        {
-            int n = element.Length;
-            int m = element.IndexOf('[');
-            return new string[] { element.Substring(0, m), element.Substring(m + 1, n - m - 2) };
+            return ParseHelper.ParseSet(path).Evaluate(this, value);
         }
 
         public bool ShouldTrace(TraceFlags flags)
