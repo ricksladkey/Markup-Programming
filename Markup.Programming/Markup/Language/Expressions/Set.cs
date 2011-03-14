@@ -146,7 +146,7 @@ namespace Markup.Programming
                 Target = value;
                 return value;
             }
-            var context = engine.GetContext(Path);
+            var context = engine.Context;
             var type = engine.EvaluateType(TypeProperty, TypeName);
             if (Operator != AssignmentOperator.Assign)
             {
