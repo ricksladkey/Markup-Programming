@@ -133,7 +133,7 @@
     <Compile Include="Internal\Components\ComponentBase.cs" />
     <Compile Include="Internal\Diagnostics\EngineDebugView.cs" />
     <Compile Include="Internal\Engine\MethodHelper.cs" />
-    <Compile Include="Internal\Engine\ParseHelper.cs" />
+    <Compile Include="Internal\Engine\PathExpression.cs" />
     <Compile Include="Markup\Handlers\EventHandler.cs" />
     <Compile Include="Markup\Attached.cs" />
     <Compile Include="Internal\Language\Handler.cs" />

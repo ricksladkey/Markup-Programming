@@ -334,12 +334,12 @@ namespace Markup.Programming.Core
 
         public object GetPath(string path)
         {
-            return ParseHelper.ParseGet(path).Evaluate(this);
+            return new PathExpression(true, path).Evaluate(this);
         }
 
         public object SetPath(string path, object value)
         {
-            return ParseHelper.ParseSet(path).Evaluate(this, value);
+            return new PathExpression(false, path).Evaluate(this, value);
         }
 
         public bool ShouldTrace(TraceFlags flags)
