@@ -78,13 +78,8 @@
                                 <p:Parameter ParameterName="FromCollection"/>
                                 <p:Parameter ParameterName="ToCollection"/>
                             </p:Function.Parameters>
-                            <p:Call Path="$ToCollection.Insert">
-                                <p:Val Value="0"/>
-                                <p:Get Path="$FromCollection[0]"/>
-                            </p:Call>
-                            <p:Call Path="$FromCollection.RemoveAt">
-                                <p:Val Value="0"/>
-                            </p:Call>
+                            <p:Call Path="$ToCollection.Insert(0, $FromCollection[0])"/>
+                            <p:Call Path="$FromCollection.RemoveAt(0)"/>
                         </p:Function>
 
                         <!-- this just implements the rules of the tower of hanoi game -->
