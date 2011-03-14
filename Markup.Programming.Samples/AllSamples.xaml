@@ -26,7 +26,7 @@
                         <p:Yield>
                             <p:Object>
                                 <p:Property PropertyName="Name">
-                                    <p:Call Path="$UserControl.ToString"/>
+                                    <p:Call Path="$UserControl.ToString()"/>
                                 </p:Property>
                                 <p:Property PropertyName="Control">
                                     <p:Get Path="$UserControl"/>
@@ -49,8 +49,8 @@
                     <p:Set ParameterName="Children">
                         <p:Get Context="{Binding ElementName=ContentHost}" PropertyName="Children"/>
                     </p:Set>
-                    <p:Call Path="$Children.Clear"/>
-                    <p:Call Path="$Children.Add" ParameterPath="Samples[$AssociatedObject.SelectedIndex].Control"/>
+                    <p:Call Path="$Children.Clear()"/>
+                    <p:Call Path="$Children.Add(Samples[$AssociatedObject.SelectedIndex].Control)"/>
                 </p:EventHandler>
             </p:Attached.Operations>
             <ComboBox.ItemTemplate>

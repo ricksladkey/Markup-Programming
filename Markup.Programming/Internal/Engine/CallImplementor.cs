@@ -67,12 +67,12 @@ namespace Markup.Programming.Core
             var path = caller.PathBase;
             if (path != null && path.Length > 0 && path[0] == ':')
             {
-                var fields = SplitMethod(path.Substring(1));
+                var fields = ParseMethod(path.Substring(1), ref args, engine);
                 return CallMethod(fields[1], true, engine.LookupType(fields[0]), null, args, engine);
             }
             if (path != null)
             {
-                var fields = SplitMethod(path);
+                var fields = ParseMethod(path, ref args, engine);
                 var context = engine.GetContext(fields[0]);
                 var typeToCall = caller.Type ?? context.GetType();
                 return CallMethod(fields[1], false, typeToCall, context, args, engine);
@@ -80,11 +80,27 @@ namespace Markup.Programming.Core
             return ThrowHelper.Throw("nothing to call");
         }
 
-        private static string[] SplitMethod(string path)
+        private static string[] ParseMethod(string path, ref object[] args, Engine engine)
         {
-            int n = path.LastIndexOf('.');
-            if (n == -1) return new string[] { ".", path };
-            return new string[] { path.Substring(0, n), path.Substring(n + 1) };
+            var context = ".";
+            var name = path;
+            var parameters = "";
+            int start = name.IndexOf('(');
+            int end = name.LastIndexOf(')');
+            if (start != -1 && end != -1)
+            {
+                parameters = name.Substring(start + 1, end - (start + 1)).Trim();
+                if (parameters == "") args = new object[0];
+                else args = parameters.Split(',').Select(parameter => engine.GetPath(parameter)).ToArray();
+                name = name.Substring(0, start);
+            }
+            int n = name.LastIndexOf('.');
+            if (n != -1)
+            {
+                context = name.Substring(0, n);
+                name = name.Substring(n + 1);
+            }
+            return new string[] { context, name };
         }
 
         private object CallMethod(string methodName, bool staticMethod, Type typeToCall, object callee, object[] args, Engine engine)

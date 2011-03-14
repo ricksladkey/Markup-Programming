@@ -3,6 +3,10 @@ using System.Diagnostics;
 
 namespace Markup.Programming.Core
 {
+    /// <summary>
+    /// The ParseHelper class parses paths into PathExpression objects that
+    /// can be evaluated later.
+    /// </summary>
     public static class ParseHelper
     {
         public class PathExpression
@@ -72,16 +76,7 @@ namespace Markup.Programming.Core
             public PathNode Index { get; set; }
             public override object Evaluate(Engine engine, object value)
             {
-#if true
-                if (Get)
-                {
-                    var context = Context.Evaluate(engine, value);
-                    var index = Index.Evaluate(engine, value);
-                    return PathHelper.GetItem(context, index);
-                }
-#else
                 if (Get) return PathHelper.GetItem(Context.Evaluate(engine, value), Index.Evaluate(engine, value));
-#endif
                 ThrowIfUnset(value);
                 PathHelper.SetItem(Context.Evaluate(engine, value), Index.Evaluate(engine, value), value);
                 return value;
