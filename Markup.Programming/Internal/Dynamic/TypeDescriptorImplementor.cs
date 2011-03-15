@@ -15,13 +15,13 @@ namespace Markup.Programming.Core
     /// </summary>
     public class TypeDescriptorImplementor : ICustomTypeDescriptor
     {
-        public TypeDescriptorImplementor(IProvideProperties component, Type componentType)
+        public TypeDescriptorImplementor(IDynamicObject component, Type componentType)
         {
             Component = component;
             ComponentType = componentType;
         }
 
-        public IProvideProperties Component { get; private set; }
+        public IDynamicObject Component { get; private set; }
         public Type ComponentType { get; private set; }
 
         public AttributeCollection GetAttributes() { return TypeDescriptor.GetAttributes(Component, true); }
@@ -38,7 +38,7 @@ namespace Markup.Programming.Core
 
         public PropertyDescriptorCollection GetProperties()
         {
-            var properties = Component.PropertyInfo.Select(pair => new BasicPropertyDescriptor(pair, ComponentType)).ToArray();
+            var properties = Component.DynamicProperties.Select(pair => new BasicPropertyDescriptor(pair, ComponentType)).ToArray();
             return new PropertyDescriptorCollection(properties);
         }
     }
@@ -57,11 +57,11 @@ namespace Markup.Programming.Core
 
         public override bool CanResetValue(object component) { return true; }
         public override Type ComponentType { get { return componentType; } }
-        public override object GetValue(object component) { return (component as IProvideProperties)[Name]; }
+        public override object GetValue(object component) { return (component as IDynamicObject)[Name]; }
         public override bool IsReadOnly { get { return false; } }
         public override Type PropertyType { get { return propertyType; } }
         public override void ResetValue(object component) { SetValue(component, null); }
-        public override void SetValue(object component, object value) { (component as IProvideProperties)[Name] = value; }
+        public override void SetValue(object component, object value) { (component as IDynamicObject)[Name] = value; }
         public override bool ShouldSerializeValue(object component) { return true; }
     }
 }

@@ -17,7 +17,7 @@ namespace Markup.Programming.Core
         public static DynamicObject Empty =
             new DynamicObject
             {
-                PropertyInfo = new NameTypePair[0],
+                DynamicProperties = new NameTypePair[0],
                 PropertyStore = new Dictionary<string, object>(),
             };
 

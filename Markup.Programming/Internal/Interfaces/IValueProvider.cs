@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Markup.Programming.Core
 {
-    public interface IProvideValue
+    public interface IValueProvider
     {
         object Value { get; set;  }
     }

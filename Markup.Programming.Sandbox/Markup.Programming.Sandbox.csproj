@@ -55,7 +55,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug - Emulate Silverlight|AnyCPU'">
     <DebugSymbols>true</DebugSymbols>
-    <OutputPath>bin\Debug - Emulate Silverlight\</OutputPath>
+    <OutputPath>..\bin\WPF4 Emulating Silverlight\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <DebugType>full</DebugType>
     <PlatformTarget>AnyCPU</PlatformTarget>

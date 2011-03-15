@@ -6,12 +6,12 @@ using System.Text;
 namespace Markup.Programming.Core
 {
     /// <summary>
-    /// The IProvideProperties interface is a very simple
-    /// interface for dynamic property types and objects.
+    /// The IDynamicObject interface is a very simple
+    /// interface for dynamic objects.
     /// </summary>
-    public interface IProvideProperties
+    public interface IDynamicObject
     {
-        IEnumerable<NameTypePair> PropertyInfo { get; }
+        IEnumerable<NameTypePair> DynamicProperties { get; }
         object this[string propertyName] { get; set; }
     }
 }

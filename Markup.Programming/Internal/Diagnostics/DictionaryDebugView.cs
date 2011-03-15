@@ -37,10 +37,10 @@ namespace Markup.Programming.Core
         }
     }
 
-    public class PropertyInfoDebugView : DictionaryDebugView
+    public class DynamicObjectDebugView : DictionaryDebugView
     {
-        private IProvideProperties component;
-        public PropertyInfoDebugView(IProvideProperties component) { this.component = component; }
+        private IDynamicObject component;
+        public DynamicObjectDebugView(IDynamicObject component) { this.component = component; }
 
         [DebuggerBrowsable(DebuggerBrowsableState.RootHidden)]
         public override KeyValuePair[] Pairs
@@ -48,7 +48,7 @@ namespace Markup.Programming.Core
             get
             {
                 if (component == null) return null;
-                return component.PropertyInfo.Select(property => new KeyValuePair(property.Name, component[property.Name])).ToArray();
+                return component.DynamicProperties.Select(property => new KeyValuePair(property.Name, component[property.Name])).ToArray();
             }
         }
     }

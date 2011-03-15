@@ -11,7 +11,7 @@ namespace Markup.Programming.Core
     /// This is used as the base class for classes like MarkupObject,
     /// MarkupCommand, etc. that are intended to be defined in XAML resources.
     /// </summary>
-    public abstract class ResourceObject : BindingCapableObject, ISupportInitialize, IProvideValue, IComponent
+    public abstract class ResourceObject : BindingCapableObject, ISupportInitialize, IValueProvider, IComponent
     {
         private DependencyObject associatedObject;
 

@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
-using System.ComponentModel;
-using System.Windows.Markup;
 using System.Windows;
+using System.Windows.Markup;
 using Markup.Programming.Core;
-using System.Diagnostics;
 
 namespace Markup.Programming
 {
@@ -19,9 +19,9 @@ namespace Markup.Programming
 
     [ContentProperty("Properties")]
 #if DEBUG
-    [DebuggerDisplay("Properties = {Properties.Count}"), DebuggerTypeProxy(typeof(PropertyInfoDebugView))]
+    [DebuggerDisplay("Properties = {Properties.Count}"), DebuggerTypeProxy(typeof(DynamicObjectDebugView))]
 #endif
-    public class MarkupObject : ResourceObject, INotifyPropertyChanged, IProvideProperties, ICustomTypeDescriptor
+    public class MarkupObject : ResourceObject, INotifyPropertyChanged, IDynamicObject, ICustomTypeDescriptor
     {
         public MarkupObject()
         {
@@ -69,9 +69,9 @@ namespace Markup.Programming
             return DynamicHelper.ToString(this, "MarkupObject");
         }
 
-    #region IProvidePropertyInfo Members
+    #region IDyamicObject Members
 
-        public IEnumerable<NameTypePair> PropertyInfo
+        public IEnumerable<NameTypePair> DynamicProperties
         {
             get { return propertyInfo; }
         }
@@ -145,7 +145,7 @@ namespace Markup.Programming
 #else
 
     [ContentProperty("Properties")]
-    public class MarkupObject : ResourceObject, IProvideProperties
+    public class MarkupObject : ResourceObject, IDynamicObject
     {
         public MarkupObject()
         {
@@ -180,7 +180,7 @@ namespace Markup.Programming
             var pairs = Properties.Select(property =>
                 new NameValuePair(property.PropertyName, property.Evaluate(engine))).ToArray();
             Type dynamicType = null;
-            value = DynamicTypeHelper.CreateObject(ref dynamicType, pairs);
+            value = DynamicHelper.CreateObject(ref dynamicType, pairs);
         }
 
         public IEnumerable<NameTypePair> PropertyInfo

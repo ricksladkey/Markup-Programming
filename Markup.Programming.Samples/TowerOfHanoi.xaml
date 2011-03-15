@@ -160,7 +160,7 @@
                             <Grid Background="Pink">
 
                                 <!-- this says: using the data context for the layout root, -->
-                                <!-- call the SelectCommand.Execute when the MouseLeftButtonDown -->
+                                <!-- call SelectCommand.Execute when the MouseLeftButtonDown -->
                                 <!-- event is raised, passing it the selected post -->
                                 <p:Attached.Operations>
                                     <p:CallHandler

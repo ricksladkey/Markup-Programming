@@ -34,7 +34,7 @@ namespace Markup.Programming.Core
             foreach (var pair in pairs) propertyStore.Add(pair.Name, pair.Value);
 #if !SILVERLIGHT
             if (Configuration.Silverlight) return null;
-            var instance = new DynamicObject { PropertyInfo = propertyInfo, PropertyStore = propertyStore };
+            var instance = new DynamicObject { DynamicProperties = propertyInfo, PropertyStore = propertyStore };
             return instance;
 #else
             return null;
@@ -45,7 +45,7 @@ namespace Markup.Programming.Core
         {
             if (dynamicType == null) dynamicType = CreateType(propertyInfo);
             var instance = Activator.CreateInstance(dynamicType) as DynamicObjectBase;
-            instance.PropertyInfo = propertyInfo;
+            instance.DynamicProperties = propertyInfo;
             instance.PropertyStore = new Dictionary<string, object>();
             foreach (var pair in pairs) instance[pair.Name] = pair.Value;
             return instance;
@@ -92,9 +92,9 @@ namespace Markup.Programming.Core
             return typeBuilder.CreateType();
         }
 
-        public static string ToString(IProvideProperties component, string name)
+        public static string ToString(IDynamicObject component, string name)
         {
-            var propertyInfo = component.PropertyInfo;
+            var propertyInfo = component.DynamicProperties;
             if (propertyInfo == null) return name + ": [Initializing]";
             var text = propertyInfo.Count() == 0 ? "" :
                 propertyInfo.Skip(1).Aggregate(propertyInfo.First().Name, (current, next) => current + ", " + next.Name);

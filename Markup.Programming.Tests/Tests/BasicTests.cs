@@ -20,7 +20,7 @@ namespace Markup.Programming.Tests
                     new Property { PropertyName = "String1", Value = "Test" },
                     new Property { PropertyName = "String2", Value = null },
                 }
-            }.Value as IProvideProperties;
+            }.Value as IDynamicObject;
             var window = new Window { DataContext = viewModel };
             Assert.AreEqual("Test", viewModel["String1"]);
             Assert.AreEqual(null, viewModel["String2"]);
@@ -80,7 +80,7 @@ namespace Markup.Programming.Tests
                         new Property { PropertyName = "String2", Value = null },
                         new Property { PropertyName = "String3", Value = null },
                     }
-            }.Value as IProvideProperties;
+            }.Value as IDynamicObject;
             Assert.AreEqual("Test", viewModel["String1"]);
             Assert.AreEqual(null, viewModel["String2"]);
             Assert.AreEqual(null, viewModel["String3"]);
@@ -109,7 +109,7 @@ namespace Markup.Programming.Tests
                         new Property { PropertyName = "String2", Value = null },
                         new Property { PropertyName = "String3", Value = null },
                     }
-            }.Value as IProvideProperties;
+            }.Value as IDynamicObject;
             Assert.AreEqual("Test", viewModel["String1"]);
             Assert.AreEqual(null, viewModel["String2"]);
             Assert.AreEqual(null, viewModel["String3"]);

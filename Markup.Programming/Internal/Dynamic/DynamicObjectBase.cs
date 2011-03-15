@@ -14,12 +14,12 @@ namespace Markup.Programming.Core
     /// and property change notification.
     /// </summary>
 #if DEBUG
-    [DebuggerDisplay("Properties = {PropertyStore.Count}"), DebuggerTypeProxy(typeof(PropertyInfoDebugView))]
+    [DebuggerDisplay("Properties = {PropertyStore.Count}"), DebuggerTypeProxy(typeof(DynamicObjectDebugView))]
 #endif
-    public class DynamicObjectBase : INotifyPropertyChanged, IProvideProperties
+    public class DynamicObjectBase : INotifyPropertyChanged, IDynamicObject
     {
         public Dictionary<string, object> PropertyStore { get; set; }
-        public IEnumerable<NameTypePair> PropertyInfo { get; set; }
+        public IEnumerable<NameTypePair> DynamicProperties { get; set; }
         public event PropertyChangedEventHandler PropertyChanged;
 
         protected void OnPropertyChanged(string propertyName)

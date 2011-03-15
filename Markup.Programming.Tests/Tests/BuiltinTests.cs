@@ -47,7 +47,7 @@ namespace Markup.Programming.Tests
                     }
                 }
             };
-            var viewModel = window.FindResource("ViewModel") as IProvideProperties;
+            var viewModel = window.FindResource("ViewModel") as IDynamicObject;
             Assert.AreEqual(viewModel, viewModel["ResourceObject"]);
         }
     }
