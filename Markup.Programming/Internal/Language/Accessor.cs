@@ -38,27 +38,27 @@ namespace Markup.Programming.Core
 
         protected object Get(Engine engine)
         {
-            return Evaluate(true, engine, null);
+            return Evaluate(false, engine, null);
         }
 
         protected object Set(Engine engine, object value)
         {
-            return Evaluate(false, engine, value);
+            return Evaluate(true, engine, value);
         }
 
-        private object Evaluate(bool isGet, Engine engine, object value)
+        private object Evaluate(bool isSet, Engine engine, object value)
         {
-            var op = isGet ? Operator.GetItem : Operator.SetItem;
+            var op = isSet ? Operator.SetItem : Operator.GetItem;
             var context = engine.GetContext(Path);
             if (Arguments.Count != 0)
             {
                 var combinedArgs = new object[] { context }.Concat(Arguments.Evaluate(engine));
-                if (!isGet) combinedArgs.Concat(new object[] { value });
+                if (isSet) combinedArgs.Concat(new object[] { value });
                 return engine.Evaluate(op, combinedArgs.ToArray());
             }
             var type = engine.EvaluateType(TypeProperty, TypeName);
             var index = engine.Evaluate(IndexProperty, IndexPath, type);
-            if (isGet) return engine.Evaluate(op, context, index);
+            if (!isSet) return engine.Evaluate(op, context, index);
             return engine.Evaluate(op, context, index, value);
         }
     }

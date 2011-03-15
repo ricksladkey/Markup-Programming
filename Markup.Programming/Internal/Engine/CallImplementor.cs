@@ -40,7 +40,7 @@ namespace Markup.Programming.Core
                 var parameter = engine.Evaluate(caller.CallerParameterProperty, caller.ParameterPath);
                 args = new object[] { engine.EvaluateObject(parameter) }.Concat(args).ToArray();
             }
-            if (caller.PathBase != null) return CallPath(engine, args);
+            if (caller.PathBase != null) return engine.CallPath(caller.PathBase, args);
             if (caller.FunctionName != null) return engine.CallFunction(caller.FunctionName, args);
             if (caller.BuiltinFunction != 0) return CallBuiltinFunction(engine, args);
             return CallMethod(engine, args);
@@ -50,14 +50,6 @@ namespace Markup.Programming.Core
         {
             var builtin = new BuiltinImplementor(engine);
             return MethodHelper.CallMethod(caller.BuiltinFunction.ToString(), false, typeof(BuiltinImplementor), builtin, args, null, engine);
-        }
-
-        public object CallPath(Engine engine, object[] args)
-        {
-            var path = caller.PathBase;
-            var pathExpression = new PathExpression(true, false, path);
-            var node = pathExpression.PathNode as CallNode;
-            return (node.Arguments == null) ? node.Call(engine, args) : pathExpression.Evaluate(engine);
         }
 
         private object CallMethod(Engine engine, object[] args)

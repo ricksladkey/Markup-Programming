@@ -225,9 +225,10 @@ namespace Markup.Programming.Core
             foreach (var pair in dictionary) DefineParameter(pair.Key, pair.Value, false);
         }
 
-        public void DefineParameterInParentScope(string name, object value)
+        public object DefineParameterInParentScope(string name, object value)
         {
             DefineParameter(name, value, true);
+            return value;
         }
 
         private void DefineParameter(string name, object value, bool parentFrame)
@@ -300,7 +301,7 @@ namespace Markup.Programming.Core
             return ThrowHelper.Throw("function not found: " + name) as Function;
         }
 
-        public static Type LookupType(string name)
+        public Type LookupType(string name)
         {
             if (name.Split(',').Length > 2) return TypeHelper.ConvertToType(name);
             return TypeHelper.ResolvePartialType(name);
@@ -334,12 +335,17 @@ namespace Markup.Programming.Core
 
         public object GetPath(string path)
         {
-            return new PathExpression(true, true, path).Evaluate(this);
+            return new PathExpression(this, false, false, path).Evaluate(this);
         }
 
         public object SetPath(string path, object value)
         {
-            return new PathExpression(false, true, path).Evaluate(this, value);
+            return new PathExpression(this, true, false, path).Evaluate(this, value);
+        }
+
+        public object CallPath(string path, object[] args)
+        {
+            return new PathExpression(this, false, true, path).Call(this, args);
         }
 
         public bool ShouldTrace(TraceFlags flags)

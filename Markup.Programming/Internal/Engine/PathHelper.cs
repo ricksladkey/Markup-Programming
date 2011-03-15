@@ -108,7 +108,7 @@ namespace Markup.Programming.Core
             context.SetValue(dependencyProperty, value);
         }
 
-        public static void SetProperty(object context, string propertyName, object value)
+        public static object SetProperty(object context, string propertyName, object value)
         {
             if (context == null) ThrowHelper.Throw("context cannot be null");
             var propertyInfo = context.GetType().GetProperty(propertyName);
@@ -116,7 +116,7 @@ namespace Markup.Programming.Core
             {
                 value = TypeHelper.Convert(propertyInfo.PropertyType, value);
                 propertyInfo.SetValue(context, value, null);
-                return;
+                return value;
             }
 
 #if !SILVERLIGHT
@@ -128,7 +128,7 @@ namespace Markup.Programming.Core
                     {
                         value = TypeHelper.Convert(descriptor.PropertyType, value);
                         descriptor.SetValue(context, value);
-                        return;
+                        return value;
                     }
                 }
             }
@@ -137,10 +137,10 @@ namespace Markup.Programming.Core
             if (context is System.Dynamic.DynamicObject)
             {
                 if ((context as System.Dynamic.DynamicObject).TrySetMember(new BasicSetMemberBinder(propertyName), value))
-                    return;
+                    return value;
             }
 
-            ThrowHelper.Throw("no such property: " + propertyName);
+            return ThrowHelper.Throw("no such property: " + propertyName);
         }
 
         public static void SetStaticProperty(Type type, string propertyName, object value)
@@ -196,23 +196,23 @@ namespace Markup.Programming.Core
 
         public static object GetItem(object context, params object[] args)
         {
-            return CallAccessor(true, context, args);
+            return CallAccessor(false, context, args);
         }
 
         public static object SetItem(object context, params object [] args)
         {
-            CallAccessor(false, context, args);
+            CallAccessor(true, context, args);
             return args[args.Length - 1];
         }
 
-        public static object CallAccessor(bool isGet, object context, params object[] rawArgs)
+        public static object CallAccessor(bool isSet, object context, params object[] rawArgs)
         {
             if (context == null) ThrowHelper.Throw("context cannot be null");
             var contextType = context.GetType();
             var propertyInfo = contextType.GetProperty("Item");
             if (propertyInfo == null && context is IList) propertyInfo = typeof(IList).GetProperty("Item");
             if (propertyInfo == null) ThrowHelper.Throw("no such property");
-            var methodInfo = isGet ? propertyInfo.GetGetMethod() : propertyInfo.GetSetMethod();
+            var methodInfo = isSet ? propertyInfo.GetSetMethod() : propertyInfo.GetGetMethod();
             if (methodInfo == null) ThrowHelper.Throw("no such method");
             var parameters = methodInfo.GetParameters();
             if (parameters.Length != rawArgs.Length) ThrowHelper.Throw(string.Format("indexer count mismatch: {0} != {1}", parameters.Length, rawArgs.Length));
