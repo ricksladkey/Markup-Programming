@@ -8,6 +8,34 @@ namespace Markup.Programming.Core
 {
     public static class MethodHelper
     {
+        public static object CallMethod(string methodName, bool staticMethod, Type typeToCall, object callee, object[] args, Type[] typeArgs, Engine engine)
+        {
+            var bindingFlags = (staticMethod ? BindingFlags.Static : BindingFlags.Instance) |
+                BindingFlags.Public | BindingFlags.FlattenHierarchy;
+            var methodInfo = null as MethodInfo;
+            if (typeArgs != null)
+            {
+                // Use type arguments to choose overload.
+                methodInfo = typeToCall.GetMethod(methodName, bindingFlags, null, typeArgs, null);
+            }
+            else
+            {
+                try
+                {
+                    // Try default method.
+                    methodInfo = typeToCall.GetMethod(methodName, bindingFlags);
+                }
+                catch
+                {
+                    // Use arguments to choose overload.
+                    var types = args.Select(value => value != null ? value.GetType() : typeof(object));
+                    methodInfo = typeToCall.GetMethod(methodName, bindingFlags, null, types.ToArray(), null);
+                    if (methodInfo == null) ThrowHelper.Throw("method overload not found: " + methodName);
+                }
+            }
+            return MethodHelper.CallMethod(methodName, methodInfo, callee, args, engine);
+        }
+
         public static object CallMethod(string methodName, MethodInfo methodInfo, object callee, object[] args, Engine engine)
         {
 

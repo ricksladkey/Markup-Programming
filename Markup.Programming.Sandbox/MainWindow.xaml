@@ -5,23 +5,32 @@
     xmlns:p="http://programmability.codeplex.com/markup/programming"
     Height="300" Width="300">
     <Grid>
-        <UniformGrid Rows="2">
+        <UniformGrid Rows="3">
+            <Rectangle Fill="Red">
+
+                <!-- Shortest form -->
+
+                <p:Attached.Operations>
+                    <p:CallHandler Path="MouseLeftButtonDown.[MessageBox].Show('Hello, world!')"/>
+                </p:Attached.Operations>
+
+            </Rectangle>
             <Rectangle Fill="Green">
 
-                <!-- Short form -->
+                <!-- Shorter form -->
                 
                 <p:Attached.Operations>
-                    <p:CallHandler Path="MouseLeftButtonDown.:MessageBox.Show" Parameter="Hello, world!"/>
+                    <p:CallHandler Path="MouseLeftButtonDown.[MessageBox].Show" Parameter="Hello, world!"/>
                 </p:Attached.Operations>
                 
             </Rectangle>
-            <Rectangle Fill="Red">
+            <Rectangle Fill="Blue">
                 
                 <!-- Standard way -->
 
                 <p:Attached.Operations>
                     <p:EventHandler Path="MouseLeftButtonDown">
-                        <p:Call Path=":MessageBox.Show">
+                        <p:Call Path="[MessageBox].Show">
                             <p:Val Value="Hello, world!"/>
                         </p:Call>
                     </p:EventHandler>

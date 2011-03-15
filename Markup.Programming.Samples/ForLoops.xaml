@@ -20,8 +20,8 @@
                             <p:For.Next>
                                 <p:Set Path="$I" Operator="Increment" />
                             </p:For.Next>
-                            <p:Call Path=":MessageBox.Show">
-                                <p:Call Path=":String.Format">
+                            <p:Call Path="[MessageBox].Show">
+                                <p:Call Path="[String].Format">
                                     <p:Val Value="I = {0}"/>
                                     <p:Get Path="$I"/>
                                 </p:Call>
@@ -34,8 +34,8 @@
                 <p:Attached.Operations>
                     <p:EventHandler Path="Click">
                         <p:For ParameterName="I" Value="0" UpperLimit="3" Increment="1">
-                            <p:Call Path=":MessageBox.Show">
-                                <p:Call Path=":String.Format">
+                            <p:Call Path="[MessageBox].Show">
+                                <p:Call Path="[String].Format">
                                     <p:Val Value="I = {0}"/>
                                     <p:Get Path="$I"/>
                                 </p:Call>

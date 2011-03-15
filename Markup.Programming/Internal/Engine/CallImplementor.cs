@@ -48,88 +48,32 @@ namespace Markup.Programming.Core
         private object CallBuiltinFunction(Engine engine, object[] args)
         {
             var builtin = new BuiltinImplementor(engine);
-            return CallMethod(caller.BuiltinFunction.ToString(), false, typeof(BuiltinImplementor), builtin, args, engine);
+            return MethodHelper.CallMethod(caller.BuiltinFunction.ToString(), false, typeof(BuiltinImplementor), builtin, args, null, engine);
         }
 
         private object CallMethod(Engine engine, object[] args)
         {
+            var typeArgs = caller.TypeArguments.Count != 0 ?
+                caller.TypeArguments.Evaluate(engine).Cast<Type>().ToArray() : null;
             if (caller.StaticMethodName != null)
             {
                 var type = engine.EvaluateType(caller.CallerTypeProperty, caller.TypeName);
-                return CallMethod(caller.StaticMethodName, true, type, null, args, engine);
+                return MethodHelper.CallMethod(caller.StaticMethodName, true, type, null, args, typeArgs, engine);
             }
             if (caller.MethodName != null)
             {
                 var context = engine.GetContext(caller.PathBase);
                 var typeToCall = caller.Type ?? context.GetType();
-                return CallMethod(caller.MethodName, false, typeToCall, context, args, engine);
+                return MethodHelper.CallMethod(caller.MethodName, false, typeToCall, context, args, typeArgs, engine);
             }
             var path = caller.PathBase;
-            if (path != null && path.Length > 0 && path[0] == ':')
-            {
-                var fields = ParseMethod(path.Substring(1), ref args, engine);
-                return CallMethod(fields[1], true, engine.LookupType(fields[0]), null, args, engine);
-            }
             if (path != null)
             {
-                var fields = ParseMethod(path, ref args, engine);
-                var context = engine.GetContext(fields[0]);
-                var typeToCall = caller.Type ?? context.GetType();
-                return CallMethod(fields[1], false, typeToCall, context, args, engine);
+                var pathExpression = new PathExpression(true, false, path);
+                var node = pathExpression.PathNode as MethodNode;
+                return (node.Arguments == null) ? node.Call(engine, args) : pathExpression.Evaluate(engine);
             }
             return ThrowHelper.Throw("nothing to call");
-        }
-
-        private static string[] ParseMethod(string path, ref object[] args, Engine engine)
-        {
-            var context = "@";
-            var name = path;
-            var parameters = "";
-            int start = name.IndexOf('(');
-            int end = name.LastIndexOf(')');
-            if (start != -1 && end != -1)
-            {
-                parameters = name.Substring(start + 1, end - (start + 1)).Trim();
-                if (parameters == "") args = new object[0];
-                else args = parameters.Split(',').Select(parameter => engine.GetPath(parameter)).ToArray();
-                name = name.Substring(0, start);
-            }
-            int n = name.LastIndexOf('.');
-            if (n != -1)
-            {
-                context = name.Substring(0, n);
-                name = name.Substring(n + 1);
-            }
-            return new string[] { context, name };
-        }
-
-        private object CallMethod(string methodName, bool staticMethod, Type typeToCall, object callee, object[] args, Engine engine)
-        {
-            var bindingFlags = (staticMethod ? BindingFlags.Static : BindingFlags.Instance) |
-                BindingFlags.Public | BindingFlags.FlattenHierarchy;
-            var methodInfo = null as MethodInfo;
-            if (caller.TypeArguments.Count != 0)
-            {
-                // Use type arguments to choose overload.
-                var types = caller.TypeArguments.Evaluate(engine).Cast<Type>().ToArray();
-                methodInfo = typeToCall.GetMethod(methodName, bindingFlags, null, types, null);
-            }
-            else
-            {
-                try
-                {
-                    // Try default method.
-                    methodInfo = typeToCall.GetMethod(methodName, bindingFlags);
-                }
-                catch
-                {
-                    // Use arguments to choose overload.
-                    var types = args.Select(value => value != null ? value.GetType() : typeof(object));
-                    methodInfo = typeToCall.GetMethod(methodName, bindingFlags, null, types.ToArray(), null);
-                    if (methodInfo == null) ThrowHelper.Throw("method overload not found: " + methodName);
-                }
-            }
-            return MethodHelper.CallMethod(methodName, methodInfo, callee, args, engine);
         }
 
         private object CallFunction(Engine engine, IEnumerable<object> args)

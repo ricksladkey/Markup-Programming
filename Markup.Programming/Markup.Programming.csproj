@@ -134,6 +134,7 @@
     <Compile Include="Internal\Diagnostics\EngineDebugView.cs" />
     <Compile Include="Internal\Engine\MethodHelper.cs" />
     <Compile Include="Internal\Engine\PathExpression.cs" />
+    <Compile Include="Internal\Engine\PathNode.cs" />
     <Compile Include="Markup\Handlers\EventHandler.cs" />
     <Compile Include="Markup\Attached.cs" />
     <Compile Include="Internal\Language\Handler.cs" />

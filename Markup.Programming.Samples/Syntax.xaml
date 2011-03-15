@@ -158,14 +158,14 @@
 
         <Button Content="Click Me">
             <p:Attached.Operations>
-                <p:CallHandler EventName="Click.:MessageBox.Show"/>
+                <p:CallHandler EventName="Click.[MessageBox].Show"/>
             </p:Attached.Operations>
         </Button>
 
         <Button Content="Click Me">
             <p:Attached.Operations>
                 <p:EventHandler Path="Click">
-                    <p:Call Path=":MessageBox.Show" Parameter="Hellow, world!"/>
+                    <p:Call Path="[MessageBox].Show" Parameter="Hellow, world!"/>
                 </p:EventHandler>
             </p:Attached.Operations>
         </Button>

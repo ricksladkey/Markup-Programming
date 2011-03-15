@@ -71,6 +71,7 @@ namespace Markup.Programming.Tests.Tests
         [TestMethod]
         public void BasicPathTests()
         {
+            BasicGetTest("abc", "'abc'");
             BasicGetTest("Test1", "String1");
             BasicGetTest("Test2", "Object1.String1");
             BasicGetTest("Value1", "$Parameter1");

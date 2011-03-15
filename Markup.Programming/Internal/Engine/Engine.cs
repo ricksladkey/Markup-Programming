@@ -300,7 +300,7 @@ namespace Markup.Programming.Core
             return ThrowHelper.Throw("function not found: " + name) as Function;
         }
 
-        public Type LookupType(string name)
+        public static Type LookupType(string name)
         {
             if (name.Split(',').Length > 2) return TypeHelper.ConvertToType(name);
             return TypeHelper.ResolvePartialType(name);
@@ -334,17 +334,12 @@ namespace Markup.Programming.Core
 
         public object GetPath(string path)
         {
-            return new PathExpression(true, true, path, this).Evaluate(this);
-        }
-
-        public object GetPathMethod(string path)
-        {
-            return new PathExpression(true, false, path, this).Evaluate(this);
+            return new PathExpression(true, true, path).Evaluate(this);
         }
 
         public object SetPath(string path, object value)
         {
-            return new PathExpression(false, true, path, this).Evaluate(this, value);
+            return new PathExpression(false, true, path).Evaluate(this, value);
         }
 
         public bool ShouldTrace(TraceFlags flags)

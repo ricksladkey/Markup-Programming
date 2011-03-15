@@ -11,107 +11,6 @@ namespace Markup.Programming.Core
     /// </summary>
     public class PathExpression
     {
-        private abstract class PathNode
-        {
-            public bool IsGet { get; set; }
-            public PathNode Context { get; set; }
-            public void ThrowIfUnset(object value) { if (IsUnset(value)) ThrowHelper.Throw("unset"); }
-            public object Evaluate(Engine engine, object value)
-            {
-                engine.Trace(TraceFlags.Path, "Path: evaluate {0}", this.GetType().Name);
-                var result = OnEvaluate(engine, value);
-                engine.Trace(TraceFlags.Path, "Path: {0} = {1}", this.GetType().Name, result);
-                return result;
-            }
-            protected abstract object OnEvaluate(Engine engine, object value);
-        }
-
-        private class ValueNode : PathNode
-        {
-            public object Value { get; set; }
-            protected override object OnEvaluate(Engine engine, object value) { return Value; }
-        }
-
-        private class OpNode : PathNode
-        {
-            public OpNode() { Operands = new List<PathNode>(); }
-            public Operator Operator { get; set; }
-            public IList<PathNode> Operands { get; set; }
-            protected override object OnEvaluate(Engine engine, object value)
-            {
-                return engine.Evaluate(Operator, Operands.Select(operand => operand.Evaluate(engine, value)).ToArray());
-            }
-        }
-
-        private class ContextNode : PathNode
-        {
-            protected override object OnEvaluate(Engine engine, object value) { return engine.Context; }
-        }
-
-        private class ParameterNode : PathNode
-        {
-            public string ParameterName { get; set; }
-            protected override object OnEvaluate(Engine engine, object value)
-            {
-                if (IsGet) return engine.LookupParameter(ParameterName);
-                ThrowIfUnset(value);
-                engine.DefineParameterInParentScope(ParameterName, value);
-                return value;
-            }
-        }
-
-        private class PropertyNode : PathNode
-        {
-            public string PropertyName { get; set; }
-            protected override object OnEvaluate(Engine engine, object value)
-            {
-                if (IsGet) return PathHelper.GetProperty(Context.Evaluate(engine, value), PropertyName);
-                ThrowIfUnset(value);
-                PathHelper.SetProperty(Context.Evaluate(engine, value), PropertyName, value);
-                return value;
-            }
-        }
-
-        private class ItemNode : PathNode
-        {
-            public PathNode Index { get; set; }
-            protected override object OnEvaluate(Engine engine, object value)
-            {
-                if (IsGet) return PathHelper.GetItem(Context.Evaluate(engine, value), Index.Evaluate(engine, value));
-                ThrowIfUnset(value);
-                PathHelper.SetItem(Context.Evaluate(engine, value), Index.Evaluate(engine, value), value);
-                return value;
-            }
-        }
-
-        private class MethodNode : PathNode
-        {
-            public string MethodName { get; set; }
-            public IList<PathNode> Arguments { get; set; }
-            protected object[] EvaluateArguments(Engine engine, object value)
-            {
-                return Arguments.Select(argument => argument.Evaluate(engine, value)).ToArray();
-            }
-            protected override object OnEvaluate(Engine engine, object value)
-            {
-                var context = Context.Evaluate(engine, value);
-                var args = EvaluateArguments(engine, value);
-                var methodInfo = context.GetType().GetMethod(MethodName);
-                return MethodHelper.CallMethod(MethodName, methodInfo, context, args, engine);
-            }
-        }
-
-        private class StaticMethodNode : MethodNode
-        {
-            public Type Type { get; set; }
-            protected override object OnEvaluate(Engine engine, object value)
-            {
-                var args = EvaluateArguments(engine, value);
-                var methodInfo = Type.GetMethod(MethodName);
-                return MethodHelper.CallMethod(MethodName, methodInfo, null, args, engine);
-            }
-        }
-
         private class TokenQueue
         {
             private List<string> list = new List<string>();
@@ -123,20 +22,17 @@ namespace Markup.Programming.Core
         }
 
         private enum Value { UnsetValue = 0 };
-        private static bool IsUnset(object value) { return value.Equals(Value.UnsetValue); }
+        public static bool IsUnset(object value) { return value.Equals(Value.UnsetValue); }
 
-        private Engine engine;
-        private PathNode root;
         private TokenQueue tokens;
 
-        public PathExpression(bool isGet, bool isProperty, string path, Engine engine)
+        public PathExpression(bool isGet, bool isProperty, string path)
         {
             IsGet = isGet;
             IsProperty = isProperty;
             Path = path;
-            this.engine = engine;
             tokens = Tokenize(Path);
-            root = Parse();
+            PathNode = Parse();
             if (tokens.Count != 0) ThrowHelper.Throw("unexpected token: " + tokens.Dequeue());
             tokens = null;
         }
@@ -146,12 +42,13 @@ namespace Markup.Programming.Core
         public bool IsProperty { get; private set; }
         public bool IsMethod { get { return !IsProperty; } }
         public string Path { get; private set; }
+        public PathNode PathNode { get; private set; }
 
         public object Evaluate(Engine engine) { return Evaluate(engine, Value.UnsetValue); }
         public object Evaluate(Engine engine, object value)
         {
             engine.Trace(TraceFlags.Path, "Path: Evaluating: {0}", Path);
-            return root.Evaluate(engine, value);
+            return PathNode.Evaluate(engine, value);
         }
 
         private PathNode Parse()
@@ -178,11 +75,16 @@ namespace Markup.Programming.Core
                 }
                 else if (char.IsDigit(c))
                     node = new ValueNode { Value = int.Parse(tokens.Dequeue()) };
+                else if (c == '"')
+                    node = new ValueNode { Value = tokens.Dequeue().Substring(1) };
                 else if (IsInitialIdentifierChar(c))
                 {
                     tokens.Dequeue();
-                    if (tokens.Peek() == "(")
-                        node = new MethodNode { Context = node, MethodName = token, Arguments = ParseArguments() };
+                    if (tokens.Peek() == "(" || tokens.Count == 0 && IsMethod)
+                    {
+                        var args = tokens.Peek() == "(" ? ParseArguments() : null;
+                        node = new MethodNode { Context = node, MethodName = token, Arguments = args };
+                    }
                     else
                         node = new PropertyNode { IsGet = IsCurrentGet, Context = node, PropertyName = token };
                 }
@@ -200,7 +102,7 @@ namespace Markup.Programming.Core
                     while (tokens.Count > 0 && tokens.Peek() != "]") typeName += tokens.Dequeue();
                     VerifyToken("]");
                     VerifyToken(".");
-                    var type = engine.LookupType(typeName);
+                    var type = Engine.LookupType(typeName);
                     var methodName = tokens.Dequeue();
                     var args = tokens.Peek() == "(" ? ParseArguments() : null;
                     node = new StaticMethodNode { Type = type, MethodName = methodName, Arguments = args };
@@ -257,6 +159,14 @@ namespace Markup.Programming.Core
             {
                 char c = path[i];
                 if (c == ' ') { ++i; continue; }
+                if (c == '\'')
+                {
+                    var start = ++i;
+                    for (++i; i < path.Length && path[i] != '\''; ++i) continue;
+                    if (path[i] == path.Length) ThrowHelper.Throw("missing closing quote");
+                    tokens.Enqueue('"' + path.Substring(start, i++ - start));
+                    continue;
+                }
                 if ("$.[](),+-*/".Contains(c)) { tokens.Enqueue(c.ToString()); ++i; continue; }
                 if (!IsIdentifierChar(c)) ThrowHelper.Throw("invalid token: " + path.Substring(i));
                 {
