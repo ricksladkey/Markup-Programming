@@ -31,9 +31,7 @@
                 <p:Collection>
                     <p:Iterator>
                         <p:For ParameterName="I" Value="0" UpperLimit="4" Increment="1">
-                            <p:Yield>
-                                <p:Op Path1="$I" Operator="Plus" Value2="1"/>
-                            </p:Yield>
+                            <p:Yield Path="$I + 1"/>
                         </p:For>
                     </p:Iterator>
                     <p:Collection/>
@@ -174,4 +172,3 @@
         </StackPanel>
     </Grid>
 </UserControl>
- 
