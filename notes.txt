@@ -1,8 +1,8 @@
+- don't attach to events in the designer
 - add recursive descent parser for operators
 - Call.Path can choose method or function
 - fix auto-evaluation of langauge elements
 - add all-markup sample equivalent of one method two bindings
-- fix routed events
 - handle Call.Parameter for function calls
 - write macro to format comment region
 - rename MarkupObject to ResourceObject, etc.

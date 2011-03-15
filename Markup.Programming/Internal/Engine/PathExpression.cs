@@ -172,7 +172,10 @@ namespace Markup.Programming.Core
                 }
                 if (!nodeNext) return node;
                 if (token == "@")
+                {
+                    tokens.Dequeue();
                     node = new ContextNode();
+                }
                 else if (char.IsDigit(c))
                     node = new ValueNode { Value = int.Parse(tokens.Dequeue()) };
                 else if (IsInitialIdentifierChar(c))

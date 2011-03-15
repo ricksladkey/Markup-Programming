@@ -26,6 +26,15 @@ namespace Markup.Programming.Core
         public static readonly DependencyProperty EventNameProperty =
             DependencyProperty.Register("EventName", typeof(string), typeof(Handler), null);
 
+        public bool SetHandled
+        {
+            get { return (bool)GetValue(SetHandledProperty); }
+            set { SetValue(SetHandledProperty, value); }
+        }
+
+        public static readonly DependencyProperty SetHandledProperty =
+            DependencyProperty.Register("SetHandled", typeof(bool), typeof(Handler), null);
+
         protected override void OnAttached()
         {
             base.OnAttached();
@@ -70,13 +79,7 @@ namespace Markup.Programming.Core
             engine.Trace(TraceFlags.Events, "Event: {0}, sender {1}", registeredEventName, engine.Sender);
             engine.SetContext(ContextProperty, ContextPath);
             OnEventHandler(engine);
-            if (engine.EventArgs is RoutedEventArgs)
-            {
-                var routedEvent = (engine.EventArgs as RoutedEventArgs);
-                engine.Trace(TraceFlags.Events, "sender: {0}", engine.Sender);
-                engine.Trace(TraceFlags.Events, "source: {0}", routedEvent.Source);
-                engine.Trace(TraceFlags.Events, "orig  : {0}", routedEvent.OriginalSource);
-            }
+            if (SetHandled && engine.EventArgs is RoutedEventArgs) (engine.EventArgs as RoutedEventArgs).Handled = true;
         }
 
         protected virtual void OnEventHandler(Engine engine)

@@ -82,7 +82,7 @@ namespace Markup.Programming.Core
 
         private static string[] ParseMethod(string path, ref object[] args, Engine engine)
         {
-            var context = ".";
+            var context = "@";
             var name = path;
             var parameters = "";
             int start = name.IndexOf('(');

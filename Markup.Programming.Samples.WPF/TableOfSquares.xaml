@@ -15,7 +15,7 @@
                                 <p:Property PropertyName="Square">
                                     <p:Op Path1="$I" Operator="Times" Path2="$I"/>
                                 </p:Property>
-                                <p:Property PropertyName="Sqrt" Path=":Math.Sqrt($I)"/>
+                                <p:Property PropertyName="Sqrt" Path="[Math].Sqrt($I)"/>
                             </p:Object>
                         </p:Yield>
                     </p:For>

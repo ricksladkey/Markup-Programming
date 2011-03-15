@@ -23,6 +23,7 @@ namespace Markup.Programming.Core
 
         void OnCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
+            if (e.NewItems == null) return;
             foreach (IComponent item in e.NewItems)
             {
                 if (this.AssociatedObject == null) return;
