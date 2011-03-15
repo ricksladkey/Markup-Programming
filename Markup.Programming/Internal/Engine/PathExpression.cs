@@ -12,7 +12,7 @@ namespace Markup.Programming.Core
     {
         private abstract class PathNode
         {
-            public bool Get { get; set; }
+            public bool IsGet { get; set; }
             public PathNode Context { get; set; }
             public void ThrowIfUnset(object value) { if (IsUnset(value)) ThrowHelper.Throw("unset"); }
             public object Evaluate(Engine engine, object value)
@@ -52,7 +52,7 @@ namespace Markup.Programming.Core
             public string ParameterName { get; set; }
             protected override object OnEvaluate(Engine engine, object value)
             {
-                if (Get) return engine.LookupParameter(ParameterName);
+                if (IsGet) return engine.LookupParameter(ParameterName);
                 ThrowIfUnset(value);
                 engine.DefineParameterInParentScope(ParameterName, value);
                 return value;
@@ -64,7 +64,7 @@ namespace Markup.Programming.Core
             public string PropertyName { get; set; }
             protected override object OnEvaluate(Engine engine, object value)
             {
-                if (Get) return PathHelper.GetProperty(Context.Evaluate(engine, value), PropertyName);
+                if (IsGet) return PathHelper.GetProperty(Context.Evaluate(engine, value), PropertyName);
                 ThrowIfUnset(value);
                 PathHelper.SetProperty(Context.Evaluate(engine, value), PropertyName, value);
                 return value;
@@ -76,7 +76,7 @@ namespace Markup.Programming.Core
             public PathNode Index { get; set; }
             protected override object OnEvaluate(Engine engine, object value)
             {
-                if (Get) return PathHelper.GetItem(Context.Evaluate(engine, value), Index.Evaluate(engine, value));
+                if (IsGet) return PathHelper.GetItem(Context.Evaluate(engine, value), Index.Evaluate(engine, value));
                 ThrowIfUnset(value);
                 PathHelper.SetItem(Context.Evaluate(engine, value), Index.Evaluate(engine, value), value);
                 return value;
@@ -110,17 +110,19 @@ namespace Markup.Programming.Core
         private static bool IsUnset(object value) { return value.Equals(Value.UnsetValue); }
 
         private PathNode root;
+        private TokenQueue tokens;
 
-        public PathExpression(bool get, string path)
+        public PathExpression(bool isGet, string path)
         {
-            Get = get;
+            IsGet = isGet;
             Path = path;
-            var tokens = Tokenize(Path);
-            root = Parse(tokens);
+            tokens = Tokenize(Path);
+            root = Parse();
             if (tokens.Count != 0) ThrowHelper.Throw("unexpected token: " + tokens.Dequeue());
+            tokens = null;
         }
 
-        public bool Get { get; private set; }
+        public bool IsGet { get; private set; }
         public string Path { get; private set; }
 
         public object Evaluate(Engine engine) { return Evaluate(engine, Value.UnsetValue); }
@@ -130,7 +132,7 @@ namespace Markup.Programming.Core
             return root.Evaluate(engine, value);
         }
 
-        private PathNode Parse(TokenQueue tokens)
+        private PathNode Parse()
         {
             if (tokens.Count == 0) return new ValueNode { Value = null };
             var node = new ContextNode() as PathNode;
@@ -145,7 +147,7 @@ namespace Markup.Programming.Core
                     tokens.Dequeue();
                     if (tokens.Count == 0) ThrowHelper.Throw("missing parameter");
                     var parameterName = tokens.Dequeue();
-                    node = new ParameterNode { Get = Get || tokens.Count > 0, ParameterName = parameterName };
+                    node = new ParameterNode { IsGet = IsCurrentGet, ParameterName = parameterName };
                 }
                 else if (IsInitialIdentifierChar(c))
                 {
@@ -153,14 +155,20 @@ namespace Markup.Programming.Core
                     if (tokens.Count > 0 && tokens.Peek() == "(")
                         node = new MethodNode { Context = node, MethodName = token, Arguments = ParseArguments(tokens) };
                     else
-                        node = new PropertyNode { Get = Get || tokens.Count > 0, Context = node, PropertyName = token };
+                        node = new PropertyNode { IsGet = IsCurrentGet, Context = node, PropertyName = token };
                 }
                 else if (c == '[')
                 {
                     tokens.Dequeue();
-                    var index = Parse(tokens);
-                    if (tokens.Count == 0 || tokens.Dequeue() != "]") ThrowHelper.Throw("missing closing square bracket");
-                    node = new ItemNode { Get = Get || tokens.Count > 0, Context = node, Index = index };
+                    var index = Parse();
+                    VerifyToken("]");
+                    node = new ItemNode { IsGet = IsCurrentGet, Context = node, Index = index };
+                }
+                else if (c == '(')
+                {
+                    tokens.Dequeue();
+                    node = Parse();
+                    VerifyToken(")");
                 }
                 else if (char.IsDigit(c))
                     node = new ValueNode { Value = int.Parse(tokens.Dequeue()) };
@@ -168,6 +176,13 @@ namespace Markup.Programming.Core
                     return node;
             }
             return node;
+        }
+
+        private bool IsCurrentGet { get { return IsGet || tokens.Count > 0; } }
+
+        private void VerifyToken(string token)
+        {
+            if (tokens.Count == 0 || tokens.Dequeue() != token) ThrowHelper.Throw("missing token: " + token);
         }
 
         private IList<PathNode> ParseArguments(TokenQueue tokens)
@@ -179,7 +194,7 @@ namespace Markup.Programming.Core
             if (tokens.Count > 0 && tokens.Peek() == ")") { tokens.Dequeue(); return nodes; }
             while (tokens.Count > 0)
             {
-                nodes.Add(Parse(tokens));
+                nodes.Add(Parse());
                 if (tokens.Count == 0) break;
                 var nextToken = tokens.Dequeue();
                 if (!expectedTokens.Contains(nextToken)) ThrowHelper.Throw("unexpected token: " + nextToken);
@@ -195,7 +210,7 @@ namespace Markup.Programming.Core
             {
                 char c = path[i];
                 if (c == ' ') { ++i; continue; }
-                if ("$.[](),".Contains(c)) { tokens.Enqueue(c.ToString()); ++i; continue; }
+                if ("$.[](),+-*/".Contains(c)) { tokens.Enqueue(c.ToString()); ++i; continue; }
                 if (!IsIdentifierChar(c)) ThrowHelper.Throw("invalid token: " + path.Substring(i));
                 {
                     var start = i;

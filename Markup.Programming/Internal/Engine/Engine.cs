@@ -233,7 +233,7 @@ namespace Markup.Programming.Core
         private void DefineParameter(string name, object value, bool parentFrame)
         {
             Trace(TraceFlags.Parameter, "DefineParameter: {0} = {1}", name, value);
-            var frame = parentFrame ? ParentFrame : CurrentFrame;
+            var frame = parentFrame ? (ParentFrame ?? CurrentFrame) : CurrentFrame;
             if (frame == null) ThrowHelper.Throw("no frame for parameter: " + name);
             if (frame.Parameters == null) frame.Parameters = new NameDictionary();
             frame.Parameters[name] = value;

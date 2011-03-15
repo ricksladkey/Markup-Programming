@@ -4,10 +4,11 @@ using System.Windows.Data;
 using System.Windows;
 using Markup.Programming.Core;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Collections.Generic;
 
 namespace Markup.Programming.Tests
 {
-    public static class Test
+    public static class TestHelper
     {
         public static T Configure<T>(T value, params Action<T>[] statements)
         {
@@ -49,21 +50,21 @@ namespace Markup.Programming.Tests
             var window = new Window { DataContext = viewModel };
             Assert.AreEqual(initialValue, viewModel.Object1);
             AttachAndExecute(window, statement);
-            Test.AreStructurallyEqual(expectedValue, viewModel.Object1);
+            TestHelper.AreStructurallyEqual(expectedValue, viewModel.Object1);
         }
 
         public static void ExpressionTest(object expectedValue, IExpression expression)
         {
             var viewModel = new BasicViewModel();
             var window = new Window { DataContext = viewModel };
-            var statement = Test.Configure(new Set
+            var statement = TestHelper.Configure(new Set
                 {
                     PropertyName = "Object1",
                     Value = expression,
                 },
-                Test.TargetBinder);
+                TestHelper.TargetBinder);
             AttachAndExecute(window, statement);
-            Test.AreStructurallyEqual(expectedValue, viewModel.Object1);
+            TestHelper.AreStructurallyEqual(expectedValue, viewModel.Object1);
         }
     }
 }

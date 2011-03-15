@@ -10,13 +10,13 @@ namespace Markup.Programming.Tests
         [TestMethod]
         public void IsDefinedTest()
         {
-            Test.ExpressionTest(true,
+            TestHelper.ExpressionTest(true,
                 new Call
                 {
                     BuiltinFunction = BuiltinFunction.ParameterIsDefined,
                     Arguments = { new Val { Value = "EventArgs" } },
                 });
-            Test.ExpressionTest(false,
+            TestHelper.ExpressionTest(false,
                 new Call
                 {
                     BuiltinFunction = BuiltinFunction.ParameterIsDefined,

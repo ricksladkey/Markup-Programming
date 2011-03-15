@@ -205,14 +205,14 @@ namespace Markup.Programming.Core
             return args[args.Length - 1];
         }
 
-        public static object CallAccessor(bool get, object context, params object[] rawArgs)
+        public static object CallAccessor(bool isGet, object context, params object[] rawArgs)
         {
             if (context == null) ThrowHelper.Throw("context cannot be null");
             var contextType = context.GetType();
             var propertyInfo = contextType.GetProperty("Item");
             if (propertyInfo == null && context is IList) propertyInfo = typeof(IList).GetProperty("Item");
             if (propertyInfo == null) ThrowHelper.Throw("no such property");
-            var methodInfo = get ? propertyInfo.GetGetMethod() : propertyInfo.GetSetMethod();
+            var methodInfo = isGet ? propertyInfo.GetGetMethod() : propertyInfo.GetSetMethod();
             if (methodInfo == null) ThrowHelper.Throw("no such method");
             var parameters = methodInfo.GetParameters();
             if (parameters.Length != rawArgs.Length) ThrowHelper.Throw(string.Format("indexer count mismatch: {0} != {1}", parameters.Length, rawArgs.Length));

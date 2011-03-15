@@ -46,19 +46,19 @@ namespace Markup.Programming.Core
             return Evaluate(false, engine, value);
         }
 
-        private object Evaluate(bool get, Engine engine, object value)
+        private object Evaluate(bool isGet, Engine engine, object value)
         {
-            var op = get ? Operator.GetItem : Operator.SetItem;
+            var op = isGet ? Operator.GetItem : Operator.SetItem;
             var context = engine.GetContext(Path);
             if (Arguments.Count != 0)
             {
                 var combinedArgs = new object[] { context }.Concat(Arguments.Evaluate(engine));
-                if (!get) combinedArgs.Concat(new object[] { value });
+                if (!isGet) combinedArgs.Concat(new object[] { value });
                 return engine.Evaluate(op, combinedArgs.ToArray());
             }
             var type = engine.EvaluateType(TypeProperty, TypeName);
             var index = engine.Evaluate(IndexProperty, IndexPath, type);
-            if (get) return engine.Evaluate(op, context, index);
+            if (isGet) return engine.Evaluate(op, context, index);
             return engine.Evaluate(op, context, index, value);
         }
     }

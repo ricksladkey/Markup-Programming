@@ -39,9 +39,9 @@ namespace Markup.Programming.Tests
             var viewModel = new BasicViewModel { String1 = "Test" };
             Assert.AreEqual("Test", viewModel.String1);
             Assert.AreEqual(null, viewModel.String2);
-            Test.AttachAndExecute(new Window { DataContext = viewModel },
-                Test.Configure(new Set { PropertyName = "String2" },
-                    Test.TargetBinder,
+            TestHelper.AttachAndExecute(new Window { DataContext = viewModel },
+                TestHelper.Configure(new Set { PropertyName = "String2" },
+                    TestHelper.TargetBinder,
                     value => BindingOperations.SetBinding(value, Set.ValueProperty, new Binding("String1"))));
             Assert.AreEqual("Test", viewModel.String1);
             Assert.AreEqual("Test", viewModel.String2);
@@ -54,14 +54,14 @@ namespace Markup.Programming.Tests
             var viewModel = new BasicViewModel { String1 = "Test" };
             Assert.AreEqual("Test", viewModel.String1);
             Assert.AreEqual(null, viewModel.String2);
-            Test.AttachAndExecute(new Window { DataContext = viewModel },
-                Test.Configure(new Set
+            TestHelper.AttachAndExecute(new Window { DataContext = viewModel },
+                TestHelper.Configure(new Set
                 {
                     PropertyName = "String2",
-                    Value = Test.Configure(new Val(),
+                    Value = TestHelper.Configure(new Val(),
                         value => BindingOperations.SetBinding(value, Val.ValueProperty, new Binding("String1"))),
                 },
-                Test.TargetBinder));
+                TestHelper.TargetBinder));
             Assert.AreEqual("Test", viewModel.String1);
             Assert.AreEqual("Test", viewModel.String2);
         }
@@ -84,12 +84,12 @@ namespace Markup.Programming.Tests
             Assert.AreEqual("Test", viewModel["String1"]);
             Assert.AreEqual(null, viewModel["String2"]);
             Assert.AreEqual(null, viewModel["String3"]);
-            Test.AttachAndExecute(new Window { DataContext = viewModel },
-                Test.Configure(new Set { PropertyName = "String2" },
-                    Test.TargetBinder,
+            TestHelper.AttachAndExecute(new Window { DataContext = viewModel },
+                TestHelper.Configure(new Set { PropertyName = "String2" },
+                    TestHelper.TargetBinder,
                     value => BindingOperations.SetBinding(value, Set.ValueProperty, new Binding("String1"))),
-                Test.Configure(new Set { PropertyName = "String3" },
-                    Test.TargetBinder,
+                TestHelper.Configure(new Set { PropertyName = "String3" },
+                    TestHelper.TargetBinder,
                     value => BindingOperations.SetBinding(value, Set.ValueProperty, new Binding("String2"))));
             Assert.AreEqual("Test", viewModel["String1"]);
             Assert.AreEqual("Test", viewModel["String2"]);
@@ -123,12 +123,12 @@ namespace Markup.Programming.Tests
             };
             var window = new Window { DataContext = viewModel };
             window.Resources.Add(resource, "sampleData");
-            Test.AttachAndExecute(window,
-                Test.Configure(new Set { PropertyName = "String2" },
-                    Test.TargetBinder,
+            TestHelper.AttachAndExecute(window,
+                TestHelper.Configure(new Set { PropertyName = "String2" },
+                    TestHelper.TargetBinder,
                     value => BindingOperations.SetBinding(value, Set.ValueProperty, new Binding("String1"))),
-                Test.Configure(new Set { PropertyName = "String3" },
-                    Test.TargetBinder,
+                TestHelper.Configure(new Set { PropertyName = "String3" },
+                    TestHelper.TargetBinder,
                     value => BindingOperations.SetBinding(value, Set.ValueProperty, new Binding("String2"))));
             Assert.AreEqual("Test", viewModel["String1"]);
             Assert.AreEqual("Test", viewModel["String2"]);

@@ -15,7 +15,7 @@ namespace Markup.Programming.Tests
         [TestMethod]
         public void NewGenericListTest()
         {
-            Test.ExpressionTest(new List<string>(),
+            TestHelper.ExpressionTest(new List<string>(),
                 new New
                 {
                     Type = typeof(List<>),
@@ -26,24 +26,24 @@ namespace Markup.Programming.Tests
         [TestMethod]
         public void IsTest()
         {
-            Test.ExpressionTest(true, new Op { Value1 = 1, Operator = Operator.Is, Value2 = typeof(int) });
-            Test.ExpressionTest(false, new Op { Value1 = 1.0, Operator = Operator.Is, Value2 = typeof(int) });
-            Test.ExpressionTest(true, new Op { Value1 = new Dog(), Operator = Operator.Is, Value2 = typeof(Animal) });
-            Test.ExpressionTest(false, new Op { Value1 = new Animal(), Operator = Operator.Is, Value2 = typeof(Dog) });
+            TestHelper.ExpressionTest(true, new Op { Value1 = 1, Operator = Operator.Is, Value2 = typeof(int) });
+            TestHelper.ExpressionTest(false, new Op { Value1 = 1.0, Operator = Operator.Is, Value2 = typeof(int) });
+            TestHelper.ExpressionTest(true, new Op { Value1 = new Dog(), Operator = Operator.Is, Value2 = typeof(Animal) });
+            TestHelper.ExpressionTest(false, new Op { Value1 = new Animal(), Operator = Operator.Is, Value2 = typeof(Dog) });
         }
 
         [TestMethod]
         public void ExpressionTests()
         {
-            Test.ExpressionTest(3, new Op { Operator = Operator.Plus,
+            TestHelper.ExpressionTest(3, new Op { Operator = Operator.Plus,
                 Arguments = { new Val { Value = 1 }, new Val { Value = 2 } } });
         }
 
         [TestMethod]
         public void CallCosTest()
         {
-            Test.StatementTest(0.0, 1.0,
-                Test.Configure(new Set
+            TestHelper.StatementTest(0.0, 1.0,
+                TestHelper.Configure(new Set
                     {
                         PropertyName = "Object1",
                         Value = new Call
@@ -52,12 +52,12 @@ namespace Markup.Programming.Tests
                             StaticMethodName = "Cos",
                             Arguments =
                             {
-                                Test.Configure(new Val(),
+                                TestHelper.Configure(new Val(),
                                     value => BindingOperations.SetBinding(value, Val.ValueProperty, new Binding("Object1"))),
                             },
                         },
                     },
-                    Test.TargetBinder));
+                    TestHelper.TargetBinder));
         }
 
         [TestMethod]
@@ -65,7 +65,7 @@ namespace Markup.Programming.Tests
         {
             // Call the static String.Format method with explicit
             // type arguments and test that params are working.
-            Test.ExpressionTest("1, 2",
+            TestHelper.ExpressionTest("1, 2",
                 new Call
                 {
                     Type = typeof(string),
@@ -92,7 +92,7 @@ namespace Markup.Programming.Tests
             // and the deduced generic type is the minimum base class.
             var item1 = new Dog();
             var item2 = new Animal();
-            Test.ExpressionTest(new ObservableCollection<Animal> { item1, item2 },
+            TestHelper.ExpressionTest(new ObservableCollection<Animal> { item1, item2 },
                 new Iterator
                 {
                     Body =

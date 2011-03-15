@@ -117,13 +117,14 @@
     </CodeAnalysisDependentAssemblyPaths>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BasicViewModel.cs" />
-    <Compile Include="BuiltinTests.cs" />
-    <Compile Include="ControlFlowTests.cs" />
-    <Compile Include="EvaluationTests.cs" />
+    <Compile Include="Tests\BasicViewModel.cs" />
+    <Compile Include="Tests\BuiltinTests.cs" />
+    <Compile Include="Tests\ControlFlowTests.cs" />
+    <Compile Include="Tests\EvaluationTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="BasicTests.cs" />
-    <Compile Include="Test.cs" />
+    <Compile Include="Tests\BasicTests.cs" />
+    <Compile Include="Tests\PathTests.cs" />
+    <Compile Include="Tests\TestHelper.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Markup.Programming\Markup.Programming.csproj">

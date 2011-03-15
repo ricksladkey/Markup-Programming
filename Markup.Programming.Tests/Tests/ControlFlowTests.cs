@@ -14,16 +14,16 @@ namespace Markup.Programming.Tests
             var viewModel = new BasicViewModel();
             Assert.AreEqual(null, viewModel.String1);
             Assert.AreEqual(null, viewModel.String2);
-            Test.AttachAndExecute(new Window { DataContext = viewModel },
+            TestHelper.AttachAndExecute(new Window { DataContext = viewModel },
                 new While
                 {
                     Body =
                     {
-                        Test.Configure(new Set { PropertyName = "String1", Value = "Test1" },
-                            Test.TargetBinder),
+                        TestHelper.Configure(new Set { PropertyName = "String1", Value = "Test1" },
+                            TestHelper.TargetBinder),
                         new Break(),
-                        Test.Configure(new Set { PropertyName = "String2", Value = "Test2" },
-                            Test.TargetBinder),
+                        TestHelper.Configure(new Set { PropertyName = "String2", Value = "Test2" },
+                            TestHelper.TargetBinder),
                     }
                 });
             Assert.AreEqual("Test1", viewModel.String1);
@@ -34,7 +34,7 @@ namespace Markup.Programming.Tests
         public void InlineFunctionTest()
         {
             // Set X = 21 and then return X * 2 and check that the result is 42.
-            Test.ExpressionTest(42,
+            TestHelper.ExpressionTest(42,
                 new InlineFunction
                 {
                     Body =
@@ -56,7 +56,7 @@ namespace Markup.Programming.Tests
         [TestMethod]
         public void SwitchTest()
         {
-            Test.ExpressionTest(42,
+            TestHelper.ExpressionTest(42,
                 new InlineFunction
                 {
                     Body =
