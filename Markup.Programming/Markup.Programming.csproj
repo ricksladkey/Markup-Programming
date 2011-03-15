@@ -146,7 +146,7 @@
     <Compile Include="Internal\Language\ConditionalValueStatement.cs" />
     <Compile Include="Internal\Dynamic\DynamicObservableCollection.cs" />
     <Compile Include="Internal\Language\HiddenExpression.cs" />
-    <Compile Include="Internal\Interfaces\ICaller.cs" />
+    <Compile Include="Internal\Engine\ICaller.cs" />
     <Compile Include="Internal\Interfaces\IHiddenExpression.cs" />
     <Compile Include="Internal\Interfaces\IProcessor.cs" />
     <Compile Include="Internal\Collections\NameTypePair.cs" />
@@ -162,7 +162,7 @@
     <Compile Include="Internal\Collections\ComponentCollectionBase.cs" />
     <Compile Include="Internal\Engine\Configuration.cs" />
     <Compile Include="Internal\Diagnostics\DictionaryDebugView.cs" />
-    <Compile Include="Internal\Interfaces\IValueProvider.cs" />
+    <Compile Include="Internal\Components\IValueProvider.cs" />
     <Compile Include="Internal\Language\Accessor.cs" />
     <Compile Include="Internal\Components\ResourceObject.cs" />
     <Compile Include="Internal\Components\BindingCapableObject.cs" />
@@ -183,7 +183,7 @@
     <Compile Include="Internal\Dynamic\DynamicObjectBase.cs" />
     <Compile Include="Internal\Dynamic\DynamicHelper.cs" />
     <Compile Include="Internal\Interfaces\IExpression.cs" />
-    <Compile Include="Internal\Interfaces\IDynamicObject.cs" />
+    <Compile Include="Internal\Dynamic\IDynamicObject.cs" />
     <Compile Include="Internal\Interfaces\IStatement.cs" />
     <Compile Include="Internal\Language\UntypedValueStatement.cs" />
     <Compile Include="Internal\Language\ValueBlock.cs" />
