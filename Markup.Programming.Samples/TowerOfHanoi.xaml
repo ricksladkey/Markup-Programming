@@ -110,13 +110,9 @@
             </p:Property>
         </p:MarkupObject>
         
-        <!-- IMPORTANT: ABOVE THIS LINE THERE IS NO VIEW SPECIFIC CODE: LOOSE COUPLING -->
-
-        <!-- add a converter that simply multiplies its value times its parameter -->
-        <!-- we use this converter to convert an abstract disk to a pixel width -->
-        <p:MarkupConverter x:Key="MultiplyConverter" ConvertPath="$ConverterValue * $ConverterParameter"/>
-            
     </UserControl.Resources>
+
+    <!-- IMPORTANT: ABOVE THIS LINE THERE IS NO VIEW SPECIFIC CODE: LOOSE COUPLING -->
 
     <!-- add our view with its data context bound to the view model -->
     <!-- no MVVM application worth its salt is complete without something like this -->
@@ -131,7 +127,18 @@
             <!-- add traditional page resources -->
             <StackPanel.Resources>
                 <DataTemplate x:Key="DiskTemplate">
-                    <Rectangle Margin="1" Height="10" Width="{Binding Converter={StaticResource MultiplyConverter}, ConverterParameter=20}" Fill="Red" Stroke="White" HorizontalAlignment="Center"/>
+                    <Rectangle Margin="1" Height="10" Fill="Red" Stroke="White" HorizontalAlignment="Center">
+                        <Rectangle.Width>
+                            <Binding>
+                                <Binding.Converter>
+
+                                    <!-- Holy cow, how many times have I wanted to be able to do this! -->
+                                    <p:MarkupConverter ConvertPath="$ConverterValue * 20"/>
+                                    
+                                </Binding.Converter>
+                            </Binding>
+                        </Rectangle.Width>
+                    </Rectangle>
                 </DataTemplate>
                 <ItemsPanelTemplate x:Key="PanelTemplate">
                     <StackPanel/>
