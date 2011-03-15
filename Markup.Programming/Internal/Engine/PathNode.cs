@@ -9,6 +9,7 @@ namespace Markup.Programming.Core
     {
         public bool IsGet { get; set; }
         public PathNode Context { get; set; }
+        public string Name { get; set; }
         public void ThrowIfUnset(object value) { if (PathExpression.IsUnset(value)) ThrowHelper.Throw("unset"); }
         public object Evaluate(Engine engine, object value)
         {
@@ -56,12 +57,11 @@ namespace Markup.Programming.Core
 
     public class PropertyNode : PathNode
     {
-        public string PropertyName { get; set; }
         protected override object OnEvaluate(Engine engine, object value)
         {
-            if (IsGet) return PathHelper.GetProperty(Context.Evaluate(engine, value), PropertyName);
+            if (IsGet) return PathHelper.GetProperty(Context.Evaluate(engine, value), Name);
             ThrowIfUnset(value);
-            PathHelper.SetProperty(Context.Evaluate(engine, value), PropertyName, value);
+            PathHelper.SetProperty(Context.Evaluate(engine, value), Name, value);
             return value;
         }
     }
@@ -78,29 +78,41 @@ namespace Markup.Programming.Core
         }
     }
 
-    public class MethodNode : PathNode
+    public abstract class CallNode : PathNode
     {
-        private object setValue;
-        public string MethodName { get; set; }
+        protected object setValue;
         public IList<PathNode> Arguments { get; set; }
         protected override object OnEvaluate(Engine engine, object value)
         {
             setValue = value;
             return Call(engine, Arguments.Select(argument => argument.Evaluate(engine, value)).ToArray());
         }
-        public virtual object Call(Engine engine, object[] args)
+        public abstract object Call(Engine engine, object[] args);
+    }
+
+    public class MethodNode : CallNode
+    {
+        public override object Call(Engine engine, object[] args)
         {
             var context = Context.Evaluate(engine, setValue);
-            return MethodHelper.CallMethod(MethodName, false, context.GetType(), context, args, null, engine);
+            return MethodHelper.CallMethod(Name, false, context.GetType(), context, args, null, engine);
         }
     }
 
-    public class StaticMethodNode : MethodNode
+    public class StaticMethodNode : CallNode
     {
         public Type Type { get; set; }
         public override object Call(Engine engine, object[] args)
         {
-            return MethodHelper.CallMethod(MethodName, true, Type, null, args, null, engine);
+            return MethodHelper.CallMethod(Name, true, Type, null, args, null, engine);
+        }
+    }
+
+    public class FunctionNode : CallNode
+    {
+        public override object Call(Engine engine, object[] args)
+        {
+            return engine.CallFunction(Name, args);
         }
     }
 }

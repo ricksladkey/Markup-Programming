@@ -90,10 +90,7 @@
                             <p:If.Then>
                                 <p:When>
                                     <p:Op Operator="NotIsZero" Path="SelectedPost.Count"/>
-                                    <p:Call FunctionName="MoveItem">
-                                        <p:Get Path="SelectedPost"/>
-                                        <p:Get Path="HoldingPost"/>
-                                    </p:Call>
+                                    <p:Call Path="$MoveItem(SelectedPost, HoldingPost)"/>
                                 </p:When>
                             </p:If.Then>
                             <p:If.Else>
@@ -105,10 +102,7 @@
                                             <p:Get Path="SelectedPost[0]"/>
                                         </p:Op>
                                     </p:Op>
-                                    <p:Call FunctionName="MoveItem">
-                                        <p:Get Path="HoldingPost"/>
-                                        <p:Get Path="SelectedPost"/>
-                                    </p:Call>
+                                    <p:Call Path="$MoveItem(HoldingPost, SelectedPost)"/>
                                 </p:When>
                             </p:If.Else>
                         </p:If>

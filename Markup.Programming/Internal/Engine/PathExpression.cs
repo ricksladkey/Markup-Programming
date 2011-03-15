@@ -80,20 +80,26 @@ namespace Markup.Programming.Core
                 else if (IsInitialIdentifierChar(c))
                 {
                     tokens.Dequeue();
-                    if (tokens.Peek() == "(" || tokens.Count == 0 && IsMethod)
+                    if (IsCurrentMethod)
                     {
                         var args = tokens.Peek() == "(" ? ParseArguments() : null;
-                        node = new MethodNode { Context = node, MethodName = token, Arguments = args };
+                        node = new MethodNode { Context = node, Name = token, Arguments = args };
                     }
                     else
-                        node = new PropertyNode { IsGet = IsCurrentGet, Context = node, PropertyName = token };
+                        node = new PropertyNode { IsGet = IsCurrentGet, Context = node, Name = token };
                 }
                 else if (c == '$')
                 {
                     tokens.Dequeue();
                     if (tokens.Count == 0) ThrowHelper.Throw("missing parameter");
-                    var parameterName = tokens.Dequeue();
-                    node = new ParameterNode { IsGet = IsCurrentGet, ParameterName = parameterName };
+                    var name = tokens.Dequeue();
+                    if (IsCurrentMethod)
+                    {
+                        var args = tokens.Peek() == "(" ? ParseArguments() : null;
+                        node = new FunctionNode { Context = node, Name = name, Arguments = args };
+                    }
+                    else
+                        node = new ParameterNode { IsGet = IsCurrentGet, ParameterName = name };
                 }
                 else if (c == '[')
                 {
@@ -105,7 +111,7 @@ namespace Markup.Programming.Core
                     var type = Engine.LookupType(typeName);
                     var methodName = tokens.Dequeue();
                     var args = tokens.Peek() == "(" ? ParseArguments() : null;
-                    node = new StaticMethodNode { Type = type, MethodName = methodName, Arguments = args };
+                    node = new StaticMethodNode { Type = type, Name = methodName, Arguments = args };
                 }
                 else if (c == '(')
                 {
@@ -128,6 +134,7 @@ namespace Markup.Programming.Core
         }
 
         private bool IsCurrentGet { get { return IsGet || tokens.Count > 0; } }
+        private bool IsCurrentMethod { get { return tokens.Peek() == "(" || tokens.Count == 0 && IsMethod; } }
 
         private void VerifyToken(string token)
         {
