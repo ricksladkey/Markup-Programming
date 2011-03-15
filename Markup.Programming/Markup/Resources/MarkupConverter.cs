@@ -22,6 +22,8 @@ namespace Markup.Programming
         public static readonly DependencyProperty ConvertExpressionProperty =
             DependencyProperty.Register("ConvertExpression", typeof(IExpression), typeof(MarkupConverter), null);
 
+        public string ConvertPath { get; set; }
+
         public IExpression ConvertBackExpression
         {
             get { return (IExpression)GetValue(ConvertBackExpressionProperty); }
@@ -30,6 +32,8 @@ namespace Markup.Programming
 
         public static readonly DependencyProperty ConvertBackExpressionProperty =
             DependencyProperty.Register("ConvertBackExpression", typeof(IExpression), typeof(MarkupConverter), null);
+
+        public string ConvertBackPath { get; set; }
 
         protected override void OnAttached()
         {
@@ -40,21 +44,22 @@ namespace Markup.Programming
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             TryToAttach();
-            return Evaluate(ConvertExpression, value, targetType, parameter, culture);
+            return Evaluate(ConvertExpression, ConvertPath, value, targetType, parameter, culture);
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
             TryToAttach();
-            return Evaluate(ConvertBackExpression, value, targetType, parameter, culture);
+            return Evaluate(ConvertBackExpression, ConvertBackPath, value, targetType, parameter, culture);
         }
 
-        public object Evaluate(IExpression expression, object value, Type targetType, object parameter, CultureInfo culture)
+        public object Evaluate(IExpression expression, string path, object value, Type targetType, object parameter, CultureInfo culture)
         {
             var parameters = new NameDictionary(
                 new NameValuePair("ConverterValue", value),
                 new NameValuePair("ConverterParameter", parameter),
                 new NameValuePair("ConverterCulture", culture));
+            if (path != null) return new Engine().With(this, parameters, engine => engine.GetPath(path));
             return new Engine().With(this, parameters, engine => expression.Evaluate(engine));
         }
     }

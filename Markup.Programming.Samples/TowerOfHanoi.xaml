@@ -116,12 +116,8 @@
 
         <!-- add a converter that simply multiplies its value times its parameter -->
         <!-- we use this converter to convert an abstract disk to a pixel width -->
-        <p:MarkupConverter x:Key="MultiplyConverter">
-            <p:MarkupConverter.ConvertExpression>
-                <p:Op Path1="$ConverterValue" Operator="Times" Path2="$ConverterParameter"/>
-            </p:MarkupConverter.ConvertExpression>
-        </p:MarkupConverter>
-
+        <p:MarkupConverter x:Key="MultiplyConverter" ConvertPath="$ConverterValue * $ConverterParameter"/>
+            
     </UserControl.Resources>
 
     <!-- add our view with its data context bound to the view model -->

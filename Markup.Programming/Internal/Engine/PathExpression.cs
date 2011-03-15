@@ -84,9 +84,14 @@ namespace Markup.Programming.Core
             public IList<PathNode> Arguments { get; set; }
             protected override object OnEvaluate(Engine engine, object value)
             {
-                return Call(engine, EvaluateArguments(engine));
+                return Call(engine, GetArguments(engine, null));
             }
-            protected object[] EvaluateArguments(Engine engine) { return Arguments.Select(argument => argument.Evaluate(engine, Value.UnsetValue)).ToArray(); }
+            protected object[] GetArguments(Engine engine, object[] args)
+            {
+                if (Arguments != null) return Arguments.Select(argument => argument.Evaluate(engine, Value.UnsetValue)).ToArray();
+                if (args == null) ThrowHelper.Throw("missing arguments");
+                return args;
+            }
             public abstract object Call(Engine engine, object[] args);
         }
 
@@ -95,7 +100,7 @@ namespace Markup.Programming.Core
             public override object Call(Engine engine, object[] args)
             {
                 var context = Context.Evaluate(engine, Value.UnsetValue);
-                return MethodHelper.CallMethod(Name, false, context.GetType(), context, args ?? EvaluateArguments(engine), null, engine);
+                return MethodHelper.CallMethod(Name, false, context.GetType(), context, GetArguments(engine, args), null, engine);
             }
         }
 
@@ -104,7 +109,7 @@ namespace Markup.Programming.Core
             public Type Type { get; set; }
             public override object Call(Engine engine, object[] args)
             {
-                return MethodHelper.CallMethod(Name, true, Type, null, args ?? EvaluateArguments(engine), null, engine);
+                return MethodHelper.CallMethod(Name, true, Type, null, args ?? GetArguments(engine, args), null, engine);
             }
         }
 
@@ -112,7 +117,7 @@ namespace Markup.Programming.Core
         {
             public override object Call(Engine engine, object[] args)
             {
-                return engine.CallFunction(Name, args ?? EvaluateArguments(engine));
+                return engine.CallFunction(Name, GetArguments(engine, args));
             }
         }
         private class TokenQueue
