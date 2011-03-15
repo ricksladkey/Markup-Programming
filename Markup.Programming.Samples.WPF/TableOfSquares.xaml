@@ -12,9 +12,7 @@
                         <p:Yield>
                             <p:Object>
                                 <p:Property PropertyName="Number" Path="$I"/>
-                                <p:Property PropertyName="Square">
-                                    <p:Op Path1="$I" Operator="Times" Path2="$I"/>
-                                </p:Property>
+                                <p:Property PropertyName="Square" Path="$I*$I"/>
                                 <p:Property PropertyName="Sqrt" Path="[Math].Sqrt($I)"/>
                             </p:Object>
                         </p:Yield>

@@ -47,6 +47,8 @@ namespace Markup.Programming
         Equate,
         Compare,
         ToArray,
+        GetProperty,
+        SetProperty,
         GetItem,
         SetItem,
 

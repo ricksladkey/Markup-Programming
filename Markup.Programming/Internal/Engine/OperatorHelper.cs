@@ -64,6 +64,10 @@ namespace Markup.Programming.Core
                     return operands.LastOrDefault();
                 case Operator.Format:
                     return string.Format(operands[0] as string, operands.Skip(1).ToArray());
+                case Operator.GetProperty:
+                    return PathHelper.GetProperty(operands[0], operands[1] as string);
+                case Operator.SetProperty:
+                    { PathHelper.SetProperty(operands[0], operands[1] as string, operands[2]); return operands[2]; }
                 case Operator.GetItem:
                     return PathHelper.GetItem(operands[0], operands.Skip(1).ToArray());
                 case Operator.SetItem:
@@ -149,12 +153,38 @@ namespace Markup.Programming.Core
                 case Operator.NotIsZero:
                 case Operator.ToString:
                     return 1;
+                case Operator.SetItem:
+                    return 3;
                 case Operator.Format:
                 case Operator.GetItem:
                     return 0;
                 default:
                     return 2;
             }
+        }
+
+        private static bool IsTypeTransitive(Operator op)
+        {
+            switch (op)
+            {
+                case Operator.Plus:
+                case Operator.Minus:
+                case Operator.Times:
+                case Operator.Mod:
+                case Operator.Divide:
+                case Operator.AndAnd:
+                case Operator.OrOr:
+                case Operator.And:
+                case Operator.Or:
+                case Operator.BitwiseAnd:
+                case Operator.BitwiseOr:
+                case Operator.BitwiseXor:
+                case Operator.LeftShift:
+                case Operator.RightShift:
+                case Operator.GetProperty:
+                    return true;
+            }
+            return false;
         }
 
         private static object Op(Operator op, Engine engine, object operand)
@@ -233,29 +263,6 @@ namespace Markup.Programming.Core
         private static void InvalidOperation(Operator op, int n)
         {
             ThrowHelper.Throw(string.Format("invalid operator: {0}, operand count: {1}", op, n));
-        }
-
-        private static bool IsTypeTransitive(Operator op)
-        {
-            switch (op)
-            {
-                case Operator.Plus:
-                case Operator.Minus:
-                case Operator.Times:
-                case Operator.Mod:
-                case Operator.Divide:
-                case Operator.AndAnd:
-                case Operator.OrOr:
-                case Operator.And:
-                case Operator.Or:
-                case Operator.BitwiseAnd:
-                case Operator.BitwiseOr:
-                case Operator.BitwiseXor:
-                case Operator.LeftShift:
-                case Operator.RightShift:
-                    return true;
-            }
-            return false;
         }
 
         private static bool Is(object instance, object type)

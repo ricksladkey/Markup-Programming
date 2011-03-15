@@ -24,14 +24,14 @@ namespace Markup.Programming.Core
         private enum Value { UnsetValue = 0 };
         public static bool IsUnset(object value) { return value.Equals(Value.UnsetValue); }
 
-        private TokenQueue tokens;
+        private TokenQueue tokens = new TokenQueue();
 
         public PathExpression(bool isGet, bool isProperty, string path)
         {
             IsGet = isGet;
             IsProperty = isProperty;
             Path = path;
-            tokens = Tokenize(Path);
+            Tokenize();
             PathNode = Parse();
             if (tokens.Count != 0) ThrowHelper.Throw("unexpected token: " + tokens.Dequeue());
             tokens = null;
@@ -40,7 +40,7 @@ namespace Markup.Programming.Core
         public bool IsGet { get; private set; }
         public bool IsSet { get { return !IsGet; } }
         public bool IsProperty { get; private set; }
-        public bool IsMethod { get { return !IsProperty; } }
+        public bool IsCall { get { return !IsProperty; } }
         public string Path { get; private set; }
         public PathNode PathNode { get; private set; }
 
@@ -53,18 +53,18 @@ namespace Markup.Programming.Core
 
         private PathNode Parse()
         {
-            var node = null as PathNode;
             if (tokens.Count == 0) return new ValueNode { Value = null };
-            node = new ContextNode();
+            var node = new ContextNode() as PathNode;
             var nodeNext = true;
             for (var token = tokens.Peek(); token != null; token = tokens.Peek())
             {
                 var c = token[0];
-                if (c == '.')
+                if (".+-*/".Contains(c))
                 {
-                    if (nodeNext) ThrowHelper.Throw("unexpected dot operator");
+                    if (nodeNext) ThrowHelper.Throw("unexpected operator");
                     nodeNext = true;
                     tokens.Dequeue();
+                    if (c != '.') node = new OpNode { Operator = GetOperator(token), Operands = { node, Parse() } };
                     continue;
                 }
                 if (!nodeNext) return node;
@@ -133,8 +133,22 @@ namespace Markup.Programming.Core
             return node;
         }
 
+        private Operator GetOperator(string token)
+        {
+            char c = token[0];
+            switch (c)
+            {
+                case '.': return Operator.GetProperty;
+                case '+': return Operator.Plus;
+                case '-': return Operator.Minus;
+                case '*': return Operator.Times;
+                case '/': return Operator.Divide;
+            }
+            return (Operator)ThrowHelper.Throw("invalid operator");
+        }
+
         private bool IsCurrentGet { get { return IsGet || tokens.Count > 0; } }
-        private bool IsCurrentMethod { get { return tokens.Peek() == "(" || tokens.Count == 0 && IsMethod; } }
+        private bool IsCurrentMethod { get { return tokens.Peek() == "(" || tokens.Count == 0 && IsCall; } }
 
         private void VerifyToken(string token)
         {
@@ -159,30 +173,28 @@ namespace Markup.Programming.Core
             return ThrowHelper.Throw("missing closing parenthesis") as IList<PathNode>;
         }
 
-        private static TokenQueue Tokenize(string path)
+        private void Tokenize()
         {
-            TokenQueue tokens = new TokenQueue();
-            for (int i = 0; i < path.Length; )
+            for (int i = 0; i < Path.Length; )
             {
-                char c = path[i];
+                char c = Path[i];
                 if (c == ' ') { ++i; continue; }
                 if (c == '\'')
                 {
                     var start = ++i;
-                    for (++i; i < path.Length && path[i] != '\''; ++i) continue;
-                    if (path[i] == path.Length) ThrowHelper.Throw("missing closing quote");
-                    tokens.Enqueue('"' + path.Substring(start, i++ - start));
+                    for (++i; i < Path.Length && Path[i] != '\''; ++i) continue;
+                    if (Path[i] == Path.Length) ThrowHelper.Throw("missing closing quote");
+                    tokens.Enqueue('"' + Path.Substring(start, i++ - start));
                     continue;
                 }
                 if ("$.[](),+-*/".Contains(c)) { tokens.Enqueue(c.ToString()); ++i; continue; }
-                if (!IsIdentifierChar(c)) ThrowHelper.Throw("invalid token: " + path.Substring(i));
+                if (!IsIdentifierChar(c)) ThrowHelper.Throw("invalid token: " + Path.Substring(i));
                 {
                     var start = i;
-                    for (++i; i < path.Length && IsIdentifierChar(path[i]); ++i) continue;
-                    tokens.Enqueue(path.Substring(start, i - start));
+                    for (++i; i < Path.Length && IsIdentifierChar(Path[i]); ++i) continue;
+                    tokens.Enqueue(Path.Substring(start, i - start));
                 }
             }
-            return tokens;
         }
 
         private static bool IsInitialIdentifierChar(char c)

@@ -38,9 +38,16 @@ Path Syntax:
 
 "" - null
 @ - Context
-12345 - value
-context.Property - property
-context.Method(arg, ...) - method
-$Parameter - parameter
+12345 - integral value
+'abcdef' - string value
+context.Property - property (in property context)
+context.Method(arg, ...) - method (in any context)
+context.Method - method (in call context)
+[Namspace.Type].Method - static method
+$Parameter - parameter (in property context)
+$Function(arg, ...) - function (in any context)
+$Function - function (in call context)
 context[index] - item
+context[index1][index2] - items can be chained
+@[index] - item (if needed to disambiguate with static method)
 (Context.path) - grouping
