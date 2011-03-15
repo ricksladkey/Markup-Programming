@@ -34,7 +34,7 @@ namespace Markup.Programming.Core
 #endif
     public class Engine
     {
-        public static string ContextParameter = "@Context";
+        public static string ContextParameter = "@";
 
         private static int nextId = 0;
         private int id;
@@ -334,12 +334,17 @@ namespace Markup.Programming.Core
 
         public object GetPath(string path)
         {
-            return new PathExpression(true, path).Evaluate(this);
+            return new PathExpression(true, true, path, this).Evaluate(this);
+        }
+
+        public object GetPathMethod(string path)
+        {
+            return new PathExpression(true, false, path, this).Evaluate(this);
         }
 
         public object SetPath(string path, object value)
         {
-            return new PathExpression(false, path).Evaluate(this, value);
+            return new PathExpression(false, true, path, this).Evaluate(this, value);
         }
 
         public bool ShouldTrace(TraceFlags flags)

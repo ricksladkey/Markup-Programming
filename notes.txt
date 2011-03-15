@@ -1,3 +1,4 @@
+- add recursive descent parser for operators
 - Call.Path can choose method or function
 - fix auto-evaluation of langauge elements
 - add all-markup sample equivalent of one method two bindings
@@ -33,3 +34,14 @@
 - handle detaching
 - optionally show exceptions in message boxes
 - ToString with details for a composite object doesn't refresh its binding properly
+
+Path Syntax:
+
+"" - null
+@ - Context
+12345 - value
+context.Property - property
+context.Method(arg, ...) - method
+$Parameter - parameter
+context[index] - item
+(Context.path) - grouping

@@ -74,6 +74,7 @@ namespace Markup.Programming.Tests.Tests
             BasicGetTest("Test1", "String1");
             BasicGetTest("Test2", "Object1.String1");
             BasicGetTest("Value1", "$Parameter1");
+            BasicGetTest(256.0, "[System.Math].Pow(2, 8)");
             BasicSetTest((vm, p) => Assert.AreEqual(p["Parameter1"], 42), "$Parameter1", 42);
         }
     }

@@ -161,6 +161,8 @@ namespace Markup.Programming
                     oldValue = PathHelper.GetStaticProperty(type, StaticPropertyName);
                 else if (StaticFieldName != null)
                     oldValue = PathHelper.GetStaticField(type, StaticFieldName);
+                else if (Path != null)
+                    oldValue = engine.GetPath(Path);
                 else
                     oldValue = context;
                 value = engine.Evaluate(Operator, oldValue, value);

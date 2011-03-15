@@ -21,13 +21,8 @@ namespace Markup.Programming.Core
             if (Application.Current == null) throw exception;
             string message = exception.Message;
             MessageBox.Show(message);
-#if !SILVERLIGHT
-            Application.Current.Shutdown(1);
 #endif
-            return null;
-#else
             throw exception;
-#endif
         }
     }
 }

@@ -1,6 +1,7 @@
-﻿using System.Linq;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 
 namespace Markup.Programming.Core
 {
@@ -17,9 +18,9 @@ namespace Markup.Programming.Core
             public void ThrowIfUnset(object value) { if (IsUnset(value)) ThrowHelper.Throw("unset"); }
             public object Evaluate(Engine engine, object value)
             {
-                engine.Trace(TraceFlags.Path, "Path: evaluate {0}", this);
+                engine.Trace(TraceFlags.Path, "Path: evaluate {0}", this.GetType().Name);
                 var result = OnEvaluate(engine, value);
-                engine.Trace(TraceFlags.Path, "Path: {0} = {1}", this, result);
+                engine.Trace(TraceFlags.Path, "Path: {0} = {1}", this.GetType().Name, result);
                 return result;
             }
             protected abstract object OnEvaluate(Engine engine, object value);
@@ -87,12 +88,27 @@ namespace Markup.Programming.Core
         {
             public string MethodName { get; set; }
             public IList<PathNode> Arguments { get; set; }
+            protected object[] EvaluateArguments(Engine engine, object value)
+            {
+                return Arguments.Select(argument => argument.Evaluate(engine, value)).ToArray();
+            }
             protected override object OnEvaluate(Engine engine, object value)
             {
                 var context = Context.Evaluate(engine, value);
-                var args = Arguments.Select(argument => argument.Evaluate(engine, value)).ToArray();
+                var args = EvaluateArguments(engine, value);
                 var methodInfo = context.GetType().GetMethod(MethodName);
                 return MethodHelper.CallMethod(MethodName, methodInfo, context, args, engine);
+            }
+        }
+
+        private class StaticMethodNode : MethodNode
+        {
+            public Type Type { get; set; }
+            protected override object OnEvaluate(Engine engine, object value)
+            {
+                var args = EvaluateArguments(engine, value);
+                var methodInfo = Type.GetMethod(MethodName);
+                return MethodHelper.CallMethod(MethodName, methodInfo, null, args, engine);
             }
         }
 
@@ -102,20 +118,23 @@ namespace Markup.Programming.Core
             private int current = 0;
             public void Enqueue(string item) { list.Add(item); }
             public string Dequeue() { return list[current++]; }
-            public string Peek() { return list[current]; }
+            public string Peek() { return current < list.Count ? list[current] : null; }
             public int Count { get { return list.Count - current; } }
         }
 
         private enum Value { UnsetValue = 0 };
         private static bool IsUnset(object value) { return value.Equals(Value.UnsetValue); }
 
+        private Engine engine;
         private PathNode root;
         private TokenQueue tokens;
 
-        public PathExpression(bool isGet, string path)
+        public PathExpression(bool isGet, bool isProperty, string path, Engine engine)
         {
             IsGet = isGet;
+            IsProperty = isProperty;
             Path = path;
+            this.engine = engine;
             tokens = Tokenize(Path);
             root = Parse();
             if (tokens.Count != 0) ThrowHelper.Throw("unexpected token: " + tokens.Dequeue());
@@ -123,6 +142,9 @@ namespace Markup.Programming.Core
         }
 
         public bool IsGet { get; private set; }
+        public bool IsSet { get { return !IsGet; } }
+        public bool IsProperty { get; private set; }
+        public bool IsMethod { get { return !IsProperty; } }
         public string Path { get; private set; }
 
         public object Evaluate(Engine engine) { return Evaluate(engine, Value.UnsetValue); }
@@ -134,14 +156,33 @@ namespace Markup.Programming.Core
 
         private PathNode Parse()
         {
+            var node = null as PathNode;
             if (tokens.Count == 0) return new ValueNode { Value = null };
-            var node = new ContextNode() as PathNode;
-            while (tokens.Count > 0)
+            node = new ContextNode();
+            var nodeNext = true;
+            for (var token = tokens.Peek(); token != null; token = tokens.Peek())
             {
-                var token = tokens.Peek();
                 var c = token[0];
                 if (c == '.')
+                {
+                    if (nodeNext) ThrowHelper.Throw("unexpected dot operator");
+                    nodeNext = true;
                     tokens.Dequeue();
+                    continue;
+                }
+                if (!nodeNext) return node;
+                if (token == "@")
+                    node = new ContextNode();
+                else if (char.IsDigit(c))
+                    node = new ValueNode { Value = int.Parse(tokens.Dequeue()) };
+                else if (IsInitialIdentifierChar(c))
+                {
+                    tokens.Dequeue();
+                    if (tokens.Peek() == "(")
+                        node = new MethodNode { Context = node, MethodName = token, Arguments = ParseArguments() };
+                    else
+                        node = new PropertyNode { IsGet = IsCurrentGet, Context = node, PropertyName = token };
+                }
                 else if (c == '$')
                 {
                     tokens.Dequeue();
@@ -149,20 +190,17 @@ namespace Markup.Programming.Core
                     var parameterName = tokens.Dequeue();
                     node = new ParameterNode { IsGet = IsCurrentGet, ParameterName = parameterName };
                 }
-                else if (IsInitialIdentifierChar(c))
-                {
-                    tokens.Dequeue();
-                    if (tokens.Count > 0 && tokens.Peek() == "(")
-                        node = new MethodNode { Context = node, MethodName = token, Arguments = ParseArguments(tokens) };
-                    else
-                        node = new PropertyNode { IsGet = IsCurrentGet, Context = node, PropertyName = token };
-                }
                 else if (c == '[')
                 {
                     tokens.Dequeue();
-                    var index = Parse();
+                    var typeName = "";
+                    while (tokens.Count > 0 && tokens.Peek() != "]") typeName += tokens.Dequeue();
                     VerifyToken("]");
-                    node = new ItemNode { IsGet = IsCurrentGet, Context = node, Index = index };
+                    VerifyToken(".");
+                    var type = engine.LookupType(typeName);
+                    var methodName = tokens.Dequeue();
+                    var args = tokens.Peek() == "(" ? ParseArguments() : null;
+                    node = new StaticMethodNode { Type = type, MethodName = methodName, Arguments = args };
                 }
                 else if (c == '(')
                 {
@@ -170,10 +208,16 @@ namespace Markup.Programming.Core
                     node = Parse();
                     VerifyToken(")");
                 }
-                else if (char.IsDigit(c))
-                    node = new ValueNode { Value = int.Parse(tokens.Dequeue()) };
                 else
                     return node;
+                while (tokens.Peek() == "[")
+                {
+                    tokens.Dequeue();
+                    var index = Parse();
+                    VerifyToken("]");
+                    node = new ItemNode { IsGet = IsCurrentGet, Context = node, Index = index };
+                }
+                nodeNext = false;
             }
             return node;
         }
@@ -185,7 +229,7 @@ namespace Markup.Programming.Core
             if (tokens.Count == 0 || tokens.Dequeue() != token) ThrowHelper.Throw("missing token: " + token);
         }
 
-        private IList<PathNode> ParseArguments(TokenQueue tokens)
+        private IList<PathNode> ParseArguments()
         {
             var nodes = new List<PathNode>();
             var expectedTokens = new List<string> { ",", ")" };
@@ -223,12 +267,12 @@ namespace Markup.Programming.Core
 
         private static bool IsInitialIdentifierChar(char c)
         {
-            return char.IsLetter(c) || c == '_';
+            return char.IsLetter(c) || c == '_' || c == '@';
         }
 
         private static bool IsIdentifierChar(char c)
         {
-            return char.IsLetterOrDigit(c) || c == '_';
+            return char.IsLetterOrDigit(c) || c == '_' || c == '@';
         }
     }
 }
