@@ -6,8 +6,24 @@ using System.Reflection;
 
 namespace Markup.Programming.Core
 {
-    public static class MethodHelper
+    public static class CallHelper
     {
+        public static object Call(string path, string staticMethodName, string methodName, string functionName, BuiltinFunction builtinFunction, Type type, ExpressionCollection typeArguments, object[] args, Engine engine)
+        {
+            if (path != null)
+                return engine.CallPath(path, args);
+            if (functionName != null)
+                return engine.CallFunction(functionName, args);
+            if (builtinFunction != 0)
+                return engine.CallBuiltinFunction(builtinFunction, args);
+            var typeArgs = typeArguments.Count != 0 ? typeArguments.Evaluate(engine).Cast<Type>().ToArray() : null;
+            if (staticMethodName != null)
+                return CallHelper.CallMethod(staticMethodName, true, type, null, args, typeArgs, engine);
+            if (methodName != null)
+                return CallHelper.CallMethod(methodName, false, type ?? engine.Context.GetType(), engine.Context, args, typeArgs, engine);
+            return ThrowHelper.Throw("nothing to call");
+        }
+
         public static object CallMethod(string methodName, bool staticMethod, Type typeToCall, object callee, object[] args, Type[] typeArgs, Engine engine)
         {
             var bindingFlags = (staticMethod ? BindingFlags.Static : BindingFlags.Instance) |
@@ -33,7 +49,7 @@ namespace Markup.Programming.Core
                     if (methodInfo == null) ThrowHelper.Throw("method overload not found: " + methodName);
                 }
             }
-            return MethodHelper.CallMethod(methodName, methodInfo, callee, args, engine);
+            return CallHelper.CallMethod(methodName, methodInfo, callee, args, engine);
         }
 
         public static object CallMethod(string methodName, MethodInfo methodInfo, object callee, object[] args, Engine engine)

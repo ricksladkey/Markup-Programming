@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Windows;
 using System.Windows.Markup;
 using Markup.Programming.Core;
@@ -9,13 +10,10 @@ namespace Markup.Programming
     /// The Call expression calls a method or a function.
     /// </summary>
     [ContentProperty("Arguments")]
-    public class Call : ExpressionBase, ICaller
+    public class Call : ExpressionBase
     {
-        private CallImplementor<Call> implementor;
-
         public Call()
         {
-            implementor = new CallImplementor<Call>(this);
             Arguments = new ExpressionCollection();
             TypeArguments = new ExpressionCollection();
         }
@@ -113,12 +111,6 @@ namespace Markup.Programming
         public static readonly DependencyProperty BuiltinFunctionProperty =
             DependencyProperty.Register("BuiltinFunction", typeof(BuiltinFunction), typeof(Call), null);
 
-        public string PathBase { get { return Path; } }
-
-        public DependencyProperty CallerTypeProperty { get { return TypeProperty; } }
-
-        public DependencyProperty CallerParameterProperty { get { return ParameterProperty; } }
-
         protected override void OnAttached()
         {
             base.OnAttached();
@@ -127,7 +119,14 @@ namespace Markup.Programming
 
         protected override object OnEvaluate(Engine engine)
         {
-            return implementor.Call(engine);
+            var args = Arguments.Evaluate(engine);
+            if (Parameter != null || ParameterPath != null || PathHelper.HasBinding(this, ParameterProperty))
+            {
+                var parameter = engine.Evaluate(ParameterProperty, ParameterPath);
+                args = new object[] { engine.EvaluateObject(parameter) }.Concat(args).ToArray();
+            }
+            var type = engine.EvaluateType(TypeProperty, TypeName);
+            return CallHelper.Call(Path, StaticMethodName, MethodName, FunctionName, BuiltinFunction, type, TypeArguments, args, engine);
         }
     }
 }

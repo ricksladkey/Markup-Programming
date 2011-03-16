@@ -132,7 +132,7 @@
     <Compile Include="Internal\Components\PrimitivePassiveComponent.cs" />
     <Compile Include="Internal\Components\ComponentBase.cs" />
     <Compile Include="Internal\Diagnostics\EngineDebugView.cs" />
-    <Compile Include="Internal\Engine\MethodHelper.cs" />
+    <Compile Include="Internal\Engine\CallHelper.cs" />
     <Compile Include="Internal\Engine\PathExpression.cs" />
     <Compile Include="Markup\Handlers\EventHandler.cs" />
     <Compile Include="Markup\Attached.cs" />
@@ -142,13 +142,11 @@
     <Compile Include="Markup\Handlers\CallHandler.cs" />
     <Compile Include="Markup\Language\Statements\Case.cs" />
     <Compile Include="Internal\Engine\BuiltinImplementor.cs" />
-    <Compile Include="Internal\Engine\CallImplementor.cs" />
     <Compile Include="Internal\Language\ConditionalValueStatement.cs" />
     <Compile Include="Internal\Dynamic\DynamicObservableCollection.cs" />
     <Compile Include="Internal\Language\HiddenExpression.cs" />
-    <Compile Include="Internal\Engine\ICaller.cs" />
-    <Compile Include="Internal\Interfaces\IHiddenExpression.cs" />
-    <Compile Include="Internal\Interfaces\IProcessor.cs" />
+    <Compile Include="Internal\Language\Interfaces\IHiddenExpression.cs" />
+    <Compile Include="Internal\Language\Interfaces\IProcessor.cs" />
     <Compile Include="Internal\Collections\NameTypePair.cs" />
     <Compile Include="Internal\Collections\NameValuePair.cs" />
     <Compile Include="Internal\Language\StatementBase.cs" />
@@ -182,9 +180,9 @@
     <Compile Include="Internal\Engine\TypeHelper.cs" />
     <Compile Include="Internal\Dynamic\DynamicObjectBase.cs" />
     <Compile Include="Internal\Dynamic\DynamicHelper.cs" />
-    <Compile Include="Internal\Interfaces\IExpression.cs" />
+    <Compile Include="Internal\Language\Interfaces\IExpression.cs" />
     <Compile Include="Internal\Dynamic\IDynamicObject.cs" />
-    <Compile Include="Internal\Interfaces\IStatement.cs" />
+    <Compile Include="Internal\Language\Interfaces\IStatement.cs" />
     <Compile Include="Internal\Language\UntypedValueStatement.cs" />
     <Compile Include="Internal\Language\ValueBlock.cs" />
     <Compile Include="Markup\Language\Statements\For.cs" />

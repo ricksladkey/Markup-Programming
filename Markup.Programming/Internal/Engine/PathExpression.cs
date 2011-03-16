@@ -100,7 +100,7 @@ namespace Markup.Programming.Core
             public override object Call(Engine engine, object[] args)
             {
                 var context = Context.Evaluate(engine, Value.UnsetValue);
-                return MethodHelper.CallMethod(Name, false, context.GetType(), context, GetArguments(engine, args), null, engine);
+                return CallHelper.CallMethod(Name, false, context.GetType(), context, GetArguments(engine, args), null, engine);
             }
         }
 
@@ -109,7 +109,7 @@ namespace Markup.Programming.Core
             public Type Type { get; set; }
             public override object Call(Engine engine, object[] args)
             {
-                return MethodHelper.CallMethod(Name, true, Type, null, args ?? GetArguments(engine, args), null, engine);
+                return CallHelper.CallMethod(Name, true, Type, null, args ?? GetArguments(engine, args), null, engine);
             }
         }
 

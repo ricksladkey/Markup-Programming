@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Windows;
 using System.Windows.Markup;
 using Markup.Programming.Core;
@@ -10,13 +11,10 @@ namespace Markup.Programming
     /// event is raised.
     /// </summary>
     [ContentProperty("Arguments")]
-    public class CallHandler : Handler, ICaller
+    public class CallHandler : Handler
     {
-        private CallImplementor<CallHandler> implementor;
-
         public CallHandler()
         {
-            implementor = new CallImplementor<CallHandler>(this);
             Arguments = new ExpressionCollection();
             TypeArguments = new ExpressionCollection();
         }
@@ -115,12 +113,7 @@ namespace Markup.Programming
             DependencyProperty.Register("BuiltinFunction", typeof(BuiltinFunction), typeof(CallHandler), null);
 
         public string PathEventName { get { return GetFields()[0]; } }
-
         public string PathBase { get { return GetFields()[1]; } }
-
-        public DependencyProperty CallerTypeProperty { get { return TypeProperty; } }
-
-        public DependencyProperty CallerParameterProperty { get { return ParameterProperty; } }
 
         protected override void OnAttached()
         {
@@ -138,7 +131,14 @@ namespace Markup.Programming
 
         protected override void OnEventHandler(Engine engine)
         {
-            implementor.Call(engine);
+            var args = Arguments.Evaluate(engine);
+            if (Parameter != null || ParameterPath != null || PathHelper.HasBinding(this, ParameterProperty))
+            {
+                var parameter = engine.Evaluate(ParameterProperty, ParameterPath);
+                args = new object[] { engine.EvaluateObject(parameter) }.Concat(args).ToArray();
+            }
+            var type = engine.EvaluateType(TypeProperty, TypeName);
+            CallHelper.Call(PathBase, StaticMethodName, MethodName, FunctionName, BuiltinFunction, type, TypeArguments, args, engine);
         }
     }
 }

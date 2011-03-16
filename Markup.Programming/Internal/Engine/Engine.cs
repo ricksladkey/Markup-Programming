@@ -470,6 +470,12 @@ namespace Markup.Programming.Core
             return GetAndResetReturnValue();
         }
 
+        public object CallBuiltinFunction(BuiltinFunction builtinFunction, object[] args)
+        {
+            var builtin = new BuiltinImplementor(this);
+            return CallHelper.CallMethod(builtinFunction.ToString(), false, typeof(BuiltinImplementor), builtin, args, null, this);
+        }
+
         public ResourceObject ParentResourceObject
         {
             get
