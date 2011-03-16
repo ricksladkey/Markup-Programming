@@ -67,7 +67,7 @@ namespace Markup.Programming
 
         private object CallFunction(object child, string function, object[] args, Engine engine)
         {
-            engine.DefineParameter(Engine.ContextParameter, ParentResourceObject.Value);
+            engine.SetContext(ParentResourceObject.Value);
             Functions.Execute(engine);
             return engine.CallFunction(function, args);
         }

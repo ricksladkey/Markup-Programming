@@ -1,8 +1,6 @@
 - add recursive descent parser for operators
 - fix auto-evaluation of langauge elements
 - add all-markup sample equivalent of one method two bindings
-- handle Call.Parameter for function calls
-- write macro to format comment region
 - rename MarkupObject to ResourceObject, etc.
 - review how to handle For type
 - change For: Operator plus Limit and Increment defaults to 1
@@ -35,8 +33,8 @@
 
 Path Syntax:
 
-"" - null
 @ - Context
+@True, @False, @Null - literal constants
 12345 - integral value
 'abcdef' - string value
 context.Property - property (in property context)
@@ -49,4 +47,5 @@ $Function - function (in call context)
 context[index] - item
 context[index1][index2] - items can be chained
 @[index] - item (if needed to disambiguate with static method)
+lhs+rhs, lhs-rhs, lhs*rhs, lhs/rhs - arithmetic
 (Context.path) - grouping

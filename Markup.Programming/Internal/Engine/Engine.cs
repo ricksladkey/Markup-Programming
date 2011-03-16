@@ -35,6 +35,12 @@ namespace Markup.Programming.Core
     public class Engine
     {
         public static string ContextParameter = "@";
+        public static IDictionary<string, object> ConstantParameters = new NameDictionary
+        {
+            { "@Null", null },
+            { "@True", true },
+            { "@False", false },
+        };
 
         private static int nextId = 0;
         private int id;
@@ -89,13 +95,13 @@ namespace Markup.Programming.Core
             {
                 if (CurrentFrame.Caller is ResourceObject)
                 {
-                    DefineParameter(ContextParameter, CurrentFrame.Caller);
+                    DefineParameter(ContextParameter, CurrentFrame.Caller, false, true);
                     return;
                 }
                 var context = CurrentFrame.Caller.AssociatedObject;
                 if (context is FrameworkElement)
                 {
-                    DefineParameter(ContextParameter, (context as FrameworkElement).DataContext);
+                    DefineParameter(ContextParameter, (context as FrameworkElement).DataContext, false, true);
                     return;
                 }
             }
@@ -123,7 +129,7 @@ namespace Markup.Programming.Core
         public void With(IComponent caller, IDictionary<string, object> dictionary, Action<Engine> statement)
         {
             PushFrame(caller);
-            DefineParameters(dictionary);
+            foreach (var pair in dictionary) DefineParameter(pair.Key, pair.Value, false, true);
             statement(this);
             PopFrame();
         }
@@ -139,7 +145,7 @@ namespace Markup.Programming.Core
         public TResult With<TResult>(IComponent caller, IDictionary<string, object> dictionary, Func<Engine, TResult> func)
         {
             PushFrame(caller);
-            DefineParameters(dictionary);
+            foreach (var pair in dictionary) DefineParameter(pair.Key, pair.Value, false, true);
             var result = func(this);
             PopFrame();
             return result;
@@ -210,29 +216,18 @@ namespace Markup.Programming.Core
         public void DefineParameter(string name, object value)
         {
             Trace(TraceFlags.Parameter, "Define: {0} = {1}", name, value);
-            DefineParameter(name, value, false);
-        }
-
-        public void DefineParameters(IEnumerable<Parameter> parameters, IEnumerable<object> args)
-        {
-            foreach (var pair in parameters.Zip(args,
-                (parameter, argument) => Tuple.Create(parameter.ParameterName, argument)))
-                DefineParameter(pair.Item1, pair.Item2);
-        }
-
-        public void DefineParameters(IDictionary<string, object> dictionary)
-        {
-            foreach (var pair in dictionary) DefineParameter(pair.Key, pair.Value, false);
+            DefineParameter(name, value, false, false);
         }
 
         public object DefineParameterInParentScope(string name, object value)
         {
-            DefineParameter(name, value, true);
+            DefineParameter(name, value, true, false);
             return value;
         }
 
-        private void DefineParameter(string name, object value, bool parentFrame)
+        private void DefineParameter(string name, object value, bool parentFrame, bool noError)
         {
+            if (!noError && !PathExpression.IsValidIdentifier(name)) Throw("invalid identifier: " + name);
             Trace(TraceFlags.Parameter, "DefineParameter: {0} = {1}", name, value);
             var frame = parentFrame ? (ParentFrame ?? CurrentFrame) : CurrentFrame;
             if (frame == null) Throw("no frame for parameter: " + name);
@@ -260,6 +255,7 @@ namespace Markup.Programming.Core
             }
             if (name == "Sender") { value = Sender; return true; }
             if (name == "EventArgs") { value = EventArgs; return true; }
+            if (ConstantParameters.ContainsKey(name)) { value = ConstantParameters[name]; return true; }
             value = null;
             return false;
         }
@@ -326,11 +322,13 @@ namespace Markup.Programming.Core
         {
             var caller = CurrentFrame.Caller as DependencyObject;
             if (caller.GetValue(property) != null || path != null || PathHelper.HasBinding(caller, property))
-            {
-                var context = Evaluate(property, path);
-                Trace(TraceFlags.Parameter, "Setting context = {0}", context);
-                DefineParameter(Engine.ContextParameter, context);
-            }
+                SetContext(Evaluate(property, path));
+        }
+
+        public void SetContext(object context)
+        {
+            Trace(TraceFlags.Parameter, "Setting context = {0}", context);
+            DefineParameter(Engine.ContextParameter, context, false, true);
         }
 
         public object GetPath(string path)
@@ -473,6 +471,12 @@ namespace Markup.Programming.Core
             SetReturnFrame();
             function.Body.Execute(this);
             return GetAndResetReturnValue();
+        }
+
+        public void DefineParameters(IEnumerable<Parameter> parameters, IEnumerable<object> args)
+        {
+            foreach (var pair in parameters.Zip(args, (parameter, argument) => Tuple.Create(parameter.ParameterName, argument)))
+                DefineParameter(pair.Item1, pair.Item2);
         }
 
         public object CallBuiltinFunction(BuiltinFunction builtinFunction, object[] args)

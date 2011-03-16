@@ -182,12 +182,7 @@ namespace Markup.Programming.Core
                     continue;
                 }
                 if (!nodeNext) return node;
-                if (token == "@")
-                {
-                    tokens.Dequeue();
-                    node = new ContextNode();
-                }
-                else if (char.IsDigit(c))
+                if (char.IsDigit(c))
                     node = new ValueNode { Value = int.Parse(tokens.Dequeue()) };
                 else if (c == '"')
                     node = new ValueNode { Value = tokens.Dequeue().Substring(1) };
@@ -204,9 +199,7 @@ namespace Markup.Programming.Core
                 }
                 else if (c == '$')
                 {
-                    tokens.Dequeue();
-                    if (tokens.Count == 0) engine.Throw("missing parameter");
-                    var name = tokens.Dequeue();
+                    var name = tokens.Dequeue().Substring(1);
                     if (IsCurrentCall)
                     {
                         var args = tokens.Peek() == "(" ? ParseArguments() : null;
@@ -287,9 +280,14 @@ namespace Markup.Programming.Core
             return engine.Throw("missing closing parenthesis") as IList<PathNode>;
         }
 
-        private static string IdChars { get { return "@_"; } }
+        private static string IdChars { get { return "_"; } }
         private static bool IsInitialIdChar(char c) { return char.IsLetter(c) || IdChars.Contains(c); }
         private static bool IsIdChar(char c) { return char.IsLetterOrDigit(c) || IdChars.Contains(c); }
+
+        public static bool IsValidIdentifier(string identifier)
+        {
+            return IsInitialIdChar(identifier.First()) && identifier.Skip(1).All(c => IsIdChar(c));
+        }
 
         private void Tokenize()
         {
@@ -297,6 +295,7 @@ namespace Markup.Programming.Core
             {
                 char c = Path[i];
                 if (char.IsWhiteSpace(c)) { ++i; continue; }
+                if (".[](),+-*/".Contains(c)) { tokens.Enqueue(c.ToString()); ++i; continue; }
                 if (c == '\'')
                 {
                     var start = ++i;
@@ -305,13 +304,23 @@ namespace Markup.Programming.Core
                     tokens.Enqueue('"' + Path.Substring(start, i++ - start));
                     continue;
                 }
-                if ("$.[](),+-*/".Contains(c)) { tokens.Enqueue(c.ToString()); ++i; continue; }
-                if (!IsIdChar(c)) engine.Throw("invalid token: " + Path.Substring(i));
+                if (char.IsDigit(c))
                 {
                     var start = i;
-                    for (++i; i < Path.Length && IsIdChar(Path[i]); ++i) continue;
+                    for (++i; i < Path.Length && char.IsDigit(Path[i]); i++) continue;
                     tokens.Enqueue(Path.Substring(start, i - start));
+                    continue;
                 }
+                if (c == '$' || c == '@' || IsInitialIdChar(c))
+                {
+                    if (c == '$' || c == '@') ++i;
+                    var start = i;
+                    var prefix = c == '$' ? "$" : (c == '@' ? "$@" : "");
+                    for (++i; i < Path.Length && IsIdChar(Path[i]); ++i) continue;
+                    tokens.Enqueue(prefix + Path.Substring(start, i - start));
+                    continue;
+                }
+                engine.Throw("invalid token: " + Path.Substring(i));
             }
         }
     }

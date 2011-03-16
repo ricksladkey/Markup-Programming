@@ -55,10 +55,12 @@ namespace Markup.Programming
 
         public object Evaluate(IExpression expression, string path, object value, Type targetType, object parameter, CultureInfo culture)
         {
-            var parameters = new NameDictionary(
-                new NameValuePair("ConverterValue", value),
-                new NameValuePair("ConverterParameter", parameter),
-                new NameValuePair("ConverterCulture", culture));
+            var parameters = new NameDictionary
+            {
+                { "ConverterValue", value },
+                { "ConverterParameter", parameter },
+                { "ConverterCulture", culture },
+            };
             if (path != null) return new Engine().With(this, parameters, engine => engine.GetPath(path));
             return new Engine().With(this, parameters, engine => expression.Evaluate(engine));
         }
