@@ -15,14 +15,7 @@ namespace Markup.Programming
     [ContentProperty("Value")]
     public class Property : ResourceObject, IHiddenExpression
     {
-        public string PropertyName
-        {
-            get { return (string)GetValue(PropertyProperty); }
-            set { SetValue(PropertyProperty, value); }
-        }
-
-        public static readonly DependencyProperty PropertyProperty =
-            DependencyProperty.Register("PropertyName", typeof(string), typeof(Property), null);
+        public string PropertyName { get; set; }
 
         public Type Type
         {
@@ -33,14 +26,7 @@ namespace Markup.Programming
         public static readonly DependencyProperty TypeProperty =
             DependencyProperty.Register("Type", typeof(Type), typeof(Property), null);
 
-        public string TypeName
-        {
-            get { return (string)GetValue(TypeNameProperty); }
-            set { SetValue(TypeNameProperty, value); }
-        }
-
-        public static readonly DependencyProperty TypeNameProperty =
-            DependencyProperty.Register("TypeName", typeof(string), typeof(Property), null);
+        public string TypeName { get; set; }
 
         public override object Value
         {
@@ -48,10 +34,10 @@ namespace Markup.Programming
             set { SetValue(ValueProperty, value); }
         }
 
-        public string Path { get; set; }
-
         public static readonly DependencyProperty ValueProperty =
             DependencyProperty.Register("Value", typeof(object), typeof(Property), null);
+
+        public string Path { get; set; }
 
         protected override void OnAttached()
         {

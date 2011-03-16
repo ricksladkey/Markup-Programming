@@ -5,14 +5,7 @@ namespace Markup.Programming
 {
     public class EventHandler : Handler
     {
-        public string Path
-        {
-            get { return (string)GetValue(PathProperty); }
-            set { SetValue(PathProperty, value); }
-        }
-
-        public static readonly DependencyProperty PathProperty =
-            DependencyProperty.Register("Path", typeof(string), typeof(EventHandler), null);
+        public string Path { get; set; }
 
         protected override void OnAttached()
         {

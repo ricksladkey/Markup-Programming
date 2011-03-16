@@ -25,14 +25,7 @@ namespace Markup.Programming
             Parameters = new ParameterCollection();
         }
 
-        public string FunctionName
-        {
-            get { return (string)GetValue(FunctionNameProperty); }
-            set { SetValue(FunctionNameProperty, value); }
-        }
-
-        public static readonly DependencyProperty FunctionNameProperty =
-            DependencyProperty.Register("FunctionName", typeof(string), typeof(Function), null);
+        public string FunctionName { get; set; }
 
         public ParameterCollection Parameters
         {

@@ -17,10 +17,10 @@ namespace Markup.Programming.Core
             set { SetValue(ContextProperty, value); }
         }
 
-        public string ContextPath { get; set; }
-
         public static readonly DependencyProperty ContextProperty =
             DependencyProperty.Register("Context", typeof(object), typeof(StatementBase), null);
+
+        public string ContextPath { get; set; }
 
         protected override void OnAttached()
         {

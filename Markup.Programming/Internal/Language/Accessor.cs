@@ -10,25 +10,18 @@ namespace Markup.Programming.Core
     [ContentProperty("Arguments")]
     public abstract class Accessor : ArgumentsExpressionWithType
     {
+        public string Path { get; set; }
+
         public object Index
         {
             get { return (object)GetValue(IndexProperty); }
             set { SetValue(IndexProperty, value); }
         }
 
-        public string IndexPath { get; set; }
-
         public static readonly DependencyProperty IndexProperty =
             DependencyProperty.Register("Index", typeof(object), typeof(Accessor), null);
 
-        public string Path
-        {
-            get { return (string)GetValue(PathProperty); }
-            set { SetValue(PathProperty, value); }
-        }
-
-        public static readonly DependencyProperty PathProperty =
-            DependencyProperty.Register("Path", typeof(string), typeof(Accessor), null);
+        public string IndexPath { get; set; }
 
         protected override void OnAttached()
         {

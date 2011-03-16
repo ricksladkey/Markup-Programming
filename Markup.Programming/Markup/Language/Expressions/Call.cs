@@ -18,14 +18,7 @@ namespace Markup.Programming
             TypeArguments = new ExpressionCollection();
         }
 
-        public string Path
-        {
-            get { return (string)GetValue(PathProperty); }
-            set { SetValue(PathProperty, value); }
-        }
-
-        public static readonly DependencyProperty PathProperty =
-            DependencyProperty.Register("Path", typeof(string), typeof(Call), null);
+        public string Path { get; set; }
 
         public Type Type
         {
@@ -36,14 +29,7 @@ namespace Markup.Programming
         public static readonly DependencyProperty TypeProperty =
             DependencyProperty.Register("Type", typeof(Type), typeof(Call), null);
 
-        public string TypeName
-        {
-            get { return (string)GetValue(TypeNameProperty); }
-            set { SetValue(TypeNameProperty, value); }
-        }
-
-        public static readonly DependencyProperty TypeNameProperty =
-            DependencyProperty.Register("TypeName", typeof(string), typeof(Call), null);
+        public string TypeName { get; set; }
 
         public object Parameter
         {
@@ -65,23 +51,9 @@ namespace Markup.Programming
         public static readonly DependencyProperty ArgumentsProperty =
             DependencyProperty.Register("Arguments", typeof(ExpressionCollection), typeof(Call), null);
 
-        public string MethodName
-        {
-            get { return (string)GetValue(MethodNameProperty); }
-            set { SetValue(MethodNameProperty, value); }
-        }
+        public string MethodName { get; set; }
 
-        public static readonly DependencyProperty MethodNameProperty =
-            DependencyProperty.Register("MethodName", typeof(string), typeof(Call), null);
-
-        public string StaticMethodName
-        {
-            get { return (string)GetValue(StaticMethodNameProperty); }
-            set { SetValue(StaticMethodNameProperty, value); }
-        }
-
-        public static readonly DependencyProperty StaticMethodNameProperty =
-            DependencyProperty.Register("StaticMethodName", typeof(string), typeof(Call), null);
+        public string StaticMethodName { get; set; }
 
         public ExpressionCollection TypeArguments
         {
@@ -92,24 +64,9 @@ namespace Markup.Programming
         public static readonly DependencyProperty TypeArgumentsProperty =
             DependencyProperty.Register("TypeArguments", typeof(ExpressionCollection), typeof(Call), null);
 
-        public string FunctionName
-        {
-            get { return (string)GetValue(FunctionNameProperty); }
-            set { SetValue(FunctionNameProperty, value); }
-        }
+        public string FunctionName { get; set; }
 
-        public static readonly DependencyProperty FunctionNameProperty =
-            DependencyProperty.Register("FunctionName", typeof(string), typeof(Call), null);
-
-
-        public BuiltinFunction BuiltinFunction
-        {
-            get { return (BuiltinFunction)GetValue(BuiltinFunctionProperty); }
-            set { SetValue(BuiltinFunctionProperty, value); }
-        }
-
-        public static readonly DependencyProperty BuiltinFunctionProperty =
-            DependencyProperty.Register("BuiltinFunction", typeof(BuiltinFunction), typeof(Call), null);
+        public BuiltinFunction BuiltinFunction { get; set; }
 
         protected override void OnAttached()
         {

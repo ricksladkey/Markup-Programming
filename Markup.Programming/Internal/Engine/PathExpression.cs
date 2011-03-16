@@ -106,10 +106,10 @@ namespace Markup.Programming.Core
 
         private class StaticMethodNode : CallNode
         {
-            public Type Type { get; set; }
+            public string TypeName { get; set; }
             public override object Call(Engine engine, object[] args)
             {
-                return CallHelper.CallMethod(Name, true, Type, null, GetArguments(engine, args), null, engine);
+                return CallHelper.CallMethod(Name, true, engine.LookupType(TypeName), null, GetArguments(engine, args), null, engine);
             }
         }
 
@@ -223,10 +223,9 @@ namespace Markup.Programming.Core
                     while (tokens.Count > 0 && tokens.Peek() != "]") typeName += tokens.Dequeue();
                     VerifyToken("]");
                     VerifyToken(".");
-                    var type = engine.LookupType(typeName);
                     var methodName = tokens.Dequeue();
                     var args = tokens.Peek() == "(" ? ParseArguments() : null;
-                    node = new StaticMethodNode { Type = type, Name = methodName, Arguments = args };
+                    node = new StaticMethodNode { TypeName = typeName, Name = methodName, Arguments = args };
                 }
                 else if (c == '(')
                 {

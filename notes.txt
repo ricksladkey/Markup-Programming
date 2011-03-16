@@ -1,3 +1,4 @@
+- add special call declaration mode for paths, e.g. foo(a,b) declares functions foo with params a and b
 - add recursive descent parser for operators
 - fix auto-evaluation of langauge elements
 - add all-markup sample equivalent of one method two bindings

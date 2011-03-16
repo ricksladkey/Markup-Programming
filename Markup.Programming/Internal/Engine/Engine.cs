@@ -27,7 +27,7 @@ namespace Markup.Programming.Core
     /// the course of an execution and disappears when control
     /// returns to the system.  It contains the stack itself and information
     /// associated with names, scopes, control flow and stack frames.
-    /// It is lightweight enough to be created and discard at will.
+    /// It is lightweight enough to be created and discarded at will.
     /// </summary>
 #if DEBUG
     [DebuggerDisplay("Frames = {stack.Count}"), DebuggerTypeProxy(typeof(EngineDebugView))]

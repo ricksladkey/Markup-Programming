@@ -35,14 +35,7 @@ namespace Markup.Programming
         public static readonly DependencyProperty ValueProperty =
             DependencyProperty.Register("Value", typeof(object), typeof(Op), null);
 
-        public string Path
-        {
-            get { return (string)GetValue(PathProperty); }
-            set { SetValue(PathProperty, value); }
-        }
-
-        public static readonly DependencyProperty PathProperty =
-            DependencyProperty.Register("Path", typeof(string), typeof(Op), null);
+        public string Path { get; set; }
 
         public object Value1
         {
@@ -53,23 +46,9 @@ namespace Markup.Programming
         public static readonly DependencyProperty Value1Property =
             DependencyProperty.Register("Value1", typeof(object), typeof(Op), null);
 
-        public string Path1
-        {
-            get { return (string)GetValue(Path1Property); }
-            set { SetValue(Path1Property, value); }
-        }
+        public string Path1 { get; set; }
 
-        public static readonly DependencyProperty Path1Property =
-            DependencyProperty.Register("Path1", typeof(string), typeof(Op), null);
-
-        public Operator Operator
-        {
-            get { return (Operator)GetValue(OperatorProperty); }
-            set { SetValue(OperatorProperty, value); }
-        }
-
-        public static readonly DependencyProperty OperatorProperty =
-            DependencyProperty.Register("Operator", typeof(Operator), typeof(Op), null);
+        public Operator Operator { get; set; }
 
         public object Value2
         {
@@ -80,14 +59,7 @@ namespace Markup.Programming
         public static readonly DependencyProperty Value2Property =
             DependencyProperty.Register("Value2", typeof(object), typeof(Op), null);
 
-        public string Path2
-        {
-            get { return (string)GetValue(Path2Property); }
-            set { SetValue(Path2Property, value); }
-        }
-
-        public static readonly DependencyProperty Path2Property =
-            DependencyProperty.Register("Path2", typeof(string), typeof(Op), null);
+        public string Path2 { get; set; }
 
         protected override object OnEvaluate(Engine engine)
         {

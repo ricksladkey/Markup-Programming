@@ -18,14 +18,7 @@ namespace Markup.Programming
         public static readonly DependencyProperty ValueProperty =
             DependencyProperty.Register("Value", typeof(object), typeof(SetItem), null);
 
-        public string ValuePath
-        {
-            get { return (string)GetValue(ValuePathProperty); }
-            set { SetValue(ValuePathProperty, value); }
-        }
-
-        public static readonly DependencyProperty ValuePathProperty =
-            DependencyProperty.Register("ValuePath", typeof(string), typeof(SetItem), null);
+        public string ValuePath { get; set; }
 
         protected override object OnEvaluate(Engine engine)
         {

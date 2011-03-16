@@ -47,84 +47,26 @@ namespace Markup.Programming
             set { SetValue(TargetProperty, value); }
         }
 
-        public string TargetPath { get; set; }
-
         public static readonly DependencyProperty TargetProperty =
             DependencyProperty.Register("Target", typeof(object), typeof(Set), null);
 
-        public string ParameterName
-        {
-            get { return (string)GetValue(ParameterNameProperty); }
-            set { SetValue(ParameterNameProperty, value); }
-        }
+        public string TargetPath { get; set; }
 
-        public static readonly DependencyProperty ParameterNameProperty =
-            DependencyProperty.Register("ParameterName", typeof(string), typeof(Set), null);
+        public string ParameterName { get; set; }
 
-        public string PropertyName
-        {
-            get { return (string)GetValue(PropertyNameProperty); }
-            set { SetValue(PropertyNameProperty, value); }
-        }
+        public string PropertyName { get; set; }
 
-        public static readonly DependencyProperty PropertyNameProperty =
-            DependencyProperty.Register("PropertyName", typeof(string), typeof(Set), null);
+        public DependencyProperty DependencyProperty { get; set; }
 
-        public DependencyProperty DependencyProperty
-        {
-            get { return (DependencyProperty)GetValue(DependencyPropertyProperty); }
-            set { SetValue(DependencyPropertyProperty, value); }
-        }
+        public string FieldName { get; set; }
 
-        public static readonly DependencyProperty DependencyPropertyProperty =
-            DependencyProperty.Register("DependencyProperty", typeof(DependencyProperty), typeof(Set), null);
+        public string StaticPropertyName { get; set; }
 
-        public string FieldName
-        {
-            get { return (string)GetValue(FieldNameProperty); }
-            set { SetValue(FieldNameProperty, value); }
-        }
+        public string StaticFieldName { get; set; }
 
-        public static readonly DependencyProperty FieldNameProperty =
-            DependencyProperty.Register("FieldName", typeof(string), typeof(Set), null);
+        public AssignmentOperator Operator { get; set; }
 
-
-        public string StaticPropertyName
-        {
-            get { return (string)GetValue(StaticPropertyNameProperty); }
-            set { SetValue(StaticPropertyNameProperty, value); }
-        }
-
-        public static readonly DependencyProperty StaticPropertyNameProperty =
-            DependencyProperty.Register("StaticPropertyName", typeof(string), typeof(Set), null);
-
-
-        public string StaticFieldName
-        {
-            get { return (string)GetValue(StaticFieldNameProperty); }
-            set { SetValue(StaticFieldNameProperty, value); }
-        }
-
-        public static readonly DependencyProperty StaticFieldNameProperty =
-            DependencyProperty.Register("StaticFieldName", typeof(string), typeof(Set), null);
-
-        public AssignmentOperator Operator
-        {
-            get { return (AssignmentOperator)GetValue(OperatorProperty); }
-            set { SetValue(OperatorProperty, value); }
-        }
-
-        public static readonly DependencyProperty OperatorProperty =
-            DependencyProperty.Register("Operator", typeof(AssignmentOperator), typeof(Set), null);
-
-        public string ValuePath
-        {
-            get { return (string)GetValue(ValuePathProperty); }
-            set { SetValue(ValuePathProperty, value); }
-        }
-
-        public static readonly DependencyProperty ValuePathProperty =
-            DependencyProperty.Register("ValuePath", typeof(string), typeof(Set), null);
+        public string ValuePath { get; set; }
 
         protected override object OnEvaluate(Engine engine)
         {

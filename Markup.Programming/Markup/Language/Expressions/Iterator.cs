@@ -28,15 +28,7 @@ namespace Markup.Programming
         public static readonly DependencyProperty TypeProperty =
             DependencyProperty.Register("Type", typeof(Type), typeof(Iterator), null);
 
-        public string TypeName
-        {
-            get { return (string)GetValue(TypeNameProperty); }
-            set { SetValue(TypeNameProperty, value); }
-        }
-
-        public static readonly DependencyProperty TypeNameProperty =
-            DependencyProperty.Register("TypeName", typeof(string), typeof(Iterator), null);
-
+        public string TypeName { get; set; }
 
         public Type TypeArgument
         {
@@ -47,14 +39,7 @@ namespace Markup.Programming
         public static readonly DependencyProperty TypeArgumentProperty =
             DependencyProperty.Register("TypeArgument", typeof(Type), typeof(Iterator), null);
 
-        public string TypeArgumentName
-        {
-            get { return (string)GetValue(TypeArgumentNameProperty); }
-            set { SetValue(TypeArgumentNameProperty, value); }
-        }
-
-        public static readonly DependencyProperty TypeArgumentNameProperty =
-            DependencyProperty.Register("TypeArgumentName", typeof(string), typeof(Iterator), null);
+        public string TypeArgumentName { get; set; }
 
         protected override object OnEvaluate(Engine engine)
         {

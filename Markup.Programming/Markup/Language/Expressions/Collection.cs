@@ -26,14 +26,7 @@ namespace Markup.Programming
         public static readonly DependencyProperty TypeArgumentProperty =
             DependencyProperty.Register("TypeArgument", typeof(Type), typeof(Collection), null);
 
-        public string TypeArgumentName
-        {
-            get { return (string)GetValue(TypeArgumentNameProperty); }
-            set { SetValue(TypeArgumentNameProperty, value); }
-        }
-
-        public static readonly DependencyProperty TypeArgumentNameProperty =
-            DependencyProperty.Register("TypeArgumentName", typeof(string), typeof(Collection), null);
+        public string TypeArgumentName { get; set; }
 
         protected override object OnEvaluate(Engine engine)
         {

@@ -14,10 +14,10 @@ namespace Markup.Programming.Core
             set { SetValue(ValueProperty, value); }
         }
 
-        public string Path { get; set; }
-
         public static readonly DependencyProperty ValueProperty =
             DependencyProperty.Register("Value", typeof(object), typeof(UntypedValueBlock), null);
+
+        public string Path { get; set; }
 
         protected override void OnAttached()
         {

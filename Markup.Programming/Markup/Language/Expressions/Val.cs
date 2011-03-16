@@ -24,14 +24,7 @@ namespace Markup.Programming
         public static readonly DependencyProperty ValueProperty =
             DependencyProperty.Register("Value", typeof(object), typeof(Val), null);
 
-        public string Path
-        {
-            get { return (string)GetValue(PathProperty); }
-            set { SetValue(PathProperty, value); }
-        }
-
-        public static readonly DependencyProperty PathProperty =
-            DependencyProperty.Register("Path", typeof(string), typeof(Val), null);
+        public string Path { get; set; }
 
         public bool SuppressAttach { get; set; }
 

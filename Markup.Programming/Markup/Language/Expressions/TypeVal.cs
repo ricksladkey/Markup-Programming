@@ -21,14 +21,7 @@ namespace Markup.Programming
         public static readonly DependencyProperty ValueProperty =
             DependencyProperty.Register("Value", typeof(Type), typeof(TypeVal), null);
 
-        public string TypeName
-        {
-            get { return (string)GetValue(TypeNameProperty); }
-            set { SetValue(TypeNameProperty, value); }
-        }
-
-        public static readonly DependencyProperty TypeNameProperty =
-            DependencyProperty.Register("TypeName", typeof(string), typeof(TypeVal), null);
+        public string TypeName { get; set; }
         
         protected override object OnEvaluate(Engine engine)
         {
