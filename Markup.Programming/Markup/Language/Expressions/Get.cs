@@ -54,7 +54,7 @@ namespace Markup.Programming
         protected override object OnEvaluate(Engine engine)
         {
             if (ParameterName != null) return engine.LookupParameter(ParameterName);
-            var context = engine.GetContext(PathExpression, Path);
+            var context = engine.GetContext(Path, PathExpression);
             var type = engine.EvaluateType(TypeProperty, TypeName);
             if (PropertyName != null)
                 return PathHelper.GetProperty(engine, context, PropertyName);
@@ -69,7 +69,7 @@ namespace Markup.Programming
             if (Path != null)
                 return context;
             if (Source != null)
-                return engine.Evaluate(SourceProperty, SourcePathExpression, SourcePath);
+                return engine.Evaluate(SourceProperty, SourcePath, SourcePathExpression);
             return engine.Throw("nothing to get");
         }
     }

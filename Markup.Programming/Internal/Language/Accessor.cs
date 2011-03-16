@@ -43,7 +43,7 @@ namespace Markup.Programming.Core
         private object Evaluate(bool isSet, Engine engine, object value)
         {
             var op = isSet ? Operator.SetItem : Operator.GetItem;
-            var context = engine.GetContext(PathExpression, Path);
+            var context = engine.GetContext(Path, PathExpression);
             if (Arguments.Count != 0)
             {
                 var combinedArgs = new object[] { context }.Concat(Arguments.Evaluate(engine));
@@ -51,7 +51,7 @@ namespace Markup.Programming.Core
                 return engine.Evaluate(op, combinedArgs.ToArray());
             }
             var type = engine.EvaluateType(TypeProperty, TypeName);
-            var index = engine.Evaluate(IndexProperty, IndexPathExpression, IndexPath, type);
+            var index = engine.Evaluate(IndexProperty, IndexPath, IndexPathExpression, type);
             if (!isSet) return engine.Evaluate(op, context, index);
             return engine.Evaluate(op, context, index, value);
         }

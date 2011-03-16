@@ -25,7 +25,7 @@ namespace Markup.Programming
 
         protected override object OnEvaluate(Engine engine)
         {
-            return Set(engine, engine.Evaluate(ValueProperty, ValuePathExpression, ValuePath));
+            return Set(engine, engine.Evaluate(ValueProperty, ValuePath, ValuePathExpression));
         }
     }
 }

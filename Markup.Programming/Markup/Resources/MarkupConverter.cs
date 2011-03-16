@@ -64,7 +64,7 @@ namespace Markup.Programming
                 { "ConverterParameter", parameter },
                 { "ConverterCulture", culture },
             };
-            if (path != null) return new Engine().With(this, parameters, engine => engine.GetPath(pathExpression, path));
+            if (path != null) return new Engine().With(this, parameters, engine => engine.GetPath(path, pathExpression));
             return new Engine().With(this, parameters, engine => expression.Evaluate(engine));
         }
     }

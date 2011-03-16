@@ -30,7 +30,7 @@ namespace Markup.Programming
         {
             if (!ShouldExecute(engine)) return;
             var type = engine.EvaluateType(TypeProperty, TypeName);
-            var value = engine.Evaluate(ValueProperty, PathExpression, Path, type);
+            var value = engine.Evaluate(ValueProperty, Path, PathExpression, type);
             if (Merge)
                 foreach (var item in value as IList) engine.YieldValue(TypeHelper.Convert(type, item));
             else

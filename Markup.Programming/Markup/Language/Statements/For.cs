@@ -106,18 +106,18 @@ namespace Markup.Programming
             }
 
             // Normal loop processing.
-            SetLoopValue(name, engine.Evaluate(ValueProperty, PathExpression, Path, type), type, engine);
+            SetLoopValue(name, engine.Evaluate(ValueProperty, Path, PathExpression, type), type, engine);
             engine.SetBreakFrame();
             while (true)
             {
                 if (engine.ShouldInterrupt) break;
                 if (While != null)
                 {
-                    if (!(bool)engine.Evaluate(WhileProperty, WhilePathExpression, WhilePath, typeof(bool))) break;
+                    if (!(bool)engine.Evaluate(WhileProperty, WhilePath, WhilePathExpression, typeof(bool))) break;
                 }
                 else if (UpperLimit != null)
                 {
-                    var limit = engine.Evaluate(UpperLimitProperty, UpperLimitPathExpression, UpperLimitPath, type);
+                    var limit = engine.Evaluate(UpperLimitProperty, UpperLimitPath, UpperLimitPathExpression, type);
                     if (!(bool)engine.Evaluate(Operator.LessThan, GetLoopValue(name, type, engine), limit)) break;
                 }
                 Body.Execute(engine);
@@ -125,7 +125,7 @@ namespace Markup.Programming
                     Next.Execute(engine);
                 else if (Increment != null)
                 {
-                    var increment = engine.Evaluate(IncrementProperty, UpperLimitPathExpression, UpperLimitPath, type);
+                    var increment = engine.Evaluate(IncrementProperty, IncrementPath, IncrementPathExpression, type);
                     SetLoopValue(name, engine.Evaluate(Operator.Plus, GetLoopValue(name, type, engine), increment), type, engine);
                 }
             }

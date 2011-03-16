@@ -80,7 +80,7 @@ namespace Markup.Programming
             var args = Arguments.Evaluate(engine);
             if (engine.HasBindingOrValue(ParameterProperty, ParameterPath))
             {
-                var parameter = engine.Evaluate(ParameterProperty, ParameterPathExpression, ParameterPath);
+                var parameter = engine.Evaluate(ParameterProperty, ParameterPath, ParameterPathExpression);
                 args = new object[] { engine.EvaluateObject(parameter) }.Concat(args).ToArray();
             }
             return CallHelper.Call(PathExpression, Path, StaticMethodName, MethodName, FunctionName, BuiltinFunction,

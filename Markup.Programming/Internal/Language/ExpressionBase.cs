@@ -28,7 +28,7 @@ namespace Markup.Programming.Core
 
         protected override object OnProcess(Engine engine)
         {
-            engine.SetContext(ContextProperty, ContextPathExpression, ContextPath);
+            engine.SetContext(ContextProperty, ContextPath, ContextPathExpression);
             return OnEvaluate(engine);
         }
 

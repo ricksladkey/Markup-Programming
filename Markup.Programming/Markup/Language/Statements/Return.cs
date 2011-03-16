@@ -20,7 +20,7 @@ namespace Markup.Programming
         {
             if (!ShouldExecute(engine)) return;
             var type = engine.EvaluateType(TypeProperty, TypeName);
-            var value = engine.Evaluate(ValueProperty, PathExpression, Path, type);
+            var value = engine.Evaluate(ValueProperty, Path, PathExpression, type);
             engine.SetReturnValue(value);
         }
     }

@@ -73,9 +73,9 @@ namespace Markup.Programming
             {
                 var arity = Operator.GetArity();
                 if (arity == 1)
-                    return engine.Evaluate(Operator, engine.Evaluate(ValueProperty, PathExpression, Path, type));
-                var value1 = engine.Evaluate(Value1Property, PathExpression1, Path1, type);
-                var value2 = engine.Evaluate(Value2Property, PathExpression2, Path2, type);
+                    return engine.Evaluate(Operator, engine.Evaluate(ValueProperty, Path, PathExpression, type));
+                var value1 = engine.Evaluate(Value1Property, Path1, PathExpression1, type);
+                var value2 = engine.Evaluate(Value2Property, Path2, PathExpression2, type);
                 return engine.Evaluate(Operator, value1, value2);
             }
             return engine.Evaluate(Operator, Arguments);

@@ -79,7 +79,7 @@ namespace Markup.Programming
 
         protected override object OnEvaluate(Engine engine)
         {
-            var value = engine.Evaluate(ValueProperty, ValuePathExpression, ValuePath);
+            var value = engine.Evaluate(ValueProperty, ValuePath, ValuePathExpression);
             if (ParameterName != null)
             {
                 if (Operator != AssignmentOperator.Assign)
@@ -92,7 +92,7 @@ namespace Markup.Programming
             }
             if (IsBareTarget)
             {
-                var target = engine.Evaluate(TargetProperty, TargetPathExpression, TargetPath);
+                var target = engine.Evaluate(TargetProperty, TargetPath, TargetPathExpression);
                 target = engine.Evaluate(Operator, target, value);
                 Target = value;
                 return value;
@@ -113,7 +113,7 @@ namespace Markup.Programming
                 else if (StaticFieldName != null)
                     oldValue = PathHelper.GetStaticField(engine, type, StaticFieldName);
                 else if (Path != null)
-                    oldValue = engine.GetPath(PathExpression, Path);
+                    oldValue = engine.GetPath(Path, PathExpression);
                 else
                     oldValue = context;
                 value = engine.Evaluate(Operator, oldValue, value);
@@ -129,7 +129,7 @@ namespace Markup.Programming
             else if (StaticFieldName != null)
                 PathHelper.SetStaticField(engine, type, StaticFieldName, value);
             else if (Path != null)
-                engine.SetPath(SetPathExpression, Path, value);
+                engine.SetPath(Path, SetPathExpression, value);
             else
                 Context = value;
             return value;

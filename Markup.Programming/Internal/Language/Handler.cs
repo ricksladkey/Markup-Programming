@@ -62,7 +62,7 @@ namespace Markup.Programming.Core
 
         protected void SetContext(Engine engine)
         {
-            engine.SetContext(ContextProperty, ContextPathExpression, ContextPath);
+            engine.SetContext(ContextProperty, ContextPath, ContextPathExpression);
         }
 
         private string registeredEventName;

@@ -313,15 +313,15 @@ namespace Markup.Programming.Core
             }
         }
 
-        public object GetContext(PathExpression pathExpression, string path)
+        public object GetContext(string path, PathExpression pathExpression)
         {
-            return path != null ? GetPath(pathExpression, path) : Context;
+            return path != null ? GetPath(path, pathExpression) : Context;
         }
 
-        public void SetContext(DependencyProperty property, PathExpression pathExpression, string path)
+        public void SetContext(DependencyProperty property, string path, PathExpression pathExpression)
         {
             if (HasBindingOrValue(property, path))
-                SetContext(Evaluate(property, pathExpression, path));
+                SetContext(Evaluate(property, path, pathExpression));
         }
 
         public void SetContext(object context)
@@ -336,13 +336,13 @@ namespace Markup.Programming.Core
             return PathHelper.HasBindingOrValue(caller, property, path);
         }
 
-        public object GetPath(PathExpression pathExpression, string path)
+        public object GetPath(string path, PathExpression pathExpression)
         {
             if (pathExpression == null) pathExpression = new PathExpression();
             return pathExpression.Parse(this, false, false, path).Evaluate(this);
         }
 
-        public object SetPath(PathExpression pathExpression, string path, object value)
+        public object SetPath(string path, PathExpression pathExpression, object value)
         {
             if (pathExpression == null) pathExpression = new PathExpression();
             return pathExpression.Parse(this, true, false, path).Evaluate(this, value);
@@ -428,14 +428,14 @@ namespace Markup.Programming.Core
             return EvaluateObject(parent.GetValue(property));
         }
 
-        public object Evaluate(DependencyProperty property, PathExpression pathExpression, string path)
+        public object Evaluate(DependencyProperty property, string path, PathExpression pathExpression)
         {
-            return Evaluate(property, pathExpression, path, null);
+            return Evaluate(property, path, pathExpression, null);
         }
 
-        public object Evaluate(DependencyProperty property, PathExpression pathExpression, string path, Type type)
+        public object Evaluate(DependencyProperty property, string path, PathExpression pathExpression, Type type)
         {
-            var value = (path != null) ? GetPath(pathExpression, path) : Evaluate(property);
+            var value = (path != null) ? GetPath(path, pathExpression) : Evaluate(property);
             return TypeHelper.Convert(type, value);
         }
 
