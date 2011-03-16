@@ -76,6 +76,7 @@ namespace Markup.Programming.Core
 
         private void EventHandler(Engine engine)
         {
+            if (Configuration.IsInDesignMode) return;
             engine.Trace(TraceFlags.Events, "Event: {0}, sender {1}", registeredEventName, engine.Sender);
             engine.SetContext(ContextProperty, ContextPath);
             OnEventHandler(engine);

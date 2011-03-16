@@ -1,5 +1,3 @@
-- detect running in the designer
-- don't attach to events in the designer
 - add recursive descent parser for operators
 - fix auto-evaluation of langauge elements
 - add all-markup sample equivalent of one method two bindings
