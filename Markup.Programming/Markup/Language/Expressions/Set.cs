@@ -52,6 +52,9 @@ namespace Markup.Programming
 
         public string TargetPath { get; set; }
 
+        private PathExpression targetPathExpression = new PathExpression();
+        protected PathExpression TargetPathExpression { get { return targetPathExpression; } }
+
         public string ParameterName { get; set; }
 
         public string PropertyName { get; set; }
@@ -68,9 +71,15 @@ namespace Markup.Programming
 
         public string ValuePath { get; set; }
 
+        private PathExpression valuePathExpression = new PathExpression();
+        protected PathExpression ValuePathExpression { get { return valuePathExpression; } }
+
+        private PathExpression setPathExpression = new PathExpression();
+        protected PathExpression SetPathExpression { get { return setPathExpression; } }
+
         protected override object OnEvaluate(Engine engine)
         {
-            var value = engine.Evaluate(ValueProperty, ValuePath);
+            var value = engine.Evaluate(ValueProperty, ValuePathExpression, ValuePath);
             if (ParameterName != null)
             {
                 if (Operator != AssignmentOperator.Assign)
@@ -83,7 +92,7 @@ namespace Markup.Programming
             }
             if (IsBareTarget)
             {
-                var target = engine.Evaluate(TargetProperty, TargetPath);
+                var target = engine.Evaluate(TargetProperty, TargetPathExpression, TargetPath);
                 target = engine.Evaluate(Operator, target, value);
                 Target = value;
                 return value;
@@ -120,7 +129,7 @@ namespace Markup.Programming
             else if (StaticFieldName != null)
                 PathHelper.SetStaticField(engine, type, StaticFieldName, value);
             else if (Path != null)
-                engine.SetPath(PathExpression, Path, value);
+                engine.SetPath(SetPathExpression, Path, value);
             else
                 Context = value;
             return value;

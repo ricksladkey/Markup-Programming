@@ -20,7 +20,7 @@ namespace Markup.Programming
         protected override void OnExecute(Engine engine)
         {
             var type = engine.EvaluateType(TypeProperty, TypeName);
-            var value = engine.Evaluate(ValueProperty, Path) as IEnumerable;
+            var value = engine.Evaluate(ValueProperty, PathExpression, Path) as IEnumerable;
             var name = ParameterName;
             foreach (object item in value)
             {

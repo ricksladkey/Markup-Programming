@@ -14,10 +14,13 @@ namespace Markup.Programming.Core
             set { SetValue(WhenProperty, value); }
         }
 
-        public string WhenPath { get; set; }
-
         public static readonly DependencyProperty WhenProperty =
             DependencyProperty.Register("When", typeof(object), typeof(ConditionalValueStatement), null);
+
+        public string WhenPath { get; set; }
+
+        private PathExpression whenPathExpression = new PathExpression();
+        protected PathExpression WhenPathExpression { get { return whenPathExpression; } }
 
         protected override void OnAttached()
         {
@@ -27,7 +30,7 @@ namespace Markup.Programming.Core
 
         protected bool ShouldExecute(Engine engine)
         {
-            var when = engine.Evaluate(WhenProperty, WhenPath);
+            var when = engine.Evaluate(WhenProperty, WhenPathExpression, WhenPath);
             if (when == null) return true;
             return TypeHelper.ConvertToBool(when);
         }

@@ -1,20 +1,20 @@
-Markup.Programming extends XAML to a full programming language in markup: control flow, expressions, functions, objects, commands, converters, events, and more. Write an MVVM prototype in markup-only or use it for enhanced interactivity.
+! Markup Programming
 
-Features for WPF4 and Silverlight4:
+* _Markup Programming is a standalone extension to XAML that provides operation-binding power comparable to the data-binding built in to XAML.  It is is built on the foundation of a complete imperative programming language with dynamic objects._
 
-- Expressions: operators, CLR methods/properties/fields, conversions, bindings
-- Parameters: define, store and reference scoped values by name
-- Control flow: If/Then/Else, For, ForEach, While, When, and Break
-- Modularity: Function, Call and Return, Module and Import complete with arguments
-- Instantiation: New with constructor arguments including generic type parameters
-- MarkupObjects: like a dynamic data store but with no code-behind
-- Commands and CommandBindings: defined and referenced all in markup
-- Converters and MultiConverters: all in markup
+Why add rich support for operation-binding to XAML?  People used to ask the same question about data-binding.  The answer is that the combination of powerful operation-binding and data-binding enables the use of elegant, maintainable and sophisticated design methodologies such as MVVM.
 
-This means you can:
+!! Features
 
-- create an instance of ObservableCollection<string>()
-- call a method on Keyboard.FocusedElement
-- move an item from one collection to another
-- mark an event as handled
-- or even simply create an object with two properties called Name and Address that implements INotifyPropertyChanged
+* *Tiny:* no dependencies and roughly a 100k
+* *Free*: open source and Apache license
+* *Necessary*: a swiss army knife; a programming language
+* *Sufficient*: call any method in any assembly
+* *Portable*: supports WPF4 and Silverlight4
+* *Concise*: three lines of XAML to bind to your view-model operation
+* *Flexible*: handle any event on any element
+* *Fast*: prototype with dynamic sample data
+* *Designable*: dynamic data shows in the designer
+* *Powerful*: even write complete applications entirely in markup
+
+*Want to try it out?*  See [Getting Started]

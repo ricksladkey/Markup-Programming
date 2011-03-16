@@ -46,6 +46,9 @@ namespace Markup.Programming
 
         public string Path1 { get; set; }
 
+        private PathExpression pathExpression1 = new PathExpression();
+        protected PathExpression PathExpression1 { get { return pathExpression1; } }
+
         public Operator Operator { get; set; }
 
         public object Value2
@@ -59,6 +62,9 @@ namespace Markup.Programming
 
         public string Path2 { get; set; }
 
+        private PathExpression pathExpression2 = new PathExpression();
+        protected PathExpression PathExpression2 { get { return pathExpression2; } }
+
         protected override object OnEvaluate(Engine engine)
         {
             if (Operator == 0) engine.Throw("missing operator");
@@ -67,9 +73,9 @@ namespace Markup.Programming
             {
                 var arity = Operator.GetArity();
                 if (arity == 1)
-                    return engine.Evaluate(Operator, engine.Evaluate(ValueProperty, Path, type));
-                var value1 = engine.Evaluate(Value1Property, Path1, type);
-                var value2 = engine.Evaluate(Value2Property, Path2, type);
+                    return engine.Evaluate(Operator, engine.Evaluate(ValueProperty, PathExpression, Path, type));
+                var value1 = engine.Evaluate(Value1Property, PathExpression1, Path1, type);
+                var value2 = engine.Evaluate(Value2Property, PathExpression2, Path2, type);
                 return engine.Evaluate(Operator, value1, value2);
             }
             return engine.Evaluate(Operator, Arguments);

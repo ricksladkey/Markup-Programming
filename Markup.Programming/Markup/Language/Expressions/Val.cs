@@ -38,7 +38,7 @@ namespace Markup.Programming
         {
             if (Quote) return engine.Quote(ValueProperty);
             var type = engine.EvaluateType(TypeProperty, TypeName);
-            return engine.Evaluate(ValueProperty, Path, type);
+            return engine.Evaluate(ValueProperty, PathExpression, Path, type);
         }
     }
 }

@@ -1,3 +1,8 @@
+- add not operator
+- Add free type syntax in paths, e.g. [Enum].GetValues([HorizontalAlignment])
+- Add Convert builtin function
+- Add Operator builtin function
+- Add @BuiltinFunction to path syntax
 - add special call declaration mode for paths, e.g. foo(a,b) declares functions foo with params a and b
 - add recursive descent parser for operators
 - fix auto-evaluation of langauge elements
@@ -31,22 +36,3 @@
 - handle detaching
 - optionally show exceptions in message boxes
 - ToString with details for a composite object doesn't refresh its binding properly
-
-Path Syntax:
-
-@ - Context
-@True, @False, @Null - literal constants
-12345 - integral value
-'abcdef' - string value
-context.Property - property (in property context)
-context.Method(arg, ...) - method (in any context)
-context.Method - method (in call context)
-[Namspace.Type].Method - static method
-$Parameter - parameter (in property context)
-$Function(arg, ...) - function (in any context)
-$Function - function (in call context)
-context[index] - item
-context[index1][index2] - items can be chained
-@[index] - item (if needed to disambiguate with static method)
-lhs+rhs, lhs-rhs, lhs*rhs, lhs/rhs - arithmetic
-(Context.path) - grouping

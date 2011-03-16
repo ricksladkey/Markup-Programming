@@ -20,9 +20,12 @@ namespace Markup.Programming
 
         public string ValuePath { get; set; }
 
+        private PathExpression valuePathExpression = new PathExpression();
+        protected PathExpression ValuePathExpression { get { return valuePathExpression; } }
+
         protected override object OnEvaluate(Engine engine)
         {
-            return Set(engine, engine.Evaluate(ValueProperty, ValuePath));
+            return Set(engine, engine.Evaluate(ValueProperty, ValuePathExpression, ValuePath));
         }
     }
 }

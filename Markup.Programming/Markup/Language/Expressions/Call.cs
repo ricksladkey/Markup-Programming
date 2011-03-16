@@ -40,6 +40,9 @@ namespace Markup.Programming
 
         public string ParameterPath { get; set; }
 
+        private PathExpression parameterPathExpression = new PathExpression();
+        protected PathExpression ParameterPathExpression { get { return parameterPathExpression; } }
+
         public ExpressionCollection Arguments
         {
             get { return (ExpressionCollection)GetValue(ArgumentsProperty); }
@@ -77,7 +80,7 @@ namespace Markup.Programming
             var args = Arguments.Evaluate(engine);
             if (engine.HasBindingOrValue(ParameterProperty, ParameterPath))
             {
-                var parameter = engine.Evaluate(ParameterProperty, ParameterPath);
+                var parameter = engine.Evaluate(ParameterProperty, ParameterPathExpression, ParameterPath);
                 args = new object[] { engine.EvaluateObject(parameter) }.Concat(args).ToArray();
             }
             return CallHelper.Call(PathExpression, Path, StaticMethodName, MethodName, FunctionName, BuiltinFunction,

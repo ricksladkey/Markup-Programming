@@ -32,10 +32,10 @@ namespace Markup.Programming.Core
 
         protected void ExecuteBody(object sender, object e)
         {
-            new Engine(sender, e).With(this, engine => Body.Execute(engine));
+            new Engine(sender, e).With(this, engine => ExecuteBody(engine));
         }
 
-        protected void ExecuteBody(Engine engine)
+        protected virtual void ExecuteBody(Engine engine)
         {
             Body.Execute(engine);
         }

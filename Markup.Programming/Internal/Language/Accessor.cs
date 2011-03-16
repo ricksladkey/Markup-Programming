@@ -21,6 +21,9 @@ namespace Markup.Programming.Core
 
         public string IndexPath { get; set; }
 
+        private PathExpression indexPathExpression = new PathExpression();
+        protected PathExpression IndexPathExpression { get { return indexPathExpression; } }
+
         protected override void OnAttached()
         {
             base.OnAttached();
@@ -48,7 +51,7 @@ namespace Markup.Programming.Core
                 return engine.Evaluate(op, combinedArgs.ToArray());
             }
             var type = engine.EvaluateType(TypeProperty, TypeName);
-            var index = engine.Evaluate(IndexProperty, IndexPath, type);
+            var index = engine.Evaluate(IndexProperty, IndexPathExpression, IndexPath, type);
             if (!isSet) return engine.Evaluate(op, context, index);
             return engine.Evaluate(op, context, index, value);
         }

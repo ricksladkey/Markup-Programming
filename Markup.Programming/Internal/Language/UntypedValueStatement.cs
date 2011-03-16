@@ -26,6 +26,9 @@ namespace Markup.Programming.Core
 
         public string Path { get; set; }
 
+        private PathExpression pathExpression = new PathExpression();
+        protected PathExpression PathExpression { get { return pathExpression; } }
+
         protected override void OnAttached()
         {
             base.OnAttached();

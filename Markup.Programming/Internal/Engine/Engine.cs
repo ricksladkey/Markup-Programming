@@ -318,10 +318,10 @@ namespace Markup.Programming.Core
             return path != null ? GetPath(pathExpression, path) : Context;
         }
 
-        public void SetContext(DependencyProperty property, string path)
+        public void SetContext(DependencyProperty property, PathExpression pathExpression, string path)
         {
             if (HasBindingOrValue(property, path))
-                SetContext(Evaluate(property, path));
+                SetContext(Evaluate(property, pathExpression, path));
         }
 
         public void SetContext(object context)
@@ -428,14 +428,14 @@ namespace Markup.Programming.Core
             return EvaluateObject(parent.GetValue(property));
         }
 
-        public object Evaluate(DependencyProperty property, string path)
+        public object Evaluate(DependencyProperty property, PathExpression pathExpression, string path)
         {
-            return Evaluate(property, path, null);
+            return Evaluate(property, pathExpression, path, null);
         }
 
-        public object Evaluate(DependencyProperty property, string path, Type type)
+        public object Evaluate(DependencyProperty property, PathExpression pathExpression, string path, Type type)
         {
-            var value = (path != null) ? GetPath(null, path) : Evaluate(property);
+            var value = (path != null) ? GetPath(pathExpression, path) : Evaluate(property);
             return TypeHelper.Convert(type, value);
         }
 

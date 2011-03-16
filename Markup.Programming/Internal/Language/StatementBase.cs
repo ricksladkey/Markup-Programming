@@ -22,6 +22,9 @@ namespace Markup.Programming.Core
 
         public string ContextPath { get; set; }
 
+        private PathExpression contextPathExpression = new PathExpression();
+        protected PathExpression ContextPathExpression { get { return contextPathExpression; } }
+
         protected override void OnAttached()
         {
             base.OnAttached();

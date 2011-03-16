@@ -30,6 +30,9 @@ namespace Markup.Programming
 
         public string SourcePath { get; set; }
 
+        private PathExpression sourcePathExpression = new PathExpression();
+        protected PathExpression SourcePathExpression { get { return sourcePathExpression; } }
+
         public string ParameterName { get; set; }
 
         public string PropertyName { get; set; }
@@ -66,7 +69,7 @@ namespace Markup.Programming
             if (Path != null)
                 return context;
             if (Source != null)
-                return engine.Evaluate(SourceProperty, SourcePath);
+                return engine.Evaluate(SourceProperty, SourcePathExpression, SourcePath);
             return engine.Throw("nothing to get");
         }
     }

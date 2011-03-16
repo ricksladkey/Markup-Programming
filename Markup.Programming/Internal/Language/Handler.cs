@@ -22,6 +22,9 @@ namespace Markup.Programming.Core
         public static readonly DependencyProperty ContextProperty =
             DependencyProperty.Register("Context", typeof(object), typeof(Handler), null);
 
+        private PathExpression contextPathExpression = new PathExpression();
+        protected PathExpression ContextPathExpression { get { return contextPathExpression; } }
+
         public string EventName
         {
             get { return (string)GetValue(EventNameProperty); }
@@ -51,14 +54,15 @@ namespace Markup.Programming.Core
             ExecutionHelper.Attach(this, properties);
         }
 
+        protected override void ExecuteBody(Engine engine)
+        {
+            SetContext(engine);
+            base.ExecuteBody(engine);
+        }
+
         protected void SetContext(Engine engine)
         {
-            if (engine.HasBindingOrValue(ContextProperty, ContextPath))
-            {
-                var context = engine.Evaluate(ContextProperty, ContextPath);
-                engine.Trace(TraceFlags.Parameter, "Setting context = {0}", context);
-                engine.SetContext(context);
-            }
+            engine.SetContext(ContextProperty, ContextPathExpression, ContextPath);
         }
 
         private string registeredEventName;
@@ -83,7 +87,7 @@ namespace Markup.Programming.Core
         {
             if (Configuration.IsInDesignMode) return;
             engine.Trace(TraceFlags.Events, "Event: {0}, sender {1}", registeredEventName, engine.Sender);
-            engine.SetContext(ContextProperty, ContextPath);
+            SetContext(engine);
             OnEventHandler(engine);
             if (SetHandled && engine.EventArgs is RoutedEventArgs) (engine.EventArgs as RoutedEventArgs).Handled = true;
         }

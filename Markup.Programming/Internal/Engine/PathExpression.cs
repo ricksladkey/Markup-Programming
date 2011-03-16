@@ -131,7 +131,7 @@ namespace Markup.Programming.Core
         }
 
         private Engine engine;
-        private TokenQueue tokens = new TokenQueue();
+        private TokenQueue tokens;
         private PathNode root;
 
         public PathExpression() { }
@@ -279,6 +279,7 @@ namespace Markup.Programming.Core
 
         private void Tokenize()
         {
+            tokens = new TokenQueue();
             for (int i = 0; i < Path.Length; )
             {
                 char c = Path[i];

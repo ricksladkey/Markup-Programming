@@ -39,6 +39,9 @@ namespace Markup.Programming
 
         public string Path { get; set; }
 
+        private PathExpression pathExpression = new PathExpression();
+        protected PathExpression PathExpression { get { return pathExpression; } }
+
         protected override void OnAttached()
         {
             base.OnAttached();
@@ -57,7 +60,7 @@ namespace Markup.Programming
         private object GetPropertyValue(Engine engine)
         {
             var type = engine.EvaluateType(TypeProperty, TypeName);
-            return engine.Evaluate(ValueProperty, Path, type);
+            return engine.Evaluate(ValueProperty, PathExpression, Path, type);
         }
     }
 }
