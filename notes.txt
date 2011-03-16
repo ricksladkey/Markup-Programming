@@ -1,3 +1,4 @@
+- change builtin parameters to lowercase
 - add not operator
 - Add free type syntax in paths, e.g. [Enum].GetValues([HorizontalAlignment])
 - Add Convert builtin function

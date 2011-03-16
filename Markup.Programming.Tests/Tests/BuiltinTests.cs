@@ -14,7 +14,7 @@ namespace Markup.Programming.Tests
                 new Call
                 {
                     BuiltinFunction = BuiltinFunction.ParameterIsDefined,
-                    Arguments = { new Val { Value = "EventArgs" } },
+                    Arguments = { new Val { Value = "@EventArgs" } },
                 });
             TestHelper.ExpressionTest(false,
                 new Call

@@ -9,7 +9,7 @@
             <TextBox Text="Normal TextBox"/>
             <TextBox Text="SelectOnFocus TextBox">
                 <p:Attached.Operations>
-                    <p:CallHandler Path="PreviewGotKeyboardFocus.$AssociatedObject.SelectAll()"/>
+                    <p:CallHandler Path="PreviewGotKeyboardFocus.@AssociatedObject.SelectAll()"/>
                 </p:Attached.Operations>
             </TextBox>
         </StackPanel>

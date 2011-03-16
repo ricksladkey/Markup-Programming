@@ -11,22 +11,22 @@
     d:DesignHeight="500" d:DesignWidth="500">
     <UserControl.Resources>
         <p:MarkupCollection x:Key="UserControls">
+            <samples:HelloWorld/>
             <samples:TowerOfHanoi/>
             <samples:MarkupObjectSample/>
             <samples:SelectOnFocus/>
             <samples:ForLoops/>
             <samples:DynamicButton/>
             <samples:CrashSample/>
-            <samples:HelloWorld/>
         </p:MarkupCollection>
         <p:MarkupObject x:Key="ViewModel">
             <p:Property PropertyName="Samples">
                 <p:Iterator>
-                    <p:ForEach ParameterName="UserControl" Value="{StaticResource UserControls}">
+                    <p:ForEach ParameterName="userControl" Value="{StaticResource UserControls}">
                         <p:Yield>
                             <p:Object>
-                                <p:Property PropertyName="Name" Path="$UserControl.ToString()"/>
-                                <p:Property PropertyName="Control" Path="$UserControl"/>
+                                <p:Property PropertyName="Name" Path="$userControl.ToString()"/>
+                                <p:Property PropertyName="Control" Path="$userControl"/>
                             </p:Object>
                         </p:Yield>
                     </p:ForEach>
@@ -42,11 +42,11 @@
         <ComboBox ItemsSource="{Binding Samples}" Grid.Row="0">
             <p:Attached.Operations>
                 <p:EventHandler Path="SelectionChanged">
-                    <p:Set Path="$Children">
+                    <p:Set Path="$children">
                         <p:Get Context="{Binding ElementName=ContentHost}" PropertyName="Children"/>
                     </p:Set>
-                    <p:Call Path="$Children.Clear()"/>
-                    <p:Call Path="$Children.Add(Samples[$AssociatedObject.SelectedIndex].Control)"/>
+                    <p:Call Path="$children.Clear()"/>
+                    <p:Call Path="$children.Add(Samples[@AssociatedObject.SelectedIndex].Control)"/>
                 </p:EventHandler>
             </p:Attached.Operations>
             <ComboBox.ItemTemplate>

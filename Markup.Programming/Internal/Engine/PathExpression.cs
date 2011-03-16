@@ -6,7 +6,7 @@ using System.Linq;
 namespace Markup.Programming.Core
 {
     /// <summary>
-    /// The PathExpression class parses paths into expression objects that
+    /// The PathExpression class compiles paths into expression objects that
     /// can be evaluated to produces values corresponding to the paths.
     /// </summary>
     public class PathExpression
@@ -134,8 +134,6 @@ namespace Markup.Programming.Core
         private TokenQueue tokens;
         private PathNode root;
 
-        public PathExpression() { }
-
         public bool IsSet { get; private set; }
         public bool IsCall { get; private set; }
         public string Path { get; private set; }
@@ -154,7 +152,7 @@ namespace Markup.Programming.Core
             return call.Call(engine, args);
         }
 
-        public PathExpression Parse(Engine engine, bool isSet, bool isCall, string path)
+        public PathExpression Compile(Engine engine, bool isSet, bool isCall, string path)
         {
             if (isSet == IsSet && IsCall == isCall && object.ReferenceEquals(Path, path)) return this;
             this.engine = engine;
@@ -251,8 +249,8 @@ namespace Markup.Programming.Core
             return node;
         }
 
-        private bool IsCurrentSet { get { return IsSet && tokens.Count == 0; } }
-        private bool IsCurrentCall { get { return IsCall && tokens.Count == 0 || tokens.Peek() == "("; } }
+        private bool IsCurrentSet { get { return IsSet && tokens != null && tokens.Count == 0; } }
+        private bool IsCurrentCall { get { return IsCall && tokens != null && tokens.Count == 0 || tokens.Peek() == "("; } }
 
         private void VerifyToken(string token)
         {
@@ -313,7 +311,15 @@ namespace Markup.Programming.Core
                 }
                 if (c == '$' || c == '@' || IsInitialIdChar(c))
                 {
-                    if (c == '$' || c == '@') ++i;
+                    if (c == '$' || c == '@')
+                    {
+                        ++i;
+                        if (i == Path.Length || !IsInitialIdChar(Path[i]))
+                        {
+                            if (c == '$') engine.Throw("missing identifier");
+                            if (c == '@') { tokens.Enqueue("@"); continue; }
+                        }
+                    }
                     var start = i;
                     var prefix = c == '$' ? "$" : (c == '@' ? "$@" : "");
                     for (++i; i < Path.Length && IsIdChar(Path[i]); ++i) continue;

@@ -35,12 +35,6 @@ namespace Markup.Programming.Core
     public class Engine
     {
         public static string ContextParameter = "@";
-        public static IDictionary<string, object> ConstantParameters = new NameDictionary
-        {
-            { "@Null", null },
-            { "@True", true },
-            { "@False", false },
-        };
 
         private static int nextId = 0;
         private int id;
@@ -50,9 +44,20 @@ namespace Markup.Programming.Core
         private object returnValue;
         private List<StackFrame> stack = new List<StackFrame>();
         private IDictionary<string, Function> functions;
-        private StackFrame CurrentFrame { get { return stack.Count >= 1 ? stack[stack.Count - 1] : null; } }
+        public StackFrame CurrentFrame { get { return stack.Count >= 1 ? stack[stack.Count - 1] : null; } }
         private StackFrame ParentFrame { get { return stack.Count >= 2 ? stack[stack.Count - 2] : null; } }
         private string FrameInfo { get { return string.Format("{0}/{1}", id, stack.Count); } }
+
+        private BuiltinImplementor builtinImplementor;
+        private BuiltinImplementor BuiltinImplementor
+        {
+            get
+            {
+                if (builtinImplementor != null) return builtinImplementor;
+                builtinImplementor = new BuiltinImplementor(this);
+                return builtinImplementor;
+            }
+        }
 
         public Engine()
             : this(null, null)
@@ -246,18 +251,7 @@ namespace Markup.Programming.Core
                 }
                 if (frame.ScopeFrame) break;
             }
-            if (name == "AssociatedObject")
-            {
-                if (CurrentFrame == null) Throw("no frame for AssociatedObject");
-                if (CurrentFrame.Caller == null) Throw("no caller for AssociatedObject");
-                value = CurrentFrame.Caller.AssociatedObject;
-                return true;
-            }
-            if (name == "Sender") { value = Sender; return true; }
-            if (name == "EventArgs") { value = EventArgs; return true; }
-            if (ConstantParameters.ContainsKey(name)) { value = ConstantParameters[name]; return true; }
-            value = null;
-            return false;
+            return BuiltinImplementor.TryLookupParameter(name, out value);
         }
 
         public object LookupParameter(string name)
@@ -339,19 +333,19 @@ namespace Markup.Programming.Core
         public object GetPath(string path, PathExpression pathExpression)
         {
             if (pathExpression == null) pathExpression = new PathExpression();
-            return pathExpression.Parse(this, false, false, path).Evaluate(this);
+            return pathExpression.Compile(this, false, false, path).Evaluate(this);
         }
 
         public object SetPath(string path, PathExpression pathExpression, object value)
         {
             if (pathExpression == null) pathExpression = new PathExpression();
-            return pathExpression.Parse(this, true, false, path).Evaluate(this, value);
+            return pathExpression.Compile(this, true, false, path).Evaluate(this, value);
         }
 
         public object CallPath(PathExpression pathExpression, string path, object[] args)
         {
             if (pathExpression == null) pathExpression = new PathExpression();
-            return pathExpression.Parse(this, false, true, path).Call(this, args);
+            return pathExpression.Compile(this, false, true, path).Call(this, args);
         }
 
         public bool ShouldTrace(TraceFlags flags)
@@ -489,8 +483,7 @@ namespace Markup.Programming.Core
 
         public object CallBuiltinFunction(BuiltinFunction builtinFunction, object[] args)
         {
-            var builtin = new BuiltinImplementor(this);
-            return CallHelper.CallMethod(builtinFunction.ToString(), false, typeof(BuiltinImplementor), builtin, args, null, this);
+            return CallHelper.CallMethod(builtinFunction.ToString(), false, typeof(BuiltinImplementor), BuiltinImplementor, args, null, this);
         }
 
         public ResourceObject ParentResourceObject

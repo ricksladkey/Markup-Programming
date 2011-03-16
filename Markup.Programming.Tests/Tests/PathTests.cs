@@ -63,7 +63,7 @@ namespace Markup.Programming.Tests.Tests
             var names = new NameDictionary
             {
                 { Engine.ContextParameter, viewModel },
-                { "Parameter1", "Value1" },
+                { "parameter1", "Value1" },
             };
             return names;
         }
@@ -72,14 +72,14 @@ namespace Markup.Programming.Tests.Tests
         public void BasicPathTests()
         {
             BasicGetTest("abc", "'abc'");
-            BasicGetTest(true, "@True");
+            BasicGetTest(true, "@true");
             BasicGetTest(3, "1 + 2");
             BasicGetTest(true, "1 == 1");
             BasicGetTest("Test1", "String1");
             BasicGetTest("Test2", "Object1.String1");
-            BasicGetTest("Value1", "$Parameter1");
+            BasicGetTest("Value1", "$parameter1");
             BasicGetTest(256.0, "[System.Math].Pow(2, 8)");
-            BasicSetTest((vm, p) => Assert.AreEqual(p["Parameter1"], 42), "$Parameter1", 42);
+            BasicSetTest((vm, p) => Assert.AreEqual(p["parameter1"], 42), "$parameter1", 42);
         }
     }
 }

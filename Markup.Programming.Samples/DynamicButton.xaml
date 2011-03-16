@@ -10,16 +10,16 @@
                 <p:Attached.Operations>
                     <p:EventHandler Path="Click">
                         <p:Block>
-                            <p:Set ParameterName="Children">
+                            <p:Set Path="$children">
                                 <p:Get Context="{Binding ElementName=ContentHost}" PropertyName="Children"/>
                             </p:Set>
-                            <p:Set ParameterName="Child">
+                            <p:Set Path="$child">
                                 <p:Object TypeName="Button">
                                     <p:Property PropertyName="Content" Value="Click Me!"/>
                                     <p:Property PropertyName="Opacity" Value="0.5"/>
                                 </p:Object>
                             </p:Set>
-                            <p:Call Path="$Children.Add" ParameterPath="$Child"/>
+                            <p:Call Path="$children.Add" ParameterPath="$child"/>
                         </p:Block>
                     </p:EventHandler>
                 </p:Attached.Operations>

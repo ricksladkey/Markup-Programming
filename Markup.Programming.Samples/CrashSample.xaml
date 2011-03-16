@@ -8,7 +8,7 @@
         <Button Content="Crash Me!">
             <p:Attached.Operations>
                 <p:EventHandler Path="Click">
-                    <p:Block ContextPath="@Null">
+                    <p:Block ContextPath="@null">
                         <p:If Value="True">
                             <p:If.Then>
                                 <p:When>

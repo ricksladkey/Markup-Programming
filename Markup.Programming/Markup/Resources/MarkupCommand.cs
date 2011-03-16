@@ -52,7 +52,7 @@ namespace Markup.Programming
         {
             base.OnAttached();
             Attach(LoadActionsProperty, CanExecuteExpressionProperty, ExecuteBodyProperty);
-            var parameters = new NameDictionary { { "Command", this } };
+            var parameters = new NameDictionary { { "@Command", this } };
             new Engine().With(this, parameters, engine => LoadActions.Execute(engine));
         }
 
@@ -60,7 +60,7 @@ namespace Markup.Programming
         {
             TryToAttach();
             if (CanExecuteExpression == null) return true;
-            var parameters = new NameDictionary{ { "CommandParamer", parameter} };
+            var parameters = new NameDictionary{ { "@CommandParameter", parameter} };
             return new Engine(parameter).With(this, parameters,
                 engine => (bool)engine.Evaluate(CanExecuteExpressionProperty));
         }
@@ -82,7 +82,7 @@ namespace Markup.Programming
         public void Execute(object parameter)
         {
             TryToAttach();
-            var parameters = new NameDictionary { { "CommandParameter", parameter } };
+            var parameters = new NameDictionary { { "@CommandParameter", parameter } };
             new Engine(parameter).With(this, parameters, engine => ExecuteBody.Execute(engine));
         }
     }

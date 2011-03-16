@@ -36,7 +36,7 @@
                     <p:Val Value="{Binding FirstName}"/>
                     
                     <!-- use parameter value indirection -->
-                    <p:Val Path="$I"/>
+                    <p:Val Path="$i"/>
 
                     <!-- explicit type conversion -->
                     <p:Val Value="42" Type="sys:Int32"/>
@@ -54,26 +54,26 @@
                     </p:Val>
 
                     <!-- use get accessors -->
-                    <p:Get ParameterName="I"/>
+                    <p:Get ParameterName="i"/>
                     <p:Get Source="{StaticResource BlueBrush}"/>
                     <p:Get Context="{StaticResource BlueBrush}" PropertyName="Color"/>
-                    <p:Get Path="$C" PropertyName="Count"/>
+                    <p:Get Path="$c" PropertyName="Count"/>
                     <p:Get Context="{Binding ElementName=Button}" DependencyProperty="Button.Command"/>
                     
                     <!-- use set accessors -->
-                    <p:Set ParameterName="S" Value="New Value"/>
+                    <p:Set ParameterName="s" Value="New Value"/>
                     <p:Set Target="{Binding FirstName, Mode=TwoWay}" Value="Bill"/>
                     <p:Set Target="{Binding}" PropertyName="FirstName" Value="Bill"/>
-                    <p:Set Path="$C" PropertyName="Count" Value="10"/>
-                    <p:Set Operator="Increment" Path="$C" PropertyName="Total"/>
+                    <p:Set Path="$c" PropertyName="Count" Value="10"/>
+                    <p:Set Operator="Increment" Path="$c" PropertyName="Total"/>
 
                     <!-- use item accessor for arrays, collections and dictionaries -->
-                    <p:GetItem Path="$X" Index="0"/>
-                    <p:GetItem Path="$X" IndexPath="$I"/>
-                    <p:GetItem Path="$Array3D">
-                        <p:Val Path="$I"/>
-                        <p:Val Path="$J"/>
-                        <p:Val Path="$K"/>
+                    <p:GetItem Path="$x" Index="0"/>
+                    <p:GetItem Path="$x" IndexPath="$i"/>
+                    <p:GetItem Path="$array3D">
+                        <p:Val Path="$i"/>
+                        <p:Val Path="$j"/>
+                        <p:Val Path="$k"/>
                     </p:GetItem>
 
                     <!-- all accessors can use context and context is inherited -->
@@ -87,8 +87,8 @@
                     <p:Op Type="sys:Boolean" Operator="Not" Value="True"/>
                     
                     <!-- use binary operator with one or two parameters -->
-                    <p:Op Path1="$I" Operator="LessThan" Value2="10"/>
-                    <p:Op Path1="$I" Operator="LessThan" Path2="$J"/>
+                    <p:Op Path1="$i" Operator="LessThan" Value2="10"/>
+                    <p:Op Path1="$i" Operator="LessThan" Path2="$j"/>
                         
                     <!-- use operators in params mode -->
                     <p:Op Operator="Plus">
@@ -99,8 +99,8 @@
                     
                     <!-- use short-circuit operators to avoid crashes -->
                     <p:Op Operator="AndAnd">
-                        <p:Op Operator="NotIsNull" Path="$P"/>
-                        <p:Get Path="$P" PropertyName="IsReady"/>
+                        <p:Op Operator="NotIsNull" Path="$p"/>
+                        <p:Get Path="$p" PropertyName="IsReady"/>
                     </p:Op>
 
                     <!-- create a dynamic object -->
@@ -136,15 +136,15 @@
 
                     <!-- filter collections using iterators -->
                     <p:Iterator>
-                        <p:ForEach ParameterName="Operator">
+                        <p:ForEach ParameterName="operator">
                             <p:ForEach.Value>
                                 <p:Call Type="sys:Enum" StaticMethodName="GetValues">
                                     <p:TypeVal Value="p:Operator"/>
                                 </p:Call>
                             </p:ForEach.Value>
-                            <p:Yield Path="$Operator">
+                            <p:Yield Path="$operator">
                                 <p:Yield.When>
-                                    <p:Call Path="$Operator" MethodName="Contains">
+                                    <p:Call Path="$operator" MethodName="Contains">
                                         <p:Val Value="Bitwise"/>
                                     </p:Call>
                                 </p:Yield.When>

@@ -10,20 +10,20 @@
             <Button Content="Standard For">
                 <p:Attached.Operations>
                     <p:EventHandler Path="Click">
-                        <p:For ParameterName="I" TypeName="Int32">
+                        <p:For ParameterName="i" TypeName="Int32">
                             <p:For.Value>
                                 <p:Val Value="0"/>
                             </p:For.Value>
                             <p:For.While>
-                                <p:Op Path1="$I" Operator="LessThan" Value2="3"/>
+                                <p:Op Path1="$i" Operator="LessThan" Value2="3"/>
                             </p:For.While>
                             <p:For.Next>
-                                <p:Set Path="$I" Operator="Increment" />
+                                <p:Set Path="$i" Operator="Increment" />
                             </p:For.Next>
                             <p:Call Path="[MessageBox].Show">
                                 <p:Call Path="[String].Format">
-                                    <p:Val Value="I = {0}"/>
-                                    <p:Get Path="$I"/>
+                                    <p:Val Value="i = {0}"/>
+                                    <p:Get Path="$i"/>
                                 </p:Call>
                             </p:Call>
                         </p:For>
@@ -33,11 +33,11 @@
             <Button Content="Simplied For">
                 <p:Attached.Operations>
                     <p:EventHandler Path="Click">
-                        <p:For ParameterName="I" Value="0" UpperLimit="3" Increment="1">
+                        <p:For ParameterName="i" Value="0" UpperLimit="3" Increment="1">
                             <p:Call Path="[MessageBox].Show">
                                 <p:Call Path="[String].Format">
-                                    <p:Val Value="I = {0}"/>
-                                    <p:Get Path="$I"/>
+                                    <p:Val Value="i = {0}"/>
+                                    <p:Get Path="$i"/>
                                 </p:Call>
                             </p:Call>
                         </p:For>

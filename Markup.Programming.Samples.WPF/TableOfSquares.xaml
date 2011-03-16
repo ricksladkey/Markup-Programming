@@ -8,12 +8,12 @@
         <p:MarkupObject x:Key="ViewModel">
             <p:Property PropertyName="Table">
                 <p:Iterator>
-                    <p:For ParameterName="I" Value="0" UpperLimit="5" Increment="1">
+                    <p:For ParameterName="i" Value="0" UpperLimit="5" Increment="1">
                         <p:Yield>
                             <p:Object>
-                                <p:Property PropertyName="Number" Path="$I"/>
-                                <p:Property PropertyName="Square" Path="$I * $I"/>
-                                <p:Property PropertyName="Sqrt" Path="[Math].Sqrt($I)"/>
+                                <p:Property PropertyName="Number" Path="$i"/>
+                                <p:Property PropertyName="Square" Path="$i * $i"/>
+                                <p:Property PropertyName="Sqrt" Path="[Math].Sqrt($i)"/>
                             </p:Object>
                         </p:Yield>
                     </p:For>
