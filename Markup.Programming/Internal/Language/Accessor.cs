@@ -10,8 +10,6 @@ namespace Markup.Programming.Core
     [ContentProperty("Arguments")]
     public abstract class Accessor : ArgumentsExpressionWithType
     {
-        public string Path { get; set; }
-
         public object Index
         {
             get { return (object)GetValue(IndexProperty); }
@@ -42,7 +40,7 @@ namespace Markup.Programming.Core
         private object Evaluate(bool isSet, Engine engine, object value)
         {
             var op = isSet ? Operator.SetItem : Operator.GetItem;
-            var context = engine.GetContext(Path);
+            var context = engine.GetContext(PathExpression, Path);
             if (Arguments.Count != 0)
             {
                 var combinedArgs = new object[] { context }.Concat(Arguments.Evaluate(engine));

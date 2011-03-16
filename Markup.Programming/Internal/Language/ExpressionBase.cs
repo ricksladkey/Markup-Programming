@@ -11,6 +11,11 @@ namespace Markup.Programming.Core
     /// </summary>
     public abstract class ExpressionBase : Statement, IExpression
     {
+        public string Path { get; set; }
+
+        private PathExpression pathExpression = new PathExpression();
+        protected PathExpression PathExpression { get { return pathExpression; } }
+
         protected override void OnExecute(Engine engine)
         {
             // Nothing happens.

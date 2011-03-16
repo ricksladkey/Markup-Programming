@@ -18,8 +18,6 @@ namespace Markup.Programming
             TypeArguments = new ExpressionCollection();
         }
 
-        public string Path { get; set; }
-
         public Type Type
         {
             get { return (Type)GetValue(TypeProperty); }
@@ -82,7 +80,7 @@ namespace Markup.Programming
                 var parameter = engine.Evaluate(ParameterProperty, ParameterPath);
                 args = new object[] { engine.EvaluateObject(parameter) }.Concat(args).ToArray();
             }
-            return CallHelper.Call(Path, StaticMethodName, MethodName, FunctionName, BuiltinFunction,
+            return CallHelper.Call(PathExpression, Path, StaticMethodName, MethodName, FunctionName, BuiltinFunction,
                 engine.EvaluateType(TypeProperty, TypeName), TypeArguments, args, engine);
         }
     }

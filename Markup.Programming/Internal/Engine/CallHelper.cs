@@ -8,10 +8,10 @@ namespace Markup.Programming.Core
 {
     public static class CallHelper
     {
-        public static object Call(string path, string staticMethodName, string methodName, string functionName, BuiltinFunction builtinFunction, Type type, ExpressionCollection typeArguments, object[] args, Engine engine)
+        public static object Call(PathExpression pathExpression, string path, string staticMethodName, string methodName, string functionName, BuiltinFunction builtinFunction, Type type, ExpressionCollection typeArguments, object[] args, Engine engine)
         {
             if (path != null)
-                return engine.CallPath(path, args);
+                return engine.CallPath(pathExpression, path, args);
             if (functionName != null)
                 return engine.CallFunction(functionName, args);
             if (builtinFunction != 0)

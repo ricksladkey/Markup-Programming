@@ -42,8 +42,6 @@ namespace Markup.Programming
 
         public string StaticFieldName { get; set; }
 
-        public string Path { get; set; }
-
         protected override void OnAttached()
         {
             base.OnAttached();
@@ -53,7 +51,7 @@ namespace Markup.Programming
         protected override object OnEvaluate(Engine engine)
         {
             if (ParameterName != null) return engine.LookupParameter(ParameterName);
-            var context = engine.GetContext(Path);
+            var context = engine.GetContext(PathExpression, Path);
             var type = engine.EvaluateType(TypeProperty, TypeName);
             if (PropertyName != null)
                 return PathHelper.GetProperty(engine, context, PropertyName);

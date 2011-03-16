@@ -5,8 +5,6 @@ namespace Markup.Programming
 {
     public class EventHandler : Handler
     {
-        public string Path { get; set; }
-
         protected override void OnAttached()
         {
             base.OnAttached();

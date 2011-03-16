@@ -313,9 +313,9 @@ namespace Markup.Programming.Core
             }
         }
 
-        public object GetContext(string path)
+        public object GetContext(PathExpression pathExpression, string path)
         {
-            return path != null ? GetPath(path) : Context;
+            return path != null ? GetPath(pathExpression, path) : Context;
         }
 
         public void SetContext(DependencyProperty property, string path)
@@ -336,19 +336,22 @@ namespace Markup.Programming.Core
             return PathHelper.HasBindingOrValue(caller, property, path);
         }
 
-        public object GetPath(string path)
+        public object GetPath(PathExpression pathExpression, string path)
         {
-            return new PathExpression(this, false, false, path).Evaluate(this);
+            if (pathExpression == null) pathExpression = new PathExpression();
+            return pathExpression.Parse(this, false, false, path).Evaluate(this);
         }
 
-        public object SetPath(string path, object value)
+        public object SetPath(PathExpression pathExpression, string path, object value)
         {
-            return new PathExpression(this, true, false, path).Evaluate(this, value);
+            if (pathExpression == null) pathExpression = new PathExpression();
+            return pathExpression.Parse(this, true, false, path).Evaluate(this, value);
         }
 
-        public object CallPath(string path, object[] args)
+        public object CallPath(PathExpression pathExpression, string path, object[] args)
         {
-            return new PathExpression(this, false, true, path).Call(this, args);
+            if (pathExpression == null) pathExpression = new PathExpression();
+            return pathExpression.Parse(this, false, true, path).Call(this, args);
         }
 
         public bool ShouldTrace(TraceFlags flags)
@@ -432,7 +435,7 @@ namespace Markup.Programming.Core
 
         public object Evaluate(DependencyProperty property, string path, Type type)
         {
-            var value = (path != null) ? GetPath(path) : Evaluate(property);
+            var value = (path != null) ? GetPath(null, path) : Evaluate(property);
             return TypeHelper.Convert(type, value);
         }
 

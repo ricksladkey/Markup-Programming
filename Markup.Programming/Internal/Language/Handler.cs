@@ -6,6 +6,11 @@ namespace Markup.Programming.Core
 {
     public abstract class Handler : PrimitiveActiveComponent, IComponent
     {
+        public string Path { get; set; }
+
+        private PathExpression pathExpression = new PathExpression();
+        protected PathExpression PathExpression { get { return pathExpression; } }
+
         public object Context
         {
             get { return (object)GetValue(ContextProperty); }

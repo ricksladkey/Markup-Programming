@@ -11,19 +11,8 @@ namespace Markup.Programming
     /// The When statement evaluates its body once when Value converted
     /// to a boolean evaluates to true.
     /// </summary>
-    public class When : Block
+    public class When : UntypedValueBlock
     {
-        public object Value
-        {
-            get { return (object)GetValue(ValueProperty); }
-            set { SetValue(ValueProperty, value); }
-        }
-
-        public static readonly DependencyProperty ValueProperty =
-            DependencyProperty.Register("Value", typeof(object), typeof(When), null);
-
-        public string Path { get; set; }
-
         protected override void OnExecute(Engine engine)
         {
             if (engine.HasBindingOrValue(ValueProperty, Path))

@@ -134,18 +134,7 @@ namespace Markup.Programming.Core
         private TokenQueue tokens = new TokenQueue();
         private PathNode root;
 
-        public PathExpression(Engine engine, bool isSet, bool isCall, string path)
-        {
-            this.engine = engine;
-            IsSet = isSet;
-            IsCall = isCall;
-            Path = path;
-            Tokenize();
-            root = Parse();
-            if (tokens.Count > 0) engine.Throw("unexpected token: " + tokens.Dequeue());
-            engine = null;
-            tokens = null;
-        }
+        public PathExpression() { }
 
         public bool IsSet { get; private set; }
         public bool IsCall { get; private set; }
@@ -163,6 +152,21 @@ namespace Markup.Programming.Core
             var call = root as CallNode;
             if (call == null) engine.Throw("not a call node");
             return call.Call(engine, args);
+        }
+
+        public PathExpression Parse(Engine engine, bool isSet, bool isCall, string path)
+        {
+            if (isSet == IsSet && IsCall == isCall && Path == path) return this;
+            this.engine = engine;
+            IsSet = isSet;
+            IsCall = isCall;
+            Path = path;
+            Tokenize();
+            root = Parse();
+            if (tokens.Count > 0) engine.Throw("unexpected token: " + tokens.Dequeue());
+            this.engine = null;
+            tokens = null;
+            return this;
         }
 
         private PathNode Parse()

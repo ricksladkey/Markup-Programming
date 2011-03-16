@@ -24,13 +24,13 @@ namespace Markup.Programming.Tests.Tests
             }
             private object GetPath(IDictionary<string, object> parameters, string path, Engine engine)
             {
-                var result = engine.GetPath(path);
+                var result = engine.GetPath(null, path);
                 foreach (var name in parameters.Keys) parameters[name] = engine.LookupParameter(name);
                 return result;
             }
             private object SetPath(IDictionary<string, object> parameters, string path, object value, Engine engine)
             {
-                var result = engine.SetPath(path, value);
+                var result = engine.SetPath(null, path, value);
                 foreach (var name in parameters.Keys) parameters[name] = engine.LookupParameter(name);
                 return result;
             }

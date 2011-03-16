@@ -35,6 +35,9 @@ namespace Markup.Programming
 
         public string ConvertBackPath { get; set; }
 
+        private PathExpression pathExpression = new PathExpression();
+        protected PathExpression PathExpression { get { return pathExpression; } }
+
         protected override void OnAttached()
         {
             base.OnAttached();
@@ -61,7 +64,7 @@ namespace Markup.Programming
                 { "ConverterParameter", parameter },
                 { "ConverterCulture", culture },
             };
-            if (path != null) return new Engine().With(this, parameters, engine => engine.GetPath(path));
+            if (path != null) return new Engine().With(this, parameters, engine => engine.GetPath(pathExpression, path));
             return new Engine().With(this, parameters, engine => expression.Evaluate(engine));
         }
     }

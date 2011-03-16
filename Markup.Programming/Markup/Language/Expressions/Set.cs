@@ -104,7 +104,7 @@ namespace Markup.Programming
                 else if (StaticFieldName != null)
                     oldValue = PathHelper.GetStaticField(engine, type, StaticFieldName);
                 else if (Path != null)
-                    oldValue = engine.GetPath(Path);
+                    oldValue = engine.GetPath(PathExpression, Path);
                 else
                     oldValue = context;
                 value = engine.Evaluate(Operator, oldValue, value);
@@ -120,7 +120,7 @@ namespace Markup.Programming
             else if (StaticFieldName != null)
                 PathHelper.SetStaticField(engine, type, StaticFieldName, value);
             else if (Path != null)
-                engine.SetPath(Path, value);
+                engine.SetPath(PathExpression, Path, value);
             else
                 Context = value;
             return value;

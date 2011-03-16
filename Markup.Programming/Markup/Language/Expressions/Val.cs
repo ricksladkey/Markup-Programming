@@ -24,8 +24,6 @@ namespace Markup.Programming
         public static readonly DependencyProperty ValueProperty =
             DependencyProperty.Register("Value", typeof(object), typeof(Val), null);
 
-        public string Path { get; set; }
-
         public bool SuppressAttach { get; set; }
 
         public bool Quote { get; set; }

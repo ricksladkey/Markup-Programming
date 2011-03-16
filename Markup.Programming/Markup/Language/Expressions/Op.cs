@@ -35,8 +35,6 @@ namespace Markup.Programming
         public static readonly DependencyProperty ValueProperty =
             DependencyProperty.Register("Value", typeof(object), typeof(Op), null);
 
-        public string Path { get; set; }
-
         public object Value1
         {
             get { return (object)GetValue(Value1Property); }
