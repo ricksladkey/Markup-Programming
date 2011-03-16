@@ -156,7 +156,7 @@ namespace Markup.Programming.Core
 
         public PathExpression Parse(Engine engine, bool isSet, bool isCall, string path)
         {
-            if (isSet == IsSet && IsCall == isCall && Path == path) return this;
+            if (isSet == IsSet && IsCall == isCall && object.ReferenceEquals(Path, path)) return this;
             this.engine = engine;
             IsSet = isSet;
             IsCall = isCall;
