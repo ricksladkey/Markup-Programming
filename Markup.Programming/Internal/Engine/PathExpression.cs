@@ -109,7 +109,7 @@ namespace Markup.Programming.Core
             public Type Type { get; set; }
             public override object Call(Engine engine, object[] args)
             {
-                return CallHelper.CallMethod(Name, true, Type, null, args ?? GetArguments(engine, args), null, engine);
+                return CallHelper.CallMethod(Name, true, Type, null, GetArguments(engine, args), null, engine);
             }
         }
 
