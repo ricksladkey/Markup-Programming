@@ -132,7 +132,7 @@ namespace Markup.Programming
         protected override void OnEventHandler(Engine engine)
         {
             var args = Arguments.Evaluate(engine);
-            if (Parameter != null || ParameterPath != null || PathHelper.HasBinding(this, ParameterProperty))
+            if (engine.HasBindingOrValue(ParameterProperty, ParameterPath))
             {
                 var parameter = engine.Evaluate(ParameterProperty, ParameterPath);
                 args = new object[] { engine.EvaluateObject(parameter) }.Concat(args).ToArray();

@@ -74,6 +74,7 @@ namespace Markup.Programming.Tests.Tests
             BasicGetTest("abc", "'abc'");
             BasicGetTest(true, "@True");
             BasicGetTest(3, "1 + 2");
+            BasicGetTest(true, "1 == 1");
             BasicGetTest("Test1", "String1");
             BasicGetTest("Test2", "Object1.String1");
             BasicGetTest("Value1", "$Parameter1");

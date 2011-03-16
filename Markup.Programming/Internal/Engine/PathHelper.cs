@@ -194,6 +194,11 @@ namespace Markup.Programming.Core
             return HasBinding(context, property) || context.GetValue(property) != null;
         }
 
+        public static bool HasBindingOrValue(DependencyObject context, DependencyProperty property, string path)
+        {
+            return HasBindingOrValue(context, property) || path != null;
+        }
+
         public static object GetItem(Engine engine, object context, params object[] args)
         {
             return CallAccessor(engine, false, context, args);

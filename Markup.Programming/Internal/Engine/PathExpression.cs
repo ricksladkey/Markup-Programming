@@ -172,13 +172,21 @@ namespace Markup.Programming.Core
             var nodeNext = true;
             for (var token = tokens.Peek(); token != null; token = tokens.Peek())
             {
-                var c = token[0];
-                if (".+-*/".Contains(c))
+                if (OperatorMap.ContainsKey(token))
                 {
-                    if (nodeNext) engine.Throw("unexpected operator");
+                    var op = OperatorMap[token];
+                    if (nodeNext) engine.Throw("unexpected operator" + op);
                     nodeNext = true;
                     tokens.Dequeue();
-                    if (c != '.') node = new OpNode { Operator = GetOperator(token), Operands = { node, Parse() } };
+                    node = new OpNode { Operator = op, Operands = { node, Parse() } };
+                    continue;
+                }
+                var c = token[0];
+                if (c == '.')
+                {
+                    if (nodeNext) engine.Throw("unexpected dot operator");
+                    nodeNext = true;
+                    tokens.Dequeue();
                     continue;
                 }
                 if (!nodeNext) return node;
@@ -240,20 +248,6 @@ namespace Markup.Programming.Core
             return node;
         }
 
-        private Operator GetOperator(string token)
-        {
-            char c = token[0];
-            switch (c)
-            {
-                case '.': return Operator.GetProperty;
-                case '+': return Operator.Plus;
-                case '-': return Operator.Minus;
-                case '*': return Operator.Times;
-                case '/': return Operator.Divide;
-            }
-            return (Operator)engine.Throw("invalid operator");
-        }
-
         private bool IsCurrentSet { get { return IsSet && tokens.Count == 0; } }
         private bool IsCurrentCall { get { return IsCall && tokens.Count == 0 || tokens.Peek() == "("; } }
 
@@ -280,22 +274,24 @@ namespace Markup.Programming.Core
             return engine.Throw("missing closing parenthesis") as IList<PathNode>;
         }
 
-        private static string IdChars { get { return "_"; } }
-        private static bool IsInitialIdChar(char c) { return char.IsLetter(c) || IdChars.Contains(c); }
-        private static bool IsIdChar(char c) { return char.IsLetterOrDigit(c) || IdChars.Contains(c); }
-
-        public static bool IsValidIdentifier(string identifier)
-        {
-            return IsInitialIdChar(identifier.First()) && identifier.Skip(1).All(c => IsIdChar(c));
-        }
-
         private void Tokenize()
         {
             for (int i = 0; i < Path.Length; )
             {
                 char c = Path[i];
                 if (char.IsWhiteSpace(c)) { ++i; continue; }
-                if (".[](),+-*/".Contains(c)) { tokens.Enqueue(c.ToString()); ++i; continue; }
+                if (i < Path.Length - 1 && OperatorMap.ContainsKey(Path.Substring(i, 2)))
+                {
+                    tokens.Enqueue(Path.Substring(i, 2));
+                    i += 2;
+                    continue;
+                }
+                if (OperatorMap.ContainsKey(c.ToString()) || ".[](),".Contains(c))
+                {
+                    tokens.Enqueue(c.ToString());
+                    ++i;
+                    continue;
+                }
                 if (c == '\'')
                 {
                     var start = ++i;
@@ -322,6 +318,36 @@ namespace Markup.Programming.Core
                 }
                 engine.Throw("invalid token: " + Path.Substring(i));
             }
+
         }
+
+        private static string IdChars { get { return "_"; } }
+        private static bool IsInitialIdChar(char c) { return char.IsLetter(c) || IdChars.Contains(c); }
+        private static bool IsIdChar(char c) { return char.IsLetterOrDigit(c) || IdChars.Contains(c); }
+
+        public static bool IsValidIdentifier(string identifier)
+        {
+            return IsInitialIdChar(identifier.First()) && identifier.Skip(1).All(c => IsIdChar(c));
+        }
+
+        public static IDictionary<string, Operator> OperatorMap { get { return operatorMap; } }
+        private static Dictionary<string, Operator> operatorMap = new Dictionary<string, Operator>
+        {
+            { "+", Operator.Plus },
+            { "-", Operator.Minus },
+            { "*", Operator.Times },
+            { "/", Operator.Divide },
+            { "&&", Operator.AndAnd },
+            { "||", Operator.OrOr },
+            { "&", Operator.And },
+            { "|", Operator.Or },
+            { "!", Operator.Not },
+            { "==", Operator.Equals },
+            { "!=", Operator.NotEquals },
+            { "<", Operator.LessThan },
+            { "<=", Operator.LessThanOrEqual },
+            { ">", Operator.GreaterThan },
+            { ">=", Operator.GreaterThanOrEqual },
+        };
     }
 }

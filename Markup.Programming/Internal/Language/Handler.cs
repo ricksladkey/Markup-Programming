@@ -48,7 +48,7 @@ namespace Markup.Programming.Core
 
         protected void SetContext(Engine engine)
         {
-            if (Context != null || ContextPath != null || PathHelper.HasBinding(this, ContextProperty))
+            if (engine.HasBindingOrValue(ContextProperty, ContextPath))
             {
                 var context = engine.Evaluate(ContextProperty, ContextPath);
                 engine.Trace(TraceFlags.Parameter, "Setting context = {0}", context);

@@ -320,8 +320,7 @@ namespace Markup.Programming.Core
 
         public void SetContext(DependencyProperty property, string path)
         {
-            var caller = CurrentFrame.Caller as DependencyObject;
-            if (caller.GetValue(property) != null || path != null || PathHelper.HasBinding(caller, property))
+            if (HasBindingOrValue(property, path))
                 SetContext(Evaluate(property, path));
         }
 
@@ -329,6 +328,12 @@ namespace Markup.Programming.Core
         {
             Trace(TraceFlags.Parameter, "Setting context = {0}", context);
             DefineParameter(Engine.ContextParameter, context, false, true);
+        }
+
+        public bool HasBindingOrValue(DependencyProperty property, string path)
+        {
+            var caller = CurrentFrame.Caller as DependencyObject;
+            return PathHelper.HasBindingOrValue(caller, property, path);
         }
 
         public object GetPath(string path)

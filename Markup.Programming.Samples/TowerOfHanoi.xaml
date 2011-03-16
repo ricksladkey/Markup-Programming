@@ -83,22 +83,17 @@
                         <!-- this just implements the rules of the tower of hanoi game -->
                         <!-- the logic is about as complex as the game is -->
                         <p:Set Path="SelectedPost" ValuePath="$Parameter"/>
-                        <p:If>
-                            <p:Op Operator="IsZero" Path="HoldingPost.Count"/>
+                        <p:If Path="HoldingPost.Count == 0">
                             <p:If.Then>
-                                <p:When>
-                                    <p:Op Operator="NotIsZero" Path="SelectedPost.Count"/>
+                                <p:When Path="SelectedPost.Count != 0">
                                     <p:Call Path="$MoveItem(SelectedPost, HoldingPost)"/>
                                 </p:When>
                             </p:If.Then>
                             <p:If.Else>
                                 <p:When>
                                     <p:Op Operator="OrOr">
-                                        <p:Op Operator="IsZero" Path="SelectedPost.Count"/>
-                                        <p:Op Operator="LessThan">
-                                            <p:Get Path="HoldingPost[0]"/>
-                                            <p:Get Path="SelectedPost[0]"/>
-                                        </p:Op>
+                                        <p:Get Path="SelectedPost.Count == 0"/>
+                                        <p:Get Path="HoldingPost[0] &lt; HoldingPost[0]"/>
                                     </p:Op>
                                     <p:Call Path="$MoveItem(HoldingPost, SelectedPost)"/>
                                 </p:When>
