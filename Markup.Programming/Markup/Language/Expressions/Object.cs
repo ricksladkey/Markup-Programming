@@ -62,7 +62,7 @@ namespace Markup.Programming
             if (type != null)
             {
                 var target = Activator.CreateInstance(type);
-                foreach (var pair in pairs) PathHelper.SetProperty(target, pair.Name, pair.Value);
+                foreach (var pair in pairs) PathHelper.SetProperty(engine, target, pair.Name, pair.Value);
                 return target;
             }
             return DynamicHelper.CreateObject(ref dynamicType, pairs);

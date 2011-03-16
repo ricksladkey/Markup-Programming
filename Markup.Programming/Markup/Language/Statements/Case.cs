@@ -10,7 +10,7 @@ namespace Markup.Programming
     {
         protected override void OnExecute(Engine engine)
         {
-            ThrowHelper.Throw("Case only supported in Switch");
+            engine.Throw("Case only supported in Switch");
         }
 
         public object Evaluate(Engine engine)

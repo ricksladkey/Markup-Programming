@@ -198,12 +198,12 @@ namespace Markup.Programming.Core
                     return;
                 }
             }
-            ThrowHelper.Throw("missing yield frame");
+            Throw("missing yield frame");
         }
 
         public IList<object> GetYieldedValues()
         {
-            if (CurrentFrame.YieldedValues == null) ThrowHelper.Throw("missing yielded values");
+            if (CurrentFrame.YieldedValues == null) Throw("missing yielded values");
             return CurrentFrame.YieldedValues;
         }
 
@@ -235,7 +235,7 @@ namespace Markup.Programming.Core
         {
             Trace(TraceFlags.Parameter, "DefineParameter: {0} = {1}", name, value);
             var frame = parentFrame ? (ParentFrame ?? CurrentFrame) : CurrentFrame;
-            if (frame == null) ThrowHelper.Throw("no frame for parameter: " + name);
+            if (frame == null) Throw("no frame for parameter: " + name);
             if (frame.Parameters == null) frame.Parameters = new NameDictionary();
             frame.Parameters[name] = value;
         }
@@ -253,8 +253,8 @@ namespace Markup.Programming.Core
             }
             if (name == "AssociatedObject")
             {
-                if (CurrentFrame == null) ThrowHelper.Throw("no frame for AssociatedObject");
-                if (CurrentFrame.Caller == null) ThrowHelper.Throw("no caller for AssociatedObject");
+                if (CurrentFrame == null) Throw("no frame for AssociatedObject");
+                if (CurrentFrame.Caller == null) Throw("no caller for AssociatedObject");
                 value = CurrentFrame.Caller.AssociatedObject;
                 return true;
             }
@@ -272,14 +272,14 @@ namespace Markup.Programming.Core
                 Trace(TraceFlags.Parameter, "Lookup: {0} = {1}", name, value);
                 return value;
             }
-            return ThrowHelper.Throw("parameter not found: " + name);
+            return Throw("parameter not found: " + name);
         }
 
         public void DefineFunction(string name, Function value)
         {
             if (functions == null) functions = new Dictionary<string, Function>();
             if (functions.ContainsKey(name) && functions[name] != value)
-                ThrowHelper.Throw("function redefinition: " + name);
+                Throw("function redefinition: " + name);
             functions[name] = value;
         }
 
@@ -298,7 +298,7 @@ namespace Markup.Programming.Core
         {
             var value = null as Function;
             if (TryLookupFunction(name, out value)) return value;
-            return ThrowHelper.Throw("function not found: " + name) as Function;
+            return Throw("function not found: " + name) as Function;
         }
 
         public Type LookupType(string name)
@@ -365,24 +365,29 @@ namespace Markup.Programming.Core
             Trace(TraceFlags.Stack, "[" + FrameInfo + "]" + format, args);
         }
 
+        public object Throw(string message, params object[] args)
+        {
+            return ThrowHelper.Throw(new InvalidOperationException(string.Format(message, args)), this);
+        }
+
         public object Evaluate(Operator op, params object[] values)
         {
-            return OperatorHelper.Evaluate(op, ExpressionOrValue.ValueArray(values), this);
+            return OperatorHelper.Evaluate(this, op, ExpressionOrValue.ValueArray(values));
         }
 
         public object Evaluate(Operator op, IEnumerable<IExpression> collection)
         {
-            return OperatorHelper.Evaluate(op, ExpressionOrValue.ExpressionArray(collection), this);
+            return OperatorHelper.Evaluate(this, op, ExpressionOrValue.ExpressionArray(collection));
         }
 
         public object Evaluate(Operator op, ExpressionOrValue[] expressions)
         {
-            return OperatorHelper.Evaluate(op, expressions, this);
+            return OperatorHelper.Evaluate(this, op, expressions);
         }
 
         public object Evaluate(Operator op, ExpressionCollection collection)
         {
-            return OperatorHelper.Evaluate(op, ExpressionOrValue.ExpressionArray(collection), this);
+            return OperatorHelper.Evaluate(this, op, ExpressionOrValue.ExpressionArray(collection));
         }
 
         public object Evaluate(AssignmentOperator op, object lhs, object rhs)
@@ -434,7 +439,7 @@ namespace Markup.Programming.Core
             if (name == null && !PathHelper.HasBindingOrValue(parent, property)) return null;
             var type = name != null ? LookupType(name) : parent.GetValue(property) as Type;
             if (type != null) return type;
-            return ThrowHelper.Throw("missing type") as Type;
+            return Throw("missing type") as Type;
         }
 
         public object Quote(DependencyProperty property)

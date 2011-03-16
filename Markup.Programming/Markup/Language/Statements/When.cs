@@ -14,9 +14,9 @@ namespace Markup.Programming
     {
         protected override void OnExecute(Engine engine)
         {
-            if (Body.Count == 0) ThrowHelper.Throw("missing condition");
+            if (Body.Count == 0) engine.Throw("missing condition");
             var expression = Body[0] as IExpression;
-            if (expression == null) ThrowHelper.Throw("missing expression");
+            if (expression == null) engine.Throw("missing expression");
             if (!TypeHelper.ConvertToBool(expression.Evaluate(engine))) return;
             Body.ExecuteSkipOne(engine);
         }

@@ -91,7 +91,7 @@ namespace Markup.Programming
 
         protected override object OnEvaluate(Engine engine)
         {
-            if (Operator == 0) ThrowHelper.Throw("missing operator");
+            if (Operator == 0) engine.Throw("missing operator");
             var type = engine.EvaluateType(TypeProperty, TypeName);
             if (Arguments.Count == 0)
             {

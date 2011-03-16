@@ -21,7 +21,7 @@ namespace Markup.Programming.Core
                 return CallHelper.CallMethod(staticMethodName, true, type, null, args, typeArgs, engine);
             if (methodName != null)
                 return CallHelper.CallMethod(methodName, false, type ?? engine.Context.GetType(), engine.Context, args, typeArgs, engine);
-            return ThrowHelper.Throw("nothing to call");
+            return engine.Throw("nothing to call");
         }
 
         public static object CallMethod(string methodName, bool staticMethod, Type typeToCall, object callee, object[] args, Type[] typeArgs, Engine engine)
@@ -46,7 +46,7 @@ namespace Markup.Programming.Core
                     // Use arguments to choose overload.
                     var types = args.Select(value => value != null ? value.GetType() : typeof(object));
                     methodInfo = typeToCall.GetMethod(methodName, bindingFlags, null, types.ToArray(), null);
-                    if (methodInfo == null) ThrowHelper.Throw("method overload not found: " + methodName);
+                    if (methodInfo == null) engine.Throw("method overload not found: " + methodName);
                 }
             }
             return CallHelper.CallMethod(methodName, methodInfo, callee, args, engine);
@@ -55,7 +55,7 @@ namespace Markup.Programming.Core
         public static object CallMethod(string methodName, MethodInfo methodInfo, object callee, object[] args, Engine engine)
         {
 
-            if (methodInfo == null) ThrowHelper.Throw("method not found: " + methodName);
+            if (methodInfo == null) engine.Throw("method not found: " + methodName);
             var parameters = methodInfo.GetParameters();
             var methodArgs = null as object[];
             if (HasParamsParameter(parameters))
@@ -68,7 +68,7 @@ namespace Markup.Programming.Core
             }
             else
             {
-                if (parameters.Length != args.Length) ThrowHelper.Throw(string.Format("argument count mismatch: {0} != {1}", parameters.Length, args.Length));
+                if (parameters.Length != args.Length) engine.Throw("argument count mismatch: {0} != {1}", parameters.Length, args.Length);
                 methodArgs = ConvertArguments(parameters, args).ToArray();
             }
             bool trace = engine.ShouldTrace(TraceFlags.Call);

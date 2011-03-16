@@ -105,20 +105,20 @@ namespace Markup.Programming
             var context = engine.GetContext(Path);
             var type = engine.EvaluateType(TypeProperty, TypeName);
             if (PropertyName != null)
-                return PathHelper.GetProperty(context, PropertyName);
+                return PathHelper.GetProperty(engine, context, PropertyName);
             if (FieldName != null)
-                return PathHelper.GetField(context, FieldName);
+                return PathHelper.GetField(engine, context, FieldName);
             if (DependencyProperty != null)
-                return PathHelper.GetDependencyProperty(context as DependencyObject, DependencyProperty);
+                return PathHelper.GetDependencyProperty(engine, context as DependencyObject, DependencyProperty);
             if (StaticPropertyName != null)
-                return PathHelper.GetStaticProperty(type, StaticPropertyName);
+                return PathHelper.GetStaticProperty(engine, type, StaticPropertyName);
             if (StaticFieldName != null)
-                return PathHelper.GetStaticField(type, StaticFieldName);
+                return PathHelper.GetStaticField(engine, type, StaticFieldName);
             if (Path != null)
                 return context;
             if (Source != null)
                 return engine.Evaluate(SourceProperty, SourcePath);
-            return ThrowHelper.Throw("nothing to get");
+            return engine.Throw("nothing to get");
         }
     }
 }

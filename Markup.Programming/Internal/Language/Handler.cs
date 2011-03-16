@@ -64,7 +64,7 @@ namespace Markup.Programming.Core
             var context = AssociatedObject;
             registeredEventName = EventName ?? alternateEventName;
             var eventInfo = context.GetType().GetEvent(registeredEventName);
-            if (eventInfo == null) ThrowHelper.Throw("no such event: " + registeredEventName);
+            if (eventInfo == null) engine.Throw("no such event: " + registeredEventName);
             eventInfo.AddEventHandler(context,
                 Delegate.CreateDelegate(eventInfo.EventHandlerType, this, handlerMethodInfo));
         }

@@ -152,15 +152,15 @@ namespace Markup.Programming
             {
                 object oldValue = null;
                 if (DependencyProperty != null)
-                    oldValue = PathHelper.GetDependencyProperty(context as DependencyObject, DependencyProperty);
+                    oldValue = PathHelper.GetDependencyProperty(engine, context as DependencyObject, DependencyProperty);
                 else if (PropertyName != null)
-                    oldValue = PathHelper.GetProperty(context, PropertyName);
+                    oldValue = PathHelper.GetProperty(engine, context, PropertyName);
                 else if (FieldName != null)
-                    oldValue = PathHelper.GetField(context, FieldName);
+                    oldValue = PathHelper.GetField(engine, context, FieldName);
                 else if (StaticPropertyName != null)
-                    oldValue = PathHelper.GetStaticProperty(type, StaticPropertyName);
+                    oldValue = PathHelper.GetStaticProperty(engine, type, StaticPropertyName);
                 else if (StaticFieldName != null)
-                    oldValue = PathHelper.GetStaticField(type, StaticFieldName);
+                    oldValue = PathHelper.GetStaticField(engine, type, StaticFieldName);
                 else if (Path != null)
                     oldValue = engine.GetPath(Path);
                 else
@@ -168,15 +168,15 @@ namespace Markup.Programming
                 value = engine.Evaluate(Operator, oldValue, value);
             }
             if (DependencyProperty != null)
-                PathHelper.SetDependencyProperty(context as DependencyObject, DependencyProperty, value);
+                PathHelper.SetDependencyProperty(engine, context as DependencyObject, DependencyProperty, value);
             else if (PropertyName != null)
-                PathHelper.SetProperty(context, PropertyName, value);
+                PathHelper.SetProperty(engine, context, PropertyName, value);
             else if (FieldName != null)
-                PathHelper.SetField(context, FieldName, value);
+                PathHelper.SetField(engine, context, FieldName, value);
             else if (StaticPropertyName != null)
-                PathHelper.SetStaticProperty(type, StaticPropertyName, value);
+                PathHelper.SetStaticProperty(engine, type, StaticPropertyName, value);
             else if (StaticFieldName != null)
-                PathHelper.SetStaticField(type, StaticFieldName, value);
+                PathHelper.SetStaticField(engine, type, StaticFieldName, value);
             else if (Path != null)
                 engine.SetPath(Path, value);
             else

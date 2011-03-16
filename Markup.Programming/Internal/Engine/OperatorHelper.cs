@@ -29,7 +29,7 @@ namespace Markup.Programming.Core
             { Operator.Negate, "op_UnaryNegation" },
         };
 
-        public static object Evaluate(Operator op, ExpressionOrValue[] expressions, Engine engine)
+        public static object Evaluate(Engine engine, Operator op, ExpressionOrValue[] expressions)
         {
             // Get arity.
             var arity = GetArity(op);
@@ -49,7 +49,7 @@ namespace Markup.Programming.Core
             }
             if (op == Operator.Conditional)
             {
-                if (n != 3) InvalidOperation(op, n);
+                if (n != 3) InvalidOperation(engine, op, n);
                 var condition = TypeHelper.ConvertToBool(expressions[0].Evaluate(engine));
                 return expressions[condition ? 1 : 2].Evaluate(engine);
             }
@@ -65,13 +65,13 @@ namespace Markup.Programming.Core
                 case Operator.Format:
                     return string.Format(operands[0] as string, operands.Skip(1).ToArray());
                 case Operator.GetProperty:
-                    return PathHelper.GetProperty(operands[0], operands[1] as string);
+                    return PathHelper.GetProperty(engine, operands[0], operands[1] as string);
                 case Operator.SetProperty:
-                    { PathHelper.SetProperty(operands[0], operands[1] as string, operands[2]); return operands[2]; }
+                    { PathHelper.SetProperty(engine, operands[0], operands[1] as string, operands[2]); return operands[2]; }
                 case Operator.GetItem:
-                    return PathHelper.GetItem(operands[0], operands.Skip(1).ToArray());
+                    return PathHelper.GetItem(engine, operands[0], operands.Skip(1).ToArray());
                 case Operator.SetItem:
-                    return PathHelper.SetItem(operands[0], operands.Skip(1).ToArray());
+                    return PathHelper.SetItem(engine, operands[0], operands.Skip(1).ToArray());
                 case Operator.ToArray:
                     return TypeHelper.CreateArray(operands);
                 default:
@@ -81,7 +81,7 @@ namespace Markup.Programming.Core
             // Handle unary operators.
             if (arity == 1)
             {
-                if (n != 1) InvalidOperation(op, n);
+                if (n != 1) InvalidOperation(engine, op, n);
 
                 // Handle special unary operators.
                 switch (op)
@@ -93,38 +93,38 @@ namespace Markup.Programming.Core
                     case Operator.NotIsNull:
                         return operands[0] != null;
                     case Operator.IsZero:
-                        return Op(Operator.Equals, engine, operands[0], 0);
+                        return Op(engine, Operator.Equals, operands[0], 0);
                     case Operator.NotIsZero:
-                        return Op(Operator.NotEquals, engine, operands[0], 0);
+                        return Op(engine, Operator.NotEquals, operands[0], 0);
                     case Operator.GreaterThanZero:
-                        return Op(Operator.GreaterThan, engine, operands[0], 0);
+                        return Op(engine, Operator.GreaterThan, operands[0], 0);
                     case Operator.GreaterThanOrEqualToZero:
-                        return Op(Operator.GreaterThanOrEqual, engine, operands[0], 0);
+                        return Op(engine, Operator.GreaterThanOrEqual, operands[0], 0);
                     case Operator.LessThanZero:
-                        return Op(Operator.LessThan, engine, operands[0], 0);
+                        return Op(engine, Operator.LessThan, operands[0], 0);
                     case Operator.LessThanOrEqualToZero:
-                        return Op(Operator.LessThanOrEqual, engine, operands[0], 0);
+                        return Op(engine, Operator.LessThanOrEqual, operands[0], 0);
                     default:
                         break;
                 }
 
                 // Handle standard unary operators.
-                return Op(op, engine, operands[0]);
+                return Op(engine, op, engine, operands[0]);
             }
 
             // Handle binary operators.
-            if (n < 2) InvalidOperation(op, n);
+            if (n < 2) InvalidOperation(engine, op, n);
 
             // Handle binary operators that aren't type transitive.
-            if (!IsTypeTransitive(op) && n != 2) InvalidOperation(op, n);
+            if (!IsTypeTransitive(op) && n != 2) InvalidOperation(engine, op, n);
 
             // Handle special binary operators.
             switch (op)
             {
                 case Operator.Is:
-                    return Is(operands[0], operands[1]);
+                    return Is(engine, operands[0], operands[1]);
                 case Operator.As:
-                    return Is(operands[0], operands[1]) ? operands[0] : null;
+                    return Is(engine, operands[0], operands[1]) ? operands[0] : null;
                 case Operator.Equate:
                     return operands[0].Equals(operands[1]);
                 case Operator.Compare:
@@ -134,9 +134,9 @@ namespace Markup.Programming.Core
             }
 
             // Process binary operations associating from the left.
-            var result = Op(op, engine, operands[0], operands[1]);
+            var result = Op(engine, op, operands[0], operands[1]);
             for (int i = 2; i < n; i++)
-                result = Op(op, engine, result, operands[i]);
+                result = Op(engine, op, result, operands[i]);
             return result;
         }
 
@@ -187,23 +187,23 @@ namespace Markup.Programming.Core
             return false;
         }
 
-        private static object Op(Operator op, Engine engine, object operand)
+        private static object Op(Engine engine, Operator op, object operand)
         {
-            var result = InvokeOperator(op, operand);
+            var result = InvokeOperator(engine, op, operand);
             engine.Trace(TraceFlags.Operator, "Evaluate: {0} {1} => {3}", operand, op, result);
             return result;
         }
 
-        private static object Op(Operator op, Engine engine, object lhs, object rhs)
+        private static object Op(Engine engine, Operator op, object lhs, object rhs)
         {
-            var result = InvokeOperator(op, lhs, rhs);
+            var result = InvokeOperator(engine, op, lhs, rhs);
             engine.Trace(TraceFlags.Operator, "Evaluate: {0} {1} {2} => {3}", lhs, op, rhs, result);
             return result;
         }
 
-        private static object InvokeOperator(Operator op, object operand)
+        private static object InvokeOperator(Engine engine, Operator op, object operand)
         {
-            if (operand == null) ThrowHelper.Throw("operand");
+            if (operand == null) engine.Throw("operand");
             var type = operand.GetType();
 
             // Try the operator map.
@@ -223,13 +223,13 @@ namespace Markup.Programming.Core
                 }
             }
 
-            return ThrowHelper.Throw(string.Format("no such operator: {0}({1})", op, type));
+            return engine.Throw("no such operator: {0}({1})", op, type);
         }
 
-        private static object InvokeOperator(Operator op, object lhs, object rhs)
+        private static object InvokeOperator(Engine engine, Operator op, object lhs, object rhs)
         {
-            if (lhs == null) ThrowHelper.Throw("lhs");
-            if (rhs == null) ThrowHelper.Throw("rhs");
+            if (lhs == null) engine.Throw("lhs");
+            if (rhs == null) engine.Throw("rhs");
             var type = lhs.GetType();
 
             // Try the operator map.
@@ -257,17 +257,17 @@ namespace Markup.Programming.Core
             if (op == Operator.Equals && TypeHelper.IsClassObject(lhs))
                 return lhs.Equals(rhs);
 
-            return ThrowHelper.Throw(string.Format("no such operator: {0}({1}, {2})", op, type, type));
+            return engine.Throw("no such operator: {0}({1}, {2})", op, type, type);
         }
 
-        private static void InvalidOperation(Operator op, int n)
+        private static void InvalidOperation(Engine engine, Operator op, int n)
         {
-            ThrowHelper.Throw(string.Format("invalid operator: {0}, operand count: {1}", op, n));
+            engine.Throw("invalid operator: {0}, operand count: {1}", op, n);
         }
 
-        private static bool Is(object instance, object type)
+        private static bool Is(Engine engine, object instance, object type)
         {
-            if (type == null) ThrowHelper.Throw("type");
+            if (type == null) engine.Throw("type");
             if (instance == null) return false;
             return (type as Type).IsAssignableFrom(instance.GetType());
         }

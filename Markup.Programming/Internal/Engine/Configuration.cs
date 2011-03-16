@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.ComponentModel;
+using System.Windows;
 
 namespace Markup.Programming.Core
 {
@@ -13,16 +15,24 @@ namespace Markup.Programming.Core
     {
 
 #if !FULL_TRACING
-        public static TraceFlags TraceDefaults = TraceFlags.Console;
+        public static TraceFlags TraceDefaults { get { return TraceFlags.Console; } }
 #else
-        public static TraceFlags TraceDefaults = TraceFlags.All;
+        public static TraceFlags TraceDefaults { get { return TraceFlags.All; } }
 #endif
 
 #if !SILVERLIGHT && !EMULATE_SILVERLIGHT
-        public static bool Silverlight = false;
+        public static bool Silverlight { get { return false; } }
 #else
-        public static bool Silverlight = true;
+        public static bool Silverlight { get { return true; } }
 #endif
 
+        public static bool IsInDesignMode
+        {
+            get
+            {
+                var property = DesignerProperties.IsInDesignModeProperty;
+                return (bool)DependencyPropertyDescriptor.FromProperty(property, typeof(FrameworkElement)).Metadata.DefaultValue;
+            }
+        }
     }
 }

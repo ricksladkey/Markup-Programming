@@ -20,7 +20,7 @@ namespace Markup.Programming.Core
             public object Evaluate(Engine engine, object value)
             {
                 engine.Trace(TraceFlags.Path, "Path: {0} {1} {2}", this.GetType().Name, IsSet, Name);
-                if (IsSet && value.Equals(Value.UnsetValue)) ThrowHelper.Throw("value not supplied");
+                if (IsSet && value.Equals(Value.UnsetValue)) engine.Throw("value not supplied");
                 var result = OnEvaluate(engine, value);
                 engine.Trace(TraceFlags.Path, "Path: {0} = {1}", this.GetType().Name, result);
                 return result;
@@ -64,8 +64,8 @@ namespace Markup.Programming.Core
         {
             protected override object OnEvaluate(Engine engine, object value)
             {
-                if (!IsSet) return PathHelper.GetProperty(Context.Evaluate(engine, value), Name);
-                return PathHelper.SetProperty(Context.Evaluate(engine, value), Name, value);
+                if (!IsSet) return PathHelper.GetProperty(engine, Context.Evaluate(engine, value), Name);
+                return PathHelper.SetProperty(engine, Context.Evaluate(engine, value), Name, value);
             }
         }
 
@@ -74,8 +74,8 @@ namespace Markup.Programming.Core
             public PathNode Index { get; set; }
             protected override object OnEvaluate(Engine engine, object value)
             {
-                if (!IsSet) return PathHelper.GetItem(Context.Evaluate(engine, value), Index.Evaluate(engine, value));
-                return PathHelper.SetItem(Context.Evaluate(engine, value), Index.Evaluate(engine, value), value);
+                if (!IsSet) return PathHelper.GetItem(engine, Context.Evaluate(engine, value), Index.Evaluate(engine, value));
+                return PathHelper.SetItem(engine, Context.Evaluate(engine, value), Index.Evaluate(engine, value), value);
             }
         }
 
@@ -89,7 +89,7 @@ namespace Markup.Programming.Core
             protected object[] GetArguments(Engine engine, object[] args)
             {
                 if (Arguments != null) return Arguments.Select(argument => argument.Evaluate(engine, Value.UnsetValue)).ToArray();
-                if (args == null) ThrowHelper.Throw("missing arguments");
+                if (args == null) engine.Throw("missing arguments");
                 return args;
             }
             public abstract object Call(Engine engine, object[] args);
@@ -142,7 +142,7 @@ namespace Markup.Programming.Core
             Path = path;
             Tokenize();
             root = Parse();
-            if (tokens.Count > 0) ThrowHelper.Throw("unexpected token: " + tokens.Dequeue());
+            if (tokens.Count > 0) engine.Throw("unexpected token: " + tokens.Dequeue());
             engine = null;
             tokens = null;
         }
@@ -161,7 +161,7 @@ namespace Markup.Programming.Core
         {
             engine.Trace(TraceFlags.Path, "Path: Call: {0}", Path);
             var call = root as CallNode;
-            if (call == null) ThrowHelper.Throw("not a call node");
+            if (call == null) engine.Throw("not a call node");
             return call.Call(engine, args);
         }
 
@@ -175,7 +175,7 @@ namespace Markup.Programming.Core
                 var c = token[0];
                 if (".+-*/".Contains(c))
                 {
-                    if (nodeNext) ThrowHelper.Throw("unexpected operator");
+                    if (nodeNext) engine.Throw("unexpected operator");
                     nodeNext = true;
                     tokens.Dequeue();
                     if (c != '.') node = new OpNode { Operator = GetOperator(token), Operands = { node, Parse() } };
@@ -205,7 +205,7 @@ namespace Markup.Programming.Core
                 else if (c == '$')
                 {
                     tokens.Dequeue();
-                    if (tokens.Count == 0) ThrowHelper.Throw("missing parameter");
+                    if (tokens.Count == 0) engine.Throw("missing parameter");
                     var name = tokens.Dequeue();
                     if (IsCurrentCall)
                     {
@@ -258,7 +258,7 @@ namespace Markup.Programming.Core
                 case '*': return Operator.Times;
                 case '/': return Operator.Divide;
             }
-            return (Operator)ThrowHelper.Throw("invalid operator");
+            return (Operator)engine.Throw("invalid operator");
         }
 
         private bool IsCurrentSet { get { return IsSet && tokens.Count == 0; } }
@@ -266,7 +266,7 @@ namespace Markup.Programming.Core
 
         private void VerifyToken(string token)
         {
-            if (tokens.Count == 0 || tokens.Dequeue() != token) ThrowHelper.Throw("missing token: " + token);
+            if (tokens.Count == 0 || tokens.Dequeue() != token) engine.Throw("missing token: " + token);
         }
 
         private IList<PathNode> ParseArguments()
@@ -274,17 +274,17 @@ namespace Markup.Programming.Core
             var nodes = new List<PathNode>();
             var expectedTokens = new List<string> { ",", ")" };
             var token = tokens.Dequeue();
-            if (token != "(") ThrowHelper.Throw("missing opening parenthesis");
+            if (token != "(") engine.Throw("missing opening parenthesis");
             if (tokens.Count > 0 && tokens.Peek() == ")") { tokens.Dequeue(); return nodes; }
             while (tokens.Count > 0)
             {
                 nodes.Add(Parse());
                 if (tokens.Count == 0) break;
                 var nextToken = tokens.Dequeue();
-                if (!expectedTokens.Contains(nextToken)) ThrowHelper.Throw("unexpected token: " + nextToken);
+                if (!expectedTokens.Contains(nextToken)) engine.Throw("unexpected token: " + nextToken);
                 if (nextToken == ")") return nodes;
             }
-            return ThrowHelper.Throw("missing closing parenthesis") as IList<PathNode>;
+            return engine.Throw("missing closing parenthesis") as IList<PathNode>;
         }
 
         private static string IdChars { get { return "@_"; } }
@@ -301,12 +301,12 @@ namespace Markup.Programming.Core
                 {
                     var start = ++i;
                     for (++i; i < Path.Length && Path[i] != '\''; ++i) continue;
-                    if (Path[i] == Path.Length) ThrowHelper.Throw("missing closing quote");
+                    if (Path[i] == Path.Length) engine.Throw("missing closing quote");
                     tokens.Enqueue('"' + Path.Substring(start, i++ - start));
                     continue;
                 }
                 if ("$.[](),+-*/".Contains(c)) { tokens.Enqueue(c.ToString()); ++i; continue; }
-                if (!IsIdChar(c)) ThrowHelper.Throw("invalid token: " + Path.Substring(i));
+                if (!IsIdChar(c)) engine.Throw("invalid token: " + Path.Substring(i));
                 {
                     var start = i;
                     for (++i; i < Path.Length && IsIdChar(Path[i]); ++i) continue;
