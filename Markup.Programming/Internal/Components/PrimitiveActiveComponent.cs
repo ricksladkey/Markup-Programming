@@ -30,7 +30,7 @@ namespace Markup.Programming.Core
             foreach (var component in Body) component.Attach(AssociatedObject);
         }
 
-        protected void ExecuteBody(object sender, object e)
+        protected virtual void ExecuteBody(object sender, object e)
         {
             new Engine(sender, e).With(this, engine => ExecuteBody(engine));
         }
@@ -45,12 +45,12 @@ namespace Markup.Programming.Core
     using System.Windows.Interactivity; // portable
     public class PrimitiveActiveComponent : TriggerBase<DependencyObject>, IComponent
     {
-        protected void ExecuteBody(object sender, object e)
+        protected virtual void ExecuteBody(object sender, object e)
         {
             InvokeActions(e);
         }
 
-        protected void ExecuteBody(Engine engine)
+        protected virtual void ExecuteBody(Engine engine)
         {
             InvokeActions(engine.EventArgs);
         }
