@@ -139,6 +139,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="CallingChoices.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="CrashSample.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -179,6 +183,9 @@
   <ItemGroup>
     <Compile Include="AllSamples.xaml.cs">
       <DependentUpon>AllSamples.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="CallingChoices.xaml.cs">
+      <DependentUpon>CallingChoices.xaml</DependentUpon>
     </Compile>
     <Compile Include="CrashSample.xaml.cs">
       <DependentUpon>CrashSample.xaml</DependentUpon>

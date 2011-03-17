@@ -5,28 +5,11 @@
     xmlns:p="http://programmability.codeplex.com/markup/programming"
     Height="300" Width="300">
     <Grid>
-        <UniformGrid Rows="3">
+        <UniformGrid Rows="4">
             <Rectangle Fill="Red">
 
-                <!-- Shortest form -->
-
-                <p:Attached.Operations>
-                    <p:CallHandler Path="MouseLeftButtonDown.[MessageBox].Show('Hello, world!')"/>
-                </p:Attached.Operations>
-
-            </Rectangle>
-            <Rectangle Fill="Green">
-
-                <!-- Shorter form -->
-                
-                <p:Attached.Operations>
-                    <p:CallHandler Path="MouseLeftButtonDown.[MessageBox].Show" Parameter="Hello, world!"/>
-                </p:Attached.Operations>
-                
-            </Rectangle>
-            <Rectangle Fill="Blue">
-                
-                <!-- Standard way -->
+                <!-- Standard way: most flexible for binding multiple parameters, -->
+                <!-- using multiple static resources, etc. -->
 
                 <p:Attached.Operations>
                     <p:EventHandler Path="MouseLeftButtonDown">
@@ -35,7 +18,39 @@
                         </p:Call>
                     </p:EventHandler>
                 </p:Attached.Operations>
+
+            </Rectangle>
+            <Rectangle Fill="Orange">
+
+                <!-- Short form: a single parameter (like commands!) can be specified -->
+                <!-- the same line and supports, binding, static resources, etc. -->
+
+                <p:Attached.Operations>
+                    <p:EventHandler Path="MouseLeftButtonDown">
+                        <p:Call Path="[MessageBox].Show" Parameter="Hello, world!"/>
+                    </p:EventHandler>
+                </p:Attached.Operations>
+
+            </Rectangle>
+            <Rectangle Fill="Yellow">
+
+                <!-- Shorter form: if the body is just a call combine the event handler -->
+                <!-- and the call into a single call handler -->
                 
+                <p:Attached.Operations>
+                    <p:CallHandler Path="MouseLeftButtonDown.[MessageBox].Show" Parameter="Hello, world!"/>
+                </p:Attached.Operations>
+                
+            </Rectangle>
+            <Rectangle Fill="Green">
+
+                <!-- Shortest form, no binding but unlimited parameters, associated object, -->
+                <!-- properties, context, lots of options -->
+
+                <p:Attached.Operations>
+                    <p:CallHandler Path="MouseLeftButtonDown.[MessageBox].Show('Hello, world!')"/>
+                </p:Attached.Operations>
+
             </Rectangle>
         </UniformGrid>
     </Grid>

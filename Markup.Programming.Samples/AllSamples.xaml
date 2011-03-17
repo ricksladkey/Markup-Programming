@@ -13,10 +13,11 @@
         <p:MarkupCollection x:Key="UserControls">
             <samples:HelloWorld/>
             <samples:TowerOfHanoi/>
-            <samples:MarkupObjectSample/>
+            <samples:CallingChoices/>
             <samples:SelectOnFocus/>
             <samples:ForLoops/>
             <samples:DynamicButton/>
+            <samples:MarkupObjectSample/>
             <samples:CrashSample/>
         </p:MarkupCollection>
         <p:MarkupObject x:Key="ViewModel">
@@ -37,9 +38,11 @@
     <Grid DataContext="{Binding Value, Source={StaticResource ViewModel}}">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <ComboBox ItemsSource="{Binding Samples}" Grid.Row="0">
+        <TextBlock Text="Markup Programming Samples" FontSize="20"/>
+        <ComboBox ItemsSource="{Binding Samples}" Grid.Row="1">
             <p:Attached.Operations>
                 <p:EventHandler Path="SelectionChanged">
                     <p:Set Path="$children">
@@ -55,6 +58,6 @@
                 </DataTemplate>
             </ComboBox.ItemTemplate>
         </ComboBox>
-        <Grid Name="ContentHost" Grid.Row="1" Background="SlateGray"/>
+        <Grid Name="ContentHost" Grid.Row="2" Background="SlateGray"/>
     </Grid>
 </UserControl>

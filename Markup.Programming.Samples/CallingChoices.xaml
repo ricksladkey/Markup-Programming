@@ -1,0 +1,61 @@
+﻿<UserControl
+    x:Class="Markup.Programming.Samples.CallingChoices"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:p="http://programmability.codeplex.com/markup/programming"
+    Height="300" Width="300">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="75"/>
+            <RowDefinition Height="75"/>
+            <RowDefinition Height="75"/>
+            <RowDefinition Height="75"/>
+        </Grid.RowDefinitions>
+        <Rectangle Fill="Red" Grid.Row="0">
+
+            <!-- Standard way: most flexible for binding multiple parameters, -->
+            <!-- using multiple static resources, etc. -->
+
+            <p:Attached.Operations>
+                <p:EventHandler Path="MouseLeftButtonDown">
+                    <p:Call Path="[MessageBox].Show">
+                        <p:Val Value="Hello, world!"/>
+                    </p:Call>
+                </p:EventHandler>
+            </p:Attached.Operations>
+
+        </Rectangle>
+        <Rectangle Fill="Orange" Grid.Row="1">
+
+            <!-- Short form: a single parameter (like commands!) can be specified -->
+            <!-- the same line and supports, binding, static resources, etc. -->
+
+            <p:Attached.Operations>
+                <p:EventHandler Path="MouseLeftButtonDown">
+                    <p:Call Path="[MessageBox].Show" Parameter="Hello, world!"/>
+                </p:EventHandler>
+            </p:Attached.Operations>
+
+        </Rectangle>
+        <Rectangle Fill="Yellow" Grid.Row="2">
+
+            <!-- Shorter form: if the body is just a call combine the event handler -->
+            <!-- and the call into a single call handler -->
+
+            <p:Attached.Operations>
+                <p:CallHandler Path="MouseLeftButtonDown.[MessageBox].Show" Parameter="Hello, world!"/>
+            </p:Attached.Operations>
+
+        </Rectangle>
+        <Rectangle Fill="Green" Grid.Row="3">
+
+            <!-- Shortest form, no binding but unlimited parameters, associated object, -->
+            <!-- properties, context, lots of options -->
+
+            <p:Attached.Operations>
+                <p:CallHandler Path="MouseLeftButtonDown.[MessageBox].Show('Hello, world!')"/>
+            </p:Attached.Operations>
+
+        </Rectangle>
+    </Grid>
+</UserControl>
