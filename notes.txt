@@ -1,34 +1,28 @@
-- revisit conversion, specifically we should not silently allow conversions to fail
-- add special call declaration mode for paths, e.g. foo(a,b) declares functions foo with params a and b
-- add recursive descent parser for operators
-- fix auto-evaluation of langauge elements
-- add all-markup sample equivalent of one method two bindings
-- rename MarkupObject to ResourceObject, etc.
+- remove try/catch from Call
+- refactor recursive descent parser for operators
 - review how to handle For type
 - change For: Operator plus Limit and Increment defaults to 1
-- add types to function parameters, and report them at call time
-- support multiple indexers in paths
-- provide special handling for context across function calls
-- discover and store ResourceObject upon first execution
-- add way to apply Call to a collection
-- remove try/catch from Call
+- revisit conversion, specifically we should not silently allow conversions to fail
+-----------------------
+- add special call declaration mode for paths, e.g. foo(a,b) declares functions foo with params a and b
+- fix auto-evaluation of langauge elements
+- rename MarkupObject to ResourceObject, etc.
 - clean up MarkupConverter names, especially LoadActions, etc.
-- clean up DebugWriteLine and ShowMessageBox
-- add string operators
+- convert Type arguments to type or expression
+-----------------------
+- provide special handling for context across function calls
+- add types to function parameters, and report them at call time
+- add way to apply Call to a collection
+- consider styles and collections
+- handle detaching
+- add MarkupMultiConverter
 - finish MarkupCollection cleanup
-- figure out why MarkupObjectExtension cannot be first item in Resources
-- figure out why ExpressionCollection cannot be cast to an IEnumerable<IExpression>
-- use to intentionally avoid documentation: /// <internalonly />
-- add modules as a static dictionary for function lookup
 - add timer
 - add RoutedEventTrigger
-- add MarkupMultiConverter
-- Set: validate that Target is set (with unit test)
-- Set: validate that Target has a two-way binding if PropertyName is omitted (with unit test)
-- convert Type arguments to type or expression
-- delay evaluation of MarkupObject properties until parent inheritance context is set
-- statement collections should be read-only
-- all collections should be read-only
-- handle detaching
-- optionally show exceptions in message boxes
+- use to intentionally avoid documentation: /// <internalonly />
+- support multiple indexers in paths
+-----------------------
 - ToString with details for a composite object doesn't refresh its binding properly
+- delay evaluation of MarkupObject properties until parent inheritance context is set
+- figure out why MarkupObjectExtension cannot be first item in Resources
+- figure out why ExpressionCollection cannot be cast to an IEnumerable<IExpression>

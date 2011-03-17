@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.Windows;
 using Markup.Programming.Core;
@@ -96,5 +97,21 @@ namespace Markup.Programming.Tests.Tests
             BasicGetTest(true, "@Convert('True', [Boolean])");
             BasicGetTest(6, "@Op('Plus', 1, 2, 3)");
         }
+
+#if DEBUG
+
+        [TestMethod]
+        public void DebugParseTest()
+        {
+            var engine = new Engine();
+            var path = "1 + 2 + 3";
+            var expression = new PathExpression();
+            var tokens = expression.DebugCompile(engine, false, false, path);
+            var newPath = tokens.Aggregate("", (sofar, next) => sofar + next);
+            Assert.AreEqual(newPath, "Plus(1,Plus(2,3))");
+        }
+
+#endif
+
     }
 }

@@ -1,7 +1,8 @@
 ﻿using System;
+using System.Linq;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 
 namespace Markup.Programming.Core
 {
@@ -26,21 +27,40 @@ namespace Markup.Programming.Core
                 return result;
             }
             protected abstract object OnEvaluate(Engine engine, object value);
+
+            /// <summary>
+            /// Convert a path node back into a stream of tokens.
+            /// This infrastructure is used for unit testing.
+            /// </summary>
+            /// <param name="tokens">The queue of tokens to populate</param>
+            [Conditional("DEBUG")]
+            public void Tokenize(TokenQueue tokens) { this.tokens = tokens; AddTokens(); }
+            private TokenQueue tokens;
+            [Conditional("DEBUG")]
+            protected virtual void AddTokens() { }
+            [Conditional("DEBUG")]
+            protected void Add(params object[] items) { foreach (var item in items) this.tokens.Enqueue(item.ToString()); }
+            [Conditional("DEBUG")]
+            protected void Add(params PathNode[] nodes)
+            {
+                if (nodes.Length == 0) return;
+                nodes.First().Tokenize(tokens);
+                foreach (var node in nodes.Skip(1)) { Add(","); node.Tokenize(tokens); }
+            }
         }
 
         private class ValueNode : PathNode
         {
             public object Value { get; set; }
             protected override object OnEvaluate(Engine engine, object value) { return Value; }
+            protected override void AddTokens() { Add(Value); }
         }
 
         private class TypeValueNode : PathNode
         {
             public string TypeName { get; set; }
-            protected override object OnEvaluate(Engine engine, object value)
-            {
-                return engine.LookupType(TypeName);
-            }
+            protected override object OnEvaluate(Engine engine, object value) { return engine.LookupType(TypeName); }
+            protected override void AddTokens() { Add("[", TypeName, "]"); }
         }
 
         private class OpNode : PathNode
@@ -52,6 +72,7 @@ namespace Markup.Programming.Core
             {
                 return engine.Evaluate(Operator, Operands.Select(operand => operand.Evaluate(engine, value)).ToArray());
             }
+            protected override void AddTokens() { Add(Operator, "("); Add(Operands.ToArray()); Add(")"); }
         }
 
         private class ContextNode : PathNode
@@ -129,7 +150,7 @@ namespace Markup.Programming.Core
                 return engine.CallFunction(Name, GetArguments(engine, args));
             }
         }
-        private class TokenQueue
+        private class TokenQueue : IEnumerable<string>
         {
             private List<string> list = new List<string>();
             private int current = 0;
@@ -137,6 +158,8 @@ namespace Markup.Programming.Core
             public string Dequeue() { return list[current++]; }
             public string Peek() { return current < list.Count ? list[current] : null; }
             public int Count { get { return list.Count - current; } }
+            public IEnumerator<string> GetEnumerator() { return list.Skip(current).GetEnumerator(); }
+            IEnumerator IEnumerable.GetEnumerator() { return GetEnumerator(); }
         }
 
         private Engine engine;
@@ -377,5 +400,16 @@ namespace Markup.Programming.Core
             { ">", Operator.GreaterThan },
             { ">=", Operator.GreaterThanOrEqual },
         };
+
+#if DEBUG
+        public List<string> DebugCompile(Engine engine, bool isSet, bool isCall, string path)
+        {
+            Compile(engine, isSet, isCall, path);
+            var newTokens = new TokenQueue();
+            root.Tokenize(newTokens);
+            return new List<string>(newTokens);
+        }
+#endif
+
     }
 }
