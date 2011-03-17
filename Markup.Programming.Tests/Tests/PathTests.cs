@@ -75,6 +75,9 @@ namespace Markup.Programming.Tests.Tests
             BasicGetTest(true, "@true");
             BasicGetTest(3, "1 + 2");
             BasicGetTest(true, "1 == 1");
+            BasicGetTest(true, "!@false");
+            BasicGetTest("Left", "[Enum].GetValues([HorizontalAlignment])[0].ToString()");
+
             BasicGetTest("Test1", "String1");
             BasicGetTest("Test2", "Object1.String1");
             BasicGetTest("Value1", "$parameter1");

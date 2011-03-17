@@ -34,6 +34,15 @@ namespace Markup.Programming.Core
             protected override object OnEvaluate(Engine engine, object value) { return Value; }
         }
 
+        private class TypeValueNode : PathNode
+        {
+            public string TypeName { get; set; }
+            protected override object OnEvaluate(Engine engine, object value)
+            {
+                return engine.LookupType(TypeName);
+            }
+        }
+
         private class OpNode : PathNode
         {
             public OpNode() { Operands = new List<PathNode>(); }
@@ -177,10 +186,14 @@ namespace Markup.Programming.Core
                 if (OperatorMap.ContainsKey(token))
                 {
                     var op = OperatorMap[token];
-                    if (nodeNext) engine.Throw("unexpected operator" + op);
+                    var unary = op.GetArity() == 1;
+                    if (nodeNext != unary) engine.Throw("unexpected operator" + op);
                     nodeNext = true;
                     tokens.Dequeue();
-                    node = new OpNode { Operator = op, Operands = { node, Parse() } };
+                    if (unary)
+                        node = new OpNode { Operator = op, Operands = { Parse() } };
+                    else
+                        node = new OpNode { Operator = op, Operands = { node, Parse() } };
                     continue;
                 }
                 var c = token[0];
@@ -224,10 +237,15 @@ namespace Markup.Programming.Core
                     var typeName = "";
                     while (tokens.Count > 0 && tokens.Peek() != "]") typeName += tokens.Dequeue();
                     VerifyToken("]");
-                    VerifyToken(".");
-                    var methodName = tokens.Dequeue();
-                    var args = tokens.Peek() == "(" ? ParseArguments() : null;
-                    node = new StaticMethodNode { TypeName = typeName, Name = methodName, Arguments = args };
+                    if (tokens.Peek() == ".")
+                    {
+                        VerifyToken(".");
+                        var methodName = tokens.Dequeue();
+                        var args = tokens.Peek() == "(" ? ParseArguments() : null;
+                        node = new StaticMethodNode { TypeName = typeName, Name = methodName, Arguments = args };
+                    }
+                    else
+                        node = new TypeValueNode { TypeName = typeName };
                 }
                 else if (c == '(')
                 {

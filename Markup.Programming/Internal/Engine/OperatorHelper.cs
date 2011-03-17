@@ -109,7 +109,7 @@ namespace Markup.Programming.Core
                 }
 
                 // Handle standard unary operators.
-                return Op(engine, op, engine, operands[0]);
+                return Op(engine, op, operands[0]);
             }
 
             // Handle binary operators.
@@ -190,7 +190,7 @@ namespace Markup.Programming.Core
         private static object Op(Engine engine, Operator op, object operand)
         {
             var result = InvokeOperator(engine, op, operand);
-            engine.Trace(TraceFlags.Operator, "Evaluate: {0} {1} => {3}", operand, op, result);
+            engine.Trace(TraceFlags.Operator, "Evaluate: {0} {1} => {2}", operand, op, result);
             return result;
         }
 
