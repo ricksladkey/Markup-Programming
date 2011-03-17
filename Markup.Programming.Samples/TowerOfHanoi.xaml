@@ -140,7 +140,8 @@
                 </ItemsPanelTemplate>
             </StackPanel.Resources>
 
-            <Grid Background="PaleGreen" Height="25">
+            <TextBox Text="Tower of Hanoi" FontSize="20" Background="PaleTurquoise"/>
+            <Grid Margin="0,3,0,0" Background="PaleGreen" Height="25">
                 <ItemsControl ItemsSource="{Binding HoldingPost}" ItemsPanel="{StaticResource PanelTemplate}" ItemTemplate="{StaticResource DiskTemplate}" VerticalAlignment="Center"/>
             </Grid>
             <ItemsControl ItemsSource="{Binding Posts}">
@@ -151,7 +152,7 @@
                 </ItemsControl.ItemsPanel>
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <Border Margin="1" BorderThickness="5" BorderBrush="LightGray" Height="100" Width="95">
+                        <Border Margin="3" BorderThickness="5" BorderBrush="LightGray" Height="100" Width="94">
                             <Grid Background="Pink">
 
                                 <!-- this says: using the data context for the layout root, -->
