@@ -16,7 +16,7 @@
     x:Class="Markup.Programming.Samples.TowerOfHanoi"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:p="http://programmability.codeplex.com/markup/programming"
+    xmlns:p="http://markupprogramming.codeplex.com/markup/programming"
     Height="300" Width="300">
     <UserControl.Resources>
 

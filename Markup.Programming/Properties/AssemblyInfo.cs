@@ -31,8 +31,8 @@ using System.Windows.Markup;
 
 //[assembly: NeutralResourcesLanguage("en-US", UltimateResourceFallbackLocation.Satellite)]
 
-[assembly: XmlnsPrefix("http://programmability.codeplex.com/markup/programming", "p")]
-[assembly: XmlnsDefinition("http://programmability.codeplex.com/markup/programming", "Markup.Programming")]
+[assembly: XmlnsPrefix("http://markupprogramming.codeplex.com/markup/programming", "p")]
+[assembly: XmlnsDefinition("http://markupprogramming.codeplex.com/markup/programming", "Markup.Programming")]
 
 // Version information for an assembly consists of the following four values:
 //
