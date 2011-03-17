@@ -8,6 +8,7 @@ using System.Diagnostics;
 
 namespace Markup.Programming.Core
 {
+#if !SILVERLIGHT
     public class DynamicObservableCollection<T> : ObservableCollection<T>, ITypedList where T : DynamicObject
     {
         private T representativeItem;
@@ -27,4 +28,5 @@ namespace Markup.Programming.Core
 
         public string GetListName(PropertyDescriptor[] listAccessors) { throw new NotImplementedException(); }
     }
+#endif
 }

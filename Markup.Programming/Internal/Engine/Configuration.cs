@@ -30,8 +30,14 @@ namespace Markup.Programming.Core
         {
             get
             {
-                var property = DesignerProperties.IsInDesignModeProperty;
-                return (bool)DependencyPropertyDescriptor.FromProperty(property, typeof(FrameworkElement)).Metadata.DefaultValue;
+#if !SILVERLIGHT
+                if (!Silverlight)
+                {
+                    var property = DesignerProperties.IsInDesignModeProperty;
+                    return (bool)DependencyPropertyDescriptor.FromProperty(property, typeof(FrameworkElement)).Metadata.DefaultValue;
+                }
+#endif
+                return false;
             }
         }
     }

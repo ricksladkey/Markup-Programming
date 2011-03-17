@@ -89,7 +89,10 @@ namespace Markup.Programming.Core
             engine.Trace(TraceFlags.Events, "Event: {0}, sender {1}", registeredEventName, engine.Sender);
             SetContext(engine);
             OnEventHandler(engine);
-            if (SetHandled && engine.EventArgs is RoutedEventArgs) (engine.EventArgs as RoutedEventArgs).Handled = true;
+#if !SILVERLIGHT
+            if (!Configuration.Silverlight && SetHandled && engine.EventArgs is RoutedEventArgs)
+                (engine.EventArgs as RoutedEventArgs).Handled = true;
+#endif
         }
 
         protected virtual void OnEventHandler(Engine engine)

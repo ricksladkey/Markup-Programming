@@ -183,9 +183,9 @@ namespace Markup.Programming
             value = DynamicHelper.CreateObject(ref dynamicType, pairs);
         }
 
-        public IEnumerable<NameTypePair> PropertyInfo
+        public IEnumerable<NameTypePair> DynamicProperties
         {
-            get { CheckEvaluate(); return value.PropertyInfo; }
+            get { CheckEvaluate(); return value.DynamicProperties; }
         }
 
         public object this[string propertyName]

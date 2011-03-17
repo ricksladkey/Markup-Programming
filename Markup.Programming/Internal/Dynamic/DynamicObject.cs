@@ -6,6 +6,7 @@ using System.ComponentModel;
 
 namespace Markup.Programming.Core
 {
+#if !SILVERLIGHT
     /// <summary>
     /// A DynamicTemplateObject implements a dynamic object using the
     /// ICustomTypeDescriptor interface which is supported by WPF.  Neither
@@ -42,4 +43,5 @@ namespace Markup.Programming.Core
             return DynamicHelper.ToString(this, "Object");
         }
     }
+#endif
 }

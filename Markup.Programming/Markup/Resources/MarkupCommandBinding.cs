@@ -7,6 +7,7 @@ using System.ComponentModel;
 
 namespace Markup.Programming
 {
+#if !SILVERLIGHT
     /// <summary>
     /// A MarkupCommandBinding creates a command binding that forwards routed
     /// command events to a handler command.
@@ -25,4 +26,5 @@ namespace Markup.Programming
             CanExecute += (s, e) => e.CanExecute = HandlerCommand.CanExecute(e.Parameter);
         }
     }
+#endif
 }

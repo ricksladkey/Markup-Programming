@@ -12,7 +12,7 @@ namespace Markup.Programming
     [ContentProperty("Functions")]
     public class Command : HiddenExpression
     {
-        private class CommandInterop : ICommand
+        public class CommandInterop : ICommand
         {
             public Command Parent { get; set; }
 

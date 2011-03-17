@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.ComponentModel;
 using System.Collections.ObjectModel;
@@ -196,22 +197,22 @@ namespace Markup.Programming.Core
             get { return AppDomain.CurrentDomain.GetAssemblies(); }
         }
 #else
-        private static IEnumerable<Assembly> Assemblies { get { return assemblies; } }
         private static Type[] coreTypes =
         {
             typeof(Array), // mscorlib
-            typeof(Debug), // System
-            typeof(HashSet<>), // System.Core
-            typeof(Socket), // System.Net
+            typeof(System.Diagnostics.Debug), // System
+            typeof(System.Collections.Generic.HashSet<>), // System.Core
+            typeof(System.Net.Sockets.Socket), // System.Net
             typeof(Window), // System.Windows
             typeof(System.Windows.Browser.BrowserInformation),
-            typeof(XmlWriter), // System.Xml
+            typeof(System.Xml.XmlWriter), // System.Xml
 #if INTERACTIVITY
             typeof(System.Windows.Interactivity.IAttachedObject), // portable
 #endif
             typeof(IStatement), // Markup.Programming
         };
         private static Assembly[] assemblies = coreTypes.Select(type => type.Assembly).ToArray();
+        private static IEnumerable<Assembly> Assemblies { get { return assemblies; } }
 #endif
     }
 }

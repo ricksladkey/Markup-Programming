@@ -6,6 +6,7 @@ using System.ComponentModel;
 
 namespace Markup.Programming.Core
 {
+#if !SILVERLIGHT
     /// <summary>
     /// A TypeDescriptorImplementor implements the hard labor of
     /// ICustomTypeDescriptor so that client class can just
@@ -64,4 +65,5 @@ namespace Markup.Programming.Core
         public override void SetValue(object component, object value) { (component as IDynamicObject)[Name] = value; }
         public override bool ShouldSerializeValue(object component) { return true; }
     }
+#endif
 }

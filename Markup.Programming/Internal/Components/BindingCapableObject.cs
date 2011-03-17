@@ -24,10 +24,10 @@ namespace Markup.Programming.Core
 #else
 
     /// <summary>
-    /// An ResourceObjectBase object is a DependencyObject on Silverlight
+    /// An BindingCapableObject object is a DependencyObject on Silverlight
     /// because Silverlight does not support Freezable.
     /// </summary>
-    public class ResourceObjectBase : DependencyObject
+    public class BindingCapableObject : DependencyObject
     {
     }
 

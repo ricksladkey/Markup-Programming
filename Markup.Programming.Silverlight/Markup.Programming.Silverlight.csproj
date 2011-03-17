@@ -122,22 +122,324 @@
     <Reference Include="System.Windows.Browser" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\Markup.Programming\Internal\Collections\ComponentCollection.cs">
+      <Link>Internal\Collections\ComponentCollection.cs</Link>
+    </Compile>
+    <Compile Include="..\Markup.Programming\Internal\Collections\ComponentCollectionBase.cs">
+      <Link>Internal\Collections\ComponentCollectionBase.cs</Link>
+    </Compile>
+    <Compile Include="..\Markup.Programming\Internal\Collections\ExpressionCollection.cs">
+      <Link>Internal\Collections\ExpressionCollection.cs</Link>
+    </Compile>
+    <Compile Include="..\Markup.Programming\Internal\Collections\FunctionCollection.cs">
+      <Link>Internal\Collections\FunctionCollection.cs</Link>
+    </Compile>
+    <Compile Include="..\Markup.Programming\Internal\Collections\HandlerCollection.cs">
+      <Link>Internal\Collections\HandlerCollection.cs</Link>
+    </Compile>
+    <Compile Include="..\Markup.Programming\Internal\Collections\NameDictionary.cs">
+      <Link>Internal\Collections\NameDictionary.cs</Link>
+    </Compile>
+    <Compile Include="..\Markup.Programming\Internal\Collections\NameTypePair.cs">
+      <Link>Internal\Collections\NameTypePair.cs</Link>
+    </Compile>
+    <Compile Include="..\Markup.Programming\Internal\Collections\NameValuePair.cs">
+      <Link>Internal\Collections\NameValuePair.cs</Link>
+    </Compile>
+    <Compile Include="..\Markup.Programming\Internal\Collections\ParameterCollection.cs">
+      <Link>Internal\Collections\ParameterCollection.cs</Link>
+    </Compile>
+    <Compile Include="..\Markup.Programming\Internal\Collections\PropertyCollection.cs">
+      <Link>Internal\Collections\PropertyCollection.cs</Link>
+    </Compile>
+    <Compile Include="..\Markup.Programming\Internal\Collections\SmallDictionary.cs">
+      <Link>Internal\Collections\SmallDictionary.cs</Link>
+    </Compile>
+    <Compile Include="..\Markup.Programming\Internal\Collections\StatementCollection.cs">
+      <Link>Internal\Collections\StatementCollection.cs</Link>
+    </Compile>
+    <Compile Include="..\Markup.Programming\Internal\Collections\StatementCollectionBase.cs">
+      <Link>Internal\Collections\StatementCollectionBase.cs</Link>
+    </Compile>
+    <Compile Include="..\Markup.Programming\Internal\Components\BindingCapableObject.cs">
+      <Link>Internal\Components\BindingCapableObject.cs</Link>
+    </Compile>
+    <Compile Include="..\Markup.Programming\Internal\Components\ComponentBase.cs">
+      <Link>Internal\Components\ComponentBase.cs</Link>
+    </Compile>
+    <Compile Include="..\Markup.Programming\Internal\Components\IComponent.cs">
+      <Link>Internal\Components\IComponent.cs</Link>
+    </Compile>
+    <Compile Include="..\Markup.Programming\Internal\Components\IValueProvider.cs">
+      <Link>Internal\Components\IValueProvider.cs</Link>
+    </Compile>
+    <Compile Include="..\Markup.Programming\Internal\Components\PrimitiveActiveComponent.cs">
+      <Link>Internal\Components\PrimitiveActiveComponent.cs</Link>
+    </Compile>
+    <Compile Include="..\Markup.Programming\Internal\Components\PrimitivePassiveComponent.cs">
+      <Link>Internal\Components\PrimitivePassiveComponent.cs</Link>
+    </Compile>
+    <Compile Include="..\Markup.Programming\Internal\Components\ResourceObject.cs">
+      <Link>Internal\Components\ResourceObject.cs</Link>
+    </Compile>
+    <Compile Include="..\Markup.Programming\Internal\Diagnostics\CollectionDebugView.cs">
+      <Link>Internal\Diagnostics\CollectionDebugView.cs</Link>
+    </Compile>
+    <Compile Include="..\Markup.Programming\Internal\Diagnostics\DictionaryDebugView.cs">
+      <Link>Internal\Diagnostics\DictionaryDebugView.cs</Link>
+    </Compile>
+    <Compile Include="..\Markup.Programming\Internal\Diagnostics\EngineDebugView.cs">
+      <Link>Internal\Diagnostics\EngineDebugView.cs</Link>
+    </Compile>
+    <Compile Include="..\Markup.Programming\Internal\Dynamic\DynamicHelper.cs">
+      <Link>Internal\Dynamic\DynamicHelper.cs</Link>
+    </Compile>
+    <Compile Include="..\Markup.Programming\Internal\Dynamic\DynamicObject.cs">
+      <Link>Internal\Dynamic\DynamicObject.cs</Link>
+    </Compile>
+    <Compile Include="..\Markup.Programming\Internal\Dynamic\DynamicObjectBase.cs">
+      <Link>Internal\Dynamic\DynamicObjectBase.cs</Link>
+    </Compile>
+    <Compile Include="..\Markup.Programming\Internal\Dynamic\DynamicObservableCollection.cs">
+      <Link>Internal\Dynamic\DynamicObservableCollection.cs</Link>
+    </Compile>
+    <Compile Include="..\Markup.Programming\Internal\Dynamic\IDynamicObject.cs">
+      <Link>Internal\Dynamic\IDynamicObject.cs</Link>
+    </Compile>
+    <Compile Include="..\Markup.Programming\Internal\Dynamic\TypeDescriptorImplementor.cs">
+      <Link>Internal\Dynamic\TypeDescriptorImplementor.cs</Link>
+    </Compile>
+    <Compile Include="..\Markup.Programming\Internal\Engine\BuiltinImplementor.cs">
+      <Link>Internal\Engine\BuiltinImplementor.cs</Link>
+    </Compile>
+    <Compile Include="..\Markup.Programming\Internal\Engine\CallHelper.cs">
+      <Link>Internal\Engine\CallHelper.cs</Link>
+    </Compile>
+    <Compile Include="..\Markup.Programming\Internal\Engine\Configuration.cs">
+      <Link>Internal\Engine\Configuration.cs</Link>
+    </Compile>
+    <Compile Include="..\Markup.Programming\Internal\Engine\Engine.cs">
+      <Link>Internal\Engine\Engine.cs</Link>
+    </Compile>
+    <Compile Include="..\Markup.Programming\Internal\Engine\ExecutionHelper.cs">
+      <Link>Internal\Engine\ExecutionHelper.cs</Link>
+    </Compile>
+    <Compile Include="..\Markup.Programming\Internal\Engine\ExpressionOrValue.cs">
+      <Link>Internal\Engine\ExpressionOrValue.cs</Link>
+    </Compile>
+    <Compile Include="..\Markup.Programming\Internal\Engine\OperatorHelper.cs">
+      <Link>Internal\Engine\OperatorHelper.cs</Link>
+    </Compile>
+    <Compile Include="..\Markup.Programming\Internal\Engine\PathExpression.cs">
+      <Link>Internal\Engine\PathExpression.cs</Link>
+    </Compile>
+    <Compile Include="..\Markup.Programming\Internal\Engine\PathHelper.cs">
+      <Link>Internal\Engine\PathHelper.cs</Link>
+    </Compile>
+    <Compile Include="..\Markup.Programming\Internal\Engine\StackFrame.cs">
+      <Link>Internal\Engine\StackFrame.cs</Link>
+    </Compile>
+    <Compile Include="..\Markup.Programming\Internal\Engine\ThrowHelper.cs">
+      <Link>Internal\Engine\ThrowHelper.cs</Link>
+    </Compile>
+    <Compile Include="..\Markup.Programming\Internal\Engine\TraceHelper.cs">
+      <Link>Internal\Engine\TraceHelper.cs</Link>
+    </Compile>
+    <Compile Include="..\Markup.Programming\Internal\Engine\TypeHelper.cs">
+      <Link>Internal\Engine\TypeHelper.cs</Link>
+    </Compile>
+    <Compile Include="..\Markup.Programming\Internal\Language\Accessor.cs">
+      <Link>Internal\Language\Accessor.cs</Link>
+    </Compile>
+    <Compile Include="..\Markup.Programming\Internal\Language\ArgumentsExpression.cs">
+      <Link>Internal\Language\ArgumentsExpression.cs</Link>
+    </Compile>
+    <Compile Include="..\Markup.Programming\Internal\Language\ArgumentsExpressionWithType.cs">
+      <Link>Internal\Language\ArgumentsExpressionWithType.cs</Link>
+    </Compile>
+    <Compile Include="..\Markup.Programming\Internal\Language\BlockExpression.cs">
+      <Link>Internal\Language\BlockExpression.cs</Link>
+    </Compile>
+    <Compile Include="..\Markup.Programming\Internal\Language\ConditionalValueStatement.cs">
+      <Link>Internal\Language\ConditionalValueStatement.cs</Link>
+    </Compile>
+    <Compile Include="..\Markup.Programming\Internal\Language\ExpressionBase.cs">
+      <Link>Internal\Language\ExpressionBase.cs</Link>
+    </Compile>
+    <Compile Include="..\Markup.Programming\Internal\Language\Handler.cs">
+      <Link>Internal\Language\Handler.cs</Link>
+    </Compile>
+    <Compile Include="..\Markup.Programming\Internal\Language\HiddenExpression.cs">
+      <Link>Internal\Language\HiddenExpression.cs</Link>
+    </Compile>
+    <Compile Include="..\Markup.Programming\Internal\Language\Interfaces\IExpression.cs">
+      <Link>Internal\Language\Interfaces\IExpression.cs</Link>
+    </Compile>
+    <Compile Include="..\Markup.Programming\Internal\Language\Interfaces\IHiddenExpression.cs">
+      <Link>Internal\Language\Interfaces\IHiddenExpression.cs</Link>
+    </Compile>
+    <Compile Include="..\Markup.Programming\Internal\Language\Interfaces\IProcessor.cs">
+      <Link>Internal\Language\Interfaces\IProcessor.cs</Link>
+    </Compile>
+    <Compile Include="..\Markup.Programming\Internal\Language\Interfaces\IStatement.cs">
+      <Link>Internal\Language\Interfaces\IStatement.cs</Link>
+    </Compile>
+    <Compile Include="..\Markup.Programming\Internal\Language\ParameterBlock.cs">
+      <Link>Internal\Language\ParameterBlock.cs</Link>
+    </Compile>
+    <Compile Include="..\Markup.Programming\Internal\Language\Statement.cs">
+      <Link>Internal\Language\Statement.cs</Link>
+    </Compile>
+    <Compile Include="..\Markup.Programming\Internal\Language\StatementBase.cs">
+      <Link>Internal\Language\StatementBase.cs</Link>
+    </Compile>
+    <Compile Include="..\Markup.Programming\Internal\Language\TypedExpession.cs">
+      <Link>Internal\Language\TypedExpession.cs</Link>
+    </Compile>
+    <Compile Include="..\Markup.Programming\Internal\Language\UntypedValueBlock.cs">
+      <Link>Internal\Language\UntypedValueBlock.cs</Link>
+    </Compile>
+    <Compile Include="..\Markup.Programming\Internal\Language\UntypedValueStatement.cs">
+      <Link>Internal\Language\UntypedValueStatement.cs</Link>
+    </Compile>
+    <Compile Include="..\Markup.Programming\Internal\Language\ValueBlock.cs">
+      <Link>Internal\Language\ValueBlock.cs</Link>
+    </Compile>
+    <Compile Include="..\Markup.Programming\Internal\Language\ValueStatement.cs">
+      <Link>Internal\Language\ValueStatement.cs</Link>
+    </Compile>
+    <Compile Include="..\Markup.Programming\Markup\Attached.cs">
+      <Link>Markup\Attached.cs</Link>
+    </Compile>
+    <Compile Include="..\Markup.Programming\Markup\Handlers\AttachedHandler.cs">
+      <Link>Markup\Handlers\AttachedHandler.cs</Link>
+    </Compile>
+    <Compile Include="..\Markup.Programming\Markup\Handlers\CallHandler.cs">
+      <Link>Markup\Handlers\CallHandler.cs</Link>
+    </Compile>
+    <Compile Include="..\Markup.Programming\Markup\Handlers\DataChangedHandler.cs">
+      <Link>Markup\Handlers\DataChangedHandler.cs</Link>
+    </Compile>
+    <Compile Include="..\Markup.Programming\Markup\Handlers\EventHandler.cs">
+      <Link>Markup\Handlers\EventHandler.cs</Link>
+    </Compile>
+    <Compile Include="..\Markup.Programming\Markup\Language\Enumerations\AssignmentOperator.cs">
+      <Link>Markup\Language\Enumerations\AssignmentOperator.cs</Link>
+    </Compile>
+    <Compile Include="..\Markup.Programming\Markup\Language\Enumerations\BuiltinFunction.cs">
+      <Link>Markup\Language\Enumerations\BuiltinFunction.cs</Link>
+    </Compile>
+    <Compile Include="..\Markup.Programming\Markup\Language\Enumerations\Operator.cs">
+      <Link>Markup\Language\Enumerations\Operator.cs</Link>
+    </Compile>
+    <Compile Include="..\Markup.Programming\Markup\Language\Expressions\Call.cs">
+      <Link>Markup\Language\Expressions\Call.cs</Link>
+    </Compile>
+    <Compile Include="..\Markup.Programming\Markup\Language\Expressions\Collection.cs">
+      <Link>Markup\Language\Expressions\Collection.cs</Link>
+    </Compile>
+    <Compile Include="..\Markup.Programming\Markup\Language\Expressions\Get.cs">
+      <Link>Markup\Language\Expressions\Get.cs</Link>
+    </Compile>
+    <Compile Include="..\Markup.Programming\Markup\Language\Expressions\GetItem.cs">
+      <Link>Markup\Language\Expressions\GetItem.cs</Link>
+    </Compile>
+    <Compile Include="..\Markup.Programming\Markup\Language\Expressions\InlineFunction.cs">
+      <Link>Markup\Language\Expressions\InlineFunction.cs</Link>
+    </Compile>
+    <Compile Include="..\Markup.Programming\Markup\Language\Expressions\Iterator.cs">
+      <Link>Markup\Language\Expressions\Iterator.cs</Link>
+    </Compile>
+    <Compile Include="..\Markup.Programming\Markup\Language\Expressions\New.cs">
+      <Link>Markup\Language\Expressions\New.cs</Link>
+    </Compile>
+    <Compile Include="..\Markup.Programming\Markup\Language\Expressions\Object.cs">
+      <Link>Markup\Language\Expressions\Object.cs</Link>
+    </Compile>
+    <Compile Include="..\Markup.Programming\Markup\Language\Expressions\Op.cs">
+      <Link>Markup\Language\Expressions\Op.cs</Link>
+    </Compile>
+    <Compile Include="..\Markup.Programming\Markup\Language\Expressions\Set.cs">
+      <Link>Markup\Language\Expressions\Set.cs</Link>
+    </Compile>
+    <Compile Include="..\Markup.Programming\Markup\Language\Expressions\SetItem.cs">
+      <Link>Markup\Language\Expressions\SetItem.cs</Link>
+    </Compile>
+    <Compile Include="..\Markup.Programming\Markup\Language\Expressions\TypeVal.cs">
+      <Link>Markup\Language\Expressions\TypeVal.cs</Link>
+    </Compile>
+    <Compile Include="..\Markup.Programming\Markup\Language\Expressions\Val.cs">
+      <Link>Markup\Language\Expressions\Val.cs</Link>
+    </Compile>
+    <Compile Include="..\Markup.Programming\Markup\Language\Statements\Block.cs">
+      <Link>Markup\Language\Statements\Block.cs</Link>
+    </Compile>
+    <Compile Include="..\Markup.Programming\Markup\Language\Statements\Break.cs">
+      <Link>Markup\Language\Statements\Break.cs</Link>
+    </Compile>
+    <Compile Include="..\Markup.Programming\Markup\Language\Statements\Case.cs">
+      <Link>Markup\Language\Statements\Case.cs</Link>
+    </Compile>
+    <Compile Include="..\Markup.Programming\Markup\Language\Statements\For.cs">
+      <Link>Markup\Language\Statements\For.cs</Link>
+    </Compile>
+    <Compile Include="..\Markup.Programming\Markup\Language\Statements\ForEach.cs">
+      <Link>Markup\Language\Statements\ForEach.cs</Link>
+    </Compile>
+    <Compile Include="..\Markup.Programming\Markup\Language\Statements\Function.cs">
+      <Link>Markup\Language\Statements\Function.cs</Link>
+    </Compile>
+    <Compile Include="..\Markup.Programming\Markup\Language\Statements\If.cs">
+      <Link>Markup\Language\Statements\If.cs</Link>
+    </Compile>
+    <Compile Include="..\Markup.Programming\Markup\Language\Statements\Import.cs">
+      <Link>Markup\Language\Statements\Import.cs</Link>
+    </Compile>
+    <Compile Include="..\Markup.Programming\Markup\Language\Statements\Module.cs">
+      <Link>Markup\Language\Statements\Module.cs</Link>
+    </Compile>
+    <Compile Include="..\Markup.Programming\Markup\Language\Statements\Return.cs">
+      <Link>Markup\Language\Statements\Return.cs</Link>
+    </Compile>
+    <Compile Include="..\Markup.Programming\Markup\Language\Statements\Switch.cs">
+      <Link>Markup\Language\Statements\Switch.cs</Link>
+    </Compile>
+    <Compile Include="..\Markup.Programming\Markup\Language\Statements\When.cs">
+      <Link>Markup\Language\Statements\When.cs</Link>
+    </Compile>
+    <Compile Include="..\Markup.Programming\Markup\Language\Statements\While.cs">
+      <Link>Markup\Language\Statements\While.cs</Link>
+    </Compile>
+    <Compile Include="..\Markup.Programming\Markup\Language\Statements\Yield.cs">
+      <Link>Markup\Language\Statements\Yield.cs</Link>
+    </Compile>
+    <Compile Include="..\Markup.Programming\Markup\Language\Support\Command.cs">
+      <Link>Markup\Language\Support\Command.cs</Link>
+    </Compile>
+    <Compile Include="..\Markup.Programming\Markup\Language\Support\Parameter.cs">
+      <Link>Markup\Language\Support\Parameter.cs</Link>
+    </Compile>
+    <Compile Include="..\Markup.Programming\Markup\Language\Support\Property.cs">
+      <Link>Markup\Language\Support\Property.cs</Link>
+    </Compile>
+    <Compile Include="..\Markup.Programming\Markup\Resources\MarkupCollection.cs">
+      <Link>Markup\Resources\MarkupCollection.cs</Link>
+    </Compile>
+    <Compile Include="..\Markup.Programming\Markup\Resources\MarkupCommand.cs">
+      <Link>Markup\Resources\MarkupCommand.cs</Link>
+    </Compile>
+    <Compile Include="..\Markup.Programming\Markup\Resources\MarkupCommandBinding.cs">
+      <Link>Markup\Resources\MarkupCommandBinding.cs</Link>
+    </Compile>
+    <Compile Include="..\Markup.Programming\Markup\Resources\MarkupConverter.cs">
+      <Link>Markup\Resources\MarkupConverter.cs</Link>
+    </Compile>
+    <Compile Include="..\Markup.Programming\Markup\Resources\MarkupObject.cs">
+      <Link>Markup\Resources\MarkupObject.cs</Link>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Core\Collections\" />
-    <Folder Include="Core\Dynamic\" />
-    <Folder Include="Core\Interfaces\" />
-    <Folder Include="Core\Language\" />
-    <Folder Include="Core\Resource\" />
-    <Folder Include="Language\Enumerations\" />
-    <Folder Include="Language\Expressions\" />
-    <Folder Include="Language\Statements\" />
-    <Folder Include="Language\Support\" />
-    <Folder Include="Support\Interactivity\" />
-    <Folder Include="Support\Resource\" />
-    <Folder Include="Support\Triggers\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Silverlight\$(SilverlightVersion)\Microsoft.Silverlight.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
