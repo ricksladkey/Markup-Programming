@@ -308,8 +308,14 @@
     <Compile Include="..\Markup.Programming\Internal\Language\ValueStatement.cs">
       <Link>Internal\Language\ValueStatement.cs</Link>
     </Compile>
-    <Compile Include="..\Markup.Programming\Markup\Attached.cs">
-      <Link>Markup\Attached.cs</Link>
+    <Compile Include="..\Markup.Programming\Markup\Glue\Additional.cs">
+      <Link>Markup\Glue\Additional.cs</Link>
+    </Compile>
+    <Compile Include="..\Markup.Programming\Markup\Glue\Attached.cs">
+      <Link>Markup\Glue\Attached.cs</Link>
+    </Compile>
+    <Compile Include="..\Markup.Programming\Markup\Glue\OperationCollection.cs">
+      <Link>Markup\Glue\OperationCollection.cs</Link>
     </Compile>
     <Compile Include="..\Markup.Programming\Markup\Handlers\AttachedHandler.cs">
       <Link>Markup\Handlers\AttachedHandler.cs</Link>

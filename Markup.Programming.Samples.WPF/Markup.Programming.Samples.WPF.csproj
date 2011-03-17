@@ -134,7 +134,14 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="StyleSample.xaml.cs">
+      <DependentUpon>StyleSample.xaml</DependentUpon>
+    </Compile>
     <Page Include="OneMethodTwoBindings\View.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="StyleSample.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

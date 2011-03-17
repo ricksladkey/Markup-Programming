@@ -11,7 +11,7 @@ namespace Markup.Programming.Core
     /// The Configuration class allows us to test the
     /// Silverlight configuration on the desktop.
     /// </summary>
-    internal static class Configuration
+    public static class Configuration
     {
 
 #if !FULL_TRACING

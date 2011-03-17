@@ -127,6 +127,7 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Markup\Glue\OperationCollection.cs" />
     <Compile Include="Internal\Diagnostics\CollectionDebugView.cs" />
     <Compile Include="Internal\Components\PrimitiveActiveComponent.cs" />
     <Compile Include="Internal\Components\PrimitivePassiveComponent.cs" />
@@ -134,8 +135,9 @@
     <Compile Include="Internal\Diagnostics\EngineDebugView.cs" />
     <Compile Include="Internal\Engine\CallHelper.cs" />
     <Compile Include="Internal\Engine\PathExpression.cs" />
+    <Compile Include="Markup\Glue\Additional.cs" />
     <Compile Include="Markup\Handlers\EventHandler.cs" />
-    <Compile Include="Markup\Attached.cs" />
+    <Compile Include="Markup\Glue\Attached.cs" />
     <Compile Include="Internal\Language\Handler.cs" />
     <Compile Include="Markup\Language\Enumerations\AssignmentOperator.cs" />
     <Compile Include="Markup\Language\Enumerations\BuiltinFunction.cs" />
@@ -237,7 +239,6 @@
     <AppDesigner Include="Properties\" />
     <Compile Include="Markup\Language\Statements\Yield.cs" />
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

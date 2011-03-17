@@ -1,0 +1,24 @@
+﻿<Window
+    x:Class="Markup.Programming.Samples.StyleSample"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:p="http://programmability.codeplex.com/markup/programming"
+    Height="300" Width="300">
+    <Grid>
+        <Grid.Resources>
+            <p:OperationCollection x:Key="SelectOnFocusOperation" x:Shared="False">
+                <p:CallHandler Path="GotFocus.@AssociatedObject.SelectAll()"/>
+            </p:OperationCollection>
+            <Style x:Key="SelectOnFocusStyle" TargetType="{x:Type TextBox}">
+                <Setter Property="p:Additional.Operations" Value="{StaticResource SelectOnFocusOperation}"/>
+            </Style>
+        </Grid.Resources>
+        <StackPanel>
+            <TextBlock Text="Markup Programming using Styles" FontSize="20"/>
+            <TextBox Text="Normal TextBox"/>
+            <TextBox Text="SelectOnFocus TextBox" Style="{StaticResource SelectOnFocusStyle}"/>
+            <TextBox Text="Normal TextBox"/>
+            <TextBox Text="SelectOnFocus TextBox" Style="{StaticResource SelectOnFocusStyle}"/>
+        </StackPanel>
+    </Grid>
+</Window>

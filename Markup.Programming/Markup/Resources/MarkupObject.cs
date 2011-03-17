@@ -45,7 +45,7 @@ namespace Markup.Programming
         }
 
         private Dictionary<string, object> propertyStore;
-        private NameTypePair[] propertyInfo;
+        private NameTypePair[] dynamicProperties;
 
         public PropertyCollection Properties
         {
@@ -73,7 +73,7 @@ namespace Markup.Programming
 
         public IEnumerable<NameTypePair> DynamicProperties
         {
-            get { return propertyInfo; }
+            get { return dynamicProperties; }
         }
 
         public object this[string propertyName]
@@ -130,7 +130,7 @@ namespace Markup.Programming
                 value = TypeHelper.Convert(value, type);
                 propertyStore.Add(property.PropertyName, value);
             }
-            propertyInfo = Properties.Select(property => GetPair(property)).ToArray();
+            dynamicProperties = Properties.Select(property => GetPair(property)).ToArray();
             Evaluated = true;
         }
 
