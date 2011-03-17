@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Windows;
 using Markup.Programming.Core;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Collections;
 
 namespace Markup.Programming.Tests.Tests
 {
@@ -81,6 +82,8 @@ namespace Markup.Programming.Tests.Tests
             BasicGetTest(false, "@Convert('fALSE', [Boolean])");
             BasicGetTest(true, "@Convert('True', [Boolean])");
             BasicGetTest(6, "@Op('Plus', 1, 2, 3)");
+            BasicGetTest(new ArrayList(), "@Op('New', [ArrayList])");
+            BasicGetTest(new ArrayList(), "[ArrayList]()");
 
             BasicGetTest("Test1", "String1");
             BasicGetTest("Test2", "Object1.String1");
@@ -93,9 +96,6 @@ namespace Markup.Programming.Tests.Tests
         [TestMethod]
         public void PathTestSandbox()
         {
-            BasicGetTest(false, "@Convert('fALSE', [Boolean])");
-            BasicGetTest(true, "@Convert('True', [Boolean])");
-            BasicGetTest(6, "@Op('Plus', 1, 2, 3)");
         }
 
 #if DEBUG

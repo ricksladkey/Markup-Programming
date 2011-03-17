@@ -49,7 +49,7 @@ namespace Markup.Programming
             var type = Type;
             if (TypeArguments.Count != 0)
                 type = type.MakeGenericType(TypeArguments.Evaluate(engine).Cast<Type>().ToArray());
-            return Activator.CreateInstance(type, Arguments.Evaluate(engine));
+            return TypeHelper.CreateInstance(type, Arguments.Evaluate(engine));
         }
     }
 }

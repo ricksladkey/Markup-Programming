@@ -51,6 +51,7 @@ namespace Markup.Programming
         SetProperty,
         GetItem,
         SetItem,
+        New,
 
         IsNull,
         NotIsNull,

@@ -13,22 +13,6 @@ namespace Markup.Programming.Core
     /// </summary>
     public static class OperatorHelper
     {
-        private static Dictionary<Operator, string> operatorMap = new Dictionary<Operator, string>
-        {
-            { Operator.Plus, "op_Addition" },
-            { Operator.Minus, "op_Subtraction" },
-            { Operator.Times, "op_Multiplication" },
-            { Operator.Mod, "op_Modulus" },
-            { Operator.Divide, "op_Division" },
-            { Operator.Equals, "op_Equality" },
-            { Operator.NotEquals, "op_Inequality" },
-            { Operator.LessThan, "op_LessThan" },
-            { Operator.LessThanOrEqual, "op_LessThanOrEqual" },
-            { Operator.GreaterThan, "op_GreaterThan" },
-            { Operator.GreaterThanOrEqual, "op_GreaterThanOrEqual" },
-            { Operator.Negate, "op_UnaryNegation" },
-        };
-
         public static object Evaluate(Engine engine, Operator op, ExpressionOrValue[] expressions)
         {
             // Get arity.
@@ -72,8 +56,8 @@ namespace Markup.Programming.Core
                     return PathHelper.GetItem(engine, operands[0], operands.Skip(1).ToArray());
                 case Operator.SetItem:
                     return PathHelper.SetItem(engine, operands[0], operands.Skip(1).ToArray());
-                case Operator.ToArray:
-                    return TypeHelper.CreateArray(operands);
+                case Operator.New:
+                    return TypeHelper.CreateInstance(operands[0] as Type, operands.Skip(1).ToArray());
                 default:
                     break;
             }
@@ -104,6 +88,8 @@ namespace Markup.Programming.Core
                         return Op(engine, Operator.LessThan, operands[0], 0);
                     case Operator.LessThanOrEqualToZero:
                         return Op(engine, Operator.LessThanOrEqual, operands[0], 0);
+                    case Operator.ToArray:
+                        return TypeHelper.CreateArray(operands);
                     default:
                         break;
                 }
@@ -140,6 +126,13 @@ namespace Markup.Programming.Core
             return result;
         }
 
+        private static bool Is(Engine engine, object instance, object type)
+        {
+            if (type == null) engine.Throw("type");
+            if (instance == null) return false;
+            return (type as Type).IsAssignableFrom(instance.GetType());
+        }
+
         public static int GetArity(Operator op)
         {
             switch (op)
@@ -152,11 +145,12 @@ namespace Markup.Programming.Core
                 case Operator.IsZero:
                 case Operator.NotIsZero:
                 case Operator.ToString:
+                case Operator.ToArray:
                     return 1;
-                case Operator.SetItem:
-                    return 3;
                 case Operator.Format:
                 case Operator.GetItem:
+                case Operator.SetItem:
+                case Operator.New:
                     return 0;
                 default:
                     return 2;
@@ -265,12 +259,21 @@ namespace Markup.Programming.Core
             engine.Throw("invalid operator: {0}, operand count: {1}", op, n);
         }
 
-        private static bool Is(Engine engine, object instance, object type)
+        private static Dictionary<Operator, string> operatorMap = new Dictionary<Operator, string>
         {
-            if (type == null) engine.Throw("type");
-            if (instance == null) return false;
-            return (type as Type).IsAssignableFrom(instance.GetType());
-        }
+            { Operator.Plus, "op_Addition" },
+            { Operator.Minus, "op_Subtraction" },
+            { Operator.Times, "op_Multiplication" },
+            { Operator.Mod, "op_Modulus" },
+            { Operator.Divide, "op_Division" },
+            { Operator.Equals, "op_Equality" },
+            { Operator.NotEquals, "op_Inequality" },
+            { Operator.LessThan, "op_LessThan" },
+            { Operator.LessThanOrEqual, "op_LessThanOrEqual" },
+            { Operator.GreaterThan, "op_GreaterThan" },
+            { Operator.GreaterThanOrEqual, "op_GreaterThanOrEqual" },
+            { Operator.Negate, "op_UnaryNegation" },
+        };
 
         public static double Plus(double lhs, double rhs) { return lhs + rhs; }
         public static double Minus(double lhs, double rhs) { return lhs - rhs; }

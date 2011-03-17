@@ -1,12 +1,11 @@
 - refactor recursive descent parser for operators
-- support new in Path
 - consider removing Type completely
 - review how to handle For type
 - change For: Operator plus Limit and Increment defaults to 1
 - revisit conversion, specifically we should not silently allow conversions to fail
 -----------------------
-- add special call declaration mode for paths, e.g. foo(a,b) declares functions foo with params a and b
-- fix auto-evaluation of langauge elements
+- add special call declaration mode for paths, e.g. $foo($a,$b) declares functions foo with params a and b
+- fix accidental auto-evaluation of langauge elements
 - rename MarkupObject to ResourceObject, etc.
 - clean up MarkupConverter names, especially LoadActions, etc.
 - convert Type arguments to type or expression

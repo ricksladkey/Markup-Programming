@@ -17,6 +17,11 @@ namespace Markup.Programming.Core
     /// </summary>
     public static class TypeHelper
     {
+        public static object CreateInstance(Type type, params object[] args)
+        {
+            return Activator.CreateInstance(type, args);
+        }
+
         public static bool IsClassObject(object value)
         {
             return value != null && value.GetType().IsClass;

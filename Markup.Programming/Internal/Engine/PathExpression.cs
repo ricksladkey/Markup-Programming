@@ -267,6 +267,11 @@ namespace Markup.Programming.Core
                         var args = tokens.Peek() == "(" ? ParseArguments() : null;
                         node = new StaticMethodNode { TypeName = typeName, Name = methodName, Arguments = args };
                     }
+                    else if (tokens.Peek() == "(")
+                    {
+                        var operands = new PathNode[] {  new TypeValueNode { TypeName = typeName } };
+                        node = new OpNode { Operator = Operator.New, Operands = operands.Concat(ParseArguments()).ToList() };
+                    }
                     else
                         node = new TypeValueNode { TypeName = typeName };
                 }
