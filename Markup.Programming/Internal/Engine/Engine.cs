@@ -342,7 +342,7 @@ namespace Markup.Programming.Core
             return pathExpression.Compile(this, true, false, path).Evaluate(this, value);
         }
 
-        public object CallPath(PathExpression pathExpression, string path, IEnumerable<object> args)
+        public object CallPath(string path, PathExpression pathExpression, IEnumerable<object> args)
         {
             if (pathExpression == null) pathExpression = new PathExpression();
             return pathExpression.Compile(this, false, true, path).Call(this, args);

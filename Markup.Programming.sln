@@ -160,15 +160,11 @@ Global
 		{2FB153D9-B8A9-4D9B-8BF7-CB1DF54A3B36}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2FB153D9-B8A9-4D9B-8BF7-CB1DF54A3B36}.Release|Any CPU.Build.0 = Release|Any CPU
 		{A0150B3B-AC19-4B5F-9ECF-77BE3A00D873}.Debug - Emulate Silverlight|Any CPU.ActiveCfg = Debug|Any CPU
-		{A0150B3B-AC19-4B5F-9ECF-77BE3A00D873}.Debug - Emulate Silverlight|Any CPU.Build.0 = Debug|Any CPU
 		{A0150B3B-AC19-4B5F-9ECF-77BE3A00D873}.Debug - Full Tracing|Any CPU.ActiveCfg = Debug|Any CPU
-		{A0150B3B-AC19-4B5F-9ECF-77BE3A00D873}.Debug - Full Tracing|Any CPU.Build.0 = Debug|Any CPU
 		{A0150B3B-AC19-4B5F-9ECF-77BE3A00D873}.Debug - Silverlight|Any CPU.ActiveCfg = Debug|Any CPU
-		{A0150B3B-AC19-4B5F-9ECF-77BE3A00D873}.Debug - Silverlight|Any CPU.Build.0 = Debug|Any CPU
 		{A0150B3B-AC19-4B5F-9ECF-77BE3A00D873}.Debug - System.Windows.Interactivity|Any CPU.ActiveCfg = Debug|Any CPU
 		{A0150B3B-AC19-4B5F-9ECF-77BE3A00D873}.Debug - System.Windows.Interactivity|Any CPU.Build.0 = Debug|Any CPU
 		{A0150B3B-AC19-4B5F-9ECF-77BE3A00D873}.Debug - WPF|Any CPU.ActiveCfg = Debug|Any CPU
-		{A0150B3B-AC19-4B5F-9ECF-77BE3A00D873}.Debug - WPF|Any CPU.Build.0 = Debug|Any CPU
 		{A0150B3B-AC19-4B5F-9ECF-77BE3A00D873}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{A0150B3B-AC19-4B5F-9ECF-77BE3A00D873}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A0150B3B-AC19-4B5F-9ECF-77BE3A00D873}.Release|Any CPU.ActiveCfg = Release|Any CPU

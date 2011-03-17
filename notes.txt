@@ -1,5 +1,6 @@
-- remove try/catch from Call
 - refactor recursive descent parser for operators
+- support new in Path
+- consider removing Type completely
 - review how to handle For type
 - change For: Operator plus Limit and Increment defaults to 1
 - revisit conversion, specifically we should not silently allow conversions to fail

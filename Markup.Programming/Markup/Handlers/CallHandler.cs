@@ -96,7 +96,7 @@ namespace Markup.Programming
                 var parameter = engine.Evaluate(ParameterProperty, ParameterPath, ParameterPathExpression);
                 args = new object[] { engine.EvaluateObject(parameter) }.Concat(args).ToArray();
             }
-            CallHelper.Call(PathExpression, PathBase, StaticMethodName, MethodName, FunctionName, BuiltinFunction,
+            CallHelper.Call(PathBase, PathExpression, StaticMethodName, MethodName, FunctionName, BuiltinFunction,
                 engine.EvaluateType(TypeProperty, TypeName), TypeArguments, args, engine);
         }
     }

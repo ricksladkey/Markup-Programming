@@ -8,10 +8,10 @@ namespace Markup.Programming.Core
 {
     public static class CallHelper
     {
-        public static object Call(PathExpression pathExpression, string path, string staticMethodName, string methodName, string functionName, BuiltinFunction builtinFunction, Type type, ExpressionCollection typeArguments, IEnumerable<object> args, Engine engine)
+        public static object Call(string path, PathExpression pathExpression, string staticMethodName, string methodName, string functionName, BuiltinFunction builtinFunction, Type type, ExpressionCollection typeArguments, IEnumerable<object> args, Engine engine)
         {
             if (path != null)
-                return engine.CallPath(pathExpression, path, args);
+                return engine.CallPath(path, pathExpression, args);
             if (functionName != null)
                 return engine.CallFunction(functionName, args);
             if (builtinFunction != 0)
@@ -36,25 +36,22 @@ namespace Markup.Programming.Core
             }
             else
             {
-                try
+                // Look for a matching method.
+                var candidates = typeToCall.GetMethods(bindingFlags).Where(info => info.Name == methodName);
+                var count = candidates.Count();
+                if (count >= 1)
                 {
-                    // Try default method.
-                    methodInfo = typeToCall.GetMethod(methodName, bindingFlags);
-                }
-                catch
-                {
-                    // Use arguments to choose overload.
-                    var types = args.Select(value => value != null ? value.GetType() : typeof(object));
-                    methodInfo = typeToCall.GetMethod(methodName, bindingFlags, null, types.ToArray(), null);
-                    if (methodInfo == null) engine.Throw("method overload not found: " + methodName);
+                    if (count == 1)
+                        methodInfo = candidates.First();
+                    else
+                    {
+                        // Use arguments to choose overload.
+                        var types = args.Select(value => value != null ? value.GetType() : typeof(object));
+                        methodInfo = typeToCall.GetMethod(methodName, bindingFlags, null, types.ToArray(), null);
+                        if (methodInfo == null) engine.Throw("method overload not found: " + methodName);
+                    }
                 }
             }
-            return CallHelper.CallMethod(methodName, methodInfo, callee, args.ToArray(), engine);
-        }
-
-        public static object CallMethod(string methodName, MethodInfo methodInfo, object callee, object[] args, Engine engine)
-        {
-
             if (methodInfo == null) engine.Throw("method not found: " + methodName);
             var parameters = methodInfo.GetParameters();
             var methodArgs = null as object[];
@@ -68,7 +65,7 @@ namespace Markup.Programming.Core
             }
             else
             {
-                if (parameters.Length != args.Length) engine.Throw("argument count mismatch: {0} != {1}", parameters.Length, args.Length);
+                if (parameters.Length != args.Count()) engine.Throw("argument count mismatch: {0} != {1}", parameters.Length, args.Count());
                 methodArgs = ConvertArguments(parameters, args).ToArray();
             }
             bool trace = engine.ShouldTrace(TraceFlags.Call);
@@ -82,9 +79,9 @@ namespace Markup.Programming.Core
             return result;
         }
 
-        private static void TraceCall(string info, string methodName, object[] args, Engine engine)
+        private static void TraceCall(string info, string methodName, IEnumerable<object> args, Engine engine)
         {
-            var text = args.Length == 0 ? "" : args.Aggregate((current, next) => current + ", " + next);
+            var text = args.Count() == 0 ? "" : args.Aggregate((current, next) => current + ", " + next);
             engine.Trace(TraceFlags.Call, "Call {0}: {1}({2})", info, methodName, text);
         }
 
