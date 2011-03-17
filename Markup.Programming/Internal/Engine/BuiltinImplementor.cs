@@ -59,5 +59,15 @@ namespace Markup.Programming.Core
         {
             return engine.ParentResourceObject;
         }
+
+        public object Convert(object value, Type type)
+        {
+            return TypeHelper.Convert(value, type);
+        }
+
+        public object Op(Operator op, params object[] operands)
+        {
+            return engine.Evaluate(op, operands);
+        }
     }
 }

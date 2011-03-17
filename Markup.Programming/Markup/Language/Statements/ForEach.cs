@@ -24,7 +24,7 @@ namespace Markup.Programming
             var name = ParameterName;
             foreach (object item in value)
             {
-                engine.DefineParameter(name, TypeHelper.Convert(type, item));
+                engine.DefineParameter(name, TypeHelper.Convert(item, type));
                 Body.Execute(engine);
             }
         }

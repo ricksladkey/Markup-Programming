@@ -13,7 +13,9 @@ namespace Markup.Programming
     {
         ParameterIsDefined = 1,
         FunctionIsDefined,
-        GetResourceObject,
         Evaluate,
+        GetResourceObject,
+        Convert,
+        Op,
     }
 }

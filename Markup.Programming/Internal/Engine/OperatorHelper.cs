@@ -238,7 +238,7 @@ namespace Markup.Programming.Core
                 var methodInfo = type.GetMethod(operatorMap[op], new Type[] { type, type });
                 if (methodInfo != null)
                 {
-                    rhs = TypeHelper.Convert(type, rhs);
+                    rhs = TypeHelper.Convert(rhs, type);
                     return methodInfo.Invoke(null, new object[] { lhs, rhs });
                 }
             }
@@ -248,7 +248,7 @@ namespace Markup.Programming.Core
                 var methodInfo = typeof(OperatorHelper).GetMethod(op.ToString(), new Type[] { type, type });
                 if (methodInfo != null)
                 {
-                    rhs = TypeHelper.Convert(type, rhs);
+                    rhs = TypeHelper.Convert(rhs, type);
                     return methodInfo.Invoke(null, new object[] { lhs, rhs });
                 }
             }

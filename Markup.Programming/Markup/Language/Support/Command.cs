@@ -20,7 +20,7 @@ namespace Markup.Programming
             {
                 var engine = new Engine();
                 var rawResult = Parent.Interop(this, "CanExecute", new object[] { parameter }, engine);
-                var result = (bool)TypeHelper.Convert(typeof(bool), rawResult);
+                var result = (bool)TypeHelper.Convert(rawResult, typeof(bool));
                 return result;
             }
 

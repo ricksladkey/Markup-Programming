@@ -127,7 +127,7 @@ namespace Markup.Programming
             {
                 var value = property.Evaluate(engine);
                 var type = property.Type;
-                value = TypeHelper.Convert(type, value);
+                value = TypeHelper.Convert(value, type);
                 propertyStore.Add(property.PropertyName, value);
             }
             propertyInfo = Properties.Select(property => GetPair(property)).ToArray();

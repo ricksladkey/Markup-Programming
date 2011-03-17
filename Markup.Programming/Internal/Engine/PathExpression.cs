@@ -95,18 +95,18 @@ namespace Markup.Programming.Core
             {
                 return Call(engine, GetArguments(engine, null));
             }
-            protected object[] GetArguments(Engine engine, object[] args)
+            protected IEnumerable<object> GetArguments(Engine engine, IEnumerable<object> args)
             {
                 if (Arguments != null) return Arguments.Select(argument => argument.Evaluate(engine, Value.UnsetValue)).ToArray();
                 if (args == null) engine.Throw("missing arguments");
                 return args;
             }
-            public abstract object Call(Engine engine, object[] args);
+            public abstract object Call(Engine engine, IEnumerable<object> args);
         }
 
         private class MethodNode : CallNode
         {
-            public override object Call(Engine engine, object[] args)
+            public override object Call(Engine engine, IEnumerable<object> args)
             {
                 var context = Context.Evaluate(engine, Value.UnsetValue);
                 return CallHelper.CallMethod(Name, false, context.GetType(), context, GetArguments(engine, args), null, engine);
@@ -116,7 +116,7 @@ namespace Markup.Programming.Core
         private class StaticMethodNode : CallNode
         {
             public string TypeName { get; set; }
-            public override object Call(Engine engine, object[] args)
+            public override object Call(Engine engine, IEnumerable<object> args)
             {
                 return CallHelper.CallMethod(Name, true, engine.LookupType(TypeName), null, GetArguments(engine, args), null, engine);
             }
@@ -124,7 +124,7 @@ namespace Markup.Programming.Core
 
         private class FunctionNode : CallNode
         {
-            public override object Call(Engine engine, object[] args)
+            public override object Call(Engine engine, IEnumerable<object> args)
             {
                 return engine.CallFunction(Name, GetArguments(engine, args));
             }
@@ -153,7 +153,7 @@ namespace Markup.Programming.Core
             engine.Trace(TraceFlags.Path, "Path: {0}: {0}", Path, value.Equals(Value.UnsetValue) ? "Get" : "Set");
             return root.Evaluate(engine, value);
         }
-        public object Call(Engine engine, object[] args)
+        public object Call(Engine engine, IEnumerable<object> args)
         {
             engine.Trace(TraceFlags.Path, "Path: Call: {0}", Path);
             var call = root as CallNode;

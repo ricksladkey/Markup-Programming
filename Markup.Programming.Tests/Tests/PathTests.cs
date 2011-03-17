@@ -77,12 +77,24 @@ namespace Markup.Programming.Tests.Tests
             BasicGetTest(true, "1 == 1");
             BasicGetTest(true, "!@false");
             BasicGetTest("Left", "[Enum].GetValues([HorizontalAlignment])[0].ToString()");
+            BasicGetTest(false, "@Convert('fALSE', [Boolean])");
+            BasicGetTest(true, "@Convert('True', [Boolean])");
+            BasicGetTest(6, "@Op('Plus', 1, 2, 3)");
 
             BasicGetTest("Test1", "String1");
             BasicGetTest("Test2", "Object1.String1");
+            BasicGetTest(true, "@ParameterIsDefined('parameter1')");
             BasicGetTest("Value1", "$parameter1");
             BasicGetTest(256.0, "[System.Math].Pow(2, 8)");
             BasicSetTest((vm, p) => Assert.AreEqual(p["parameter1"], 42), "$parameter1", 42);
+        }
+
+        [TestMethod]
+        public void PathTestSandbox()
+        {
+            BasicGetTest(false, "@Convert('fALSE', [Boolean])");
+            BasicGetTest(true, "@Convert('True', [Boolean])");
+            BasicGetTest(6, "@Op('Plus', 1, 2, 3)");
         }
     }
 }

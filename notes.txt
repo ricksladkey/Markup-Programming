@@ -1,7 +1,4 @@
-- Add free type syntax in paths, e.g. [Enum].GetValues([HorizontalAlignment])
-- Add Convert builtin function
-- Add Operator builtin function
-- Add @BuiltinFunction to path syntax
+- revisit conversion, specifically we should not silently allow conversions to fail
 - add special call declaration mode for paths, e.g. foo(a,b) declares functions foo with params a and b
 - add recursive descent parser for operators
 - fix auto-evaluation of langauge elements

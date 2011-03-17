@@ -103,7 +103,7 @@ namespace Markup.Programming.Core
         {
 #if !SILVERLIGHT
             if (!Configuration.Silverlight)
-                value = TypeHelper.Convert(dependencyProperty.PropertyType, value);
+                value = TypeHelper.Convert(value, dependencyProperty.PropertyType);
 #endif
             context.SetValue(dependencyProperty, value);
         }
@@ -114,7 +114,7 @@ namespace Markup.Programming.Core
             var propertyInfo = context.GetType().GetProperty(propertyName);
             if (propertyInfo != null)
             {
-                value = TypeHelper.Convert(propertyInfo.PropertyType, value);
+                value = TypeHelper.Convert(value, propertyInfo.PropertyType);
                 propertyInfo.SetValue(context, value, null);
                 return value;
             }
@@ -126,7 +126,7 @@ namespace Markup.Programming.Core
                 {
                     if (descriptor.Name == propertyName)
                     {
-                        value = TypeHelper.Convert(descriptor.PropertyType, value);
+                        value = TypeHelper.Convert(value, descriptor.PropertyType);
                         descriptor.SetValue(context, value);
                         return value;
                     }
@@ -149,7 +149,7 @@ namespace Markup.Programming.Core
             var propertyInfo = type.GetProperty(propertyName, BindingFlags.Static | BindingFlags.Public | BindingFlags.FlattenHierarchy);
             if (propertyInfo != null)
             {
-                value = TypeHelper.Convert(propertyInfo.PropertyType, value);
+                value = TypeHelper.Convert(value, propertyInfo.PropertyType);
                 propertyInfo.SetValue(null, value, null);
                 return;
             }
@@ -161,7 +161,7 @@ namespace Markup.Programming.Core
             var fieldInfo = context.GetType().GetField(fieldName);
             if (fieldInfo != null)
             {
-                value = TypeHelper.Convert(fieldInfo.FieldType, value);
+                value = TypeHelper.Convert(value, fieldInfo.FieldType);
                 fieldInfo.SetValue(context, value);
                 return;
             }
@@ -173,7 +173,7 @@ namespace Markup.Programming.Core
             var fieldInfo = type.GetField(fieldName, BindingFlags.Static | BindingFlags.Public | BindingFlags.FlattenHierarchy);
             if (fieldInfo != null)
             {
-                value = TypeHelper.Convert(fieldInfo.FieldType, value);
+                value = TypeHelper.Convert(value, fieldInfo.FieldType);
                 fieldInfo.SetValue(null, value);
                 return;
             }
@@ -223,7 +223,7 @@ namespace Markup.Programming.Core
             if (parameters.Length != rawArgs.Length)
                 engine.Throw("indexer count mismatch: {0} != {1}", parameters.Length, rawArgs.Length);
             var args = parameters.Zip(rawArgs,
-                (parameter, indexer) => TypeHelper.Convert(parameter.ParameterType, indexer)).ToArray();
+                (parameter, indexer) => TypeHelper.Convert(indexer, parameter.ParameterType)).ToArray();
             return methodInfo.Invoke(context, args);
         }
     }

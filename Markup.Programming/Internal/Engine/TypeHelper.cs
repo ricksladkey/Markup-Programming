@@ -23,15 +23,15 @@ namespace Markup.Programming.Core
 
         public static bool ConvertToBool(object value)
         {
-            return (bool)Convert(typeof(bool), value);
+            return (bool)Convert(value, typeof(bool));
         }
 
         public static Type ConvertToType(string value)
         {
-            return Convert(typeof(Type), value) as Type;
+            return Convert(value, typeof(Type)) as Type;
         }
 
-        public static object Convert(Type type, object value)
+        public static object Convert(object value, Type type)
         {
             if (type == typeof(Type) && value is string) return ParseTypeName(value as string);
             if (type != null && value != null && value.GetType() != type)

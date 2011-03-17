@@ -133,12 +133,12 @@ namespace Markup.Programming
 
         private void SetLoopValue(string name, object value, Type type, Engine engine)
         {
-            engine.DefineParameter(name, TypeHelper.Convert(type, value));
+            engine.DefineParameter(name, TypeHelper.Convert(value, type));
         }
 
         private object GetLoopValue(string name, Type type, Engine engine)
         {
-            return TypeHelper.Convert(type, engine.LookupParameter(name));
+            return TypeHelper.Convert(engine.LookupParameter(name), type);
         }
     }
 }

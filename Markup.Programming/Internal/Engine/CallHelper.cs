@@ -8,7 +8,7 @@ namespace Markup.Programming.Core
 {
     public static class CallHelper
     {
-        public static object Call(PathExpression pathExpression, string path, string staticMethodName, string methodName, string functionName, BuiltinFunction builtinFunction, Type type, ExpressionCollection typeArguments, object[] args, Engine engine)
+        public static object Call(PathExpression pathExpression, string path, string staticMethodName, string methodName, string functionName, BuiltinFunction builtinFunction, Type type, ExpressionCollection typeArguments, IEnumerable<object> args, Engine engine)
         {
             if (path != null)
                 return engine.CallPath(pathExpression, path, args);
@@ -24,7 +24,7 @@ namespace Markup.Programming.Core
             return engine.Throw("nothing to call");
         }
 
-        public static object CallMethod(string methodName, bool staticMethod, Type typeToCall, object callee, object[] args, Type[] typeArgs, Engine engine)
+        public static object CallMethod(string methodName, bool staticMethod, Type typeToCall, object callee, IEnumerable<object> args, Type[] typeArgs, Engine engine)
         {
             var bindingFlags = (staticMethod ? BindingFlags.Static : BindingFlags.Instance) |
                 BindingFlags.Public | BindingFlags.FlattenHierarchy;
@@ -49,7 +49,7 @@ namespace Markup.Programming.Core
                     if (methodInfo == null) engine.Throw("method overload not found: " + methodName);
                 }
             }
-            return CallHelper.CallMethod(methodName, methodInfo, callee, args, engine);
+            return CallHelper.CallMethod(methodName, methodInfo, callee, args.ToArray(), engine);
         }
 
         public static object CallMethod(string methodName, MethodInfo methodInfo, object callee, object[] args, Engine engine)
@@ -90,7 +90,7 @@ namespace Markup.Programming.Core
 
         private static IEnumerable<object> ConvertArguments(IEnumerable<ParameterInfo> parameters, IEnumerable<object> args)
         {
-            return parameters.Zip(args, (parameterInfo, arg) => TypeHelper.Convert(parameterInfo.ParameterType, arg));
+            return parameters.Zip(args, (parameterInfo, arg) => TypeHelper.Convert(arg, parameterInfo.ParameterType));
         }
 
         public static bool HasParamsParameter(ParameterInfo[] parameters)

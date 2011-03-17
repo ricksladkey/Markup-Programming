@@ -342,7 +342,7 @@ namespace Markup.Programming.Core
             return pathExpression.Compile(this, true, false, path).Evaluate(this, value);
         }
 
-        public object CallPath(PathExpression pathExpression, string path, object[] args)
+        public object CallPath(PathExpression pathExpression, string path, IEnumerable<object> args)
         {
             if (pathExpression == null) pathExpression = new PathExpression();
             return pathExpression.Compile(this, false, true, path).Call(this, args);
@@ -430,7 +430,7 @@ namespace Markup.Programming.Core
         public object Evaluate(DependencyProperty property, string path, PathExpression pathExpression, Type type)
         {
             var value = (path != null) ? GetPath(path, pathExpression) : Evaluate(property);
-            return TypeHelper.Convert(type, value);
+            return TypeHelper.Convert(value, type);
         }
 
         public Type EvaluateType(DependencyProperty property, string name)
@@ -460,6 +460,12 @@ namespace Markup.Programming.Core
         public object CallFunction(string name, IEnumerable<object> args)
         {
             Trace(TraceFlags.Call, "CallFunction: " + name);
+            if (name.StartsWith("@"))
+            {
+                var builtinFunction = default(BuiltinFunction);
+                if (!Enum.TryParse<BuiltinFunction>(name.Substring(1), out builtinFunction)) Throw("invalid builtin function: " + name);
+                return CallBuiltinFunction(builtinFunction, args);
+            }
             var function = LookupFunction(name);
             if (function.HasParamsParameter)
             {
@@ -481,7 +487,7 @@ namespace Markup.Programming.Core
                 DefineParameter(pair.Item1, pair.Item2);
         }
 
-        public object CallBuiltinFunction(BuiltinFunction builtinFunction, object[] args)
+        public object CallBuiltinFunction(BuiltinFunction builtinFunction, IEnumerable<object> args)
         {
             return CallHelper.CallMethod(builtinFunction.ToString(), false, typeof(BuiltinImplementor), BuiltinImplementor, args, null, this);
         }
