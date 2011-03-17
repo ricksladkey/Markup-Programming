@@ -1,3 +1,4 @@
+- support doubles in paths
 - refactor recursive descent parser for operators
 - consider removing Type completely
 - review how to handle For type
