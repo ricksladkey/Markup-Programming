@@ -20,7 +20,7 @@
     Height="300" Width="300">
     <UserControl.Resources>
 
-        <!-- add an the view model of our prototype: pure data and commands-->
+        <!-- add an the view model of our prototype: pure data and operations -->
         <!-- we have a Posts property that a a collection of three collections -->
         <!-- the first collection is initialized with disks -->
         <!-- we have another property called HoldingPost that stores a disk -->
