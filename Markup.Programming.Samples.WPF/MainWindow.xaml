@@ -16,7 +16,7 @@
         <p:MarkupObject x:Key="ViewModel">
             <p:Property PropertyName="Samples">
                 <p:Iterator>
-                    <p:ForEach VariableName="window" Value="{StaticResource Windows}">
+                    <p:ForEach Var="window" Value="{StaticResource Windows}">
                         <p:Yield>
                             <p:Object>
                                 <p:Property PropertyName="Name" Path="$window.ToString()"/>

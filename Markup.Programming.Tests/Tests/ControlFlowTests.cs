@@ -39,12 +39,12 @@ namespace Markup.Programming.Tests
                 {
                     Body =
                     {
-                        new Set { VariableName = "X", Value = 21 },
+                        new Set { Var = "x", Value = 21 },
                         new Return
                         {
                             Value = new Op
                             {
-                                Value1 = new Val { Path = "$X" },
+                                Value1 = new Val { Path = "$x" },
                                 Operator = Operator.Times,
                                 Value2 = 2,
                             }

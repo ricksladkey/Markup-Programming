@@ -93,7 +93,7 @@ namespace Markup.Programming
         protected override void OnExecute(Engine engine)
         {
             // Use the same name and type for the whole loop.
-            var name = VariableName;
+            var name = "$" + Var;
             var type = engine.EvaluateType(TypeProperty, TypeName);
             if (type == null && (UpperLimit != null || Increment != null)) type = typeof(int);
 

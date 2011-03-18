@@ -10,7 +10,7 @@
             <Button Content="Standard For">
                 <p:Attached.Operations>
                     <p:EventHandler Path="Click">
-                        <p:For VariableName="i" TypeName="Int32">
+                        <p:For Var="i" TypeName="Int32">
                             <p:For.Value>
                                 <p:Val Value="0"/>
                             </p:For.Value>
@@ -33,7 +33,7 @@
             <Button Content="Simplied For">
                 <p:Attached.Operations>
                     <p:EventHandler Path="Click">
-                        <p:For VariableName="i" Value="0" UpperLimit="3" Increment="1">
+                        <p:For Var="i" Value="0" UpperLimit="3" Increment="1">
                             <p:Call Path="[MessageBox].Show">
                                 <p:Call Path="[String].Format">
                                     <p:Val Value="i = {0}"/>

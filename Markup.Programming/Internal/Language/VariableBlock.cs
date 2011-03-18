@@ -8,6 +8,6 @@ namespace Markup.Programming.Core
 {
     public abstract class VariableBlock : ValueBlock
     {
-        public string VariableName { get; set; }
+        public string Var { get; set; }
     }
 }

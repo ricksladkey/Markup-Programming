@@ -125,18 +125,18 @@ namespace Markup.Programming.Core
             stack.RemoveAt(stack.Count - 1);
         }
 
-        public void With(IComponent caller, Action<Engine> statement)
+        public void With(IComponent caller, Action<Engine> action)
         {
             PushFrame(caller);
-            statement(this);
+            action(this);
             PopFrame();
         }
 
-        public void With(IComponent caller, IDictionary<string, object> dictionary, Action<Engine> statement)
+        public void With(IComponent caller, IDictionary<string, object> variables, Action<Engine> action)
         {
             PushFrame(caller);
-            foreach (var pair in dictionary) DefineVariable(pair.Key, pair.Value, false, true);
-            statement(this);
+            foreach (var pair in variables) DefineVariable(pair.Key, pair.Value, false, true);
+            action(this);
             PopFrame();
         }
 
@@ -148,10 +148,10 @@ namespace Markup.Programming.Core
             return result;
         }
 
-        public TResult With<TResult>(IComponent caller, IDictionary<string, object> dictionary, Func<Engine, TResult> func)
+        public TResult With<TResult>(IComponent caller, IDictionary<string, object> variables, Func<Engine, TResult> func)
         {
             PushFrame(caller);
-            foreach (var pair in dictionary) DefineVariable(pair.Key, pair.Value, false, true);
+            foreach (var pair in variables) DefineVariable(pair.Key, pair.Value, false, true);
             var result = func(this);
             PopFrame();
             return result;
@@ -486,7 +486,7 @@ namespace Markup.Programming.Core
             {
                 var m = function.Parameters.Count - 1;
                 DefineParameters(function.Parameters.Take(m), args.Take(m));
-                DefineVariable(function.Parameters[m].ParameterName, args.Skip(m).ToArray());
+                DefineParameter(function.Parameters[m], args.Skip(m).ToArray());
             }
             else
                 DefineParameters(function.Parameters, args);
@@ -498,8 +498,13 @@ namespace Markup.Programming.Core
 
         private void DefineParameters(IEnumerable<Parameter> parameters, IEnumerable<object> args)
         {
-            foreach (var pair in parameters.Zip(args, (parameter, argument) => Tuple.Create(parameter.ParameterName, argument)))
-                DefineVariable(pair.Item1, pair.Item2);
+            foreach (var pair in parameters.Zip(args, (parameter, argument) => Tuple.Create(parameter, argument)))
+                DefineParameter(pair.Item1, pair.Item2);
+        }
+
+        private void DefineParameter(Parameter parameter, object arg)
+        {
+            DefineVariable("$" + parameter.ParameterName, arg);
         }
 
         public object CallBuiltinFunction(BuiltinFunction builtinFunction, IEnumerable<object> args)

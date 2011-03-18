@@ -16,7 +16,7 @@ namespace Markup.Programming
             public bool CanExecute(object parameter)
             {
                 var engine = new Engine();
-                var rawResult = Parent.Interop(this, "CanExecute", new object[] { parameter }, engine);
+                var rawResult = Parent.Interop(this, "$CanExecute", new object[] { parameter }, engine);
                 var result = (bool)TypeHelper.Convert(rawResult, typeof(bool));
                 return result;
             }
@@ -31,7 +31,7 @@ namespace Markup.Programming
             public void Execute(object parameter)
             {
                 var engine = new Engine();
-                Parent.Interop(this, "Execute", new object[] { parameter }, engine);
+                Parent.Interop(this, "$Execute", new object[] { parameter }, engine);
             }
         }
 

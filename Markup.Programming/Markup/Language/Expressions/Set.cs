@@ -55,7 +55,7 @@ namespace Markup.Programming
         private PathExpression targetPathExpression = new PathExpression();
         protected PathExpression TargetPathExpression { get { return targetPathExpression; } }
 
-        public string VariableName { get; set; }
+        public string Var { get; set; }
 
         public string PropertyName { get; set; }
 
@@ -80,14 +80,15 @@ namespace Markup.Programming
         protected override object OnEvaluate(Engine engine)
         {
             var value = engine.Evaluate(ValueProperty, ValuePath, ValuePathExpression);
-            if (VariableName != null)
+            if (Var != null)
             {
+                var variable = "$" + Var;
                 if (Operator != AssignmentOperator.Assign)
                 {
-                    var oldValue = engine.LookupVariable(VariableName);
+                    var oldValue = engine.LookupVariable(variable);
                     value = engine.Evaluate(Operator, oldValue, value);
                 }
-                engine.DefineVariableInParentScope(VariableName, value);
+                engine.DefineVariableInParentScope(variable, value);
                 return value;
             }
             if (IsBareTarget)

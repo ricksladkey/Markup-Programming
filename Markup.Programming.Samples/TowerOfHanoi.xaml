@@ -30,7 +30,7 @@
             <p:Property PropertyName="Posts">
                 <p:Collection>
                     <p:Iterator>
-                        <p:For VariableName="i" Value="0" UpperLimit="4" Increment="1">
+                        <p:For Var="i" Value="0" UpperLimit="4" Increment="1">
                             <p:Yield Path="$i + 1"/>
                         </p:For>
                     </p:Iterator>
@@ -45,7 +45,7 @@
             <p:Property PropertyName="SelectCommand">
 
                 <!-- create a command that only processes data, i.e. operates on the view model -->
-                <!-- the command, like many commands, takes a parameter, the selected post -->
+                <!-- the command, like many commands, takes an argument, the selected post -->
                 <!-- the post is *not* a UI object, which is an ItemsControl, but an item in the -->
                 <!-- view model's Posts property, which itself is a collection of three items -->
                 <!-- in true MVVM fashion, the command knows nothing at all about the view -->

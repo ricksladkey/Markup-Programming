@@ -21,7 +21,7 @@ namespace Markup.Programming
         {
             var type = engine.EvaluateType(TypeProperty, TypeName);
             var value = engine.Evaluate(ValueProperty, Path, PathExpression) as IEnumerable;
-            var name = VariableName;
+            var name = "$" + Var;
             foreach (object item in value)
             {
                 engine.DefineVariable(name, TypeHelper.Convert(item, type));

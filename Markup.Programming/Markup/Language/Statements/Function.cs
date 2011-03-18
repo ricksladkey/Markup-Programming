@@ -43,7 +43,7 @@ namespace Markup.Programming
 
         protected override void OnExecute(Engine engine)
         {
-            engine.DefineFunction(FunctionName, this);
+            engine.DefineFunction("$" + FunctionName, this);
         }
     }
 }

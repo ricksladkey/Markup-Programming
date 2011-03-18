@@ -229,7 +229,13 @@ namespace Markup.Programming.Core
                 }
                 if (!nodeNext) return node;
                 if (char.IsDigit(c))
-                    node = new ValueNode { Value = int.Parse(tokens.Dequeue()) };
+                {
+                    tokens.Dequeue();
+                    var result = null as object;
+                    if (token.Contains('.')) { double d; if (!double.TryParse(token, out d)) engine.Throw("bad double: " + token); result = d; }
+                    else { int i; if (!int.TryParse(token, out i)) engine.Throw("bad int: " + token); result = i; }
+                    node = new ValueNode { Value = result };
+                }
                 else if (c == '"')
                     node = new ValueNode { Value = tokens.Dequeue().Substring(1) };
                 else if (IsIdChar(c))
@@ -243,16 +249,16 @@ namespace Markup.Programming.Core
                     else
                         node = new PropertyNode { IsSet = IsCurrentSet, Context = node, Name = token };
                 }
-                else if (c == '$')
+                else if (c == '$' || c == '@')
                 {
-                    var name = tokens.Dequeue().Substring(1);
+                    tokens.Dequeue();
                     if (IsCurrentCall)
                     {
                         var args = tokens.Peek() == "(" ? ParseArguments() : null;
-                        node = new FunctionNode { Context = node, Name = name, Arguments = args };
+                        node = new FunctionNode { Context = node, Name = token, Arguments = args };
                     }
                     else
-                        node = new VariableNode { IsSet = IsCurrentSet, VariableName = name };
+                        node = new VariableNode { IsSet = IsCurrentSet, VariableName = token };
                 }
                 else if (c == '[')
                 {
@@ -269,7 +275,7 @@ namespace Markup.Programming.Core
                     }
                     else if (tokens.Peek() == "(")
                     {
-                        var operands = new PathNode[] {  new TypeValueNode { TypeName = typeName } };
+                        var operands = new PathNode[] { new TypeValueNode { TypeName = typeName } };
                         node = new OpNode { Operator = Operator.New, Operands = operands.Concat(ParseArguments()).ToList() };
                     }
                     else
@@ -351,12 +357,13 @@ namespace Markup.Programming.Core
                 if (char.IsDigit(c))
                 {
                     var start = i;
-                    for (++i; i < Path.Length && char.IsDigit(Path[i]); i++) continue;
+                    for (++i; i < Path.Length && (char.IsDigit(Path[i]) || Path[i] == '.'); i++) continue;
                     tokens.Enqueue(Path.Substring(start, i - start));
                     continue;
                 }
                 if (c == '$' || c == '@' || IsInitialIdChar(c))
                 {
+                    var start = i;
                     if (c == '$' || c == '@')
                     {
                         ++i;
@@ -366,10 +373,8 @@ namespace Markup.Programming.Core
                             if (c == '@') { tokens.Enqueue("@"); continue; }
                         }
                     }
-                    var start = i;
-                    var prefix = c == '$' ? "$" : (c == '@' ? "$@" : "");
                     for (++i; i < Path.Length && IsIdChar(Path[i]); ++i) continue;
-                    tokens.Enqueue(prefix + Path.Substring(start, i - start));
+                    tokens.Enqueue(Path.Substring(start, i - start));
                     continue;
                 }
                 engine.Throw("invalid token: " + Path.Substring(i));
@@ -383,7 +388,8 @@ namespace Markup.Programming.Core
 
         public static bool IsValidIdentifier(string identifier)
         {
-            return IsInitialIdChar(identifier.First()) && identifier.Skip(1).All(c => IsIdChar(c));
+            if (identifier.Length < 2 || identifier[0] != '$') return false;
+            return IsInitialIdChar(identifier[1]) && identifier.Skip(2).All(c => IsIdChar(c));
         }
 
         public static IDictionary<string, Operator> OperatorMap { get { return operatorMap; } }

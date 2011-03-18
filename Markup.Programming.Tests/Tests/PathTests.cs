@@ -16,46 +16,46 @@ namespace Markup.Programming.Tests.Tests
             public void Attach(DependencyObject dependencyObject) { throw new NotImplementedException(); }
             public void Detach() { throw new NotImplementedException(); }
             public DependencyObject AssociatedObject { get { return null; } }
-            public object Evaluate(IDictionary<string, object> parameters, string path)
+            public object Evaluate(IDictionary<string, object> variables, string path)
             {
-                return new Engine().With(this, parameters, engine => GetPath(parameters, path, engine));
+                return new Engine().With(this, variables, engine => GetPath(variables, path, engine));
             }
-            public object Evaluate(IDictionary<string, object> parameters, string path, object value)
+            public object Evaluate(IDictionary<string, object> variables, string path, object value)
             {
-                return new Engine().With(this, parameters, engine => SetPath(parameters, path, value, engine));
+                return new Engine().With(this, variables, engine => SetPath(variables, path, value, engine));
             }
-            private object GetPath(IDictionary<string, object> parameters, string path, Engine engine)
+            private object GetPath(IDictionary<string, object> variables, string path, Engine engine)
             {
                 var result = engine.GetPath(path, null);
-                foreach (var name in parameters.Keys) parameters[name] = engine.LookupVariable(name);
+                foreach (var name in variables.Keys) variables[name] = engine.LookupVariable(name);
                 return result;
             }
-            private object SetPath(IDictionary<string, object> parameters, string path, object value, Engine engine)
+            private object SetPath(IDictionary<string, object> variables, string path, object value, Engine engine)
             {
                 var result = engine.SetPath(path, null, value);
-                foreach (var name in parameters.Keys) parameters[name] = engine.LookupVariable(name);
+                foreach (var name in variables.Keys) variables[name] = engine.LookupVariable(name);
                 return result;
             }
         }
 
-        private void PathTest(object expectedValue, IDictionary<string, object> parameters, string path)
+        private void PathTest(object expectedValue, IDictionary<string, object> variables, string path)
         {
-            TestHelper.AreStructurallyEqual(expectedValue, new PathEvaluator().Evaluate(parameters, path));
+            TestHelper.AreStructurallyEqual(expectedValue, new PathEvaluator().Evaluate(variables, path));
         }
 
         private void BasicGetTest(object expectedValue, string path)
         {
-            PathTest(expectedValue, GetBasicParameters(), path);
+            PathTest(expectedValue, GetBasicVariables(), path);
         }
 
         private void BasicSetTest(Action<BasicViewModel, IDictionary<string, object>> action, string path, object value)
         {
-            var parameters = GetBasicParameters();
-            new PathEvaluator().Evaluate(parameters, path, value);
-            action(parameters[Engine.ContextKey] as BasicViewModel, parameters);
+            var variables = GetBasicVariables();
+            new PathEvaluator().Evaluate(variables, path, value);
+            action(variables[Engine.ContextKey] as BasicViewModel, variables);
         }
 
-        private IDictionary<string, object> GetBasicParameters()
+        private IDictionary<string, object> GetBasicVariables()
         {
             var viewModel = new BasicViewModel
             {
@@ -65,7 +65,7 @@ namespace Markup.Programming.Tests.Tests
             var names = new NameDictionary
             {
                 { Engine.ContextKey, viewModel },
-                { "parameter1", "Value1" },
+                { "$variable1", "Value1" },
             };
             return names;
         }
@@ -87,10 +87,10 @@ namespace Markup.Programming.Tests.Tests
 
             BasicGetTest("Test1", "String1");
             BasicGetTest("Test2", "Object1.String1");
-            BasicGetTest(true, "@ParameterIsDefined('parameter1')");
-            BasicGetTest("Value1", "$parameter1");
+            BasicGetTest(true, "@ParameterIsDefined('$variable1')");
+            BasicGetTest("Value1", "$variable1");
             BasicGetTest(256.0, "[System.Math].Pow(2, 8)");
-            BasicSetTest((vm, p) => Assert.AreEqual(p["parameter1"], 42), "$parameter1", 42);
+            BasicSetTest((vm, p) => Assert.AreEqual(p["$variable1"], 42), "$variable1", 42);
         }
 
         [TestMethod]
