@@ -24,7 +24,7 @@ namespace Markup.Programming
     /// - IsNull: true if the value is null
     /// - NotIsNull: true if the value is not null
     /// </summary>
-    public class Op : ArgumentsExpressionWithType
+    public class Operator : ArgumentsExpressionWithType
     {
         public object Value
         {
@@ -33,7 +33,7 @@ namespace Markup.Programming
         }
 
         public static readonly DependencyProperty ValueProperty =
-            DependencyProperty.Register("Value", typeof(object), typeof(Op), null);
+            DependencyProperty.Register("Value", typeof(object), typeof(Operator), null);
 
         public object Value1
         {
@@ -42,14 +42,14 @@ namespace Markup.Programming
         }
 
         public static readonly DependencyProperty Value1Property =
-            DependencyProperty.Register("Value1", typeof(object), typeof(Op), null);
+            DependencyProperty.Register("Value1", typeof(object), typeof(Operator), null);
 
         public string Path1 { get; set; }
 
         private PathExpression pathExpression1 = new PathExpression();
         protected PathExpression PathExpression1 { get { return pathExpression1; } }
 
-        public Operator Operator { get; set; }
+        public Op Op { get; set; }
 
         public object Value2
         {
@@ -58,7 +58,7 @@ namespace Markup.Programming
         }
 
         public static readonly DependencyProperty Value2Property =
-            DependencyProperty.Register("Value2", typeof(object), typeof(Op), null);
+            DependencyProperty.Register("Value2", typeof(object), typeof(Operator), null);
 
         public string Path2 { get; set; }
 
@@ -67,18 +67,18 @@ namespace Markup.Programming
 
         protected override object OnEvaluate(Engine engine)
         {
-            if (Operator == 0) engine.Throw("missing operator");
+            if (Op == default(Op)) engine.Throw("missing operator");
             var type = engine.EvaluateType(TypeProperty, TypeName);
             if (Arguments.Count == 0)
             {
-                var arity = Operator.GetArity();
+                var arity = Op.GetArity();
                 if (arity == 1)
-                    return engine.Evaluate(Operator, engine.Evaluate(ValueProperty, Path, PathExpression, type));
+                    return engine.Evaluate(Op, engine.Evaluate(ValueProperty, Path, PathExpression, type));
                 var value1 = engine.Evaluate(Value1Property, Path1, PathExpression1, type);
                 var value2 = engine.Evaluate(Value2Property, Path2, PathExpression2, type);
-                return engine.Evaluate(Operator, value1, value2);
+                return engine.Evaluate(Op, value1, value2);
             }
-            return engine.Evaluate(Operator, Arguments);
+            return engine.Evaluate(Op, Arguments);
         }
     }
 }

@@ -47,7 +47,7 @@ namespace Markup.Programming
                     {
                         var testValue = caseStatement.Evaluate(engine);
                         if (engine.ShouldInterrupt) return;
-                        foundMatch = (bool)engine.Evaluate(Operator.Equals, value, testValue);
+                        foundMatch = (bool)engine.Evaluate(Op.Equals, value, testValue);
                     }
                 }
                 else

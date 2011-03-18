@@ -65,7 +65,7 @@ namespace Markup.Programming.Core
             return TypeHelper.Convert(value, type);
         }
 
-        public object Op(Operator op, params object[] operands)
+        public object Op(Op op, params object[] operands)
         {
             return engine.Evaluate(op, operands);
         }

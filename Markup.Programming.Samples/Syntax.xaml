@@ -65,7 +65,7 @@
                     <p:Set Target="{Binding FirstName, Mode=TwoWay}" Value="Bill"/>
                     <p:Set Target="{Binding}" PropertyName="FirstName" Value="Bill"/>
                     <p:Set Path="$c" PropertyName="Count" Value="10"/>
-                    <p:Set Operator="Increment" Path="$c" PropertyName="Total"/>
+                    <p:Set Op="Increment" Path="$c" PropertyName="Total"/>
 
                     <!-- use item accessor for arrays, collections and dictionaries -->
                     <p:GetItem Path="$x" Index="0"/>
@@ -82,26 +82,26 @@
                     </p:Val>
 
                     <!-- use operators with optional conversions -->
-                    <p:Op Value1="abc" Operator="Plus" Value2="def"/>
-                    <p:Op Type="sys:Int32" Value1="2" Operator="Times" Value2="2"/>
-                    <p:Op Type="sys:Boolean" Operator="Not" Value="True"/>
+                    <p:Operator Value1="abc" Op="Plus" Value2="def"/>
+                    <p:Operator Type="sys:Int32" Value1="2" Op="Times" Value2="2"/>
+                    <p:Operator Type="sys:Boolean" Op="Not" Value="True"/>
                     
                     <!-- use binary operator with one or two parameters -->
-                    <p:Op Path1="$i" Operator="LessThan" Value2="10"/>
-                    <p:Op Path1="$i" Operator="LessThan" Path2="$j"/>
+                    <p:Operator Path1="$i" Op="LessThan" Value2="10"/>
+                    <p:Operator Path1="$i" Op="LessThan" Path2="$j"/>
                         
                     <!-- use operators in params mode -->
-                    <p:Op Operator="Plus">
+                    <p:Operator Op="Plus">
                         <p:Val Type="sys:Int32" Value="1"/>
                         <p:Val Type="sys:Int32" Value="2"/>
                         <p:Val Type="sys:Int32" Value="3"/>
-                    </p:Op>
+                    </p:Operator>
                     
                     <!-- use short-circuit operators to avoid crashes -->
-                    <p:Op Operator="AndAnd">
-                        <p:Op Operator="NotIsNull" Path="$p"/>
+                    <p:Operator Op="AndAnd">
+                        <p:Operator Op="NotIsNull" Path="$p"/>
                         <p:Get Path="$p" PropertyName="IsReady"/>
-                    </p:Op>
+                    </p:Operator>
 
                     <!-- create a dynamic object -->
                     <p:Object>
@@ -120,10 +120,10 @@
                     <p:Object Type="Button">
                         <p:Property PropertyName="Content" Value="{Binding Firstname}"/>
                         <p:Property PropertyName="Opacity">
-                            <p:Op Operator="Divide">
+                            <p:Operator Op="Divide">
                                 <p:Get Context="{Binding ElementName=Button}" PropertyName="Opacity"/>
                                 <p:Val Value="2"/>
-                            </p:Op>
+                            </p:Operator>
                         </p:Property>
                     </p:Object>
 

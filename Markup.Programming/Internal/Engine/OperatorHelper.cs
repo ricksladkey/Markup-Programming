@@ -13,25 +13,25 @@ namespace Markup.Programming.Core
     /// </summary>
     public static class OperatorHelper
     {
-        public static object Evaluate(Engine engine, Operator op, ExpressionOrValue[] expressions)
+        public static object Evaluate(Engine engine, Op op, ExpressionOrValue[] expressions)
         {
             // Get arity.
             var arity = GetArity(op);
             var n = expressions.Length;
 
             // Handler operators that require conditional evaluation.
-            if (op == Operator.AndAnd || op == Operator.OrOr)
+            if (op == Op.AndAnd || op == Op.OrOr)
             {
                 // Short-circuit evaluation.
                 foreach (var expression in expressions)
                 {
                     var value = TypeHelper.ConvertToBool(expression.Evaluate(engine));
-                    if (op == Operator.AndAnd && !value) return false;
-                    if (op == Operator.OrOr && value) return true;
+                    if (op == Op.AndAnd && !value) return false;
+                    if (op == Op.OrOr && value) return true;
                 }
-                return op == Operator.AndAnd;
+                return op == Op.AndAnd;
             }
-            if (op == Operator.Conditional)
+            if (op == Op.Conditional)
             {
                 if (n != 3) InvalidOperation(engine, op, n);
                 var condition = TypeHelper.ConvertToBool(expressions[0].Evaluate(engine));
@@ -44,19 +44,19 @@ namespace Markup.Programming.Core
             // Handle n-ary operators.
             switch (op)
             {
-                case Operator.Comma:
+                case Op.Comma:
                     return operands.LastOrDefault();
-                case Operator.Format:
+                case Op.Format:
                     return string.Format(operands[0] as string, operands.Skip(1).ToArray());
-                case Operator.GetProperty:
+                case Op.GetProperty:
                     return PathHelper.GetProperty(engine, operands[0], operands[1] as string);
-                case Operator.SetProperty:
+                case Op.SetProperty:
                     { PathHelper.SetProperty(engine, operands[0], operands[1] as string, operands[2]); return operands[2]; }
-                case Operator.GetItem:
+                case Op.GetItem:
                     return PathHelper.GetItem(engine, operands[0], operands.Skip(1).ToArray());
-                case Operator.SetItem:
+                case Op.SetItem:
                     return PathHelper.SetItem(engine, operands[0], operands.Skip(1).ToArray());
-                case Operator.New:
+                case Op.New:
                     return TypeHelper.CreateInstance(operands[0] as Type, operands.Skip(1).ToArray());
                 default:
                     break;
@@ -70,32 +70,32 @@ namespace Markup.Programming.Core
                 // Handle special unary operators.
                 switch (op)
                 {
-                    case Operator.ToString:
+                    case Op.ToString:
                         return operands[0].ToString();
-                    case Operator.IsNull:
+                    case Op.IsNull:
                         return operands[0] == null;
-                    case Operator.NotIsNull:
+                    case Op.NotIsNull:
                         return operands[0] != null;
-                    case Operator.IsZero:
-                        return Op(engine, Operator.Equals, operands[0], 0);
-                    case Operator.NotIsZero:
-                        return Op(engine, Operator.NotEquals, operands[0], 0);
-                    case Operator.GreaterThanZero:
-                        return Op(engine, Operator.GreaterThan, operands[0], 0);
-                    case Operator.GreaterThanOrEqualToZero:
-                        return Op(engine, Operator.GreaterThanOrEqual, operands[0], 0);
-                    case Operator.LessThanZero:
-                        return Op(engine, Operator.LessThan, operands[0], 0);
-                    case Operator.LessThanOrEqualToZero:
-                        return Op(engine, Operator.LessThanOrEqual, operands[0], 0);
-                    case Operator.ToArray:
+                    case Op.IsZero:
+                        return InvokeOperator(engine, Op.Equals, operands[0], 0);
+                    case Op.NotIsZero:
+                        return InvokeOperator(engine, Op.NotEquals, operands[0], 0);
+                    case Op.GreaterThanZero:
+                        return InvokeOperator(engine, Op.GreaterThan, operands[0], 0);
+                    case Op.GreaterThanOrEqualToZero:
+                        return InvokeOperator(engine, Op.GreaterThanOrEqual, operands[0], 0);
+                    case Op.LessThanZero:
+                        return InvokeOperator(engine, Op.LessThan, operands[0], 0);
+                    case Op.LessThanOrEqualToZero:
+                        return InvokeOperator(engine, Op.LessThanOrEqual, operands[0], 0);
+                    case Op.ToArray:
                         return TypeHelper.CreateArray(operands);
                     default:
                         break;
                 }
 
                 // Handle standard unary operators.
-                return Op(engine, op, operands[0]);
+                return InvokeOperator(engine, op, operands[0]);
             }
 
             // Handle binary operators.
@@ -107,22 +107,22 @@ namespace Markup.Programming.Core
             // Handle special binary operators.
             switch (op)
             {
-                case Operator.Is:
+                case Op.Is:
                     return Is(engine, operands[0], operands[1]);
-                case Operator.As:
+                case Op.As:
                     return Is(engine, operands[0], operands[1]) ? operands[0] : null;
-                case Operator.Equate:
+                case Op.Equate:
                     return operands[0].Equals(operands[1]);
-                case Operator.Compare:
+                case Op.Compare:
                     return (operands[0] as IComparable).CompareTo(operands[2]);
                 default:
                     break;
             }
 
             // Process binary operations associating from the left.
-            var result = Op(engine, op, operands[0], operands[1]);
+            var result = InvokeOperator(engine, op, operands[0], operands[1]);
             for (int i = 2; i < n; i++)
-                result = Op(engine, op, result, operands[i]);
+                result = InvokeOperator(engine, op, result, operands[i]);
             return result;
         }
 
@@ -133,69 +133,69 @@ namespace Markup.Programming.Core
             return (type as Type).IsAssignableFrom(instance.GetType());
         }
 
-        public static int GetArity(Operator op)
+        public static int GetArity(Op op)
         {
             switch (op)
             {
-                case Operator.Not:
-                case Operator.Negate:
-                case Operator.BitwiseNot:
-                case Operator.IsNull:
-                case Operator.NotIsNull:
-                case Operator.IsZero:
-                case Operator.NotIsZero:
-                case Operator.ToString:
-                case Operator.ToArray:
+                case Op.Not:
+                case Op.Negate:
+                case Op.BitwiseNot:
+                case Op.IsNull:
+                case Op.NotIsNull:
+                case Op.IsZero:
+                case Op.NotIsZero:
+                case Op.ToString:
+                case Op.ToArray:
                     return 1;
-                case Operator.Format:
-                case Operator.GetItem:
-                case Operator.SetItem:
-                case Operator.New:
+                case Op.Format:
+                case Op.GetItem:
+                case Op.SetItem:
+                case Op.New:
                     return 0;
                 default:
                     return 2;
             }
         }
 
-        private static bool IsTypeTransitive(Operator op)
+        private static bool IsTypeTransitive(Op op)
         {
             switch (op)
             {
-                case Operator.Plus:
-                case Operator.Minus:
-                case Operator.Times:
-                case Operator.Mod:
-                case Operator.Divide:
-                case Operator.AndAnd:
-                case Operator.OrOr:
-                case Operator.And:
-                case Operator.Or:
-                case Operator.BitwiseAnd:
-                case Operator.BitwiseOr:
-                case Operator.BitwiseXor:
-                case Operator.LeftShift:
-                case Operator.RightShift:
-                case Operator.GetProperty:
+                case Op.Plus:
+                case Op.Minus:
+                case Op.Times:
+                case Op.Mod:
+                case Op.Divide:
+                case Op.AndAnd:
+                case Op.OrOr:
+                case Op.And:
+                case Op.Or:
+                case Op.BitwiseAnd:
+                case Op.BitwiseOr:
+                case Op.BitwiseXor:
+                case Op.LeftShift:
+                case Op.RightShift:
+                case Op.GetProperty:
                     return true;
             }
             return false;
         }
 
-        private static object Op(Engine engine, Operator op, object operand)
+        private static object InvokeOperator(Engine engine, Op op, object operand)
         {
-            var result = InvokeOperator(engine, op, operand);
+            var result = InvokeOperatorInternal(engine, op, operand);
             engine.Trace(TraceFlags.Operator, "Evaluate: {0} {1} => {2}", operand, op, result);
             return result;
         }
 
-        private static object Op(Engine engine, Operator op, object lhs, object rhs)
+        private static object InvokeOperator(Engine engine, Op op, object lhs, object rhs)
         {
-            var result = InvokeOperator(engine, op, lhs, rhs);
+            var result = InvokeOperatorInternal(engine, op, lhs, rhs);
             engine.Trace(TraceFlags.Operator, "Evaluate: {0} {1} {2} => {3}", lhs, op, rhs, result);
             return result;
         }
 
-        private static object InvokeOperator(Engine engine, Operator op, object operand)
+        private static object InvokeOperatorInternal(Engine engine, Op op, object operand)
         {
             if (operand == null) engine.Throw("operand");
             var type = operand.GetType();
@@ -220,7 +220,7 @@ namespace Markup.Programming.Core
             return engine.Throw("no such operator: {0}({1})", op, type);
         }
 
-        private static object InvokeOperator(Engine engine, Operator op, object lhs, object rhs)
+        private static object InvokeOperatorInternal(Engine engine, Op op, object lhs, object rhs)
         {
             if (lhs == null) engine.Throw("lhs");
             if (rhs == null) engine.Throw("rhs");
@@ -248,31 +248,31 @@ namespace Markup.Programming.Core
             }
 
             // Special case for equals.
-            if (op == Operator.Equals && TypeHelper.IsClassObject(lhs))
+            if (op == Op.Equals && TypeHelper.IsClassObject(lhs))
                 return lhs.Equals(rhs);
 
             return engine.Throw("no such operator: {0}({1}, {2})", op, type, type);
         }
 
-        private static void InvalidOperation(Engine engine, Operator op, int n)
+        private static void InvalidOperation(Engine engine, Op op, int n)
         {
             engine.Throw("invalid operator: {0}, operand count: {1}", op, n);
         }
 
-        private static Dictionary<Operator, string> operatorMap = new Dictionary<Operator, string>
+        private static Dictionary<Op, string> operatorMap = new Dictionary<Op, string>
         {
-            { Operator.Plus, "op_Addition" },
-            { Operator.Minus, "op_Subtraction" },
-            { Operator.Times, "op_Multiplication" },
-            { Operator.Mod, "op_Modulus" },
-            { Operator.Divide, "op_Division" },
-            { Operator.Equals, "op_Equality" },
-            { Operator.NotEquals, "op_Inequality" },
-            { Operator.LessThan, "op_LessThan" },
-            { Operator.LessThanOrEqual, "op_LessThanOrEqual" },
-            { Operator.GreaterThan, "op_GreaterThan" },
-            { Operator.GreaterThanOrEqual, "op_GreaterThanOrEqual" },
-            { Operator.Negate, "op_UnaryNegation" },
+            { Op.Plus, "op_Addition" },
+            { Op.Minus, "op_Subtraction" },
+            { Op.Times, "op_Multiplication" },
+            { Op.Mod, "op_Modulus" },
+            { Op.Divide, "op_Division" },
+            { Op.Equals, "op_Equality" },
+            { Op.NotEquals, "op_Inequality" },
+            { Op.LessThan, "op_LessThan" },
+            { Op.LessThanOrEqual, "op_LessThanOrEqual" },
+            { Op.GreaterThan, "op_GreaterThan" },
+            { Op.GreaterThanOrEqual, "op_GreaterThanOrEqual" },
+            { Op.Negate, "op_UnaryNegation" },
         };
 
         public static double Plus(double lhs, double rhs) { return lhs + rhs; }

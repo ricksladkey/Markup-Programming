@@ -175,7 +175,7 @@
     <Compile Include="Markup\Language\Support\Command.cs" />
     <Compile Include="Markup\Language\Expressions\GetItem.cs" />
     <Compile Include="Markup\Language\Expressions\Iterator.cs" />
-    <Compile Include="Markup\Language\Enumerations\Operator.cs" />
+    <Compile Include="Markup\Language\Enumerations\Op.cs" />
     <Compile Include="Markup\Language\Expressions\Get.cs" />
     <Compile Include="Markup\Language\Expressions\SetItem.cs" />
     <Compile Include="Markup\Language\Statements\Switch.cs" />
@@ -198,7 +198,7 @@
     <Compile Include="Internal\Collections\ExpressionCollection.cs" />
     <Compile Include="Markup\Language\Statements\Module.cs" />
     <Compile Include="Markup\Language\Expressions\New.cs" />
-    <Compile Include="Markup\Language\Expressions\Op.cs" />
+    <Compile Include="Markup\Language\Expressions\Operator.cs" />
     <Compile Include="Internal\Language\ExpressionBase.cs" />
     <Compile Include="Markup\Resources\MarkupCommand.cs" />
     <Compile Include="Internal\Collections\PropertyCollection.cs" />

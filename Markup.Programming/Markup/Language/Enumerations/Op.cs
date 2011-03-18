@@ -10,7 +10,7 @@ namespace Markup.Programming
     /// An Operator represents the corresponding C# operator
     /// or method.
     /// </summary>
-    public enum Operator
+    public enum Op
     {
         Plus = 1,
         Minus,
@@ -71,7 +71,7 @@ namespace Markup.Programming
     /// </summary>
     public static class OperatorExtensions
     {
-        public static int GetArity(this Operator op)
+        public static int GetArity(this Op op)
         {
             return OperatorHelper.GetArity(op);
         }

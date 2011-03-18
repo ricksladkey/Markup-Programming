@@ -58,21 +58,20 @@ namespace Markup.Programming.Core
 
         private class TypeValueNode : PathNode
         {
-            public string TypeName { get; set; }
-            protected override object OnEvaluate(Engine engine, object value) { return engine.LookupType(TypeName); }
-            protected override void AddTokens() { Add("[", TypeName, "]"); }
+            protected override object OnEvaluate(Engine engine, object value) { return engine.LookupType(Name); }
+            protected override void AddTokens() { Add("[", Name, "]"); }
         }
 
         private class OpNode : PathNode
         {
             public OpNode() { Operands = new List<PathNode>(); }
-            public Operator Operator { get; set; }
+            public Op Op { get; set; }
             public IList<PathNode> Operands { get; set; }
             protected override object OnEvaluate(Engine engine, object value)
             {
-                return engine.Evaluate(Operator, Operands.Select(operand => operand.Evaluate(engine, value)).ToArray());
+                return engine.Evaluate(Op, Operands.Select(operand => operand.Evaluate(engine, value)).ToArray());
             }
-            protected override void AddTokens() { Add(Operator, "("); Add(Operands.ToArray()); Add(")"); }
+            protected override void AddTokens() { Add(Op, "("); Add(Operands.ToArray()); Add(")"); }
         }
 
         private class ContextNode : PathNode
@@ -82,11 +81,10 @@ namespace Markup.Programming.Core
 
         private class VariableNode : PathNode
         {
-            public string VariableName { get; set; }
             protected override object OnEvaluate(Engine engine, object value)
             {
-                if (!IsSet) return engine.LookupVariable(VariableName);
-                return engine.DefineVariableInParentScope(VariableName, value);
+                if (!IsSet) return engine.LookupVariable(Name);
+                return engine.DefineVariableInParentScope(Name, value);
             }
         }
 
@@ -214,9 +212,9 @@ namespace Markup.Programming.Core
                     nodeNext = true;
                     tokens.Dequeue();
                     if (unary)
-                        node = new OpNode { Operator = op, Operands = { Parse() } };
+                        node = new OpNode { Op = op, Operands = { Parse() } };
                     else
-                        node = new OpNode { Operator = op, Operands = { node, Parse() } };
+                        node = new OpNode { Op = op, Operands = { node, Parse() } };
                     continue;
                 }
                 var c = token[0];
@@ -258,7 +256,7 @@ namespace Markup.Programming.Core
                         node = new FunctionNode { Context = node, Name = token, Arguments = args };
                     }
                     else
-                        node = new VariableNode { IsSet = IsCurrentSet, VariableName = token };
+                        node = new VariableNode { IsSet = IsCurrentSet, Name = token };
                 }
                 else if (c == '[')
                 {
@@ -275,11 +273,11 @@ namespace Markup.Programming.Core
                     }
                     else if (tokens.Peek() == "(")
                     {
-                        var operands = new PathNode[] { new TypeValueNode { TypeName = typeName } };
-                        node = new OpNode { Operator = Operator.New, Operands = operands.Concat(ParseArguments()).ToList() };
+                        var operands = new PathNode[] { new TypeValueNode { Name = typeName } };
+                        node = new OpNode { Op = Op.New, Operands = operands.Concat(ParseArguments()).ToList() };
                     }
                     else
-                        node = new TypeValueNode { TypeName = typeName };
+                        node = new TypeValueNode { Name = typeName };
                 }
                 else if (c == '(')
                 {
@@ -392,24 +390,24 @@ namespace Markup.Programming.Core
             return IsInitialIdChar(identifier[1]) && identifier.Skip(2).All(c => IsIdChar(c));
         }
 
-        public static IDictionary<string, Operator> OperatorMap { get { return operatorMap; } }
-        private static Dictionary<string, Operator> operatorMap = new Dictionary<string, Operator>
+        public static IDictionary<string, Op> OperatorMap { get { return operatorMap; } }
+        private static Dictionary<string, Op> operatorMap = new Dictionary<string, Op>
         {
-            { "+", Operator.Plus },
-            { "-", Operator.Minus },
-            { "*", Operator.Times },
-            { "/", Operator.Divide },
-            { "&&", Operator.AndAnd },
-            { "||", Operator.OrOr },
-            { "&", Operator.And },
-            { "|", Operator.Or },
-            { "!", Operator.Not },
-            { "==", Operator.Equals },
-            { "!=", Operator.NotEquals },
-            { "<", Operator.LessThan },
-            { "<=", Operator.LessThanOrEqual },
-            { ">", Operator.GreaterThan },
-            { ">=", Operator.GreaterThanOrEqual },
+            { "+", Op.Plus },
+            { "-", Op.Minus },
+            { "*", Op.Times },
+            { "/", Op.Divide },
+            { "&&", Op.AndAnd },
+            { "||", Op.OrOr },
+            { "&", Op.And },
+            { "|", Op.Or },
+            { "!", Op.Not },
+            { "==", Op.Equals },
+            { "!=", Op.NotEquals },
+            { "<", Op.LessThan },
+            { "<=", Op.LessThanOrEqual },
+            { ">", Op.GreaterThan },
+            { ">=", Op.GreaterThanOrEqual },
         };
 
 #if DEBUG

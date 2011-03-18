@@ -67,7 +67,7 @@ namespace Markup.Programming
 
         public string StaticFieldName { get; set; }
 
-        public AssignmentOperator Operator { get; set; }
+        public AssignmentOperator Op { get; set; }
 
         public string ValuePath { get; set; }
 
@@ -83,10 +83,10 @@ namespace Markup.Programming
             if (Var != null)
             {
                 var variable = "$" + Var;
-                if (Operator != AssignmentOperator.Assign)
+                if (Op != AssignmentOperator.Assign)
                 {
                     var oldValue = engine.LookupVariable(variable);
-                    value = engine.Evaluate(Operator, oldValue, value);
+                    value = engine.Evaluate(Op, oldValue, value);
                 }
                 engine.DefineVariableInParentScope(variable, value);
                 return value;
@@ -94,13 +94,13 @@ namespace Markup.Programming
             if (IsBareTarget)
             {
                 var target = engine.Evaluate(TargetProperty, TargetPath, TargetPathExpression);
-                target = engine.Evaluate(Operator, target, value);
+                target = engine.Evaluate(Op, target, value);
                 Target = value;
                 return value;
             }
             var context = engine.Context;
             var type = engine.EvaluateType(TypeProperty, TypeName);
-            if (Operator != AssignmentOperator.Assign)
+            if (Op != AssignmentOperator.Assign)
             {
                 object oldValue = null;
                 if (DependencyProperty != null)
@@ -117,7 +117,7 @@ namespace Markup.Programming
                     oldValue = engine.GetPath(Path, PathExpression);
                 else
                     oldValue = context;
-                value = engine.Evaluate(Operator, oldValue, value);
+                value = engine.Evaluate(Op, oldValue, value);
             }
             if (DependencyProperty != null)
                 PathHelper.SetDependencyProperty(engine, context as DependencyObject, DependencyProperty, value);

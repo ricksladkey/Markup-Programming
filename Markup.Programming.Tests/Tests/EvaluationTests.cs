@@ -26,16 +26,16 @@ namespace Markup.Programming.Tests
         [TestMethod]
         public void IsTest()
         {
-            TestHelper.ExpressionTest(true, new Op { Value1 = 1, Operator = Operator.Is, Value2 = typeof(int) });
-            TestHelper.ExpressionTest(false, new Op { Value1 = 1.0, Operator = Operator.Is, Value2 = typeof(int) });
-            TestHelper.ExpressionTest(true, new Op { Value1 = new Dog(), Operator = Operator.Is, Value2 = typeof(Animal) });
-            TestHelper.ExpressionTest(false, new Op { Value1 = new Animal(), Operator = Operator.Is, Value2 = typeof(Dog) });
+            TestHelper.ExpressionTest(true, new Operator { Value1 = 1, Op = Op.Is, Value2 = typeof(int) });
+            TestHelper.ExpressionTest(false, new Operator { Value1 = 1.0, Op = Op.Is, Value2 = typeof(int) });
+            TestHelper.ExpressionTest(true, new Operator { Value1 = new Dog(), Op = Op.Is, Value2 = typeof(Animal) });
+            TestHelper.ExpressionTest(false, new Operator { Value1 = new Animal(), Op = Op.Is, Value2 = typeof(Dog) });
         }
 
         [TestMethod]
         public void ExpressionTests()
         {
-            TestHelper.ExpressionTest(3, new Op { Operator = Operator.Plus,
+            TestHelper.ExpressionTest(3, new Operator { Op = Op.Plus,
                 Arguments = { new Val { Value = 1 }, new Val { Value = 2 } } });
         }
 

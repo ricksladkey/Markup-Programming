@@ -53,7 +53,7 @@
 
                     <!-- CanExecute always says "OK" -->
                     <p:Function Func="CanExecute()">
-                        <p:Return Value="True"/>
+                        <p:Return Path="@true"/>
                     </p:Function>
                     
                     <p:Function Func="Execute(parameter)">
@@ -84,10 +84,10 @@
                             </p:If.Then>
                             <p:If.Else>
                                 <p:When>
-                                    <p:Op Operator="OrOr">
+                                    <p:Operator Op="OrOr">
                                         <p:Get Path="SelectedPost.Count == 0"/>
                                         <p:Get Path="HoldingPost[0] &lt; SelectedPost[0]"/>
-                                    </p:Op>
+                                    </p:Operator>
                                     <p:Call Path="$MoveItem(HoldingPost, SelectedPost)"/>
                                 </p:When>
                             </p:If.Else>

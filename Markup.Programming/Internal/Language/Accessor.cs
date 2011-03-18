@@ -42,7 +42,7 @@ namespace Markup.Programming.Core
 
         private object Evaluate(bool isSet, Engine engine, object value)
         {
-            var op = isSet ? Operator.SetItem : Operator.GetItem;
+            var op = isSet ? Op.SetItem : Op.GetItem;
             var context = engine.GetContext(Path, PathExpression);
             if (Arguments.Count != 0)
             {

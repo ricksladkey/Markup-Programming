@@ -42,10 +42,10 @@ namespace Markup.Programming.Tests
                         new Set { Var = "x", Value = 21 },
                         new Return
                         {
-                            Value = new Op
+                            Value = new Operator
                             {
                                 Value1 = new Val { Path = "$x" },
-                                Operator = Operator.Times,
+                                Op = Op.Times,
                                 Value2 = 2,
                             }
                         }

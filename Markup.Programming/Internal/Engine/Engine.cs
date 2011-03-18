@@ -385,22 +385,22 @@ namespace Markup.Programming.Core
             return ThrowHelper.Throw(new InvalidOperationException(string.Format(message, args)), this);
         }
 
-        public object Evaluate(Operator op, params object[] values)
+        public object Evaluate(Op op, params object[] values)
         {
             return OperatorHelper.Evaluate(this, op, ExpressionOrValue.ValueArray(values));
         }
 
-        public object Evaluate(Operator op, IEnumerable<IExpression> collection)
+        public object Evaluate(Op op, IEnumerable<IExpression> collection)
         {
             return OperatorHelper.Evaluate(this, op, ExpressionOrValue.ExpressionArray(collection));
         }
 
-        public object Evaluate(Operator op, ExpressionOrValue[] expressions)
+        public object Evaluate(Op op, ExpressionOrValue[] expressions)
         {
             return OperatorHelper.Evaluate(this, op, expressions);
         }
 
-        public object Evaluate(Operator op, ExpressionCollection collection)
+        public object Evaluate(Op op, ExpressionCollection collection)
         {
             return OperatorHelper.Evaluate(this, op, ExpressionOrValue.ExpressionArray(collection));
         }
@@ -412,14 +412,14 @@ namespace Markup.Programming.Core
                 case AssignmentOperator.Assign:
                     return rhs;
                 case AssignmentOperator.Increment:
-                    return Evaluate(Operator.Plus, lhs, 1);
+                    return Evaluate(Op.Plus, lhs, 1);
                 case AssignmentOperator.Decrement:
-                    return Evaluate(Operator.Minus, lhs, 1);
+                    return Evaluate(Op.Minus, lhs, 1);
                 default:
                     break;
             }
 
-            return Evaluate((Operator)op, lhs, rhs);
+            return Evaluate((Op)op, lhs, rhs);
         }
 
         public object EvaluateObject(object value)

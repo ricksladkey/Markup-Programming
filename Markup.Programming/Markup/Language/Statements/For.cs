@@ -118,7 +118,7 @@ namespace Markup.Programming
                 else if (UpperLimit != null)
                 {
                     var limit = engine.Evaluate(UpperLimitProperty, UpperLimitPath, UpperLimitPathExpression, type);
-                    if (!(bool)engine.Evaluate(Operator.LessThan, GetLoopValue(name, type, engine), limit)) break;
+                    if (!(bool)engine.Evaluate(Op.LessThan, GetLoopValue(name, type, engine), limit)) break;
                 }
                 Body.Execute(engine);
                 if (Next.Count != 0)
@@ -126,7 +126,7 @@ namespace Markup.Programming
                 else if (Increment != null)
                 {
                     var increment = engine.Evaluate(IncrementProperty, IncrementPath, IncrementPathExpression, type);
-                    SetLoopValue(name, engine.Evaluate(Operator.Plus, GetLoopValue(name, type, engine), increment), type, engine);
+                    SetLoopValue(name, engine.Evaluate(Op.Plus, GetLoopValue(name, type, engine), increment), type, engine);
                 }
             }
         }
