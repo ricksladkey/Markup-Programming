@@ -33,7 +33,7 @@ namespace Markup.Programming
         private PathExpression sourcePathExpression = new PathExpression();
         protected PathExpression SourcePathExpression { get { return sourcePathExpression; } }
 
-        public string ParameterName { get; set; }
+        public string VariableName { get; set; }
 
         public string PropertyName { get; set; }
 
@@ -53,7 +53,7 @@ namespace Markup.Programming
 
         protected override object OnEvaluate(Engine engine)
         {
-            if (ParameterName != null) return engine.LookupParameter(ParameterName);
+            if (VariableName != null) return engine.LookupVariable(VariableName);
             var context = engine.GetContext(Path, PathExpression);
             var type = engine.EvaluateType(TypeProperty, TypeName);
             if (PropertyName != null)

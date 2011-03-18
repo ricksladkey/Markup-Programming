@@ -6,8 +6,8 @@ using System.Windows;
 
 namespace Markup.Programming.Core
 {
-    public abstract class ParameterBlock : ValueBlock
+    public abstract class VariableBlock : ValueBlock
     {
-        public string ParameterName { get; set; }
+        public string VariableName { get; set; }
     }
 }

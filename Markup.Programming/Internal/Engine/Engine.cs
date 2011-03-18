@@ -14,7 +14,7 @@ namespace Markup.Programming.Core
         Console = 0x1,
         Stack = 0x2,
         Operator = 0x4,
-        Parameter = 0x8,
+        Variable = 0x8,
         Call = 0x10,
         Path = 0x20,
         Events = 0x40,
@@ -66,15 +66,15 @@ namespace Markup.Programming.Core
         }
 
         public Engine(object parameter)
-            : this(null, parameter as EventArgs)
+            : this(null, parameter)
         {
         }
 
-        public Engine(object sender, object e)
+        public Engine(object sender, object eventArgs)
         {
             id = nextId++;
             Sender = sender;
-            EventArgs = e;
+            EventArgs = eventArgs;
         }
 
         public object Sender { get; private set; }
@@ -101,13 +101,13 @@ namespace Markup.Programming.Core
             {
                 if (CurrentFrame.Caller is ResourceObject)
                 {
-                    DefineParameter(ContextKey, CurrentFrame.Caller, false, true);
+                    DefineVariable(ContextKey, CurrentFrame.Caller, false, true);
                     return;
                 }
                 var context = CurrentFrame.Caller.AssociatedObject;
                 if (context is FrameworkElement)
                 {
-                    DefineParameter(ContextKey, (context as FrameworkElement).DataContext, false, true);
+                    DefineVariable(ContextKey, (context as FrameworkElement).DataContext, false, true);
                     return;
                 }
             }
@@ -135,7 +135,7 @@ namespace Markup.Programming.Core
         public void With(IComponent caller, IDictionary<string, object> dictionary, Action<Engine> statement)
         {
             PushFrame(caller);
-            foreach (var pair in dictionary) DefineParameter(pair.Key, pair.Value, false, true);
+            foreach (var pair in dictionary) DefineVariable(pair.Key, pair.Value, false, true);
             statement(this);
             PopFrame();
         }
@@ -151,7 +151,7 @@ namespace Markup.Programming.Core
         public TResult With<TResult>(IComponent caller, IDictionary<string, object> dictionary, Func<Engine, TResult> func)
         {
             PushFrame(caller);
-            foreach (var pair in dictionary) DefineParameter(pair.Key, pair.Value, false, true);
+            foreach (var pair in dictionary) DefineVariable(pair.Key, pair.Value, false, true);
             var result = func(this);
             PopFrame();
             return result;
@@ -219,26 +219,26 @@ namespace Markup.Programming.Core
             return CurrentFrame.YieldedValues;
         }
 
-        public void DefineParameter(string name, object value)
+        public void DefineVariable(string name, object value)
         {
-            Trace(TraceFlags.Parameter, "Define: {0} = {1}", name, value);
-            DefineParameter(name, value, false, false);
+            Trace(TraceFlags.Variable, "Define: {0} = {1}", name, value);
+            DefineVariable(name, value, false, false);
         }
 
-        public object DefineParameterInParentScope(string name, object value)
+        public object DefineVariableInParentScope(string name, object value)
         {
-            DefineParameter(name, value, true, false);
+            DefineVariable(name, value, true, false);
             return value;
         }
 
-        private void DefineParameter(string name, object value, bool parentFrame, bool noError)
+        private void DefineVariable(string name, object value, bool parentFrame, bool noError)
         {
             if (!noError && !PathExpression.IsValidIdentifier(name)) Throw("invalid identifier: " + name);
-            Trace(TraceFlags.Parameter, "DefineParameter: {0} = {1}", name, value);
+            Trace(TraceFlags.Variable, "DefineVariable: {0} = {1}", name, value);
             var frame = parentFrame ? (ParentFrame ?? CurrentFrame) : CurrentFrame;
-            if (frame == null) Throw("no frame for parameter: " + name);
-            if (frame.Parameters == null) frame.Parameters = new NameDictionary();
-            frame.Parameters[name] = value;
+            if (frame == null) Throw("no frame for variable: " + name);
+            if (frame.Variables == null) frame.Variables = new NameDictionary();
+            frame.Variables[name] = value;
         }
 
         public IDictionary<string, object> GetClosure()
@@ -246,38 +246,38 @@ namespace Markup.Programming.Core
             var closure = new Dictionary<string, object>();
             foreach (var frame in StackBackwards)
             {
-                if (frame.Parameters == null) continue;
-                    foreach (var name in frame.Parameters.Keys)
-                        if (!closure.ContainsKey(name)) closure.Add(name, frame.Parameters[name]);
+                if (frame.Variables == null) continue;
+                    foreach (var name in frame.Variables.Keys)
+                        if (!closure.ContainsKey(name)) closure.Add(name, frame.Variables[name]);
                 if (frame.ScopeFrame) break;
             }
             if (!closure.ContainsKey(AssociatedObjectKey)) closure.Add(AssociatedObjectKey, CurrentFrame.Caller.AssociatedObject);
             return closure;
         }
 
-        public bool TryLookupParameter(string name, out object value)
+        public bool TryLookupVariable(string name, out object value)
         {
             foreach (var frame in StackBackwards)
             {
-                if (frame.Parameters != null && frame.Parameters.ContainsKey(name))
+                if (frame.Variables != null && frame.Variables.ContainsKey(name))
                 {
-                    value = frame.Parameters[name];
+                    value = frame.Variables[name];
                     return true;
                 }
                 if (frame.ScopeFrame) break;
             }
-            return BuiltinImplementor.TryLookupParameter(name, out value);
+            return BuiltinImplementor.TryLookupVariable(name, out value);
         }
 
-        public object LookupParameter(string name)
+        public object LookupVariable(string name)
         {
             var value = null as object;
-            if (TryLookupParameter(name, out value))
+            if (TryLookupVariable(name, out value))
             {
-                Trace(TraceFlags.Parameter, "Lookup: {0} = {1}", name, value);
+                Trace(TraceFlags.Variable, "Lookup: {0} = {1}", name, value);
                 return value;
             }
-            return Throw("parameter not found: " + name);
+            return Throw("variable not found: " + name);
         }
 
         public void DefineFunction(string name, Function value)
@@ -317,7 +317,7 @@ namespace Markup.Programming.Core
             get
             {
                 var value = null as object;
-                if (TryLookupParameter(ContextKey, out value)) return value;
+                if (TryLookupVariable(ContextKey, out value)) return value;
                 return null;
             }
         }
@@ -335,8 +335,8 @@ namespace Markup.Programming.Core
 
         public void SetContext(object context)
         {
-            Trace(TraceFlags.Parameter, "Setting context = {0}", context);
-            DefineParameter(Engine.ContextKey, context, false, true);
+            Trace(TraceFlags.Variable, "Setting context = {0}", context);
+            DefineVariable(Engine.ContextKey, context, false, true);
         }
 
         public bool HasBindingOrValue(DependencyProperty property, string path)
@@ -369,9 +369,9 @@ namespace Markup.Programming.Core
         }
 
         [Conditional("TRACE")]
-        public void Trace(TraceFlags flags, string format, params object[] parameters)
+        public void Trace(TraceFlags flags, string format, params object[] args)
         {
-            if (ShouldTrace(flags)) TraceHelper.WriteLine(format, parameters);
+            if (ShouldTrace(flags)) TraceHelper.WriteLine(format, args);
         }
 
         [Conditional("TRACE")]
@@ -486,7 +486,7 @@ namespace Markup.Programming.Core
             {
                 var m = function.Parameters.Count - 1;
                 DefineParameters(function.Parameters.Take(m), args.Take(m));
-                DefineParameter(function.Parameters[m].ParameterName, args.Skip(m).ToArray());
+                DefineVariable(function.Parameters[m].ParameterName, args.Skip(m).ToArray());
             }
             else
                 DefineParameters(function.Parameters, args);
@@ -496,10 +496,10 @@ namespace Markup.Programming.Core
             return GetAndResetReturnValue();
         }
 
-        public void DefineParameters(IEnumerable<Parameter> parameters, IEnumerable<object> args)
+        private void DefineParameters(IEnumerable<Parameter> parameters, IEnumerable<object> args)
         {
             foreach (var pair in parameters.Zip(args, (parameter, argument) => Tuple.Create(parameter.ParameterName, argument)))
-                DefineParameter(pair.Item1, pair.Item2);
+                DefineVariable(pair.Item1, pair.Item2);
         }
 
         public object CallBuiltinFunction(BuiltinFunction builtinFunction, IEnumerable<object> args)

@@ -1,3 +1,4 @@
+- detect handler re-registration
 - write select-on-focus editable combox-box sample
 - support doubles in paths
 - refactor recursive descent parser for operators

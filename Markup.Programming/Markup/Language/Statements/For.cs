@@ -8,25 +8,25 @@ using Markup.Programming.Core;
 namespace Markup.Programming
 {
     /// <summary>
-    /// The For statement sets ParameterName of optional type Type
+    /// The For statement sets VariableName of optional type Type
     /// to initial value Value, executes its body while the While
-    /// value evaluates to true and then sets ParameterName to the value
+    /// value evaluates to true and then sets VariableName to the value
     /// Next at end of each iteration.  The Type property defaults
     /// to System.Int32.  The While property effectively defaults
     /// to true.  The Break statement can be used to break out of
-    /// the loop.  ParameterName goes out of scope after the
-    /// statement.  If ParameterName is omitted, no other actions
+    /// the loop.  VariableName goes out of scope after the
+    /// statement.  If VariableName is omitted, no other actions
     /// will be taken except for repeatedly executing the loop.
     /// 
     /// There is also a simplified alternative for numerically increasing
     /// loops.  If While is not specified but UpperLimit is, then While
-    /// interpreted as the ParameterName being less than UpperLimit.
+    /// interpreted as the VariableName being less than UpperLimit.
     /// If Next is not specified but Increment is, then Next is
-    /// interpreted as ParameterName plus the value of Increment.
+    /// interpreted as VariableName plus the value of Increment.
     /// Note that Operator.LessThan and Operator.Add will be chosen
     /// based on Type.
     /// </summary>
-    public class For : ParameterBlock
+    public class For : VariableBlock
     {
         public For()
         {
@@ -93,7 +93,7 @@ namespace Markup.Programming
         protected override void OnExecute(Engine engine)
         {
             // Use the same name and type for the whole loop.
-            var name = ParameterName;
+            var name = VariableName;
             var type = engine.EvaluateType(TypeProperty, TypeName);
             if (type == null && (UpperLimit != null || Increment != null)) type = typeof(int);
 
@@ -133,12 +133,12 @@ namespace Markup.Programming
 
         private void SetLoopValue(string name, object value, Type type, Engine engine)
         {
-            engine.DefineParameter(name, TypeHelper.Convert(value, type));
+            engine.DefineVariable(name, TypeHelper.Convert(value, type));
         }
 
         private object GetLoopValue(string name, Type type, Engine engine)
         {
-            return TypeHelper.Convert(engine.LookupParameter(name), type);
+            return TypeHelper.Convert(engine.LookupVariable(name), type);
         }
     }
 }

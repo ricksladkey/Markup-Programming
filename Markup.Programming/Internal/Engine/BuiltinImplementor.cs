@@ -24,7 +24,7 @@ namespace Markup.Programming.Core
             this.engine = engine;
         }
 
-        public bool TryLookupParameter(string name, out object value)
+        public bool TryLookupVariable(string name, out object value)
         {
             if (name == "@AssociatedObject")
             {
@@ -41,7 +41,7 @@ namespace Markup.Programming.Core
         public bool ParameterIsDefined(string name)
         {
             var value = null as object;
-            return engine.TryLookupParameter(name, out value);
+            return engine.TryLookupVariable(name, out value);
         }
 
         public bool FunctionIsDefined(string name)

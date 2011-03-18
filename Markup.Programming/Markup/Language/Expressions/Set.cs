@@ -5,7 +5,7 @@ namespace Markup.Programming
 {
     /// <summary>
     /// The Set statement sets something to a value.  For all cases the value
-    /// that is set is either Value or ParameterName, optionally converted to
+    /// that is set is either Value or VariableName, optionally converted to
     /// Type.  The set value is always further modified by the optionally
     /// AssignmentOperator.  What remains is what gets set.  There are
     /// three modes:
@@ -35,7 +35,7 @@ namespace Markup.Programming
     /// The target itself specified by either Target or TargetParameterName.
     /// In the case of a bare target specified by Target, it must have a
     /// two-way binding to have any useful effect.  If it is a bare target
-    /// and TargetParameterName is specified, it is as if ParameterName
+    /// and TargetParameterName is specified, it is as if VariableName
     /// were specified with the Let statement.  This is useful to
     /// assign the value of one parameter to another.
     /// </summary>
@@ -55,7 +55,7 @@ namespace Markup.Programming
         private PathExpression targetPathExpression = new PathExpression();
         protected PathExpression TargetPathExpression { get { return targetPathExpression; } }
 
-        public string ParameterName { get; set; }
+        public string VariableName { get; set; }
 
         public string PropertyName { get; set; }
 
@@ -80,14 +80,14 @@ namespace Markup.Programming
         protected override object OnEvaluate(Engine engine)
         {
             var value = engine.Evaluate(ValueProperty, ValuePath, ValuePathExpression);
-            if (ParameterName != null)
+            if (VariableName != null)
             {
                 if (Operator != AssignmentOperator.Assign)
                 {
-                    var oldValue = engine.LookupParameter(ParameterName);
+                    var oldValue = engine.LookupVariable(VariableName);
                     value = engine.Evaluate(Operator, oldValue, value);
                 }
-                engine.DefineParameterInParentScope(ParameterName, value);
+                engine.DefineVariableInParentScope(VariableName, value);
                 return value;
             }
             if (IsBareTarget)

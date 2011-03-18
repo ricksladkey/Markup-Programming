@@ -9,22 +9,22 @@ using Markup.Programming.Core;
 namespace Markup.Programming
 {
     /// <summary>
-    /// The ForEach statement sets ParameterName to each item in the
+    /// The ForEach statement sets VariableName to each item in the
     /// collection specified by Value optionally converting the item
     /// to type Type and then executes its body.  The Break statement
-    /// can be used to break out of the loop.  ParameterName goes
+    /// can be used to break out of the loop.  VariableName goes
     /// out of scope after the statement.
     /// </summary>
-    public class ForEach : ParameterBlock
+    public class ForEach : VariableBlock
     {
         protected override void OnExecute(Engine engine)
         {
             var type = engine.EvaluateType(TypeProperty, TypeName);
             var value = engine.Evaluate(ValueProperty, Path, PathExpression) as IEnumerable;
-            var name = ParameterName;
+            var name = VariableName;
             foreach (object item in value)
             {
-                engine.DefineParameter(name, TypeHelper.Convert(item, type));
+                engine.DefineVariable(name, TypeHelper.Convert(item, type));
                 Body.Execute(engine);
             }
         }

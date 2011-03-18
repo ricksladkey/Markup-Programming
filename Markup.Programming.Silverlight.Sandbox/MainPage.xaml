@@ -13,10 +13,10 @@
                 <p:Attached.Operations>
                     <p:EventHandler Path="Click">
                         <p:Block>
-                            <p:Set ParameterName="children">
+                            <p:Set VariableName="children">
                                 <p:Get Context="{Binding ElementName=ContentHost}" PropertyName="Children"/>
                             </p:Set>
-                            <p:Set ParameterName="child">
+                            <p:Set VariableName="child">
                                 <p:Object TypeName="Button">
                                     <p:Property PropertyName="Content" Value="Click Me!"/>
                                     <p:Property PropertyName="Opacity" Value="0.5"/>

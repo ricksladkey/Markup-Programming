@@ -30,7 +30,7 @@
             <p:Property PropertyName="Posts">
                 <p:Collection>
                     <p:Iterator>
-                        <p:For ParameterName="i" Value="0" UpperLimit="4" Increment="1">
+                        <p:For VariableName="i" Value="0" UpperLimit="4" Increment="1">
                             <p:Yield Path="$i + 1"/>
                         </p:For>
                     </p:Iterator>
@@ -163,7 +163,7 @@
                                     <p:CallHandler
                                         Context="{Binding DataContext, ElementName=LayoutRoot}"
                                         Path="MouseLeftButtonDown.SelectCommand.Execute"
-                                        Parameter="{Binding}"/>
+                                        Argument="{Binding}"/>
                                 </p:Attached.Operations>
                                 
                                 <Rectangle Margin="0,5,0,0" Width="10" Fill="Brown" HorizontalAlignment="Center"/>

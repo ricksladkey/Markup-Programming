@@ -32,7 +32,7 @@ namespace Markup.Programming.Core
         public IComponent Caller { get; private set; }
         public string CallerName { get { return Engine.GetName(Caller); } }
         public FrameFlags Flags { get; set; }
-        public IDictionary<string, object> Parameters { get; set; }
+        public IDictionary<string, object> Variables { get; set; }
         public IList<object> YieldedValues { get; set; }
 
         public bool BreakFrame

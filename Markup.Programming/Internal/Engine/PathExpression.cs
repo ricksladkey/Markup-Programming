@@ -80,13 +80,13 @@ namespace Markup.Programming.Core
             protected override object OnEvaluate(Engine engine, object value) { return engine.Context; }
         }
 
-        private class ParameterNode : PathNode
+        private class VariableNode : PathNode
         {
-            public string ParameterName { get; set; }
+            public string VariableName { get; set; }
             protected override object OnEvaluate(Engine engine, object value)
             {
-                if (!IsSet) return engine.LookupParameter(ParameterName);
-                return engine.DefineParameterInParentScope(ParameterName, value);
+                if (!IsSet) return engine.LookupVariable(VariableName);
+                return engine.DefineVariableInParentScope(VariableName, value);
             }
         }
 
@@ -252,7 +252,7 @@ namespace Markup.Programming.Core
                         node = new FunctionNode { Context = node, Name = name, Arguments = args };
                     }
                     else
-                        node = new ParameterNode { IsSet = IsCurrentSet, ParameterName = name };
+                        node = new VariableNode { IsSet = IsCurrentSet, VariableName = name };
                 }
                 else if (c == '[')
                 {

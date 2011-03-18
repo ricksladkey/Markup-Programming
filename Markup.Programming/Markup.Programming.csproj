@@ -158,7 +158,7 @@
     <Compile Include="Internal\Language\ArgumentsExpressionWithType.cs" />
     <Compile Include="Internal\Engine\ThrowHelper.cs" />
     <Compile Include="Internal\Language\TypedExpession.cs" />
-    <Compile Include="Internal\Language\ParameterBlock.cs" />
+    <Compile Include="Internal\Language\VariableBlock.cs" />
     <Compile Include="Internal\Language\UntypedValueBlock.cs" />
     <Compile Include="Internal\Engine\Engine.cs" />
     <Compile Include="Internal\Engine\TypeHelper.cs" />

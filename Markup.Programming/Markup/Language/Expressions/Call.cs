@@ -29,19 +29,19 @@ namespace Markup.Programming
 
         public string TypeName { get; set; }
 
-        public object Parameter
+        public object Argument
         {
-            get { return (object)GetValue(ParameterProperty); }
-            set { SetValue(ParameterProperty, value); }
+            get { return (object)GetValue(ArgumentProperty); }
+            set { SetValue(ArgumentProperty, value); }
         }
 
-        public static readonly DependencyProperty ParameterProperty =
-            DependencyProperty.Register("Parameter", typeof(object), typeof(Call), null);
+        public static readonly DependencyProperty ArgumentProperty =
+            DependencyProperty.Register("Argument", typeof(object), typeof(Call), null);
 
-        public string ParameterPath { get; set; }
+        public string ArgumentPath { get; set; }
 
-        private PathExpression parameterPathExpression = new PathExpression();
-        protected PathExpression ParameterPathExpression { get { return parameterPathExpression; } }
+        private PathExpression argumentPathExpression = new PathExpression();
+        protected PathExpression ArgumentPathExpression { get { return argumentPathExpression; } }
 
         public ExpressionCollection Arguments
         {
@@ -78,9 +78,9 @@ namespace Markup.Programming
         protected override object OnEvaluate(Engine engine)
         {
             var args = Arguments.Evaluate(engine);
-            if (engine.HasBindingOrValue(ParameterProperty, ParameterPath))
+            if (engine.HasBindingOrValue(ArgumentProperty, ArgumentPath))
             {
-                var parameter = engine.Evaluate(ParameterProperty, ParameterPath, ParameterPathExpression);
+                var parameter = engine.Evaluate(ArgumentProperty, ArgumentPath, ArgumentPathExpression);
                 args = new object[] { engine.EvaluateObject(parameter) }.Concat(args).ToArray();
             }
             return CallHelper.Call(Path, PathExpression, StaticMethodName, MethodName, FunctionName, BuiltinFunction,

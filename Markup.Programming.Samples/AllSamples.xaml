@@ -23,7 +23,7 @@
         <p:MarkupObject x:Key="ViewModel">
             <p:Property PropertyName="Samples">
                 <p:Iterator>
-                    <p:ForEach ParameterName="userControl" Value="{StaticResource UserControls}">
+                    <p:ForEach VariableName="userControl" Value="{StaticResource UserControls}">
                         <p:Yield>
                             <p:Object>
                                 <p:Property PropertyName="Name" Path="$userControl.ToString()"/>

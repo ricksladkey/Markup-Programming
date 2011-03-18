@@ -39,7 +39,7 @@ namespace Markup.Programming.Tests
                 {
                     Body =
                     {
-                        new Set { ParameterName = "X", Value = 21 },
+                        new Set { VariableName = "X", Value = 21 },
                         new Return
                         {
                             Value = new Op
