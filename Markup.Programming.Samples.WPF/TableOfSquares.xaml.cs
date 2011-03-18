@@ -2,9 +2,9 @@
 
 namespace Markup.Programming.Samples
 {
-    public partial class Syntax : UserControl
+    public partial class TableOfSquares : UserControl
     {
-        public Syntax()
+        public TableOfSquares()
         {
             InitializeComponent();
         }

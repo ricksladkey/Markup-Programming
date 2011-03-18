@@ -1,11 +1,18 @@
-﻿<Window
-    x:Class="Markup.Programming.Sandbox.MainWindow"
+﻿<UserControl
+    x:Class="Markup.Programming.Samples.SelectOnFocusComboBox"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:p="http://markupprogramming.codeplex.com/markup/programming"
     Height="300" Width="300">
     <Grid>
         <StackPanel>
+            <TextBlock Margin="4" TextWrapping="Wrap" Background="AntiqueWhite">
+                This sample demonstrates the "fancy" stuff you can do with
+                markup programming: the stuff I couldn't do with the other
+                methods.  It is impossible to write a resuable component
+                to solve this simple problem without solving the whole markup
+                programming problem.
+            </TextBlock>
             <TextBox Text="An ordinary TextBox"/>
             <ComboBox Text="SelectOnFocus ComboBox" IsEditable="True">
                 <p:Attached.Operations>
@@ -20,4 +27,4 @@
             <TextBox Text="Another ordinary TextBox"/>
         </StackPanel>
     </Grid>
-</Window>
+</UserControl>

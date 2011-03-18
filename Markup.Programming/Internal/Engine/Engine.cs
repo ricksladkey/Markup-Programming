@@ -34,7 +34,8 @@ namespace Markup.Programming.Core
 #endif
     public class Engine
     {
-        public static string ContextParameter = "@";
+        public static string ContextKey = "@";
+        public static string AssociatedObjectKey = "@AssociatedObject";
 
         private static int nextId = 0;
         private int id;
@@ -100,13 +101,13 @@ namespace Markup.Programming.Core
             {
                 if (CurrentFrame.Caller is ResourceObject)
                 {
-                    DefineParameter(ContextParameter, CurrentFrame.Caller, false, true);
+                    DefineParameter(ContextKey, CurrentFrame.Caller, false, true);
                     return;
                 }
                 var context = CurrentFrame.Caller.AssociatedObject;
                 if (context is FrameworkElement)
                 {
-                    DefineParameter(ContextParameter, (context as FrameworkElement).DataContext, false, true);
+                    DefineParameter(ContextKey, (context as FrameworkElement).DataContext, false, true);
                     return;
                 }
             }
@@ -240,6 +241,20 @@ namespace Markup.Programming.Core
             frame.Parameters[name] = value;
         }
 
+        public IDictionary<string, object> GetClosure()
+        {
+            var closure = new Dictionary<string, object>();
+            foreach (var frame in StackBackwards)
+            {
+                if (frame.Parameters == null) continue;
+                    foreach (var name in frame.Parameters.Keys)
+                        if (!closure.ContainsKey(name)) closure.Add(name, frame.Parameters[name]);
+                if (frame.ScopeFrame) break;
+            }
+            if (!closure.ContainsKey(AssociatedObjectKey)) closure.Add(AssociatedObjectKey, CurrentFrame.Caller.AssociatedObject);
+            return closure;
+        }
+
         public bool TryLookupParameter(string name, out object value)
         {
             foreach (var frame in StackBackwards)
@@ -302,7 +317,7 @@ namespace Markup.Programming.Core
             get
             {
                 var value = null as object;
-                if (TryLookupParameter(ContextParameter, out value)) return value;
+                if (TryLookupParameter(ContextKey, out value)) return value;
                 return null;
             }
         }
@@ -321,7 +336,7 @@ namespace Markup.Programming.Core
         public void SetContext(object context)
         {
             Trace(TraceFlags.Parameter, "Setting context = {0}", context);
-            DefineParameter(Engine.ContextParameter, context, false, true);
+            DefineParameter(Engine.ContextKey, context, false, true);
         }
 
         public bool HasBindingOrValue(DependencyProperty property, string path)

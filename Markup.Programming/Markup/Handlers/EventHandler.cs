@@ -5,10 +5,9 @@ namespace Markup.Programming
 {
     public class EventHandler : Handler
     {
-        protected override void OnAttached()
+        protected override void OnActiveExecute(Engine engine)
         {
-            base.OnAttached();
-            new Engine().With(this, engine => RegisterHandler(engine, Path));
+            RegisterHandler(engine, Path);
         }
 
         protected override void OnEventHandler(Engine engine)

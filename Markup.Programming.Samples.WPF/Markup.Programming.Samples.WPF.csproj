@@ -113,15 +113,35 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="MainWindow.xaml.cs">
+      <DependentUpon>MainWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="OneMethodTwoBindings\View.xaml.cs">
+      <DependentUpon>View.xaml</DependentUpon>
+    </Compile>
     <Compile Include="OneMethodTwoBindings\ViewModel.cs" />
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="SelectOnFocusComboBox.xaml.cs">
+      <DependentUpon>SelectOnFocusComboBox.xaml</DependentUpon>
+    </Compile>
     <Compile Include="StyleSample.xaml.cs">
       <DependentUpon>StyleSample.xaml</DependentUpon>
     </Compile>
+    <Compile Include="TableOfSquares.xaml.cs">
+      <DependentUpon>TableOfSquares.xaml</DependentUpon>
+    </Compile>
+    <Page Include="MainWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="OneMethodTwoBindings\View.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SelectOnFocusComboBox.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

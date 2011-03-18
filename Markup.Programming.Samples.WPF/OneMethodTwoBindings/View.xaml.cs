@@ -1,11 +1,11 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 
-namespace Markup.Programming.Samples
+namespace Markup.Programming.Samples.OneMethodTwoBindings
 {
-    public partial class StyleSample : UserControl
+    public partial class View : UserControl
     {
-        public StyleSample()
+        public View()
         {
             InitializeComponent();
         }

@@ -78,7 +78,6 @@ namespace Markup.Programming
         {
             base.OnAttached();
             Attach(ArgumentsProperty, TypeArgumentsProperty);
-            new Engine().With(this, engine => RegisterHandler(engine, PathEventName));
         }
 
         private string[] GetFields()
@@ -86,6 +85,11 @@ namespace Markup.Programming
             int m = Path.IndexOf('.');
             if (m == -1) ThrowHelper.Throw("missing event");
             return new string[] { Path.Substring(0, m), Path.Substring(m + 1) };
+        }
+
+        protected override void OnActiveExecute(Engine engine)
+        {
+            RegisterHandler(engine, PathEventName);
         }
 
         protected override void OnEventHandler(Engine engine)

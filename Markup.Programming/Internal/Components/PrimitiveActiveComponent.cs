@@ -4,7 +4,7 @@ namespace Markup.Programming.Core
 {
 #if !INTERACTIVITY
     [ContentProperty("Body")]
-    public abstract class PrimitiveActiveComponent : ComponentBase
+    public abstract class PrimitiveActiveComponent : Statement
     {
         public PrimitiveActiveComponent()
         {
@@ -30,11 +30,6 @@ namespace Markup.Programming.Core
             foreach (var component in Body) component.Attach(AssociatedObject);
         }
 
-        protected virtual void ExecuteBody(object sender, object e)
-        {
-            new Engine(sender, e).With(this, engine => ExecuteBody(engine));
-        }
-
         protected virtual void ExecuteBody(Engine engine)
         {
             Body.Execute(engine);
@@ -43,17 +38,45 @@ namespace Markup.Programming.Core
 #else
     using System.Windows;
     using System.Windows.Interactivity; // portable
-    public class PrimitiveActiveComponent : TriggerBase<DependencyObject>, IComponent
+    public abstract class PrimitiveActiveComponent : TriggerBase<DependencyObject>, IStatement
     {
-        protected virtual void ExecuteBody(object sender, object e)
+        public object Context
         {
-            InvokeActions(e);
+            get { return (object)GetValue(ContextProperty); }
+            set { SetValue(ContextProperty, value); }
+        }
+
+        public string ContextPath { get; set; }
+
+        public static readonly DependencyProperty ContextProperty =
+            DependencyProperty.Register("Context", typeof(object), typeof(Handler), null);
+
+        private PathExpression contextPathExpression = new PathExpression();
+        protected PathExpression ContextPathExpression { get { return contextPathExpression; } }
+
+        protected void Attach(params DependencyProperty[] properties)
+        {
+            ExecutionHelper.Attach(this, properties);
         }
 
         protected virtual void ExecuteBody(Engine engine)
         {
             InvokeActions(engine.EventArgs);
         }
+        
+        public void Execute(Engine engine)
+        {
+            Process(engine);
+        }
+
+        public object Process(Engine engine)
+        {
+            return engine.With(this, e => OnProcess(engine));
+        }
+
+        protected abstract object OnProcess(Engine engine);
+
+        protected abstract void OnExecute(Engine engine);
     }
 #endif
 }

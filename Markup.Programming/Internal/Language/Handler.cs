@@ -1,29 +1,18 @@
 ﻿using System.Windows;
 using System;
 using System.Reflection;
+using System.Collections.Generic;
 
 namespace Markup.Programming.Core
 {
-    public abstract class Handler : PrimitiveActiveComponent, IComponent
+    public abstract class Handler : PrimitiveActiveComponent
     {
+        internal bool TopLevelOperation { get; set; }
+
         public string Path { get; set; }
 
         private PathExpression pathExpression = new PathExpression();
         protected PathExpression PathExpression { get { return pathExpression; } }
-
-        public object Context
-        {
-            get { return (object)GetValue(ContextProperty); }
-            set { SetValue(ContextProperty, value); }
-        }
-
-        public string ContextPath { get; set; }
-
-        public static readonly DependencyProperty ContextProperty =
-            DependencyProperty.Register("Context", typeof(object), typeof(Handler), null);
-
-        private PathExpression contextPathExpression = new PathExpression();
-        protected PathExpression ContextPathExpression { get { return contextPathExpression; } }
 
         public string EventName
         {
@@ -43,22 +32,29 @@ namespace Markup.Programming.Core
         public static readonly DependencyProperty SetHandledProperty =
             DependencyProperty.Register("SetHandled", typeof(bool), typeof(Handler), null);
 
+        private IDictionary<string, object> closure;
+
         protected override void OnAttached()
         {
             base.OnAttached();
             Attach(ContextProperty);
+            if (TopLevelOperation) Process(new Engine());
         }
 
-        protected void Attach(params DependencyProperty[] properties)
-        {
-            ExecutionHelper.Attach(this, properties);
-        }
-
-        protected override void ExecuteBody(Engine engine)
+        protected override object OnProcess(Engine engine)
         {
             SetContext(engine);
-            base.ExecuteBody(engine);
+            OnActiveExecute(engine);
+            closure = engine.GetClosure();
+            return null;
         }
+
+        protected override void OnExecute(Engine engine)
+        {
+            engine.Throw("active operation executed as statement");
+        }
+
+        protected abstract void OnActiveExecute(Engine engine);
 
         protected void SetContext(Engine engine)
         {
@@ -80,7 +76,7 @@ namespace Markup.Programming.Core
 
         public void EventHandler(object sender, object args)
         {
-            new Engine(sender, args).With(this, engine => EventHandler(engine));
+            new Engine(sender, args).With(this, closure, engine => EventHandler(engine));
         }
 
         private void EventHandler(Engine engine)
@@ -97,6 +93,12 @@ namespace Markup.Programming.Core
 
         protected virtual void OnEventHandler(Engine engine)
         {
+        }
+
+        protected override void ExecuteBody(Engine engine)
+        {
+            SetContext(engine);
+            base.ExecuteBody(engine);
         }
     }
 }

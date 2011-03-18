@@ -52,7 +52,7 @@ namespace Markup.Programming.Tests.Tests
         {
             var parameters = GetBasicParameters();
             new PathEvaluator().Evaluate(parameters, path, value);
-            action(parameters[Engine.ContextParameter] as BasicViewModel, parameters);
+            action(parameters[Engine.ContextKey] as BasicViewModel, parameters);
         }
 
         private IDictionary<string, object> GetBasicParameters()
@@ -64,7 +64,7 @@ namespace Markup.Programming.Tests.Tests
             };
             var names = new NameDictionary
             {
-                { Engine.ContextParameter, viewModel },
+                { Engine.ContextKey, viewModel },
                 { "parameter1", "Value1" },
             };
             return names;

@@ -1,0 +1,56 @@
+﻿<Window
+    x:Class="Markup.Programming.Samples.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:p="http://markupprogramming.codeplex.com/markup/programming"
+    xmlns:samples="clr-namespace:Markup.Programming.Samples"
+    xmlns:om2b="clr-namespace:Markup.Programming.Samples.OneMethodTwoBindings"
+    Width="500" Height="500">
+    <Window.Resources>
+        <p:MarkupCollection x:Key="Windows">
+            <samples:TableOfSquares/>
+            <samples:SelectOnFocusComboBox/>
+            <samples:StyleSample/>
+            <om2b:View/>
+        </p:MarkupCollection>
+        <p:MarkupObject x:Key="ViewModel">
+            <p:Property PropertyName="Samples">
+                <p:Iterator>
+                    <p:ForEach ParameterName="window" Value="{StaticResource Windows}">
+                        <p:Yield>
+                            <p:Object>
+                                <p:Property PropertyName="Name" Path="$window.ToString()"/>
+                                <p:Property PropertyName="Control" Path="$window"/>
+                            </p:Object>
+                        </p:Yield>
+                    </p:ForEach>
+                </p:Iterator>
+            </p:Property>
+        </p:MarkupObject>
+    </Window.Resources>
+    <Grid DataContext="{Binding Value, Source={StaticResource ViewModel}}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <TextBlock Text="Markup Programming WPF Samples" FontSize="20"/>
+        <ComboBox ItemsSource="{Binding Samples}" Grid.Row="1">
+            <p:Attached.Operations>
+                <p:EventHandler Path="SelectionChanged">
+                    <p:Set Path="$children">
+                        <p:Get Context="{Binding ElementName=ContentHost}" PropertyName="Children"/>
+                    </p:Set>
+                    <p:Call Path="$children.Clear()"/>
+                    <p:Call Path="$children.Add(Samples[@AssociatedObject.SelectedIndex].Control)"/>
+                </p:EventHandler>
+            </p:Attached.Operations>
+            <ComboBox.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding Name}"/>
+                </DataTemplate>
+            </ComboBox.ItemTemplate>
+        </ComboBox>
+        <Grid Name="ContentHost" Grid.Row="2" Background="SlateGray"/>
+    </Grid>
+</Window>

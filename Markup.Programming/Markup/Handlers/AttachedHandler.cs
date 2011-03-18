@@ -12,7 +12,11 @@ namespace Markup.Programming
         protected override void OnAttached()
         {
             base.OnAttached();
-            ExecuteBody(null, null);
+        }
+
+        protected override void OnActiveExecute(Engine engine)
+        {
+            ExecuteBody(engine);
         }
     }
 }

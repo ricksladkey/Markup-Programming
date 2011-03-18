@@ -2,9 +2,9 @@
 
 namespace Markup.Programming.Samples
 {
-    public partial class Syntax : UserControl
+    public partial class SelectOnFocusComboBox : UserControl
     {
-        public Syntax()
+        public SelectOnFocusComboBox()
         {
             InitializeComponent();
         }

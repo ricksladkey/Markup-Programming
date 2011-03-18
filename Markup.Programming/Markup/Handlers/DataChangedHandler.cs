@@ -23,7 +23,11 @@ namespace Markup.Programming
 
         private void OnValueChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
-            ExecuteBody(sender, e);
+        }
+
+        protected override void OnActiveExecute(Engine engine)
+        {
+            throw new System.NotImplementedException();
         }
     }
 }

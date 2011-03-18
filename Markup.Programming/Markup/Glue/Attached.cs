@@ -21,6 +21,8 @@ namespace Markup.Programming
         {
             var parent = sender as DependencyObject;
             var child = e.NewValue as HandlerCollection;
+            if (parent == null) return;
+            foreach (var handler in child) handler.TopLevelOperation = true;
             child.Attach(parent);
         }
     }
