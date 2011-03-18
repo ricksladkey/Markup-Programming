@@ -52,14 +52,11 @@
                 <p:Command>
 
                     <!-- CanExecute always says "OK" -->
-                    <p:Function FunctionName="CanExecute">
+                    <p:Function Func="CanExecute()">
                         <p:Return Value="True"/>
                     </p:Function>
                     
-                    <p:Function FunctionName="Execute">
-                        <p:Function.Parameters>
-                            <p:Parameter ParameterName="parameter"/>
-                        </p:Function.Parameters>
+                    <p:Function Func="Execute(parameter)">
 
                         <!-- first we create a local convenience function to move an item -->
                         <!-- from one collection to another: this is C# 101 in markup programming -->
@@ -71,11 +68,7 @@
                             fromCollection.RemoveAt(0);
                         }
                         -->
-                        <p:Function FunctionName="MoveItem">
-                            <p:Function.Parameters>
-                                <p:Parameter ParameterName="fromCollection"/>
-                                <p:Parameter ParameterName="toCollection"/>
-                            </p:Function.Parameters>
+                        <p:Function Func="MoveItem(fromCollection, toCollection)">
                             <p:Call Path="$toCollection.Insert(0, $fromCollection[0])"/>
                             <p:Call Path="$fromCollection.RemoveAt(0)"/>
                         </p:Function>

@@ -25,16 +25,11 @@ namespace Markup.Programming
             Parameters = new ParameterCollection();
         }
 
+        public string Func { get; set; }
+
         public string FunctionName { get; set; }
 
-        public ParameterCollection Parameters
-        {
-            get { return (ParameterCollection)GetValue(ParametersProperty); }
-            set { SetValue(ParametersProperty, value); }
-        }
-
-        public static readonly DependencyProperty ParametersProperty =
-            DependencyProperty.Register("Parameters", typeof(ParameterCollection), typeof(Function), null);
+        public ParameterCollection Parameters { get; set; }
 
         public bool HasParamsParameter
         {
@@ -43,7 +38,25 @@ namespace Markup.Programming
 
         protected override void OnExecute(Engine engine)
         {
+            if (Func != null)
+            {
+                var func = Func;
+                var open = func.IndexOf('(');
+                var close = func.LastIndexOf(')');
+                if (open == -1 || close == -1) engine.Throw("missing parentheses: " + func);
+                FunctionName = func.Substring(0, open);
+                var fields = func.Substring(open + 1, close - (open + 1)).Split(',');
+                Parameters.AddRange(fields.Select(field => ParseParameter(engine, field.Trim())));
+            }
             engine.DefineFunction("$" + FunctionName, this);
+        }
+
+        private Parameter ParseParameter(Engine engine, string parameter)
+        {
+            if (!parameter.Contains(' ')) return new Parameter { ParameterName = parameter};
+            var fields = parameter.Split(' ');
+            if (fields.Length != 2 || fields[0] != "params") engine.Throw("invalid params: " + parameter);
+            return new Parameter { ParameterName = fields[1], Params = true };
         }
     }
 }
