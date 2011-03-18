@@ -1,6 +1,8 @@
-﻿using System.Windows;
+﻿using System.Linq;
+using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Diagnostics;
+using System.Windows;
 
 namespace Markup.Programming.Core
 {
@@ -24,21 +26,16 @@ namespace Markup.Programming.Core
         void OnCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
             if (e.NewItems == null) return;
-            foreach (IComponent item in e.NewItems)
+            if (this.AssociatedObject == null) return;
+            var attach = new List<IComponent>();
+            var detach = new List<IComponent>();
+            foreach (T item in e.NewItems)
             {
-                if (this.AssociatedObject == null) return;
-                if (item.AssociatedObject == null)
-                {
-                    item.Attach(this.AssociatedObject);
-                    continue;
-                }
-                if (item.AssociatedObject != this.AssociatedObject)
-                {
-                    item.Detach();
-                    item.Attach(this.AssociatedObject);
-                    continue;
-                }
+                if (item.AssociatedObject == null) { attach.Add(item); continue; }
+                if (item.AssociatedObject != this.AssociatedObject) { detach.Add(item); continue; }
             }
+            OnAttached(attach);
+            OnDetaching(detach);
         }
 
         private DependencyObject associatedObject;
@@ -51,23 +48,24 @@ namespace Markup.Programming.Core
         public void Attach(DependencyObject depedencyObject)
         {
             associatedObject = depedencyObject;
-            foreach (var item in this) item.Attach(associatedObject);
-            OnAttached();
+            OnAttached(this.Select(item => item as IComponent));
         }
 
         public void Detach()
         {
-            OnDetaching();
-            foreach (var item in this) item.Detach();
+            OnDetaching(this.Select(item => item as IComponent));
             associatedObject = null;
         }
 
-        protected virtual void OnAttached()
+
+        protected virtual void OnAttached(IEnumerable<IComponent> components)
         {
+            foreach (var item in components) { item.Detach(); item.Attach(associatedObject); }
         }
 
-        protected virtual void OnDetaching()
+        protected virtual void OnDetaching(IEnumerable<IComponent> components)
         {
+            foreach (var item in components) item.Detach();
         }
     }
 }

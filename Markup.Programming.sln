@@ -107,6 +107,7 @@ Global
 		{C3FA0F80-C208-40BA-B91A-0A0728658772}.Release|Any CPU.Build.0 = Release|Any CPU
 		{B60944AD-D0A2-4636-B160-75EFBD71267C}.Debug - Emulate Silverlight|Any CPU.ActiveCfg = Debug|Any CPU
 		{B60944AD-D0A2-4636-B160-75EFBD71267C}.Debug - Full Tracing|Any CPU.ActiveCfg = Debug - Full Tracing|Any CPU
+		{B60944AD-D0A2-4636-B160-75EFBD71267C}.Debug - Full Tracing|Any CPU.Build.0 = Debug - Full Tracing|Any CPU
 		{B60944AD-D0A2-4636-B160-75EFBD71267C}.Debug - Silverlight|Any CPU.ActiveCfg = Debug|Any CPU
 		{B60944AD-D0A2-4636-B160-75EFBD71267C}.Debug - Silverlight|Any CPU.Build.0 = Debug|Any CPU
 		{B60944AD-D0A2-4636-B160-75EFBD71267C}.Debug - System.Windows.Interactivity|Any CPU.ActiveCfg = Release|Any CPU
@@ -117,6 +118,7 @@ Global
 		{B60944AD-D0A2-4636-B160-75EFBD71267C}.Release|Any CPU.Build.0 = Release|Any CPU
 		{962710DB-CD1E-40F0-9F7F-319030842B9A}.Debug - Emulate Silverlight|Any CPU.ActiveCfg = Debug|Any CPU
 		{962710DB-CD1E-40F0-9F7F-319030842B9A}.Debug - Full Tracing|Any CPU.ActiveCfg = Debug - Full Tracing|Any CPU
+		{962710DB-CD1E-40F0-9F7F-319030842B9A}.Debug - Full Tracing|Any CPU.Build.0 = Debug - Full Tracing|Any CPU
 		{962710DB-CD1E-40F0-9F7F-319030842B9A}.Debug - Silverlight|Any CPU.ActiveCfg = Debug|Any CPU
 		{962710DB-CD1E-40F0-9F7F-319030842B9A}.Debug - Silverlight|Any CPU.Build.0 = Debug|Any CPU
 		{962710DB-CD1E-40F0-9F7F-319030842B9A}.Debug - System.Windows.Interactivity|Any CPU.ActiveCfg = Release|Any CPU
@@ -127,6 +129,7 @@ Global
 		{962710DB-CD1E-40F0-9F7F-319030842B9A}.Release|Any CPU.Build.0 = Release|Any CPU
 		{3A8898CF-E04E-4534-8CF1-9649377C6DEA}.Debug - Emulate Silverlight|Any CPU.ActiveCfg = Debug|Any CPU
 		{3A8898CF-E04E-4534-8CF1-9649377C6DEA}.Debug - Full Tracing|Any CPU.ActiveCfg = Debug - Full Tracing|Any CPU
+		{3A8898CF-E04E-4534-8CF1-9649377C6DEA}.Debug - Full Tracing|Any CPU.Build.0 = Debug - Full Tracing|Any CPU
 		{3A8898CF-E04E-4534-8CF1-9649377C6DEA}.Debug - Silverlight|Any CPU.ActiveCfg = Debug|Any CPU
 		{3A8898CF-E04E-4534-8CF1-9649377C6DEA}.Debug - Silverlight|Any CPU.Build.0 = Debug|Any CPU
 		{3A8898CF-E04E-4534-8CF1-9649377C6DEA}.Debug - System.Windows.Interactivity|Any CPU.ActiveCfg = Debug|Any CPU

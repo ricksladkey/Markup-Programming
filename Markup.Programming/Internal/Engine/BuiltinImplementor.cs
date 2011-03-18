@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Windows;
 
 namespace Markup.Programming.Core
 {
@@ -26,13 +27,22 @@ namespace Markup.Programming.Core
 
         public bool TryLookupVariable(string name, out object value)
         {
-            if (name == "@AssociatedObject")
+            if (name == Engine.ContextKey)
+            {
+                var firstFrame = engine.Stack.First();
+                if (firstFrame.Caller is ResourceObject) value = firstFrame.Caller;
+                else if (firstFrame.Caller.AssociatedObject is FrameworkElement)
+                value = (firstFrame.Caller.AssociatedObject as FrameworkElement).DataContext;
+                else value = engine.Throw("cannot locate default context");
+                return true;
+            }
+            if (name == Engine.AssociatedObjectKey)
             {
                 value = engine.CurrentFrame.Caller.AssociatedObject;
                 return true;
             }
-            if (name == "@Sender") { value = engine.Sender; return true; }
-            if (name == "@EventArgs") { value = engine.EventArgs; return true; }
+            if (name == Engine.SenderKey) { value = engine.Sender; return true; }
+            if (name == Engine.EventArgsKey) { value = engine.EventArgs; return true; }
             if (ConstantParameters.ContainsKey(name)) { value = ConstantParameters[name]; return true; }
             value = null;
             return false;

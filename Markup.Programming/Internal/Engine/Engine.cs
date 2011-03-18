@@ -36,6 +36,8 @@ namespace Markup.Programming.Core
     {
         public static string ContextKey = "@";
         public static string AssociatedObjectKey = "@AssociatedObject";
+        public static string SenderKey = "@Sender";
+        public static string EventArgsKey = "@EventArgs";
 
         private static int nextId = 0;
         private int id;
@@ -95,22 +97,6 @@ namespace Markup.Programming.Core
         {
             stack.Add(new StackFrame(this, caller));
             TraceStack("PushFrame: {0}", caller.GetType().Name);
-
-            // Attempt to set the default context.
-            if (stack.Count == 1)
-            {
-                if (CurrentFrame.Caller is ResourceObject)
-                {
-                    DefineVariable(ContextKey, CurrentFrame.Caller, false, true);
-                    return;
-                }
-                var context = CurrentFrame.Caller.AssociatedObject;
-                if (context is FrameworkElement)
-                {
-                    DefineVariable(ContextKey, (context as FrameworkElement).DataContext, false, true);
-                    return;
-                }
-            }
         }
 
         private void PopFrame()

@@ -1,3 +1,4 @@
+- auto-increment version number
 - detect handler re-registration
 - write select-on-focus editable combox-box sample
 - refactor recursive descent parser for operators

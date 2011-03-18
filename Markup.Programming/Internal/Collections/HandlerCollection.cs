@@ -12,5 +12,23 @@ namespace Markup.Programming.Core
     /// </summary>
     public class HandlerCollection : ComponentCollection<Handler>
     {
+        private bool topLevelCollection;
+
+        internal void AttachOperations(DependencyObject dependencyObject)
+        {
+            topLevelCollection = true;
+            Attach(dependencyObject);
+        }
+
+        protected override void OnAttached(IEnumerable<IComponent> components)
+        {
+            if (topLevelCollection) SetTopLevel(components);
+            base.OnAttached(components);
+        }
+
+        private void SetTopLevel(IEnumerable<IComponent> components)
+        {
+            foreach (Handler operation in this) operation.TopLevelOperation = true;
+        }
     }
 }

@@ -19,11 +19,9 @@ namespace Markup.Programming
 
         private static void OnOperationsChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
-            var parent = sender as DependencyObject;
-            var child = e.NewValue as HandlerCollection;
-            if (parent == null) return;
-            foreach (var handler in child) handler.TopLevelOperation = true;
-            child.Attach(parent);
+            var dependencyObject = sender as DependencyObject;
+            var collection = e.NewValue as HandlerCollection;
+            collection.AttachOperations(dependencyObject);
         }
     }
 }
