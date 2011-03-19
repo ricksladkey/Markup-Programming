@@ -1,26 +1,14 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.ComponentModel;
-using System.Windows.Markup;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.ComponentModel;
+using System.Windows.Markup;
 using Markup.Programming.Core;
 
 namespace Markup.Programming
 {
-    /// <summary>
-    /// The type of ResourceCollection
-    /// </summary>
-    public enum CollectionType
-    {
-        Collection,
-        Range,
-        Concat,
-    }
-
     /// <summary>
     /// A ResourceCollection is a collection that implements
     /// INotifyCollectionChanged and is used for defining collections
@@ -39,7 +27,6 @@ namespace Markup.Programming
         private string name { get; set; }
         private ObservableCollection<object> Collection { get; set; }
         public List<object> Children { get; set; }
-        public CollectionType CollectionType { get; set; }
 
         public string CollectionName
         {
@@ -53,19 +40,7 @@ namespace Markup.Programming
         public override void EndInit()
         {
             base.EndInit();
-
-            switch (CollectionType)
-            {
-                case CollectionType.Collection:
-                    foreach (var child in Children) Add(child);
-                    break;
-                case CollectionType.Range:
-                    for (int i = RangeStart; i < RangeStart + RangeCount; i++) Add(i);
-                    break;
-                case CollectionType.Concat:
-                    foreach (IEnumerable child in Children) foreach (var item in child) Add(item);
-                    break;
-            }
+            foreach (var child in Children) Add(child);
         }
 
         #region INotifyCollectionChanged Members
