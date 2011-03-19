@@ -46,7 +46,7 @@ namespace Markup.Programming
         protected override object OnEvaluate(Engine engine)
         {
             ParentResourceObject = engine.ParentResourceObject;
-            return new CommandInterop<Command>(this);
+            return new CommandInterop(this);
         }
     }
 }

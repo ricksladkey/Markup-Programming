@@ -14,11 +14,11 @@ namespace Markup.Programming
     /// </summary>
     public class ResourceConverter : InterfaceComponent, IValueConverter
     {
-        private ConverterInterop<ResourceConverter> interop;
+        private IValueConverter interop;
 
         public ResourceConverter()
         {
-            interop = new ConverterInterop<ResourceConverter>(this);
+            interop = new ConverterInterop(this);
         }
 
         public string ConvertPath { get; set; }

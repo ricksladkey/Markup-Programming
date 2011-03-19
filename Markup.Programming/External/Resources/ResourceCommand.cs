@@ -14,11 +14,11 @@ namespace Markup.Programming
     /// </summary>
     public class ResourceCommand : InterfaceComponent, ICommand
     {
-        private CommandInterop<ResourceCommand> interop;
+        private ICommand interop;
 
         public ResourceCommand()
         {
-            interop = new CommandInterop<ResourceCommand>(this);
+            interop = new CommandInterop(this);
         }
 
 #if SILVERLIGHT
