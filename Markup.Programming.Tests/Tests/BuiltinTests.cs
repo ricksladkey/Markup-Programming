@@ -39,7 +39,7 @@ namespace Markup.Programming.Tests
                             {
                                 new Property
                                 {
-                                    PropertyName = "ResourceObject",
+                                    Prop = "ResourceObject",
                                     Value = new Call { BuiltinFunction = BuiltinFunction.GetResourceObject },
                                 }
                             }

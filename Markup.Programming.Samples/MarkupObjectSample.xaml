@@ -7,8 +7,8 @@
     <Grid x:Name="LayoutRoot" Background="White">
         <Grid.Resources>
             <p:MarkupObject x:Key="SampleData">
-                <p:Property PropertyName="FirstName" Value="Bill"/>
-                <p:Property PropertyName="LastName" Value="Smith"/>
+                <p:Property Prop="FirstName" Value="Bill"/>
+                <p:Property Prop="LastName" Value="Smith"/>
             </p:MarkupObject>
         </Grid.Resources>
         <Grid.DataContext>

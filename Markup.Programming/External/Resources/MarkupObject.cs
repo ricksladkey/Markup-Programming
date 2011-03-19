@@ -128,7 +128,7 @@ namespace Markup.Programming
                 var value = property.Evaluate(engine);
                 var type = property.Type;
                 value = TypeHelper.Convert(value, type);
-                propertyStore.Add(property.PropertyName, value);
+                propertyStore.Add(property.Prop, value);
             }
             dynamicProperties = Properties.Select(property => GetPair(property)).ToArray();
             Evaluated = true;
@@ -136,7 +136,7 @@ namespace Markup.Programming
 
         private NameTypePair GetPair(Property property)
         {
-            var name = property.PropertyName;
+            var name = property.Prop;
             var type = property.Type ?? typeof(object);
             return new NameTypePair(name, type);
         }
@@ -178,7 +178,7 @@ namespace Markup.Programming
         private void EvaluateProperties(Engine engine)
         {
             var pairs = Properties.Select(property =>
-                new NameValuePair(property.PropertyName, property.Evaluate(engine))).ToArray();
+                new NameValuePair(property.Prop, property.Evaluate(engine))).ToArray();
             Type dynamicType = null;
             value = DynamicHelper.CreateObject(ref dynamicType, pairs);
         }

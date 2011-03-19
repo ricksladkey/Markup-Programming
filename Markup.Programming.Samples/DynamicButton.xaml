@@ -15,8 +15,8 @@
                             </p:Set>
                             <p:Set Path="$child">
                                 <p:Object TypeName="Button">
-                                    <p:Property PropertyName="Content" Value="Click Me!"/>
-                                    <p:Property PropertyName="Opacity" Value="0.5"/>
+                                    <p:Property Prop="Content" Value="Click Me!"/>
+                                    <p:Property Prop="Opacity" Value="0.5"/>
                                 </p:Object>
                             </p:Set>
                             <p:Call Path="$children.Add" ArgumentPath="$child"/>

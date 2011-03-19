@@ -14,13 +14,13 @@
             <om2b:View/>
         </p:MarkupCollection>
         <p:MarkupObject x:Key="ViewModel">
-            <p:Property PropertyName="Samples">
+            <p:Property Prop="Samples">
                 <p:Iterator>
                     <p:ForEach Var="window" Value="{StaticResource Windows}">
                         <p:Yield>
                             <p:Object>
-                                <p:Property PropertyName="Name" Path="$window.ToString()"/>
-                                <p:Property PropertyName="Control" Path="$window"/>
+                                <p:Property Prop="Name" Path="$window.ToString()"/>
+                                <p:Property Prop="Control" Path="$window"/>
                             </p:Object>
                         </p:Yield>
                     </p:ForEach>

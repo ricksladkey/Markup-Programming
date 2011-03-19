@@ -6,7 +6,7 @@
     <Grid>
         <Grid.Resources>
             <p:MarkupObject x:Key="SampleData">
-                <p:Property PropertyName="Data">
+                <p:Property Prop="Data">
                     This is some data
                 </p:Property>
             </p:MarkupObject>

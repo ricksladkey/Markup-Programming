@@ -50,7 +50,7 @@ namespace Markup.Programming
         protected override object OnEvaluate(Engine engine)
         {
             var pairs = Properties.Select(property =>
-                new NameValuePair(property.PropertyName, property.Evaluate(engine))).ToArray();
+                new NameValuePair(property.Prop, property.Evaluate(engine))).ToArray();
             var type = engine.EvaluateType(TypeProperty, TypeName);
             if (type != null)
             {

@@ -59,8 +59,8 @@
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="..\Markup.Programming\External\**\*.cs" />
     <Compile Include="..\Markup.Programming\Internal\**\*.cs" />
-    <Compile Include="..\Markup.Programming\Markup\**\*.cs" />
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
