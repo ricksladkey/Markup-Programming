@@ -6,10 +6,10 @@
     Height="300" Width="300">
     <Grid x:Name="LayoutRoot" Background="White">
         <Grid.Resources>
-            <p:MarkupObject x:Key="SampleData">
+            <p:ResourceObject x:Key="SampleData">
                 <p:Property Prop="FirstName" Value="Bill"/>
                 <p:Property Prop="LastName" Value="Smith"/>
-            </p:MarkupObject>
+            </p:ResourceObject>
         </Grid.Resources>
         <Grid.DataContext>
             <Binding Path="Value" Source="{StaticResource SampleData}"/>

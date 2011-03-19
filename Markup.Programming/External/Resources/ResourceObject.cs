@@ -11,7 +11,7 @@ using Markup.Programming.Core;
 namespace Markup.Programming
 {
     /// <summary>
-    /// A MarkupObject is a dynamic object that can be defined and
+    /// A ResourceObject is a dynamic object that can be defined and
     /// and used entirely in resources.
     /// </summary>
 
@@ -21,9 +21,9 @@ namespace Markup.Programming
 #if DEBUG
     [DebuggerDisplay("Properties = {Properties.Count}"), DebuggerTypeProxy(typeof(DynamicObjectDebugView))]
 #endif
-    public class MarkupObject : ResourceObject, INotifyPropertyChanged, IDynamicObject, ICustomTypeDescriptor
+    public class ResourceObject : ResourceObjectBase, INotifyPropertyChanged, IDynamicObject, ICustomTypeDescriptor
     {
-        public MarkupObject()
+        public ResourceObject()
         {
             Properties = new PropertyCollection();
             Implementor = new TypeDescriptorImplementor(this, this.GetType());
@@ -54,7 +54,7 @@ namespace Markup.Programming
         }
 
         public static readonly DependencyProperty PropertiesProperty =
-            DependencyProperty.Register("Properties", typeof(PropertyCollection), typeof(MarkupObject), null);
+            DependencyProperty.Register("Properties", typeof(PropertyCollection), typeof(ResourceObject), null);
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -66,7 +66,7 @@ namespace Markup.Programming
 
         public override string ToString()
         {
-            return DynamicHelper.ToString(this, "MarkupObject");
+            return DynamicHelper.ToString(this, "ResourceObject");
         }
 
     #region IDyamicObject Members
@@ -145,9 +145,9 @@ namespace Markup.Programming
 #else
 
     [ContentProperty("Properties")]
-    public class MarkupObject : ResourceObject, IDynamicObject
+    public class ResourceObject : ResourceObjectBase, IDynamicObject
     {
-        public MarkupObject()
+        public ResourceObject()
         {
             Properties = new PropertyCollection();
         }

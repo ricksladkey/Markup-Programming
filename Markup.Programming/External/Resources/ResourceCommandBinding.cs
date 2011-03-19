@@ -9,10 +9,10 @@ namespace Markup.Programming
 {
 #if !SILVERLIGHT
     /// <summary>
-    /// A MarkupCommandBinding creates a command binding that forwards routed
+    /// A ResourceCommandBinding creates a command binding that forwards routed
     /// command events to a handler command.
     /// </summary>
-    public class MarkupCommandBinding : CommandBinding, ISupportInitialize
+    public class ResourceCommandBinding : CommandBinding, ISupportInitialize
     {
         public ICommand HandlerCommand { get; set; }
 

@@ -412,8 +412,8 @@ namespace Markup.Programming.Core
         {
             if (value is IProcessor)
                 return (value as IProcessor).Process(this);
-            if (value is MarkupObject)
-                return (value as MarkupObject).Value;
+            if (value is ResourceObject)
+                return (value as ResourceObject).Value;
             return value;
         }
 
@@ -498,15 +498,15 @@ namespace Markup.Programming.Core
             return CallHelper.CallMethod(builtinFunction.ToString(), false, typeof(BuiltinImplementor), BuiltinImplementor, args, null, this);
         }
 
-        public ResourceObject ParentResourceObject
+        public ResourceObjectBase ParentResourceObject
         {
             get
             {
-                var bestCaller = null as ResourceObject;
+                var bestCaller = null as ResourceObjectBase;
                 foreach (var frame in StackBackwards)
                 {
                     var caller = frame.Caller;
-                    if (caller is ResourceObject) bestCaller = caller as ResourceObject;
+                    if (caller is ResourceObjectBase) bestCaller = caller as ResourceObjectBase;
                     else if (bestCaller != null) return bestCaller;
                 }
                 return bestCaller;

@@ -13,7 +13,7 @@ namespace Markup.Programming.Tests
         {
             // Use Set to copy String1 to String2 using the DataContext of a Window.
             // Note: This test does not use any external methods.
-            var viewModel = new MarkupObject
+            var viewModel = new ResourceObject
             {
                 Properties =
                 {
@@ -72,7 +72,7 @@ namespace Markup.Programming.Tests
             // Copy String1 to String2 and then copy String2 to String3.  If property
             // change notification isn't working, the binding for String2 will still
             // have its default value.
-            var viewModel = new MarkupObject
+            var viewModel = new ResourceObject
             {
                 Properties =
                     {
@@ -101,7 +101,7 @@ namespace Markup.Programming.Tests
         {
             // When MarkupObjects try to find their inheritance context,
             // it breaks data binding.
-            var viewModel = new MarkupObject
+            var viewModel = new ResourceObject
             {
                 Properties =
                     {
@@ -113,7 +113,7 @@ namespace Markup.Programming.Tests
             Assert.AreEqual("Test", viewModel["String1"]);
             Assert.AreEqual(null, viewModel["String2"]);
             Assert.AreEqual(null, viewModel["String3"]);
-            var resource = new MarkupObject
+            var resource = new ResourceObject
             {
                 Properties =
                     {

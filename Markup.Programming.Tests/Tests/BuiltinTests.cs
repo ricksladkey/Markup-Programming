@@ -33,7 +33,7 @@ namespace Markup.Programming.Tests
                 {
                     {
                         "ViewModel",
-                        new MarkupObject
+                        new ResourceObject
                         {
                             Properties =
                             {

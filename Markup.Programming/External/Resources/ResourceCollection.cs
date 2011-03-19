@@ -12,7 +12,7 @@ using Markup.Programming.Core;
 namespace Markup.Programming
 {
     /// <summary>
-    /// The type of MarkupCollection
+    /// The type of ResourceCollection
     /// </summary>
     public enum CollectionType
     {
@@ -22,17 +22,17 @@ namespace Markup.Programming
     }
 
     /// <summary>
-    /// A MarkupCollection is a collection that implements
+    /// A ResourceCollection is a collection that implements
     /// INotifyCollectionChanged and is used for defining collections
     /// in resources.
     /// </summary>
     [ContentProperty("Children")]
-    public class MarkupCollection : ResourceObject, IList, INotifyCollectionChanged, INotifyPropertyChanged, ISupportInitialize
+    public class ResourceCollection : ResourceObjectBase, IList, INotifyCollectionChanged, INotifyPropertyChanged, ISupportInitialize
     {
-        public MarkupCollection()
+        public ResourceCollection()
         {
             Collection = new ObservableCollection<object>();
-            Collection.CollectionChanged += new NotifyCollectionChangedEventHandler(MarkupCollection_CollectionChanged);
+            Collection.CollectionChanged += new NotifyCollectionChangedEventHandler(ResourceCollection_CollectionChanged);
             Children = new List<object>();
         }
 
@@ -70,7 +70,7 @@ namespace Markup.Programming
 
         #region INotifyCollectionChanged Members
 
-        void  MarkupCollection_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        void  ResourceCollection_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
             var handler = CollectionChanged;
             if (handler != null) CollectionChanged(this, e);

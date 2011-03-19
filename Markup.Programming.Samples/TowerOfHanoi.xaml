@@ -26,7 +26,7 @@
         <!-- we have another property called HoldingPost that stores a disk -->
         <!-- after they have moved it off of one of the main posts -->
         <!-- our disks are represented by small integers: 1, 2, 3, etc. -->
-        <p:MarkupObject x:Key="ViewModel">
+        <p:ResourceObject x:Key="ViewModel">
             <p:Property Prop="Posts">
                 <p:Collection>
                     <p:Iterator>
@@ -96,7 +96,7 @@
                     </p:Function>
                 </p:Command>
             </p:Property>
-        </p:MarkupObject>
+        </p:ResourceObject>
         
     </UserControl.Resources>
 
@@ -121,7 +121,7 @@
                                 <Binding.Converter>
 
                                     <!-- Holy cow, how many times have I wanted to be able to do this! -->
-                                    <p:MarkupConverter ConvertPath="@ConverterValue * 20"/>
+                                    <p:ResourceConverter ConvertPath="@ConverterValue * 20"/>
                                     
                                 </Binding.Converter>
                             </Binding>

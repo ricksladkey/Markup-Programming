@@ -7,15 +7,15 @@ using Markup.Programming.Core;
 namespace Markup.Programming
 {
     /// <summary>
-    /// A MarkupCommand is an ICommand that can be defined and
+    /// A ResourceCommand is an ICommand that can be defined and
     /// referenced entirely in resources and by IExpression
     /// and IStatement to implement the CanExecute and Execute
     /// interface methods.
     /// </summary>
     [ContentProperty("ExecuteBody")]
-    public class MarkupCommand : ResourceObject, ICommand
+    public class ResourceCommand : ResourceObjectBase, ICommand
     {
-        public MarkupCommand()
+        public ResourceCommand()
         {
             LoadActions = new StatementCollection();
             ExecuteBody = new StatementCollection();
@@ -28,7 +28,7 @@ namespace Markup.Programming
         }
 
         public static readonly DependencyProperty LoadActionsProperty =
-            DependencyProperty.Register("LoadActions", typeof(StatementCollection), typeof(MarkupCommand), null);
+            DependencyProperty.Register("LoadActions", typeof(StatementCollection), typeof(ResourceCommand), null);
 
         public IExpression CanExecuteExpression
         {
@@ -37,7 +37,7 @@ namespace Markup.Programming
         }
 
         public static readonly DependencyProperty CanExecuteExpressionProperty =
-            DependencyProperty.Register("CanExecutExpression", typeof(IExpression), typeof(MarkupCommand), null);
+            DependencyProperty.Register("CanExecutExpression", typeof(IExpression), typeof(ResourceCommand), null);
         
         public StatementCollection ExecuteBody
         {
@@ -46,7 +46,7 @@ namespace Markup.Programming
         }
 
         public static readonly DependencyProperty ExecuteBodyProperty =
-            DependencyProperty.Register("ExecuteBody", typeof(StatementCollection), typeof(MarkupCommand), null);
+            DependencyProperty.Register("ExecuteBody", typeof(StatementCollection), typeof(ResourceCommand), null);
 
         protected override void OnAttached()
         {

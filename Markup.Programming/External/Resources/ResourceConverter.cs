@@ -7,11 +7,11 @@ using Markup.Programming.Core;
 namespace Markup.Programming
 {
     /// <summary>
-    /// A MarkupConverter is an IValueConverter that can be defined and
+    /// A ResourceConverter is an IValueConverter that can be defined and
     /// referenced entirely in resources and by IExpression
     /// to implement the Convert and ConvertBack interface methods.
     /// </summary>
-    public class MarkupConverter : ResourceObject, IValueConverter
+    public class ResourceConverter : ResourceObjectBase, IValueConverter
     {
         public IExpression ConvertExpression
         {
@@ -20,7 +20,7 @@ namespace Markup.Programming
         }
 
         public static readonly DependencyProperty ConvertExpressionProperty =
-            DependencyProperty.Register("ConvertExpression", typeof(IExpression), typeof(MarkupConverter), null);
+            DependencyProperty.Register("ConvertExpression", typeof(IExpression), typeof(ResourceConverter), null);
 
         public string ConvertPath { get; set; }
 
@@ -31,7 +31,7 @@ namespace Markup.Programming
         }
 
         public static readonly DependencyProperty ConvertBackExpressionProperty =
-            DependencyProperty.Register("ConvertBackExpression", typeof(IExpression), typeof(MarkupConverter), null);
+            DependencyProperty.Register("ConvertBackExpression", typeof(IExpression), typeof(ResourceConverter), null);
 
         public string ConvertBackPath { get; set; }
 

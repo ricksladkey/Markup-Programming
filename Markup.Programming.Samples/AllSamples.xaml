@@ -10,7 +10,7 @@
     mc:Ignorable="d" 
     d:DesignHeight="500" d:DesignWidth="500">
     <UserControl.Resources>
-        <p:MarkupCollection x:Key="UserControls">
+        <p:ResourceCollection x:Key="UserControls">
             <samples:HelloWorld/>
             <samples:TowerOfHanoi/>
             <samples:CallingChoices/>
@@ -20,8 +20,8 @@
             <samples:PasswordSample/>
             <samples:MarkupObjectSample/>
             <samples:CrashSample/>
-        </p:MarkupCollection>
-        <p:MarkupObject x:Key="ViewModel">
+        </p:ResourceCollection>
+        <p:ResourceObject x:Key="ViewModel">
             <p:Property Prop="Samples">
                 <p:Iterator>
                     <p:ForEach Var="userControl" Value="{StaticResource UserControls}">
@@ -34,7 +34,7 @@
                     </p:ForEach>
                 </p:Iterator>
             </p:Property>
-        </p:MarkupObject>
+        </p:ResourceObject>
     </UserControl.Resources>
     <Grid DataContext="{Binding Value, Source={StaticResource ViewModel}}">
         <Grid.RowDefinitions>

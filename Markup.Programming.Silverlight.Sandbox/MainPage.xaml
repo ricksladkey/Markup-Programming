@@ -5,11 +5,11 @@
     Width="300" Height="300">
     <Grid>
         <Grid.Resources>
-            <p:MarkupObject x:Key="SampleData">
+            <p:ResourceObject x:Key="SampleData">
                 <p:Property Prop="Data">
                     This is some data
                 </p:Property>
-            </p:MarkupObject>
+            </p:ResourceObject>
         </Grid.Resources>
         <StackPanel DataContext="{Binding Value, Source={StaticResource SampleData} }">
             <Button Content="Show Data">

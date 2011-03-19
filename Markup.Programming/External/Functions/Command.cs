@@ -40,7 +40,7 @@ namespace Markup.Programming
             Functions = new FunctionCollection();
         }
 
-        public ResourceObject ParentResourceObject { get; set; }
+        public ResourceObjectBase ParentResourceObject { get; set; }
 
         public FunctionCollection Functions
         {

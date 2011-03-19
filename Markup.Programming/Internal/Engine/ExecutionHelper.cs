@@ -18,7 +18,7 @@ namespace Markup.Programming.Core
             {
                 if (PathHelper.HasBinding(parent, property)) continue;
                 var value = parent.GetValue(property);
-                if (value is ResourceObject) continue;
+                if (value is ResourceObjectBase) continue;
                 if (value is IComponent) (value as IComponent).Attach(parent.AssociatedObject);
             }
         }

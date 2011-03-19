@@ -1,6 +1,7 @@
+- <p:Set Path="$x" Value="-"/> should fail if x is not yet defined
+- <p:Set Var="x" Value="-"/> should fail if x is defined in the same scope
 - auto-increment version number
 - detect handler re-registration
-- write select-on-focus editable combox-box sample
 - refactor recursive descent parser for operators
 - consider removing Type completely
 - review how to handle For type
@@ -8,8 +9,7 @@
 - revisit conversion, specifically we should not silently allow conversions to fail
 -----------------------
 - fix accidental auto-evaluation of langauge elements
-- rename MarkupObject to ResourceObject, etc.
-- clean up MarkupConverter names, especially LoadActions, etc.
+- clean up ResourceConverter names, especially LoadActions, etc.
 - convert Type arguments to type or expression
 -----------------------
 - provide special handling for context across function calls
@@ -18,7 +18,7 @@
 - consider styles and collections
 - handle detaching
 - add MarkupMultiConverter
-- finish MarkupCollection cleanup
+- finish ResourceCollection cleanup
 - add timer
 - add RoutedEventTrigger
 - use to intentionally avoid documentation: /// <internalonly />

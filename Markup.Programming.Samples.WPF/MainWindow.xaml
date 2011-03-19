@@ -7,13 +7,13 @@
     xmlns:om2b="clr-namespace:Markup.Programming.Samples.OneMethodTwoBindings"
     Width="500" Height="500">
     <Window.Resources>
-        <p:MarkupCollection x:Key="Windows">
+        <p:ResourceCollection x:Key="Windows">
             <samples:TableOfSquares/>
             <samples:SelectOnFocusComboBox/>
             <samples:StyleSample/>
             <om2b:View/>
-        </p:MarkupCollection>
-        <p:MarkupObject x:Key="ViewModel">
+        </p:ResourceCollection>
+        <p:ResourceObject x:Key="ViewModel">
             <p:Property Prop="Samples">
                 <p:Iterator>
                     <p:ForEach Var="window" Value="{StaticResource Windows}">
@@ -26,7 +26,7 @@
                     </p:ForEach>
                 </p:Iterator>
             </p:Property>
-        </p:MarkupObject>
+        </p:ResourceObject>
     </Window.Resources>
     <Grid DataContext="{Binding Value, Source={StaticResource ViewModel}}">
         <Grid.RowDefinitions>
