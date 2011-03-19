@@ -37,7 +37,7 @@
                     <p:Value Val="{Binding FirstName}"/>
                     
                     <!-- use parameter value indirection -->
-                    <p:Path Expression="$i"/>
+                    <p:Path Expr="$i"/>
                     <p:Path>$i</p:Path>
 
                     <!-- explicit type conversion -->
@@ -50,7 +50,7 @@
                     
                     <!-- supply types as values -->
                     <p:Path>[Int32]</p:Path>
-                    <p:Path Expression="[Int32]"/>
+                    <p:Path Expr="[Int32]"/>
                     <p:Value Val="{x:Type sys:Int32}"/>
                     <p:Value>
                         <x:Type TypeName="sys:Int32"/>
@@ -74,9 +74,9 @@
                     <p:GetItem Path="$x" Index="0"/>
                     <p:GetItem Path="$x" IndexPath="$i"/>
                     <p:GetItem Path="$array3D">
-                        <p:Path Expression="$i"/>
-                        <p:Path Expression="$j"/>
-                        <p:Path Expression="$k"/>
+                        <p:Path Expr="$i"/>
+                        <p:Path Expr="$j"/>
+                        <p:Path Expr="$k"/>
                     </p:GetItem>
 
                     <!-- all accessors can use context and context is inherited -->

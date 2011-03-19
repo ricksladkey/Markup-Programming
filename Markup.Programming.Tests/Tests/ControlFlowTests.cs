@@ -44,7 +44,7 @@ namespace Markup.Programming.Tests
                         {
                             Value = new Operator
                             {
-                                Value1 = new Path { Expression = "$x" },
+                                Value1 = new Path { Expr = "$x" },
                                 Op = Op.Times,
                                 Value2 = 2,
                             }
