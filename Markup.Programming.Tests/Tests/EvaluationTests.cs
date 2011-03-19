@@ -19,7 +19,7 @@ namespace Markup.Programming.Tests
                 new New
                 {
                     Type = typeof(List<>),
-                    TypeArguments = { new Val { Value = typeof(string) } },
+                    TypeArguments = { new Get { Source= typeof(string) } },
                 });
         }
 
@@ -36,7 +36,7 @@ namespace Markup.Programming.Tests
         public void ExpressionTests()
         {
             TestHelper.ExpressionTest(3, new Operator { Op = Op.Plus,
-                Arguments = { new Val { Value = 1 }, new Val { Value = 2 } } });
+                Arguments = { new Value { Content = 1 }, new Value { Content = 2 } } });
         }
 
         [TestMethod]
@@ -52,8 +52,9 @@ namespace Markup.Programming.Tests
                             StaticMethodName = "Cos",
                             Arguments =
                             {
-                                TestHelper.Configure(new Val(),
-                                    value => BindingOperations.SetBinding(value, Val.ValueProperty, new Binding("Object1"))),
+                                // <p:Value Content="{Binding Object1}"/>
+                                TestHelper.Configure(new Value(),
+                                    value => BindingOperations.SetBinding(value, Value.ContentProperty, new Binding("Object1"))),
                             },
                         },
                     },
@@ -72,14 +73,14 @@ namespace Markup.Programming.Tests
                     StaticMethodName = "Format",
                     TypeArguments =
                     {
-                        new Val { Value = typeof(string) },
-                        new Val { Value = typeof(object[]) },
+                        new Value { Content = typeof(string) },
+                        new Value { Content = typeof(object[]) },
                     },
                     Arguments =
                     {
-                        new Val { Value = "{0}, {1}" },
-                        new Val { Value = 1 },
-                        new Val { Value = 2 },
+                        new Value { Content = "{0}, {1}" },
+                        new Value { Content = 1 },
+                        new Value { Content = 2 },
                     }
                 });
         }

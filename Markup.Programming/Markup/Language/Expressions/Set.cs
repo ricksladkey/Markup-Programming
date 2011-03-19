@@ -39,7 +39,7 @@ namespace Markup.Programming
     /// were specified with the Let statement.  This is useful to
     /// assign the value of one parameter to another.
     /// </summary>
-    public class Set : Val
+    public class Set : ValueExpression
     {
         public object Target
         {

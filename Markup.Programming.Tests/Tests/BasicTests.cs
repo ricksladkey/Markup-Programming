@@ -58,8 +58,8 @@ namespace Markup.Programming.Tests
                 TestHelper.Configure(new Set
                 {
                     PropertyName = "String2",
-                    Value = TestHelper.Configure(new Val(),
-                        value => BindingOperations.SetBinding(value, Val.ValueProperty, new Binding("String1"))),
+                    Value = TestHelper.Configure(new Value(),
+                        value => BindingOperations.SetBinding(value, Value.ContentProperty, new Binding("String1"))),
                 },
                 TestHelper.TargetBinder));
             Assert.AreEqual("Test", viewModel.String1);

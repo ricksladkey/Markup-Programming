@@ -12,7 +12,7 @@
                         <p:If Value="True">
                             <p:If.Then>
                                 <p:When>
-                                    <p:Val Value="True"/>
+                                    <p:Path>@true</p:Path>
                                     <p:Block>
                                         <p:Switch Value="2">
                                             <p:Case Value="1"/>

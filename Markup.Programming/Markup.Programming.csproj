@@ -109,6 +109,7 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Internal\Language\ValueExpression.cs" />
     <Compile Include="Markup\Glue\OperationCollection.cs" />
     <Compile Include="Internal\Diagnostics\CollectionDebugView.cs" />
     <Compile Include="Internal\Components\PrimitiveActiveComponent.cs" />
@@ -124,6 +125,7 @@
     <Compile Include="Markup\Language\Enumerations\AssignmentOp.cs" />
     <Compile Include="Markup\Language\Enumerations\BuiltinFunction.cs" />
     <Compile Include="Markup\Handlers\CallHandler.cs" />
+    <Compile Include="Markup\Language\Expressions\Path.cs" />
     <Compile Include="Markup\Language\Statements\Case.cs" />
     <Compile Include="Internal\Engine\BuiltinImplementor.cs" />
     <Compile Include="Internal\Language\ConditionalValueStatement.cs" />
@@ -181,7 +183,6 @@
     <Compile Include="Markup\Language\Statements\Switch.cs" />
     <Compile Include="Markup\Language\Expressions\Collection.cs" />
     <Compile Include="Markup\Language\Expressions\Object.cs" />
-    <Compile Include="Markup\Language\Expressions\TypeVal.cs" />
     <Compile Include="Markup\Language\Statements\When.cs" />
     <Compile Include="Internal\Collections\FunctionCollection.cs" />
     <Compile Include="Internal\Components\IComponent.cs" />
@@ -215,7 +216,7 @@
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Markup\Language\Expressions\Val.cs" />
+    <Compile Include="Markup\Language\Expressions\Value.cs" />
     <Compile Include="Markup\Handlers\ChangedHandler.cs" />
     <Compile Include="Markup\Language\Statements\While.cs" />
     <AppDesigner Include="Properties\" />

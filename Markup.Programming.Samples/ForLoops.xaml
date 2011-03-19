@@ -12,7 +12,7 @@
                     <p:EventHandler Path="Click">
                         <p:For Var="i" TypeName="Int32">
                             <p:For.Value>
-                                <p:Val Value="0"/>
+                                <p:Path>0</p:Path>
                             </p:For.Value>
                             <p:For.While>
                                 <p:Operator Path1="$i" Op="LessThan" Value2="3"/>
@@ -22,8 +22,8 @@
                             </p:For.Next>
                             <p:Call Path="[MessageBox].Show">
                                 <p:Call Path="[String].Format">
-                                    <p:Val Value="i = {0}"/>
-                                    <p:Get Path="$i"/>
+                                    <p:Path>'i = {0}'</p:Path>
+                                    <p:Path> $i </p:Path>
                                 </p:Call>
                             </p:Call>
                         </p:For>
@@ -36,8 +36,8 @@
                         <p:For Var="i" Value="0" UpperLimit="3" Increment="1">
                             <p:Call Path="[MessageBox].Show">
                                 <p:Call Path="[String].Format">
-                                    <p:Val Value="i = {0}"/>
-                                    <p:Get Path="$i"/>
+                                    <p:Path>'i = {0}'</p:Path>
+                                    <p:Path>$i</p:Path>
                                 </p:Call>
                             </p:Call>
                         </p:For>

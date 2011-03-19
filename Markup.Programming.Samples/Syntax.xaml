@@ -30,28 +30,31 @@
                 <p:Function FunctionName="ValueSamples">
 
                     <!-- sample values using ordinary XAML syntax -->
-                    <p:Val Value="An ordinary string"/>
-                    <p:Val Value="{StaticResource BlueBrush}"/>
-                    <p:Val Value="{Binding ElementName=Button}"/>
-                    <p:Val Value="{Binding FirstName}"/>
+                    <p:Value Content="An ordinary string"/>
+                    <p:Value>An ordinary string</p:Value>
+                    <p:Value Content="{StaticResource BlueBrush}"/>
+                    <p:Value Content="{Binding ElementName=Button}"/>
+                    <p:Value Content="{Binding FirstName}"/>
                     
                     <!-- use parameter value indirection -->
-                    <p:Val Path="$i"/>
+                    <p:Path Expression="$i"/>
+                    <p:Path>$i</p:Path>
 
                     <!-- explicit type conversion -->
-                    <p:Val Value="42" Type="sys:Int32"/>
+                    <p:Value Content="42" Type="sys:Int32"/>
                     
                     <!-- syntax without conversion -->
-                    <p:Val>
+                    <p:Value>
                         <sys:Int32>42</sys:Int32>
-                    </p:Val>
+                    </p:Value>
                     
                     <!-- supply types as values -->
-                    <p:TypeVal Value="sys:Int32"/>
-                    <p:Val Value="{x:Type sys:Int32}"/>
-                    <p:Val>
+                    <p:Path>[Int32]</p:Path>
+                    <p:Path Expression="[Int32]"/>
+                    <p:Value Content="{x:Type sys:Int32}"/>
+                    <p:Value>
                         <x:Type TypeName="sys:Int32"/>
-                    </p:Val>
+                    </p:Value>
 
                     <!-- use get accessors -->
                     <p:Get Var="i"/>
@@ -71,15 +74,15 @@
                     <p:GetItem Path="$x" Index="0"/>
                     <p:GetItem Path="$x" IndexPath="$i"/>
                     <p:GetItem Path="$array3D">
-                        <p:Val Path="$i"/>
-                        <p:Val Path="$j"/>
-                        <p:Val Path="$k"/>
+                        <p:Path Expression="$i"/>
+                        <p:Path Expression="$j"/>
+                        <p:Path Expression="$k"/>
                     </p:GetItem>
 
                     <!-- all accessors can use context and context is inherited -->
-                    <p:Val Context="{StaticResource BlueBrush}">
+                    <p:Value Context="{StaticResource BlueBrush}">
                         <p:Get Path="Color"/>
-                    </p:Val>
+                    </p:Value>
 
                     <!-- use operators with optional conversions -->
                     <p:Operator Value1="abc" Op="Plus" Value2="def"/>
@@ -92,9 +95,9 @@
                         
                     <!-- use operators in params mode -->
                     <p:Operator Op="Plus">
-                        <p:Val Type="sys:Int32" Value="1"/>
-                        <p:Val Type="sys:Int32" Value="2"/>
-                        <p:Val Type="sys:Int32" Value="3"/>
+                        <p:Value Type="sys:Int32" Content="1"/>
+                        <p:Value Type="sys:Int32" Content="2"/>
+                        <p:Value Type="sys:Int32" Content="3"/>
                     </p:Operator>
                     
                     <!-- use short-circuit operators to avoid crashes -->
@@ -122,31 +125,27 @@
                         <p:Property PropertyName="Opacity">
                             <p:Operator Op="Divide">
                                 <p:Get Context="{Binding ElementName=Button}" PropertyName="Opacity"/>
-                                <p:Val Value="2"/>
+                                <p:Value Content="2"/>
                             </p:Operator>
                         </p:Property>
                     </p:Object>
 
                     <!-- create a smart generic observable collection -->
                     <p:Collection>
-                        <p:Val Value="abc"/>
-                        <p:Val Value="def"/>
-                        <p:Val Value="ghi"/>
+                        <p:Value Content="abc"/>
+                        <p:Value Content="def"/>
+                        <p:Value Content="ghi"/>
                     </p:Collection>
 
                     <!-- filter collections using iterators -->
                     <p:Iterator>
                         <p:ForEach Var="operator">
                             <p:ForEach.Value>
-                                <p:Call Type="sys:Enum" StaticMethodName="GetValues">
-                                    <p:TypeVal Value="p:Operator"/>
-                                </p:Call>
+                                <p:Call Path="[Enum].GetValues([Op])"/>
                             </p:ForEach.Value>
                             <p:Yield Path="$operator">
                                 <p:Yield.When>
-                                    <p:Call Path="$operator" MethodName="Contains">
-                                        <p:Val Value="Bitwise"/>
-                                    </p:Call>
+                                    <p:Call Path="$operator.Contains('Bitwise')"/>
                                 </p:Yield.When>
                             </p:Yield>
                         </p:ForEach>
@@ -158,14 +157,14 @@
 
         <Button Content="Click Me">
             <p:Attached.Operations>
-                <p:CallHandler EventName="Click.[MessageBox].Show"/>
+                <p:CallHandler EventName="Click.[MessageBox].Show('Hello, world!')"/>
             </p:Attached.Operations>
         </Button>
 
         <Button Content="Click Me">
             <p:Attached.Operations>
                 <p:EventHandler Path="Click">
-                    <p:Call Path="[MessageBox].Show" Argument="Hello, world!"/>
+                    <p:Call Path="[MessageBox].Show('Hello, world!')"/>
                 </p:EventHandler>
             </p:Attached.Operations>
         </Button>
