@@ -121,7 +121,7 @@
     <Compile Include="Markup\Handlers\EventHandler.cs" />
     <Compile Include="Markup\Glue\Attached.cs" />
     <Compile Include="Internal\Language\Handler.cs" />
-    <Compile Include="Markup\Language\Enumerations\AssignmentOperator.cs" />
+    <Compile Include="Markup\Language\Enumerations\AssignmentOp.cs" />
     <Compile Include="Markup\Language\Enumerations\BuiltinFunction.cs" />
     <Compile Include="Markup\Handlers\CallHandler.cs" />
     <Compile Include="Markup\Language\Statements\Case.cs" />
@@ -216,7 +216,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Markup\Language\Expressions\Val.cs" />
-    <Compile Include="Markup\Handlers\DataChangedHandler.cs" />
+    <Compile Include="Markup\Handlers\ChangedHandler.cs" />
     <Compile Include="Markup\Language\Statements\While.cs" />
     <AppDesigner Include="Properties\" />
     <Compile Include="Markup\Language\Statements\Yield.cs" />

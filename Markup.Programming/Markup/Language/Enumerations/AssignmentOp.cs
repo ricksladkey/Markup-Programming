@@ -7,9 +7,9 @@ using Markup.Programming.Core;
 namespace Markup.Programming
 {
     /// <summary>
-    /// An AssignmentOperator represents the corresponding C# operator.
+    /// An AssignmentOp represents the corresponding C# operator.
     /// </summary>
-    public enum AssignmentOperator
+    public enum AssignmentOp
     {
         Assign = 0,
 

@@ -67,7 +67,7 @@ namespace Markup.Programming
 
         public string StaticFieldName { get; set; }
 
-        public AssignmentOperator Op { get; set; }
+        public AssignmentOp Op { get; set; }
 
         public string ValuePath { get; set; }
 
@@ -83,7 +83,7 @@ namespace Markup.Programming
             if (Var != null)
             {
                 var variable = "$" + Var;
-                if (Op != AssignmentOperator.Assign)
+                if (Op != AssignmentOp.Assign)
                 {
                     var oldValue = engine.LookupVariable(variable);
                     value = engine.Evaluate(Op, oldValue, value);
@@ -100,7 +100,7 @@ namespace Markup.Programming
             }
             var context = engine.Context;
             var type = engine.EvaluateType(TypeProperty, TypeName);
-            if (Op != AssignmentOperator.Assign)
+            if (Op != AssignmentOp.Assign)
             {
                 object oldValue = null;
                 if (DependencyProperty != null)

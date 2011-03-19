@@ -4,12 +4,12 @@ using Markup.Programming.Core;
 namespace Markup.Programming
 {
     /// <summary>
-    /// The DataChangedHandler invokes its passive components when Value
+    /// The ChangedHandler invokes its passive components when Value
     /// changes. If Value has a binding then normal property and collection
     /// change notification will cause the handler to be raised.  The event
     /// args will be of type DependencyPropertyChangedEventArgs.
     /// </summary>
-    public class DataChangedHandler : Handler
+    public class ChangedHandler : Handler
     {
         public struct DependencyPropertyChangedEventArgs
         {
@@ -34,8 +34,8 @@ namespace Markup.Programming
         }
 
         public static readonly DependencyProperty ValueProperty =
-            DependencyProperty.Register("Value", typeof(object), typeof(DataChangedHandler),
-            new PropertyMetadata((s, e) => (s as DataChangedHandler).OnValueChanged(s,
+            DependencyProperty.Register("Value", typeof(object), typeof(ChangedHandler),
+            new PropertyMetadata((s, e) => (s as ChangedHandler).OnValueChanged(s,
                 new DependencyPropertyChangedEventArgs(e.Property, e.OldValue, e.NewValue))));
 
         private bool enabled;

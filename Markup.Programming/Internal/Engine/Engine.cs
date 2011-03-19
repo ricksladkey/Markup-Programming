@@ -391,15 +391,15 @@ namespace Markup.Programming.Core
             return OperatorHelper.Evaluate(this, op, ExpressionOrValue.ExpressionArray(collection));
         }
 
-        public object Evaluate(AssignmentOperator op, object lhs, object rhs)
+        public object Evaluate(AssignmentOp op, object lhs, object rhs)
         {
             switch (op)
             {
-                case AssignmentOperator.Assign:
+                case AssignmentOp.Assign:
                     return rhs;
-                case AssignmentOperator.Increment:
+                case AssignmentOp.Increment:
                     return Evaluate(Op.Plus, lhs, 1);
-                case AssignmentOperator.Decrement:
+                case AssignmentOp.Decrement:
                     return Evaluate(Op.Minus, lhs, 1);
                 default:
                     break;

@@ -7,7 +7,7 @@ using Markup.Programming.Core;
 namespace Markup.Programming
 {
     /// <summary>
-    /// An Operator represents the corresponding C# operator
+    /// An Op represents the corresponding C# operator
     /// or method.
     /// </summary>
     public enum Op

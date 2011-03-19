@@ -16,7 +16,7 @@
                 <TextBlock Name="Status" Foreground="White" FontWeight="Bold"/>
             </Grid>
             <p:Attached.Operations>
-                <p:DataChangedHandler Value="{Binding Text, ElementName=Password}">
+                <p:ChangedHandler Value="{Binding Text, ElementName=Password}">
                     <p:Set Var="pass" ValuePath="@EventArgs.NewValue == 'xyzzy'"/>
                     <p:Set Context="{Binding ElementName=Status}" PropertyName="Text"
                            ValuePath="@Op('Conditional', $pass, 'Yes!', 'No.')"/>
@@ -27,7 +27,7 @@
                             <p:Get Source="{StaticResource RedBrush}"/>
                         </p:Operator>
                     </p:Set>
-                </p:DataChangedHandler>
+                </p:ChangedHandler>
             </p:Attached.Operations>
         </StackPanel>
     </Grid>
