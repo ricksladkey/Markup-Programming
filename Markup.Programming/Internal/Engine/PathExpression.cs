@@ -3,6 +3,7 @@ using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
 
 namespace Markup.Programming.Core
 {
@@ -229,10 +230,7 @@ namespace Markup.Programming.Core
                 if (char.IsDigit(c))
                 {
                     tokens.Dequeue();
-                    var result = null as object;
-                    if (token.Contains('.')) { double d; if (!double.TryParse(token, out d)) engine.Throw("bad double: " + token); result = d; }
-                    else { int i; if (!int.TryParse(token, out i)) engine.Throw("bad int: " + token); result = i; }
-                    node = new ValueNode { Value = result };
+                    node = new ValueNode { Value = token.Contains('.') ? ParseDouble(token) : ParseInt(token) };
                 }
                 else if (c == '"')
                     node = new ValueNode { Value = tokens.Dequeue().Substring(1) };
@@ -297,6 +295,19 @@ namespace Markup.Programming.Core
                 nodeNext = false;
             }
             return node;
+        }
+
+        private object ParseDouble(string token)
+        {
+            double d;
+            if (!double.TryParse(token, NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture, out d))
+                engine.Throw("bad double: " + token);
+            return d;
+        }
+
+        private object ParseInt(string token)
+        {
+            int i; if (!int.TryParse(token, out i)) engine.Throw("bad int: " + token); return i;
         }
 
         private bool IsCurrentSet { get { return IsSet && tokens != null && tokens.Count == 0; } }

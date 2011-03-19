@@ -1,3 +1,5 @@
+- add Silverlight4 demo on the website
+- fix data changed handler
 - auto-increment version number
 - detect handler re-registration
 - write select-on-focus editable combox-box sample
@@ -7,7 +9,6 @@
 - change For: Operator plus Limit and Increment defaults to 1
 - revisit conversion, specifically we should not silently allow conversions to fail
 -----------------------
-- add special call declaration mode for paths, e.g. $foo($a,$b) declares functions foo with params a and b
 - fix accidental auto-evaluation of langauge elements
 - rename MarkupObject to ResourceObject, etc.
 - clean up MarkupConverter names, especially LoadActions, etc.
