@@ -490,7 +490,7 @@ namespace Markup.Programming.Core
 
         private void DefineParameter(Parameter parameter, object arg)
         {
-            DefineVariable("$" + parameter.ParameterName, arg);
+            DefineVariable("$" + parameter.Param, arg);
         }
 
         public object CallBuiltinFunction(BuiltinFunction builtinFunction, IEnumerable<object> args)

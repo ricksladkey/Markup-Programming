@@ -6,11 +6,11 @@ using System.Text;
 namespace Markup.Programming
 {
     /// <summary>
-    /// A Parameter is a container for specifying ParameterName.
+    /// A Parameter is a container for specifying parameter attributes.
     /// </summary>
     public class Parameter
     {
         public bool Params { get; set; }
-        public string ParameterName { get; set; }
+        public string Param { get; set; }
     }
 }
