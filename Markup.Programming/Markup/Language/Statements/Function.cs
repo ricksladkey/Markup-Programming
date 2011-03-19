@@ -18,7 +18,7 @@ namespace Markup.Programming
     /// produces a return value but to return null simply fall off
     /// the end of the function.
     /// </summary>
-    public class Function : Block
+    public class Function : StatementBlock
     {
         public Function()
         {

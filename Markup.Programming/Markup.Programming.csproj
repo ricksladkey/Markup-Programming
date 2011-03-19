@@ -109,6 +109,7 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Internal\Language\StatementBlock.cs" />
     <Compile Include="Internal\Language\ValueExpression.cs" />
     <Compile Include="Markup\Glue\OperationCollection.cs" />
     <Compile Include="Internal\Diagnostics\CollectionDebugView.cs" />
@@ -173,7 +174,6 @@
     <Compile Include="Internal\Language\ValueBlock.cs" />
     <Compile Include="Markup\Language\Statements\For.cs" />
     <Compile Include="Markup\Language\Statements\ForEach.cs" />
-    <Compile Include="Markup\Language\Expressions\InlineFunction.cs" />
     <Compile Include="Markup\Language\Support\Command.cs" />
     <Compile Include="Markup\Language\Expressions\GetItem.cs" />
     <Compile Include="Markup\Language\Expressions\Iterator.cs" />

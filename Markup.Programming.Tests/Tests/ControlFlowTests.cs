@@ -35,7 +35,7 @@ namespace Markup.Programming.Tests
         {
             // Set X = 21 and then return X * 2 and check that the result is 42.
             TestHelper.ExpressionTest(42,
-                new InlineFunction
+                new Block
                 {
                     Body =
                     {
@@ -57,7 +57,7 @@ namespace Markup.Programming.Tests
         public void SwitchTest()
         {
             TestHelper.ExpressionTest(42,
-                new InlineFunction
+                new Block
                 {
                     Body =
                     {

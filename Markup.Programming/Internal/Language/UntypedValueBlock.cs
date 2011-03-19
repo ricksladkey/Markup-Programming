@@ -6,7 +6,7 @@ namespace Markup.Programming.Core
     /// An UntypedValueBlock is a Block that also has Value and
     /// ValueParam properties but not Type.
     /// </summary>
-    public abstract class UntypedValueBlock : Block
+    public abstract class UntypedValueBlock : StatementBlock
     {
         public object Value
         {
