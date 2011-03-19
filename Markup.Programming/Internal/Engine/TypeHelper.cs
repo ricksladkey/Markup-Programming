@@ -71,6 +71,7 @@ namespace Markup.Programming.Core
 
         private static object GenericConvert(Type type, object value)
         {
+            if (type.IsEnum && value is string) return Enum.Parse(type, value as string, false);
             if (value is IConvertible) return System.Convert.ChangeType(value, type, null);
             return value;
         }

@@ -219,6 +219,16 @@ namespace Markup.Programming.Core
                     continue;
                 }
                 var c = token[0];
+                if (c == '?')
+                {
+                    if (nodeNext) engine.Throw("unexpected conditional operator");
+                    tokens.Dequeue();
+                    var ifTrue = Parse();
+                    VerifyToken(":");
+                    var ifFalse = Parse();
+                    node = new OpNode { Op = Op.Conditional, Operands = { node, ifTrue, ifFalse } };
+                    continue;
+                }
                 if (c == '.')
                 {
                     if (nodeNext) engine.Throw("unexpected dot operator");
@@ -349,7 +359,7 @@ namespace Markup.Programming.Core
                     i += 2;
                     continue;
                 }
-                if (OperatorMap.ContainsKey(c.ToString()) || ".[](),".Contains(c))
+                if (OperatorMap.ContainsKey(c.ToString()) || ".[](),?:".Contains(c))
                 {
                     tokens.Enqueue(c.ToString());
                     ++i;

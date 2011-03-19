@@ -9,10 +9,5 @@ namespace Markup.Programming
         {
             RegisterHandler(engine, Path);
         }
-
-        protected override void OnEventHandler(Engine engine)
-        {
-            ExecuteBody(engine);
-        }
     }
 }

@@ -137,6 +137,10 @@
       <Link>MarkupObjectSample.xaml.cs</Link>
       <DependentUpon>MarkupObjectSample.xaml</DependentUpon>
     </Compile>
+    <Compile Include="..\Markup.Programming.Samples\PasswordSample.xaml.cs">
+      <Link>PasswordSample.xaml.cs</Link>
+      <DependentUpon>PasswordSample.xaml</DependentUpon>
+    </Compile>
     <Compile Include="..\Markup.Programming.Samples\SelectOnFocus.xaml.cs">
       <Link>SelectOnFocus.xaml.cs</Link>
       <DependentUpon>SelectOnFocus.xaml</DependentUpon>
@@ -193,6 +197,11 @@
     </Page>
     <Page Include="..\Markup.Programming.Samples\MarkupObjectSample.xaml">
       <Link>MarkupObjectSample.xaml</Link>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="..\Markup.Programming.Samples\PasswordSample.xaml">
+      <Link>PasswordSample.xaml</Link>
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

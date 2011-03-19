@@ -5,21 +5,30 @@
     xmlns:p="http://markupprogramming.codeplex.com/markup/programming"
     Width="300" Height="300">
     <Grid>
-        <Grid.Resources>
-            <p:MarkupObject x:Key="SampleData">
-                <p:Property PropertyName="Data">
-                    This is some data
-                </p:Property>
-            </p:MarkupObject>
-        </Grid.Resources>
-        <StackPanel DataContext="{Binding Value, Source={StaticResource SampleData} }">
-            <Button Content="Show Data">
-                <p:Attached.Operations>
-                    <p:EventHandler Path="Click">
-                        <p:Call Path="[MessageBox].Show(Data)"/>
-                    </p:EventHandler>
-                </p:Attached.Operations>
-            </Button>
+        <StackPanel TextBlock.FontSize="20">
+            <StackPanel.Resources>
+                <SolidColorBrush Color="Red" x:Key="RedBrush"/>
+                <SolidColorBrush Color="Green" x:Key="GreenBrush"/>
+            </StackPanel.Resources>
+            <TextBlock Text="The password is: xyzzy"/>
+            <TextBox Name="Password"/>
+            <Grid Name="StatusBackground">
+                <TextBlock Name="Status" Foreground="White" FontWeight="Bold"/>
+            </Grid>
+            <p:Attached.Operations>
+                <p:DataChangedHandler Value="{Binding Text, ElementName=Password}">
+                    <p:Set Var="pass" ValuePath="@EventArgs.NewValue == 'xyzzy'"/>
+                    <p:Set Context="{Binding ElementName=Status}" PropertyName="Text"
+                           ValuePath="@Op('Conditional', $pass, 'Yes!', 'No.')"/>
+                    <p:Set Context="{Binding ElementName=StatusBackground}" PropertyName="Background">
+                        <p:Operator Op="Conditional">
+                            <p:Get Var="pass"/>
+                            <p:Get Source="{StaticResource GreenBrush}"/>
+                            <p:Get Source="{StaticResource RedBrush}"/>
+                        </p:Operator>
+                    </p:Set>
+                </p:DataChangedHandler>
+            </p:Attached.Operations>
         </StackPanel>
     </Grid>
 </Window>

@@ -97,6 +97,7 @@ namespace Markup.Programming.Tests.Tests
         [TestMethod]
         public void PathTestSandbox()
         {
+            BasicGetTest(42, "@true ? 42 : 21");
         }
 
 #if DEBUG

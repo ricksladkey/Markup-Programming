@@ -32,7 +32,7 @@ namespace Markup.Programming.Core
         public static readonly DependencyProperty SetHandledProperty =
             DependencyProperty.Register("SetHandled", typeof(bool), typeof(Handler), null);
 
-        private IDictionary<string, object> closure;
+        private IDictionary<string, object> closure = new Dictionary<string, object>();
 
         protected override void OnAttached()
         {
@@ -93,6 +93,7 @@ namespace Markup.Programming.Core
 
         protected virtual void OnEventHandler(Engine engine)
         {
+            ExecuteBody(engine);
         }
 
         protected override void ExecuteBody(Engine engine)

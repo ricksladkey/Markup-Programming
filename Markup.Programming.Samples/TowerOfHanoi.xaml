@@ -133,7 +133,9 @@
                 </ItemsPanelTemplate>
             </StackPanel.Resources>
 
-            <TextBox Text="Tower of Hanoi" FontSize="20" Background="PaleTurquoise"/>
+            <Grid Background="PaleTurquoise">
+                <TextBlock Text="Tower of Hanoi" FontSize="20" TextAlignment="Center"/>
+            </Grid>
             <Grid Margin="0,3,0,0" Background="PaleGreen" Height="25">
                 <ItemsControl ItemsSource="{Binding HoldingPost}" ItemsPanel="{StaticResource PanelTemplate}"
                               ItemTemplate="{StaticResource DiskTemplate}" VerticalAlignment="Center"/>

@@ -112,9 +112,14 @@ namespace Markup.Programming.Core
                 case Op.As:
                     return Is(engine, operands[0], operands[1]) ? operands[0] : null;
                 case Op.Equate:
-                    return operands[0].Equals(operands[1]);
+                    return Equate(engine, operands[0], operands[1]);
                 case Op.Compare:
-                    return (operands[0] as IComparable).CompareTo(operands[2]);
+                    return Compare(engine, operands[0], operands[1]);
+                case Op.Equals:
+                case Op.NotEquals:
+                    if ((operands[0] == null || operands[0] is string) && (operands[1] == null || operands[1] is string))
+                        return Equate(engine, operands[0], operands[1]) == (op == Op.Equals);
+                    break;
                 default:
                     break;
             }
@@ -131,6 +136,18 @@ namespace Markup.Programming.Core
             if (type == null) engine.Throw("type");
             if (instance == null) return false;
             return (type as Type).IsAssignableFrom(instance.GetType());
+        }
+
+        private static bool Equate(Engine engine, object lhs, object rhs)
+        {
+            if (lhs == rhs) return true;
+            if (lhs == null || rhs == null) return false;
+            return lhs.Equals(rhs);
+        }
+
+        private static int Compare(Engine engine, object lhs, object rhs)
+        {
+            return (lhs as IComparable).CompareTo(rhs);
         }
 
         public static int GetArity(Op op)

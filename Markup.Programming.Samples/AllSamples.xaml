@@ -17,6 +17,7 @@
             <samples:SelectOnFocus/>
             <samples:ForLoops/>
             <samples:DynamicButton/>
+            <samples:PasswordSample/>
             <samples:MarkupObjectSample/>
             <samples:CrashSample/>
         </p:MarkupCollection>

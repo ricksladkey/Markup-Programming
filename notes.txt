@@ -1,5 +1,3 @@
-- add Silverlight4 demo on the website
-- fix data changed handler
 - auto-increment version number
 - detect handler re-registration
 - write select-on-focus editable combox-box sample

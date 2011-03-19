@@ -151,6 +151,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="PasswordSample.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="SelectOnFocus.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -185,6 +189,9 @@
     </Compile>
     <Compile Include="MarkupObjectSample.xaml.cs">
       <DependentUpon>MarkupObjectSample.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="PasswordSample.xaml.cs">
+      <DependentUpon>PasswordSample.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>

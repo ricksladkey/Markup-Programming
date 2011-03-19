@@ -16,13 +16,11 @@
             <TextBox Text="An ordinary TextBox"/>
             <ComboBox Text="SelectOnFocus ComboBox" IsEditable="True">
                 <p:Attached.Operations>
-                    <p:AttachedHandler>
-                        <p:EventHandler Path="Loaded">
-                            <p:Set Path="$textBox"
-                                   ValuePath="@Sender.Template.FindName('PART_EditableTextBox', @Sender)"/>
-                            <p:CallHandler Path="GotFocus.$textBox.SelectAll()"/>
-                        </p:EventHandler>
-                    </p:AttachedHandler>
+                    <p:EventHandler Path="Loaded">
+                        <p:Set Path="$textBox"
+                                ValuePath="@Sender.Template.FindName('PART_EditableTextBox', @Sender)"/>
+                        <p:CallHandler Path="GotFocus.$textBox.SelectAll()"/>
+                    </p:EventHandler>
                 </p:Attached.Operations>
             </ComboBox>
             <TextBox Text="Another ordinary TextBox"/>

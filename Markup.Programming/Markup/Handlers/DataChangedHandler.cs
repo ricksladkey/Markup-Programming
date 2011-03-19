@@ -11,6 +11,22 @@ namespace Markup.Programming
     /// </summary>
     public class DataChangedHandler : Handler
     {
+        public struct DependencyPropertyChangedEventArgs
+        {
+            public DependencyPropertyChangedEventArgs(DependencyProperty property, object oldValue, object newValue)
+            {
+                this.property = property;
+                this.oldValue = oldValue;
+                this.newValue = newValue;
+            }
+            private object newValue;
+            private object oldValue;
+            private DependencyProperty property;
+            public object NewValue { get { return newValue; } }
+            public object OldValue { get { return oldValue; } }
+            public DependencyProperty Property { get { return property; } }
+        }
+
         public object Value
         {
             get { return (object)GetValue(ValueProperty); }
@@ -19,15 +35,20 @@ namespace Markup.Programming
 
         public static readonly DependencyProperty ValueProperty =
             DependencyProperty.Register("Value", typeof(object), typeof(DataChangedHandler),
-            new PropertyMetadata((s, e) => (s as DataChangedHandler).OnValueChanged(s, e)));
+            new PropertyMetadata((s, e) => (s as DataChangedHandler).OnValueChanged(s,
+                new DependencyPropertyChangedEventArgs(e.Property, e.OldValue, e.NewValue))));
+
+        private bool enabled;
 
         private void OnValueChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
+            if (enabled) EventHandler(sender, e);
         }
 
         protected override void OnActiveExecute(Engine engine)
         {
-            throw new System.NotImplementedException();
+            enabled = true;
+            if (Value != null) OnValueChanged(this, new DependencyPropertyChangedEventArgs(ValueProperty, Value, Value));
         }
     }
 }
