@@ -36,7 +36,7 @@ namespace Markup.Programming.Tests
         public void ExpressionTests()
         {
             TestHelper.ExpressionTest(3, new Operator { Op = Op.Plus,
-                Arguments = { new Value { Content = 1 }, new Value { Content = 2 } } });
+                Arguments = { new Value { Val = 1 }, new Value { Val = 2 } } });
         }
 
         [TestMethod]
@@ -52,9 +52,9 @@ namespace Markup.Programming.Tests
                             StaticMethodName = "Cos",
                             Arguments =
                             {
-                                // <p:Value Content="{Binding Object1}"/>
+                                // <p:Value Val="{Binding Object1}"/>
                                 TestHelper.Configure(new Value(),
-                                    value => BindingOperations.SetBinding(value, Value.ContentProperty, new Binding("Object1"))),
+                                    value => BindingOperations.SetBinding(value, Value.ValProperty, new Binding("Object1"))),
                             },
                         },
                     },
@@ -73,14 +73,14 @@ namespace Markup.Programming.Tests
                     StaticMethodName = "Format",
                     TypeArguments =
                     {
-                        new Value { Content = typeof(string) },
-                        new Value { Content = typeof(object[]) },
+                        new Value { Val = typeof(string) },
+                        new Value { Val = typeof(object[]) },
                     },
                     Arguments =
                     {
-                        new Value { Content = "{0}, {1}" },
-                        new Value { Content = 1 },
-                        new Value { Content = 2 },
+                        new Value { Val = "{0}, {1}" },
+                        new Value { Val = 1 },
+                        new Value { Val = 2 },
                     }
                 });
         }

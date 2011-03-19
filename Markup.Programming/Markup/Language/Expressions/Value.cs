@@ -9,20 +9,20 @@ using Markup.Programming.Core;
 namespace Markup.Programming
 {
     /// <summary>
-    /// The Value expression simply returns Content or Path, optionally
+    /// The Value expression simply returns Val or Path, optionally
     /// converted to Type.
     /// </summary>
-    [ContentProperty("Content")]
+    [ContentProperty("Val")]
     public class Value : TypedExpession
     {
-        public object Content
+        public object Val
         {
-            get { return (object)GetValue(ContentProperty); }
-            set { SetValue(ContentProperty, value); }
+            get { return (object)GetValue(ValProperty); }
+            set { SetValue(ValProperty, value); }
         }
 
-        public static readonly DependencyProperty ContentProperty =
-            DependencyProperty.Register("Content", typeof(object), typeof(Value), null);
+        public static readonly DependencyProperty ValProperty =
+            DependencyProperty.Register("Val", typeof(object), typeof(Value), null);
 
         public bool SuppressAttach { get; set; }
 
@@ -31,14 +31,14 @@ namespace Markup.Programming
         protected override void OnAttached()
         {
             base.OnAttached();
-            if (!SuppressAttach) Attach(ContentProperty);
+            if (!SuppressAttach) Attach(ValProperty);
         }
 
         protected override object OnEvaluate(Engine engine)
         {
-            if (Quote) return engine.Quote(ContentProperty);
+            if (Quote) return engine.Quote(ValProperty);
             var type = engine.EvaluateType(TypeProperty, TypeName);
-            return engine.Evaluate(ContentProperty, Path, PathExpression, type);
+            return engine.Evaluate(ValProperty, Path, PathExpression, type);
         }
     }
 }

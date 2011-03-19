@@ -30,18 +30,18 @@
                 <p:Function FunctionName="ValueSamples">
 
                     <!-- sample values using ordinary XAML syntax -->
-                    <p:Value Content="An ordinary string"/>
+                    <p:Value Val="An ordinary string"/>
                     <p:Value>An ordinary string</p:Value>
-                    <p:Value Content="{StaticResource BlueBrush}"/>
-                    <p:Value Content="{Binding ElementName=Button}"/>
-                    <p:Value Content="{Binding FirstName}"/>
+                    <p:Value Val="{StaticResource BlueBrush}"/>
+                    <p:Value Val="{Binding ElementName=Button}"/>
+                    <p:Value Val="{Binding FirstName}"/>
                     
                     <!-- use parameter value indirection -->
                     <p:Path Expression="$i"/>
                     <p:Path>$i</p:Path>
 
                     <!-- explicit type conversion -->
-                    <p:Value Content="42" Type="sys:Int32"/>
+                    <p:Value Val="42" Type="sys:Int32"/>
                     
                     <!-- syntax without conversion -->
                     <p:Value>
@@ -51,7 +51,7 @@
                     <!-- supply types as values -->
                     <p:Path>[Int32]</p:Path>
                     <p:Path Expression="[Int32]"/>
-                    <p:Value Content="{x:Type sys:Int32}"/>
+                    <p:Value Val="{x:Type sys:Int32}"/>
                     <p:Value>
                         <x:Type TypeName="sys:Int32"/>
                     </p:Value>
@@ -95,9 +95,9 @@
                         
                     <!-- use operators in params mode -->
                     <p:Operator Op="Plus">
-                        <p:Value Type="sys:Int32" Content="1"/>
-                        <p:Value Type="sys:Int32" Content="2"/>
-                        <p:Value Type="sys:Int32" Content="3"/>
+                        <p:Value Type="sys:Int32" Val="1"/>
+                        <p:Value Type="sys:Int32" Val="2"/>
+                        <p:Value Type="sys:Int32" Val="3"/>
                     </p:Operator>
                     
                     <!-- use short-circuit operators to avoid crashes -->
@@ -125,16 +125,16 @@
                         <p:Property PropertyName="Opacity">
                             <p:Operator Op="Divide">
                                 <p:Get Context="{Binding ElementName=Button}" PropertyName="Opacity"/>
-                                <p:Value Content="2"/>
+                                <p:Value Val="2"/>
                             </p:Operator>
                         </p:Property>
                     </p:Object>
 
                     <!-- create a smart generic observable collection -->
                     <p:Collection>
-                        <p:Value Content="abc"/>
-                        <p:Value Content="def"/>
-                        <p:Value Content="ghi"/>
+                        <p:Value Val="abc"/>
+                        <p:Value Val="def"/>
+                        <p:Value Val="ghi"/>
                     </p:Collection>
 
                     <!-- filter collections using iterators -->

@@ -14,13 +14,13 @@ namespace Markup.Programming.Tests
                 new Call
                 {
                     BuiltinFunction = BuiltinFunction.ParameterIsDefined,
-                    Arguments = { new Value { Content = Engine.EventArgsKey } },
+                    Arguments = { new Value { Val = Engine.EventArgsKey } },
                 });
             TestHelper.ExpressionTest(false,
                 new Call
                 {
                     BuiltinFunction = BuiltinFunction.ParameterIsDefined,
-                    Arguments = { new Value { Content = "xyzzy" } },
+                    Arguments = { new Value { Val = "xyzzy" } },
                 });
         }
 
