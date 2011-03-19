@@ -109,8 +109,11 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Internal\Engine\CommandInterop.cs" />
+    <Compile Include="Internal\Components\InterfaceComponent.cs" />
+    <Compile Include="Internal\Interop\CommandInterop.cs" />
     <Compile Include="Internal\Engine\IInteropHost.cs" />
+    <Compile Include="Internal\Interop\ConverterInterop.cs" />
+    <Compile Include="Internal\Interop\Interop.cs" />
     <Compile Include="Internal\Language\StatementBlock.cs" />
     <Compile Include="Internal\Language\ValueExpression.cs" />
     <Compile Include="External\Support\OperationCollection.cs" />

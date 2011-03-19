@@ -14,33 +14,23 @@ namespace Markup.Programming
     /// INotifyCollectionChanged and is used for defining collections
     /// in resources.
     /// </summary>
-    [ContentProperty("Children")]
+    [ContentProperty("Items")]
     public class ResourceCollection : ResourceComponent, IList, INotifyCollectionChanged, INotifyPropertyChanged, ISupportInitialize
     {
         public ResourceCollection()
         {
+            Items = new List<object>();
             Collection = new ObservableCollection<object>();
             Collection.CollectionChanged += new NotifyCollectionChangedEventHandler(ResourceCollection_CollectionChanged);
-            Children = new List<object>();
         }
 
-        private string name { get; set; }
         private ObservableCollection<object> Collection { get; set; }
-        public List<object> Children { get; set; }
-
-        public string CollectionName
-        {
-            get { return name; }
-            set { name = value; OnPropertyChanged("CollectionName"); }
-        }
-
-        public int RangeStart { get; set; }
-        public int RangeCount { get; set; }
+        public List<object> Items { get; set; }
 
         public override void EndInit()
         {
             base.EndInit();
-            foreach (var child in Children) Add(child);
+            foreach (var child in Items) Add(child);
         }
 
         #region INotifyCollectionChanged Members

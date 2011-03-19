@@ -12,12 +12,13 @@ namespace Markup.Programming
     /// referenced entirely in resources and by IExpression
     /// to implement the Convert and ConvertBack interface methods.
     /// </summary>
-    [ContentProperty("Expressions")]
-    public class ResourceConverter : ResourceComponent, IValueConverter
+    public class ResourceConverter : InterfaceComponent, IValueConverter
     {
+        private ConverterInterop<ResourceConverter> interop;
+
         public ResourceConverter()
         {
-            Expressions = new ExpressionCollection();
+            interop = new ConverterInterop<ResourceConverter>(this);
         }
 
         public string ConvertPath { get; set; }
@@ -30,37 +31,24 @@ namespace Markup.Programming
         private PathExpression convertBackPathExpression = new PathExpression();
         protected PathExpression ConvertBackPathExpression { get { return convertBackPathExpression; } }
 
-        public ExpressionCollection Expressions
-        {
-            get { return (ExpressionCollection)GetValue(ExpressionsProperty); }
-            set { SetValue(ExpressionsProperty, value); }
-        }
-
-        public static readonly DependencyProperty ExpressionsProperty =
-            DependencyProperty.Register("Expressions", typeof(ExpressionCollection), typeof(ResourceConverter), null);
-
-        protected override void OnAttached()
-        {
-            base.OnAttached();
-            Attach(Expressions);
-        }
-
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             TryToAttach();
-            return Evaluate(Expressions.Count >= 1 ? Expressions[0] : null,
-                ConvertPath, ConvertPathExpression, value, targetType, parameter, culture);
+            if (ConvertPath != null)
+                return Evaluate(ConvertPath, ConvertPathExpression, value, targetType, parameter, culture);
+            return interop.Convert(value, targetType, parameter, culture);
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
             TryToAttach();
-            return Evaluate(Expressions.Count >= 2 ? Expressions[1] : null,
-                ConvertBackPath, ConvertBackPathExpression, value, targetType, parameter, culture);
+            if (ConvertBackPath != null)
+                return Evaluate(ConvertBackPath, ConvertPathExpression, value, targetType, parameter, culture);
+            return interop.ConvertBack(value, targetType, parameter, culture);
         }
 
-        public object Evaluate(IExpression expression,
-            string path, PathExpression pathExpression, object value, Type targetType, object parameter, CultureInfo culture)
+        public object Evaluate(string path, PathExpression pathExpression,
+            object value, Type targetType, object parameter, CultureInfo culture)
         {
             var parameters = new NameDictionary
             {
@@ -69,8 +57,7 @@ namespace Markup.Programming
                 { "@Parameter", parameter },
                 { "@Culture", culture },
             };
-            if (path != null) return new Engine().With(this, parameters, engine => engine.GetPath(path, pathExpression));
-            return new Engine().With(this, parameters, engine => expression.Evaluate(engine));
+            return new Engine().With(this, parameters, engine => engine.GetPath(path, pathExpression));
         }
     }
 }

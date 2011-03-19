@@ -1,20 +1,19 @@
 ﻿using System;
-using System.Windows;
-using System.Windows.Input;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using System.Windows.Markup;
-using Markup.Programming.Core;
+using System.Windows;
 
-namespace Markup.Programming
+namespace Markup.Programming.Core
 {
     [ContentProperty("Functions")]
-    public class Command : HiddenExpression, IInteropHost
+    public abstract class InterfaceComponent: ResourceComponent, IInteropHost
     {
-        public Command()
+        public InterfaceComponent()
         {
             Functions = new FunctionCollection();
         }
-
-        public ResourceComponent ParentResourceObject { get; set; }
 
         public FunctionCollection Functions
         {
@@ -23,7 +22,7 @@ namespace Markup.Programming
         }
 
         public static readonly DependencyProperty FunctionsProperty =
-            DependencyProperty.Register("Functions", typeof(FunctionCollection), typeof(Command), null);
+            DependencyProperty.Register("Functions", typeof(FunctionCollection), typeof(InterfaceComponent), null);
 
         protected override void OnAttached()
         {
@@ -38,15 +37,9 @@ namespace Markup.Programming
 
         private object CallFunction(object child, string function, object[] args, Engine engine)
         {
-            engine.SetContext(ParentResourceObject.Value);
+            engine.SetContext(null);
             Functions.Execute(engine);
             return engine.CallFunction(function, args);
-        }
-
-        protected override object OnEvaluate(Engine engine)
-        {
-            ParentResourceObject = engine.ParentResourceObject;
-            return new CommandInterop<Command>(this);
         }
     }
 }

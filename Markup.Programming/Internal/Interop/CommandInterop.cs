@@ -3,11 +3,9 @@ using System.Windows.Input;
 
 namespace Markup.Programming.Core
 {
-    public class CommandInterop<T> : ICommand where T : IInteropHost
+    public class CommandInterop<T> : Interop<T>, ICommand where T : IInteropHost
     {
         public CommandInterop(T parent) { Parent = parent; }
-
-        public T Parent { get; private set; }
 
         public event System.EventHandler CanExecuteChanged;
 
@@ -19,7 +17,7 @@ namespace Markup.Programming.Core
         public bool CanExecute(object parameter)
         {
             var engine = new Engine();
-            var rawResult = Parent.Interop(this, "$CanExecute", new object[] { parameter }, engine);
+            var rawResult = Parent.Callback(this, "$CanExecute", new object[] { parameter }, engine);
             var result = (bool)TypeHelper.Convert(rawResult, typeof(bool));
             return result;
         }
@@ -27,7 +25,7 @@ namespace Markup.Programming.Core
         public void Execute(object parameter)
         {
             var engine = new Engine();
-            Parent.Interop(this, "$Execute", new object[] { parameter }, engine);
+            Parent.Callback(this, "$Execute", new object[] { parameter }, engine);
         }
     }
 }
