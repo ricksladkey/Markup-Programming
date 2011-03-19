@@ -121,7 +121,7 @@
                                 <Binding.Converter>
 
                                     <!-- Holy cow, how many times have I wanted to be able to do this! -->
-                                    <p:ResourceConverter ConvertPath="@ConverterValue * 20"/>
+                                    <p:ResourceConverter ConvertPath="@Value * 20"/>
                                     
                                 </Binding.Converter>
                             </Binding>

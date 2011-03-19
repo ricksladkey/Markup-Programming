@@ -1,7 +1,8 @@
 ﻿using System;
-using System.Windows.Data;
 using System.Globalization;
 using System.Windows;
+using System.Windows.Data;
+using System.Windows.Markup;
 using Markup.Programming.Core;
 
 namespace Markup.Programming
@@ -11,58 +12,59 @@ namespace Markup.Programming
     /// referenced entirely in resources and by IExpression
     /// to implement the Convert and ConvertBack interface methods.
     /// </summary>
+    [ContentProperty("Expressions")]
     public class ResourceConverter : ResourceObjectBase, IValueConverter
     {
-        public IExpression ConvertExpression
+        public ResourceConverter()
         {
-            get { return (IExpression)GetValue(ConvertExpressionProperty); }
-            set { SetValue(ConvertExpressionProperty, value); }
+            Expressions = new ExpressionCollection();
         }
-
-        public static readonly DependencyProperty ConvertExpressionProperty =
-            DependencyProperty.Register("ConvertExpression", typeof(IExpression), typeof(ResourceConverter), null);
 
         public string ConvertPath { get; set; }
 
-        public IExpression ConvertBackExpression
-        {
-            get { return (IExpression)GetValue(ConvertBackExpressionProperty); }
-            set { SetValue(ConvertBackExpressionProperty, value); }
-        }
-
-        public static readonly DependencyProperty ConvertBackExpressionProperty =
-            DependencyProperty.Register("ConvertBackExpression", typeof(IExpression), typeof(ResourceConverter), null);
+        private PathExpression convertPathExpression = new PathExpression();
+        protected PathExpression ConvertPathExpression { get { return convertPathExpression; } }
 
         public string ConvertBackPath { get; set; }
 
-        private PathExpression pathExpression = new PathExpression();
-        protected PathExpression PathExpression { get { return pathExpression; } }
+        private PathExpression convertBackPathExpression = new PathExpression();
+        protected PathExpression ConvertBackPathExpression { get { return convertBackPathExpression; } }
+
+        public ExpressionCollection Expressions
+        {
+            get { return (ExpressionCollection)GetValue(ExpressionsProperty); }
+            set { SetValue(ExpressionsProperty, value); }
+        }
+
+        public static readonly DependencyProperty ExpressionsProperty =
+            DependencyProperty.Register("Expressions", typeof(ExpressionCollection), typeof(ResourceConverter), null);
 
         protected override void OnAttached()
         {
             base.OnAttached();
-            Attach(ConvertExpressionProperty, ConvertBackExpressionProperty);
+            Attach(Expressions);
         }
 
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             TryToAttach();
-            return Evaluate(ConvertExpression, ConvertPath, value, targetType, parameter, culture);
+            return Evaluate(Expressions.Count >= 1 ? Expressions[0] : null, ConvertPath, ConvertPathExpression, value, targetType, parameter, culture);
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
             TryToAttach();
-            return Evaluate(ConvertBackExpression, ConvertBackPath, value, targetType, parameter, culture);
+            return Evaluate(Expressions.Count >= 2 ? Expressions[1] : null, ConvertBackPath, ConvertBackPathExpression, value, targetType, parameter, culture);
         }
 
-        public object Evaluate(IExpression expression, string path, object value, Type targetType, object parameter, CultureInfo culture)
+        public object Evaluate(IExpression expression, string path, PathExpression pathExpression, object value, Type targetType, object parameter, CultureInfo culture)
         {
             var parameters = new NameDictionary
             {
-                { "@ConverterValue", value },
-                { "@ConverterParameter", parameter },
-                { "@ConverterCulture", culture },
+                { "@Value", value },
+                { "@TargetType", targetType },
+                { "@Parameter", parameter },
+                { "@Culture", culture },
             };
             if (path != null) return new Engine().With(this, parameters, engine => engine.GetPath(path, pathExpression));
             return new Engine().With(this, parameters, engine => expression.Evaluate(engine));
