@@ -365,11 +365,11 @@ namespace Markup.Programming.Core
                     ++i;
                     continue;
                 }
-                if (c == '\'')
+                if (IsQuote(c))
                 {
                     var start = ++i;
-                    for (++i; i < Path.Length && Path[i] != '\''; ++i) continue;
-                    if (Path[i] == Path.Length) engine.Throw("missing closing quote");
+                    for (++i; i < Path.Length && Path[i] != c; ++i) continue;
+                    if (Path[i] == Path.Length) engine.Throw("missing closing quote: " + Path);
                     tokens.Enqueue('"' + Path.Substring(start, i++ - start));
                     continue;
                 }
@@ -404,12 +404,12 @@ namespace Markup.Programming.Core
         private static string IdChars { get { return "_"; } }
         private static bool IsInitialIdChar(char c) { return char.IsLetter(c) || IdChars.Contains(c); }
         private static bool IsIdChar(char c) { return char.IsLetterOrDigit(c) || IdChars.Contains(c); }
-
         public static bool IsValidIdentifier(string identifier)
         {
             if (identifier.Length < 2 || identifier[0] != '$') return false;
             return IsInitialIdChar(identifier[1]) && identifier.Skip(2).All(c => IsIdChar(c));
         }
+        private static bool IsQuote(char c) { return "'\"".Contains(c); }
 
         public static IDictionary<string, Op> OperatorMap { get { return operatorMap; } }
         private static Dictionary<string, Op> operatorMap = new Dictionary<string, Op>
