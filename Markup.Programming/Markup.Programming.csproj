@@ -111,7 +111,7 @@
   <ItemGroup>
     <Compile Include="Internal\Language\StatementBlock.cs" />
     <Compile Include="Internal\Language\ValueExpression.cs" />
-    <Compile Include="Markup\Glue\OperationCollection.cs" />
+    <Compile Include="Markup\Support\OperationCollection.cs" />
     <Compile Include="Internal\Diagnostics\CollectionDebugView.cs" />
     <Compile Include="Internal\Components\PrimitiveActiveComponent.cs" />
     <Compile Include="Internal\Components\PrimitivePassiveComponent.cs" />
@@ -119,9 +119,9 @@
     <Compile Include="Internal\Diagnostics\EngineDebugView.cs" />
     <Compile Include="Internal\Engine\CallHelper.cs" />
     <Compile Include="Internal\Engine\PathExpression.cs" />
-    <Compile Include="Markup\Glue\Additional.cs" />
+    <Compile Include="Markup\Support\Additional.cs" />
     <Compile Include="Markup\Handlers\EventHandler.cs" />
-    <Compile Include="Markup\Glue\Attached.cs" />
+    <Compile Include="Markup\Support\Attached.cs" />
     <Compile Include="Internal\Language\Handler.cs" />
     <Compile Include="Markup\Language\Enumerations\AssignmentOp.cs" />
     <Compile Include="Markup\Language\Enumerations\BuiltinFunction.cs" />
@@ -139,7 +139,7 @@
     <Compile Include="Internal\Language\StatementBase.cs" />
     <Compile Include="Internal\Collections\StatementCollectionBase.cs" />
     <Compile Include="Internal\Language\ArgumentsExpression.cs" />
-    <Compile Include="Markup\Language\Statements\Block.cs" />
+    <Compile Include="Markup\Language\Expressions\Block.cs" />
     <Compile Include="Markup\Language\Expressions\Call.cs" />
     <Compile Include="Internal\Collections\StatementCollection.cs" />
     <Compile Include="Markup\Language\Statements\Break.cs" />
@@ -174,7 +174,7 @@
     <Compile Include="Internal\Language\ValueBlock.cs" />
     <Compile Include="Markup\Language\Statements\For.cs" />
     <Compile Include="Markup\Language\Statements\ForEach.cs" />
-    <Compile Include="Markup\Language\Support\Command.cs" />
+    <Compile Include="Markup\Language\Functions\Command.cs" />
     <Compile Include="Markup\Language\Expressions\GetItem.cs" />
     <Compile Include="Markup\Language\Expressions\Iterator.cs" />
     <Compile Include="Markup\Language\Enumerations\Op.cs" />
@@ -189,24 +189,24 @@
     <Compile Include="Internal\Collections\ParameterCollection.cs" />
     <Compile Include="Internal\Engine\TraceHelper.cs" />
     <Compile Include="Internal\Language\ValueStatement.cs" />
-    <Compile Include="Markup\Language\Statements\Function.cs" />
+    <Compile Include="Markup\Language\Functions\Function.cs" />
     <Compile Include="Markup\Language\Statements\If.cs" />
-    <Compile Include="Markup\Language\Statements\Import.cs" />
+    <Compile Include="Markup\Language\Functions\Import.cs" />
     <Compile Include="Markup\Resources\MarkupCommandBinding.cs" />
     <Compile Include="Markup\Resources\MarkupConverter.cs" />
     <Compile Include="Internal\Engine\OperatorHelper.cs" />
     <Compile Include="Markup\Handlers\AttachedHandler.cs" />
     <Compile Include="Internal\Collections\ExpressionCollection.cs" />
-    <Compile Include="Markup\Language\Statements\Module.cs" />
+    <Compile Include="Markup\Language\Functions\Module.cs" />
     <Compile Include="Markup\Language\Expressions\New.cs" />
     <Compile Include="Markup\Language\Expressions\Operator.cs" />
     <Compile Include="Internal\Language\ExpressionBase.cs" />
     <Compile Include="Markup\Resources\MarkupCommand.cs" />
     <Compile Include="Internal\Collections\PropertyCollection.cs" />
-    <Compile Include="Markup\Language\Support\Parameter.cs" />
+    <Compile Include="Markup\Language\Functions\Parameter.cs" />
     <Compile Include="Markup\Language\Statements\Return.cs" />
     <Compile Include="Internal\Dynamic\TypeDescriptorImplementor.cs" />
-    <Compile Include="Markup\Language\Support\Property.cs" />
+    <Compile Include="Markup\Support\Property.cs" />
     <Compile Include="Internal\Engine\PathHelper.cs" />
     <Compile Include="Markup\Resources\MarkupObject.cs" />
     <Compile Include="Markup\Resources\MarkupCollection.cs" />
@@ -221,6 +221,9 @@
     <Compile Include="Markup\Language\Statements\While.cs" />
     <AppDesigner Include="Properties\" />
     <Compile Include="Markup\Language\Statements\Yield.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Markup\Language\Support\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
