@@ -14,7 +14,7 @@ namespace Markup.Programming
     /// unless used with the Import statement.
     /// </summary>
     [ContentProperty("Functions")]
-    public class Module : ResourceObjectBase
+    public class Module : ResourceComponent
     {
         public Module()
         {

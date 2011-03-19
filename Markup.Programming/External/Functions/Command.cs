@@ -7,40 +7,14 @@ using Markup.Programming.Core;
 namespace Markup.Programming
 {
     [ContentProperty("Functions")]
-    public class Command : HiddenExpression
+    public class Command : HiddenExpression, IInteropHost
     {
-        public class CommandInterop : ICommand
-        {
-            public Command Parent { get; set; }
-
-            public bool CanExecute(object parameter)
-            {
-                var engine = new Engine();
-                var rawResult = Parent.Interop(this, "$CanExecute", new object[] { parameter }, engine);
-                var result = (bool)TypeHelper.Convert(rawResult, typeof(bool));
-                return result;
-            }
-
-            public event System.EventHandler CanExecuteChanged;
-
-            protected void OnCanExecuteChanged()
-            {
-                if (CanExecuteChanged != null) CanExecuteChanged(this, new EventArgs());
-            }
-
-            public void Execute(object parameter)
-            {
-                var engine = new Engine();
-                Parent.Interop(this, "$Execute", new object[] { parameter }, engine);
-            }
-        }
-
         public Command()
         {
             Functions = new FunctionCollection();
         }
 
-        public ResourceObjectBase ParentResourceObject { get; set; }
+        public ResourceComponent ParentResourceObject { get; set; }
 
         public FunctionCollection Functions
         {
@@ -72,7 +46,7 @@ namespace Markup.Programming
         protected override object OnEvaluate(Engine engine)
         {
             ParentResourceObject = engine.ParentResourceObject;
-            return new CommandInterop { Parent = this };
+            return new CommandInterop<Command>(this);
         }
     }
 }

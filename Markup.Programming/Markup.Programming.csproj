@@ -109,6 +109,8 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Internal\Engine\CommandInterop.cs" />
+    <Compile Include="Internal\Engine\IInteropHost.cs" />
     <Compile Include="Internal\Language\StatementBlock.cs" />
     <Compile Include="Internal\Language\ValueExpression.cs" />
     <Compile Include="External\Support\OperationCollection.cs" />
@@ -149,7 +151,7 @@
     <Compile Include="Internal\Diagnostics\DictionaryDebugView.cs" />
     <Compile Include="Internal\Components\IValueProvider.cs" />
     <Compile Include="Internal\Language\Accessor.cs" />
-    <Compile Include="Internal\Components\ResourceObjectBase.cs" />
+    <Compile Include="Internal\Components\ResourceComponent.cs" />
     <Compile Include="Internal\Components\BindingCapableObject.cs" />
     <Compile Include="Internal\Language\BlockExpression.cs" />
     <Compile Include="Internal\Engine\ExpressionOrValue.cs" />

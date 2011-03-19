@@ -21,7 +21,7 @@ namespace Markup.Programming
 #if DEBUG
     [DebuggerDisplay("Properties = {Properties.Count}"), DebuggerTypeProxy(typeof(DynamicObjectDebugView))]
 #endif
-    public class ResourceObject : ResourceObjectBase, INotifyPropertyChanged, IDynamicObject, ICustomTypeDescriptor
+    public class ResourceObject : ResourceComponent, INotifyPropertyChanged, IDynamicObject, ICustomTypeDescriptor
     {
         public ResourceObject()
         {
@@ -145,7 +145,7 @@ namespace Markup.Programming
 #else
 
     [ContentProperty("Properties")]
-    public class ResourceObject : ResourceObjectBase, IDynamicObject
+    public class ResourceObject : ResourceComponent, IDynamicObject
     {
         public ResourceObject()
         {

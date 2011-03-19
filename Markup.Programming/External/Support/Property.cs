@@ -13,7 +13,7 @@ namespace Markup.Programming
     /// A Property declares a PropertyName, its Type and its Value.
     /// </summary>
     [ContentProperty("Value")]
-    public class Property : ResourceObjectBase, IHiddenExpression
+    public class Property : ResourceComponent, IHiddenExpression
     {
         public string Prop { get; set; }
 

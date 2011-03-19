@@ -1,3 +1,4 @@
+- add Attached event to all components
 - <p:Set Path="$x" Value="-"/> should fail if x is not yet defined
 - <p:Set Var="x" Value="-"/> should fail if x is defined in the same scope
 - auto-increment version number

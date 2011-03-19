@@ -6,12 +6,12 @@ using System.ComponentModel;
 namespace Markup.Programming.Core
 {
     /// <summary>
-    /// An ResourceObjectBase is an object that implements IComponent but
+    /// An ResourceComponent is a component that implements IComponent but
     /// but doesn't otherwise derive from any component classes.
     /// This is used as the base class for classes like MarkupObject,
     /// ResourceCommand, etc. that are intended to be defined in XAML resources.
     /// </summary>
-    public abstract class ResourceObjectBase : BindingCapableObject, ISupportInitialize, IValueProvider, IComponent
+    public abstract class ResourceComponent : BindingCapableObject, ISupportInitialize, IValueProvider, IComponent
     {
         private DependencyObject associatedObject;
 

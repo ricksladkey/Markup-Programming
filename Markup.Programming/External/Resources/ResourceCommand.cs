@@ -12,57 +12,42 @@ namespace Markup.Programming
     /// and IStatement to implement the CanExecute and Execute
     /// interface methods.
     /// </summary>
-    [ContentProperty("ExecuteBody")]
-    public class ResourceCommand : ResourceObjectBase, ICommand
+    [ContentProperty("Functions")]
+    public class ResourceCommand : ResourceComponent, ICommand, IInteropHost
     {
+        private CommandInterop<ResourceCommand> interop;
+
         public ResourceCommand()
         {
-            LoadActions = new StatementCollection();
-            ExecuteBody = new StatementCollection();
+            Functions = new FunctionCollection();
+            interop = new CommandInterop<ResourceCommand>(this);
         }
 
-        public StatementCollection LoadActions
+        public FunctionCollection Functions
         {
-            get { return (StatementCollection)GetValue(LoadActionsProperty); }
-            set { SetValue(LoadActionsProperty, value); }
+            get { return (FunctionCollection)GetValue(FunctionsProperty); }
+            set { SetValue(FunctionsProperty, value); }
         }
 
-        public static readonly DependencyProperty LoadActionsProperty =
-            DependencyProperty.Register("LoadActions", typeof(StatementCollection), typeof(ResourceCommand), null);
-
-        public IExpression CanExecuteExpression
-        {
-            get { return (IExpression)GetValue(CanExecuteExpressionProperty); }
-            set { SetValue(CanExecuteExpressionProperty, value); }
-        }
-
-        public static readonly DependencyProperty CanExecuteExpressionProperty =
-            DependencyProperty.Register("CanExecutExpression", typeof(IExpression), typeof(ResourceCommand), null);
-        
-        public StatementCollection ExecuteBody
-        {
-            get { return (StatementCollection)GetValue(ExecuteBodyProperty); }
-            set { SetValue(ExecuteBodyProperty, value); }
-        }
-
-        public static readonly DependencyProperty ExecuteBodyProperty =
-            DependencyProperty.Register("ExecuteBody", typeof(StatementCollection), typeof(ResourceCommand), null);
+        public static readonly DependencyProperty FunctionsProperty =
+            DependencyProperty.Register("Functions", typeof(FunctionCollection), typeof(Command), null);
 
         protected override void OnAttached()
         {
             base.OnAttached();
-            Attach(LoadActionsProperty, CanExecuteExpressionProperty, ExecuteBodyProperty);
-            var parameters = new NameDictionary { { "@Command", this } };
-            new Engine().With(this, parameters, engine => LoadActions.Execute(engine));
+            Attach(FunctionsProperty);
         }
 
-        public bool CanExecute(object parameter)
+        public object Interop(object child, string function, object[] args, Engine engine)
         {
-            TryToAttach();
-            if (CanExecuteExpression == null) return true;
-            var parameters = new NameDictionary{ { "@CommandParameter", parameter} };
-            return new Engine(parameter).With(this, parameters,
-                engine => (bool)engine.Evaluate(CanExecuteExpressionProperty));
+            return engine.With(this, e => CallFunction(child, function, args, engine));
+        }
+
+        private object CallFunction(object child, string function, object[] args, Engine engine)
+        {
+            engine.SetContext(null);
+            Functions.Execute(engine);
+            return engine.CallFunction(function, args);
         }
 
 #if SILVERLIGHT
@@ -79,11 +64,16 @@ namespace Markup.Programming
         }
 #endif
 
+        public bool CanExecute(object parameter)
+        {
+            TryToAttach();
+            return interop.CanExecute(parameter);
+        }
+
         public void Execute(object parameter)
         {
             TryToAttach();
-            var parameters = new NameDictionary { { "@CommandParameter", parameter } };
-            new Engine(parameter).With(this, parameters, engine => ExecuteBody.Execute(engine));
+            interop.Execute(parameter);
         }
     }
 }

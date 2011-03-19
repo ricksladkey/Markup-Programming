@@ -27,7 +27,7 @@ namespace Markup.Programming
     /// in resources.
     /// </summary>
     [ContentProperty("Children")]
-    public class ResourceCollection : ResourceObjectBase, IList, INotifyCollectionChanged, INotifyPropertyChanged, ISupportInitialize
+    public class ResourceCollection : ResourceComponent, IList, INotifyCollectionChanged, INotifyPropertyChanged, ISupportInitialize
     {
         public ResourceCollection()
         {

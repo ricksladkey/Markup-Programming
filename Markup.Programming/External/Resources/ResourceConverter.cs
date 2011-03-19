@@ -13,7 +13,7 @@ namespace Markup.Programming
     /// to implement the Convert and ConvertBack interface methods.
     /// </summary>
     [ContentProperty("Expressions")]
-    public class ResourceConverter : ResourceObjectBase, IValueConverter
+    public class ResourceConverter : ResourceComponent, IValueConverter
     {
         public ResourceConverter()
         {
@@ -48,16 +48,19 @@ namespace Markup.Programming
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             TryToAttach();
-            return Evaluate(Expressions.Count >= 1 ? Expressions[0] : null, ConvertPath, ConvertPathExpression, value, targetType, parameter, culture);
+            return Evaluate(Expressions.Count >= 1 ? Expressions[0] : null,
+                ConvertPath, ConvertPathExpression, value, targetType, parameter, culture);
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
             TryToAttach();
-            return Evaluate(Expressions.Count >= 2 ? Expressions[1] : null, ConvertBackPath, ConvertBackPathExpression, value, targetType, parameter, culture);
+            return Evaluate(Expressions.Count >= 2 ? Expressions[1] : null,
+                ConvertBackPath, ConvertBackPathExpression, value, targetType, parameter, culture);
         }
 
-        public object Evaluate(IExpression expression, string path, PathExpression pathExpression, object value, Type targetType, object parameter, CultureInfo culture)
+        public object Evaluate(IExpression expression,
+            string path, PathExpression pathExpression, object value, Type targetType, object parameter, CultureInfo culture)
         {
             var parameters = new NameDictionary
             {

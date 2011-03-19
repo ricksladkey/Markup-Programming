@@ -498,15 +498,15 @@ namespace Markup.Programming.Core
             return CallHelper.CallMethod(builtinFunction.ToString(), false, typeof(BuiltinImplementor), BuiltinImplementor, args, null, this);
         }
 
-        public ResourceObjectBase ParentResourceObject
+        public ResourceComponent ParentResourceObject
         {
             get
             {
-                var bestCaller = null as ResourceObjectBase;
+                var bestCaller = null as ResourceComponent;
                 foreach (var frame in StackBackwards)
                 {
                     var caller = frame.Caller;
-                    if (caller is ResourceObjectBase) bestCaller = caller as ResourceObjectBase;
+                    if (caller is ResourceComponent) bestCaller = caller as ResourceComponent;
                     else if (bestCaller != null) return bestCaller;
                 }
                 return bestCaller;

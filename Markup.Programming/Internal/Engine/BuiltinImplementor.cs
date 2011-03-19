@@ -30,7 +30,7 @@ namespace Markup.Programming.Core
             if (name == Engine.ContextKey)
             {
                 var firstFrame = engine.Stack.First();
-                if (firstFrame.Caller is ResourceObjectBase) value = firstFrame.Caller;
+                if (firstFrame.Caller is ResourceComponent) value = firstFrame.Caller;
                 else if (firstFrame.Caller.AssociatedObject is FrameworkElement)
                 value = (firstFrame.Caller.AssociatedObject as FrameworkElement).DataContext;
                 else value = engine.Throw("cannot locate default context");
@@ -65,7 +65,7 @@ namespace Markup.Programming.Core
             return expression.Evaluate(engine);
         }
 
-        public ResourceObjectBase GetResourceObject()
+        public ResourceComponent GetResourceObject()
         {
             return engine.ParentResourceObject;
         }
