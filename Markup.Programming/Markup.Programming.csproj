@@ -109,7 +109,7 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="External\Objects\KeyValuePair.cs" />
+    <Compile Include="External\Objects\Pair.cs" />
     <Compile Include="Internal\Components\InterfaceComponent.cs" />
     <Compile Include="Internal\Components\LazyResourceComponent.cs" />
     <Compile Include="Internal\Interop\CommandInterop.cs" />

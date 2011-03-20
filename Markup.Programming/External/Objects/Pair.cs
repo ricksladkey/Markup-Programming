@@ -4,7 +4,7 @@ using Markup.Programming.Core;
 
 namespace Markup.Programming
 {
-    public class KeyValuePair : ValueExpression
+    public class Pair : ValueExpression
     {
         public object Key
         {
@@ -13,7 +13,7 @@ namespace Markup.Programming
         }
 
         public static readonly DependencyProperty KeyProperty =
-            DependencyProperty.Register("Key", typeof(object), typeof(KeyValuePair), null);
+            DependencyProperty.Register("Key", typeof(object), typeof(Pair), null);
 
         public string KeyPath { get; set; }
 

@@ -10,9 +10,9 @@ namespace Markup.Programming.Tests
 {
     public static class TestHelper
     {
-        public static T Configure<T>(T value, params Action<T>[] statements)
+        public static T Configure<T>(T value, params Action<T>[] actions)
         {
-            foreach (var statement in statements) statement(value);
+            foreach (var action in actions) action(value);
             return value;
         }
 

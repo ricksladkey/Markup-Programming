@@ -60,6 +60,27 @@ namespace Markup.Programming.Core
             return value;
         }
 
+        public static Type GetPropertyType(Engine engine, object context, string propertyName)
+        {
+            if (context == null) engine.Throw("context cannot be null");
+            var propertyInfo = context.GetType().GetProperty(propertyName);
+            if (propertyInfo != null) return propertyInfo.PropertyType;
+
+#if !SILVERLIGHT
+            if (!Configuration.Silverlight)
+                foreach (PropertyDescriptor descriptor in TypeDescriptor.GetProperties(context))
+                    if (descriptor.Name == propertyName) return descriptor.PropertyType;
+#endif
+
+            if (context is System.Dynamic.DynamicObject)
+            {
+                var value = GetProperty(engine, context, propertyName);
+                return value != null ? value.GetType() : typeof(object);
+            }
+
+            return engine.Throw("no such property: " + propertyName) as Type;
+        }
+
         public static object GetProperty(Engine engine, object context, string propertyName)
         {
             if (context == null) engine.Throw("context cannot be null");

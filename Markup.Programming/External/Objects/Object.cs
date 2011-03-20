@@ -6,6 +6,7 @@ using System.Windows;
 using System.Windows.Markup;
 using Markup.Programming.Core;
 using System.ComponentModel;
+using System.Collections;
 
 namespace Markup.Programming
 {
@@ -53,15 +54,31 @@ namespace Markup.Programming
 
         protected override object OnEvaluate(Engine engine)
         {
-            var pairs = Properties.Select(property =>
-                new NameValuePair(property.Prop, property.Evaluate(engine))).ToArray();
             var type = engine.EvaluateType(TypeProperty, Path, PathExpression);
             if (type != null)
             {
                 var target = Activator.CreateInstance(type);
-                foreach (var pair in pairs) PathHelper.SetProperty(engine, target, pair.Name, pair.Value);
+                foreach (var property in Properties)
+                {
+                    var value = property.Evaluate(engine);
+                    var propertyType = PathHelper.GetPropertyType(engine, target, property.Prop);
+                    if (typeof(IList).IsAssignableFrom(propertyType) && property.Value is Collection)
+                    {
+                        var list = PathHelper.GetProperty(engine, target, property.Prop) as IList;
+                        foreach (var item in value as IEnumerable) list.Add(item);
+                    }
+                    else if (typeof(IDictionary).IsAssignableFrom(propertyType) && property.Value is Collection)
+                    {
+                        var dictionary = PathHelper.GetProperty(engine, target, property.Prop) as IDictionary;
+                        foreach (DictionaryEntry entry in value as IEnumerable) dictionary.Add(entry.Key, entry.Value);
+                    }
+                    else
+                        PathHelper.SetProperty(engine, target, property.Prop, value);
+                }
                 return target;
             }
+            var pairs = Properties.Select(property =>
+                new NameValuePair(property.Prop, property.Evaluate(engine))).ToArray();
             return DynamicHelper.CreateObject(ref dynamicType, pairs);
         }
     }
