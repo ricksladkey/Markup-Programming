@@ -56,7 +56,6 @@ namespace Markup.Programming
             return engine.With(this, e => GetPropertyValue(engine));
         }
 
-
         private object GetPropertyValue(Engine engine)
         {
             var type = engine.EvaluateType(TypeProperty, TypeName);

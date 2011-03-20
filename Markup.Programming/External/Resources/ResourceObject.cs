@@ -21,7 +21,7 @@ namespace Markup.Programming
 #if DEBUG
     [DebuggerDisplay("Properties = {Properties.Count}"), DebuggerTypeProxy(typeof(DynamicObjectDebugView))]
 #endif
-    public class ResourceObject : ResourceComponent, INotifyPropertyChanged, IDynamicObject, ICustomTypeDescriptor
+    public class ResourceObject : LazyResourceComponent, INotifyPropertyChanged, IDynamicObject, ICustomTypeDescriptor
     {
         public ResourceObject()
         {
@@ -40,7 +40,7 @@ namespace Markup.Programming
         private TypeDescriptorImplementor implementor;
         private TypeDescriptorImplementor Implementor
         {
-            get { TryToAttach(); return implementor; }
+            get { Initialize(); return implementor; }
             set { implementor = value; }
         }
 
@@ -78,8 +78,8 @@ namespace Markup.Programming
 
         public object this[string propertyName]
         {
-            get { TryToAttach(); return propertyStore[propertyName]; }
-            set { TryToAttach(); propertyStore[propertyName] = value; OnPropertyChanged(propertyName); }
+            get { Initialize(); return propertyStore[propertyName]; }
+            set { Initialize(); propertyStore[propertyName] = value; OnPropertyChanged(propertyName); }
         }
 
     #endregion
@@ -107,22 +107,8 @@ namespace Markup.Programming
             Attach(PropertiesProperty);
         }
 
-        public override void EndInit()
+        protected override void OnInitialize(Engine engine)
         {
-            base.TryToAttach();
-        }
-
-        protected override void TryToAttach()
-        {
-            base.TryToAttach();
-            if (!Evaluated) new Engine().With(this, engine => EvaluateProperties(engine));
-        }
-
-        public bool Evaluated { get; set; }
-
-        private void EvaluateProperties(Engine engine)
-        {
-            if (Evaluated) return;
             foreach (var property in Properties)
             {
                 var value = property.Evaluate(engine);
@@ -131,7 +117,6 @@ namespace Markup.Programming
                 propertyStore.Add(property.Prop, value);
             }
             dynamicProperties = Properties.Select(property => GetPair(property)).ToArray();
-            Evaluated = true;
         }
 
         private NameTypePair GetPair(Property property)
@@ -145,37 +130,24 @@ namespace Markup.Programming
 #else
 
     [ContentProperty("Properties")]
-    public class ResourceObject : ResourceComponent, IDynamicObject
+    public class ResourceObject : LazyResourceComponent, IDynamicObject
     {
+        private DynamicObjectBase value;
+
         public ResourceObject()
         {
             Properties = new PropertyCollection();
         }
 
-        public PropertyCollection Properties { get; set; }
-
-        private bool evaluated;
-        private DynamicObjectBase value;
+        public PropertyCollection Properties { get; private set; }
 
         public override object Value
         {
-            get { CheckEvaluate();  return value; }
+            get { Initialize();  return value; }
             set { throw new NotImplementedException(); }
         }
 
-        public override void EndInit()
-        {
-            CheckEvaluate();
-        }
-
-        private void CheckEvaluate()
-        {
-            if (evaluated) return;
-            new Engine().With(this, engine => EvaluateProperties(engine));
-            evaluated = true;
-        }
-
-        private void EvaluateProperties(Engine engine)
+        protected override void OnInitialize(Engine engine)
         {
             var pairs = Properties.Select(property =>
                 new NameValuePair(property.Prop, property.Evaluate(engine))).ToArray();
@@ -185,13 +157,13 @@ namespace Markup.Programming
 
         public IEnumerable<NameTypePair> DynamicProperties
         {
-            get { CheckEvaluate(); return value.DynamicProperties; }
+            get { Initialize(); return value.DynamicProperties; }
         }
 
         public object this[string propertyName]
         {
-            get { CheckEvaluate(); return this.value[propertyName]; }
-            set { CheckEvaluate(); this.value[propertyName] = value; }
+            get { Initialize(); return this.value[propertyName]; }
+            set { Initialize(); this.value[propertyName] = value; }
         }
     }
 

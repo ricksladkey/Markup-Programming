@@ -15,30 +15,58 @@ namespace Markup.Programming
     /// in resources.
     /// </summary>
     [ContentProperty("Items")]
-    public class ResourceCollection : ResourceComponent, IList, INotifyCollectionChanged, INotifyPropertyChanged, ISupportInitialize
+    public class ResourceCollection : LazyResourceComponent, IList, INotifyCollectionChanged, INotifyPropertyChanged, ISupportInitialize
     {
+        private object value;
+        private ObservableCollection<object> collection;
+
         public ResourceCollection()
         {
             Items = new List<object>();
-            Collection = new ObservableCollection<object>();
-            Collection.CollectionChanged += new NotifyCollectionChangedEventHandler(ResourceCollection_CollectionChanged);
+            collection = new ObservableCollection<object>();
+            collection.CollectionChanged += new NotifyCollectionChangedEventHandler(OnCollectionChanged);
         }
 
-        private ObservableCollection<object> Collection { get; set; }
         public List<object> Items { get; set; }
 
-        public override void EndInit()
+        public override object Value
         {
-            base.EndInit();
-            foreach (var child in Items) Add(child);
+            get { return this; }
+            set { this.value = value; }
+        }
+
+        protected override void OnInitialize(Engine engine)
+        {
+            foreach (var item in GetItems()) Add(item);
+        }
+
+        private IList GetItems()
+        {
+            if (value == null) return Items;
+            return new Engine().With(this, engine => EvaluateItems(engine, value));
+        }
+
+        private IList EvaluateItems(Engine engine, object value)
+        {
+            var result = engine.EvaluateObject(value);
+            if (!(result is IList)) engine.Throw("value does not evaluate to a collection");
+            return result as IList;
         }
 
         #region INotifyCollectionChanged Members
 
-        void  ResourceCollection_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        public event NotifyCollectionChangedEventHandler CollectionChanged
         {
-            var handler = CollectionChanged;
-            if (handler != null) CollectionChanged(this, e);
+            add { Initialize(); CollectionChangedInternal += value; }
+            remove { Initialize(); CollectionChangedInternal -= value; }
+        }
+
+        private event NotifyCollectionChangedEventHandler CollectionChangedInternal;
+
+        void OnCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            var handler = CollectionChangedInternal;
+            if (handler != null) CollectionChangedInternal(this, e);
             switch (e.Action)
             {
                 case NotifyCollectionChangedAction.Add:
@@ -49,54 +77,58 @@ namespace Markup.Programming
             }
         }
 
-        public event NotifyCollectionChangedEventHandler CollectionChanged;
-
         #endregion
 
         #region INotifyPropertyChanged Members
 
-        public event PropertyChangedEventHandler PropertyChanged;
+        public event PropertyChangedEventHandler PropertyChanged
+        {
+            add { Initialize(); PropertyChangedInternal += value; }
+            remove { Initialize(); PropertyChangedInternal -= value; }
+        }
+
+        private event PropertyChangedEventHandler PropertyChangedInternal;
 
         private void OnPropertyChanged(string propertyName)
         {
-            var handler = PropertyChanged;
-            if (handler != null) PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+            var handler = PropertyChangedInternal;
+            if (handler != null) PropertyChangedInternal(this, new PropertyChangedEventArgs(propertyName));
         }
 
         #endregion
 
         #region IList Members
 
-        public int Add(object value) { Collection.Add(value); return Collection.Count - 1; }
-        public void Clear() { Collection.Clear(); }
-        public bool Contains(object value) { return Collection.Contains(value); }
-        public int IndexOf(object value) { return Collection.IndexOf(value); }
-        public void Insert(int index, object value) { Collection.Insert(index, value); }
-        public bool IsFixedSize { get { return false; } }
-        public bool IsReadOnly { get { return false; } }
-        public void Remove(object value) { Collection.Remove(value); }
-        public void RemoveAt(int index) { Collection.RemoveAt(index); }
+        public int Add(object value) { Initialize(); collection.Add(value); return collection.Count - 1; }
+        public void Clear() { Initialize(); collection.Clear(); }
+        public bool Contains(object value) { Initialize(); return collection.Contains(value); }
+        public int IndexOf(object value) { Initialize(); return collection.IndexOf(value); }
+        public void Insert(int index, object value) { Initialize(); collection.Insert(index, value); }
+        public bool IsFixedSize { get { Initialize(); return false; } }
+        public bool IsReadOnly { get { Initialize(); return false; } }
+        public void Remove(object value) { Initialize(); collection.Remove(value); }
+        public void RemoveAt(int index) { Initialize(); collection.RemoveAt(index); }
         public object this[int index]
         {
-            get { return Collection[index]; }
-            set { Collection[index] = value; }
+            get { Initialize(); return collection[index]; }
+            set { Initialize(); collection[index] = value; }
         }
 
         #endregion
 
         #region ICollection Members
 
-        public void CopyTo(Array array, int index) { foreach (var item in Collection) array.SetValue(item, index++); }
-        public int Count { get { return Collection.Count; } }
-        public bool IsSynchronized { get { return false; } }
-        public object SyncRoot { get { return syncRoot; } }
+        public void CopyTo(Array array, int index) { Initialize(); foreach (var item in collection) array.SetValue(item, index++); }
+        public int Count { get { Initialize(); return collection.Count; } }
+        public bool IsSynchronized { get { Initialize(); return false; } }
+        public object SyncRoot { get { Initialize(); return syncRoot; } }
         private object syncRoot = new object();
 
         #endregion
 
         #region IEnumerable Members
 
-        public IEnumerator GetEnumerator() { return Collection.GetEnumerator(); }
+        public IEnumerator GetEnumerator() { Initialize(); return collection.GetEnumerator(); }
 
         #endregion
     }
