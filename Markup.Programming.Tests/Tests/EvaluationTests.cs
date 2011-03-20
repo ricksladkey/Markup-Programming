@@ -36,7 +36,7 @@ namespace Markup.Programming.Tests
         public void ExpressionTests()
         {
             TestHelper.ExpressionTest(3, new Operator { Op = Op.Plus,
-                Arguments = { new Value { Val = 1 }, new Value { Val = 2 } } });
+                Arguments = { new Eval { Value = 1 }, new Eval { Value = 2 } } });
         }
 
         [TestMethod]
@@ -52,9 +52,9 @@ namespace Markup.Programming.Tests
                             StaticMethodName = "Cos",
                             Arguments =
                             {
-                                // <p:Value Val="{Binding Object1}"/>
-                                TestHelper.Configure(new Value(),
-                                    value => BindingOperations.SetBinding(value, Value.ValProperty, new Binding("Object1"))),
+                                // <p:Eval Value="{Binding Object1}"/>
+                                TestHelper.Configure(new Eval(),
+                                    value => BindingOperations.SetBinding(value, Eval.ValueProperty, new Binding("Object1"))),
                             },
                         },
                     },
@@ -73,14 +73,14 @@ namespace Markup.Programming.Tests
                     StaticMethodName = "Format",
                     TypeArguments =
                     {
-                        new Value { Val = typeof(string) },
-                        new Value { Val = typeof(object[]) },
+                        new Eval { Value = typeof(string) },
+                        new Eval { Value = typeof(object[]) },
                     },
                     Arguments =
                     {
-                        new Value { Val = "{0}, {1}" },
-                        new Value { Val = 1 },
-                        new Value { Val = 2 },
+                        new Eval { Value = "{0}, {1}" },
+                        new Eval { Value = 1 },
+                        new Eval { Value = 2 },
                     }
                 });
         }

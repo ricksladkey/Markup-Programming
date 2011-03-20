@@ -17,7 +17,7 @@
             </Grid>
             <p:Attached.Operations>
                 <p:ChangedHandler Value="{Binding Text, ElementName=Password}">
-                    <p:Set Var="pass" ValuePath="@EventArgs.NewValue == 'xyzzy'"/>
+                    <p:Eval Path="$pass = @EventArgs.NewValue == 'xyzzy'"/>
                     <p:Set Context="{Binding ElementName=Status}" PropertyName="Text"
                            ValuePath="@Op('Conditional', $pass, 'Yes!', 'No.')"/>
                     <p:Set Context="{Binding ElementName=StatusBackground}" PropertyName="Background">
