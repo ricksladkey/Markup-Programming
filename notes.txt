@@ -1,3 +1,4 @@
+- Make terminating semicolon optional in path syntax
 - Add support for dynamic objects in path expressions
 - write converter sample
 - add Attached event to all components
