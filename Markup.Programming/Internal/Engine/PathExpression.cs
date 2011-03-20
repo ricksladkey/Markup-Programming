@@ -50,6 +50,16 @@ namespace Markup.Programming.Core
             }
         }
 
+        private class SetNode : PathNode
+        {
+            public PathNode LValue { get; set; }
+            public PathNode RValue { get; set; }
+            protected override object OnEvaluate(Engine engine, object value)
+            {
+                return LValue.Evaluate(engine, RValue.Evaluate(engine, value));
+            }
+        }
+
         private class ValueNode : PathNode
         {
             public object Value { get; set; }
@@ -219,6 +229,22 @@ namespace Markup.Programming.Core
                     continue;
                 }
                 var c = token[0];
+                if (c == '=')
+                {
+                    node.IsSet = true;
+                    if (nodeNext) engine.Throw("unexpected conditional operator");
+                    tokens.Dequeue();
+                    var rvalue = Parse();
+                    node = new SetNode { LValue = node, RValue = rvalue };
+                    continue;
+                }
+                if (c == '.')
+                {
+                    if (nodeNext) engine.Throw("unexpected dot operator");
+                    nodeNext = true;
+                    tokens.Dequeue();
+                    continue;
+                }
                 if (c == '?')
                 {
                     if (nodeNext) engine.Throw("unexpected conditional operator");
@@ -227,13 +253,6 @@ namespace Markup.Programming.Core
                     VerifyToken(":");
                     var ifFalse = Parse();
                     node = new OpNode { Op = Op.Conditional, Operands = { node, ifTrue, ifFalse } };
-                    continue;
-                }
-                if (c == '.')
-                {
-                    if (nodeNext) engine.Throw("unexpected dot operator");
-                    nodeNext = true;
-                    tokens.Dequeue();
                     continue;
                 }
                 if (!nodeNext) return node;
@@ -359,7 +378,7 @@ namespace Markup.Programming.Core
                     i += 2;
                     continue;
                 }
-                if (OperatorMap.ContainsKey(c.ToString()) || ".[](),?:".Contains(c))
+                if (OperatorMap.ContainsKey(c.ToString()) || "=.[](),?:".Contains(c))
                 {
                     tokens.Enqueue(c.ToString());
                     ++i;

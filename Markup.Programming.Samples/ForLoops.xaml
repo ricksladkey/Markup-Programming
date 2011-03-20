@@ -18,7 +18,7 @@
                                 <p:Operator Path1="$i" Op="LessThan" Value2="3"/>
                             </p:For.While>
                             <p:For.Next>
-                                <p:Set Path="$i" Op="Increment" />
+                                <p:Set Path="$i" Op="Increment"/>
                             </p:For.Next>
                             <p:Call Path="[MessageBox].Show">
                                 <p:Call Path="[String].Format">

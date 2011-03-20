@@ -1,3 +1,4 @@
+- add path assignment operator
 - write converter sample
 - add Attached event to all components
 - <p:Set Path="$x" Value="-"/> should fail if x is not yet defined
