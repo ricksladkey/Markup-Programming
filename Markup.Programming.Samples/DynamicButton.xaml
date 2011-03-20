@@ -8,20 +8,12 @@
         <StackPanel Name="ContentHost">
             <Button Content="Add">
                 <p:Attached.Operations>
-                    <p:EventHandler Path="Click">
-                        <p:Block>
-                            <p:Set Path="$children">
-                                <p:Get Context="{Binding ElementName=ContentHost}" PropertyName="Children"/>
-                            </p:Set>
-                            <p:Set Path="$child">
-                                <p:Object Path="[Button]">
-                                    <p:Property Prop="Content" Value="Click Me!"/>
-                                    <p:Property Prop="Opacity" Value="0.5"/>
-                                </p:Object>
-                            </p:Set>
-                            <p:Call Path="$children.Add" ArgumentPath="$child"/>
-                        </p:Block>
-                    </p:EventHandler>
+                    <p:CallHandler Context="{Binding ElementName=ContentHost}" Path="Click.Children.Add">
+                        <p:Object Path="[Button]">
+                            <p:Property Prop="Content" Value="Click Me!"/>
+                            <p:Property Prop="Opacity" Value="0.5"/>
+                        </p:Object>
+                    </p:CallHandler>
                 </p:Attached.Operations>
             </Button>
         </StackPanel>
