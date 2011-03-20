@@ -93,6 +93,8 @@ namespace Markup.Programming.Tests.Tests
             BasicGetTest("123", "123 .ToString()");
             BasicGetTest(new Point { X = 1, Y = 2 }, "[Point] { X = 1,  Y =  2 }");
             BasicGetTest(new List<int> { 1, 2, 3 }, "[List<int>] { 1, 2, 3 }");
+            BasicGetTest(3, "1, 3");
+            BasicGetTest(42, "($theAnswer = 42), $theAnswer");
 
             BasicGetTest("Test1", "String1");
             BasicGetTest("Test2", "Object1.String1");

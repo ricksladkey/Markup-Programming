@@ -1,3 +1,5 @@
+- clean up event/path interaction
+- Parse number dot identifier as an integer
 - Make terminating semicolon optional in path syntax
 - Add support for dynamic objects in path expressions
 - write converter sample
@@ -29,4 +31,3 @@
 - delay evaluation of MarkupObject properties until parent inheritance context is set
 - figure out why MarkupObjectExtension cannot be first item in Resources
 - figure out why ExpressionCollection cannot be cast to an IEnumerable<IExpression>
-

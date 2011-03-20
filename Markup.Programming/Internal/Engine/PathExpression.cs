@@ -290,26 +290,23 @@ namespace Markup.Programming.Core
                         node = new OpNode { Op = op, Operands = { node, Parse() } };
                     continue;
                 }
-                var c = token[0];
-                if (c == '=')
+                if ("=.?,?".Contains(token[0]) & nodeNext) engine.Throw("unexpected operator: " + token);
+                if (token == "=")
                 {
                     node.IsSet = true;
-                    if (nodeNext) engine.Throw("unexpected conditional operator");
                     tokens.Dequeue();
                     var rvalue = Parse();
                     node = new SetNode { LValue = node, RValue = rvalue };
                     continue;
                 }
-                if (c == '.')
+                if (token == ".")
                 {
-                    if (nodeNext) engine.Throw("unexpected dot operator");
                     nodeNext = true;
                     tokens.Dequeue();
                     continue;
                 }
-                if (c == '?')
+                if (token == "?")
                 {
-                    if (nodeNext) engine.Throw("unexpected conditional operator");
                     tokens.Dequeue();
                     var ifTrue = Parse();
                     VerifyToken(":");
@@ -317,7 +314,14 @@ namespace Markup.Programming.Core
                     node = new OpNode { Op = Op.Conditional, Operands = { node, ifTrue, ifFalse } };
                     continue;
                 }
+                if (token == ",")
+                {
+                    tokens.Dequeue();
+                    node = new OpNode { Op = Op.Comma, Operands = { node, Parse() } };
+                    continue;
+                }
                 if (!nodeNext) return node;
+                char c = token[0];
                 if (char.IsDigit(c))
                 {
                     tokens.Dequeue();
@@ -478,7 +482,9 @@ namespace Markup.Programming.Core
 
         private object ParseInt(string token)
         {
-            int i; if (!int.TryParse(token, out i)) engine.Throw("bad int: " + token); return i;
+            int i;
+            if (!int.TryParse(token, out i)) engine.Throw("bad int: " + token);
+            return i;
         }
 
         private bool IsCurrentSet { get { return IsSet && tokens != null && tokens.Count == 0; } }
