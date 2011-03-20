@@ -193,7 +193,7 @@ namespace Markup.Programming.Core
             "System",
             "System.Windows",
             "System.Windows.Controls",
-            "System.COllections.Generic",
+            "System.Collections.Generic",
             "System.Collections",
         };
  

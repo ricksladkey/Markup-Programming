@@ -85,6 +85,10 @@ namespace Markup.Programming.Tests.Tests
             BasicGetTest(6, "@Op('Plus', 1, 2, 3)");
             BasicGetTest(new ArrayList(), "@Op('New', [ArrayList])");
             BasicGetTest(new ArrayList(), "[ArrayList]()");
+            BasicGetTest(42, "@true ? 42 : 21");
+            BasicGetTest(typeof(int), "[Int32]");
+            BasicGetTest(typeof(List<>), "[List<>]");
+            BasicGetTest(typeof(List<int>), "[List<Int32>]");
 
             BasicGetTest("Test1", "String1");
             BasicGetTest("Test2", "Object1.String1");
@@ -97,7 +101,6 @@ namespace Markup.Programming.Tests.Tests
         [TestMethod]
         public void PathTestSandbox()
         {
-            BasicGetTest(42, "@true ? 42 : 21");
         }
 
 #if DEBUG

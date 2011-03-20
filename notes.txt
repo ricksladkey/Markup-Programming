@@ -1,4 +1,3 @@
-- refactor out the generic type argument approach and support [List<string>] in path syntax
 - write converter sample
 - add Attached event to all components
 - auto-increment version number

@@ -67,10 +67,21 @@ namespace Markup.Programming.Core
             protected override void AddTokens() { Add(Value); }
         }
 
-        private class TypeValueNode : PathNode
+        private class TypeNode : PathNode
         {
-            protected override object OnEvaluate(Engine engine, object value) { return engine.LookupType(Name); }
-            protected override void AddTokens() { Add("[", Name, "]"); }
+            public IList<TypeNode> TypeArguments { get; set; }
+            protected override object OnEvaluate(Engine engine, object value)
+            {
+                var type = engine.LookupType(Name);
+                if (TypeArguments == null || TypeArguments.Count == 0) return type;
+                var typeArgs = TypeArguments.Select(arg => arg.Evaluate(engine, value)).Cast<Type>().ToArray();
+                return type.MakeGenericType(typeArgs);
+            }
+            protected override void AddTokens()
+            {
+                if (TypeArguments == null || TypeArguments.Count == 0) { Add("[", Name, "]"); return; }
+                Add("[", Name, "<"); Add(TypeArguments.ToArray()); Add(">", "]");
+            }
         }
 
         private class OpNode : PathNode
@@ -145,10 +156,11 @@ namespace Markup.Programming.Core
 
         private class StaticMethodNode : CallNode
         {
-            public string TypeName { get; set; }
+            public TypeNode Type { get; set; }
             public override object Call(Engine engine, IEnumerable<object> args)
             {
-                return CallHelper.CallMethod(Name, true, engine.LookupType(TypeName), null, GetArguments(engine, args), null, engine);
+                var type = Type.Evaluate(engine, null) as Type;
+                return CallHelper.CallMethod(Name, true, type, null, GetArguments(engine, args), null, engine);
             }
         }
 
@@ -287,24 +299,19 @@ namespace Markup.Programming.Core
                 }
                 else if (c == '[')
                 {
-                    tokens.Dequeue();
-                    var typeName = "";
-                    while (tokens.Count > 0 && tokens.Peek() != "]") typeName += tokens.Dequeue();
+                    var typeNode = ParseType();
                     VerifyToken("]");
                     if (tokens.Peek() == ".")
                     {
                         VerifyToken(".");
                         var methodName = tokens.Dequeue();
                         var args = tokens.Peek() == "(" ? ParseArguments() : null;
-                        node = new StaticMethodNode { TypeName = typeName, Name = methodName, Arguments = args };
+                        node = new StaticMethodNode { Type = typeNode, Name = methodName, Arguments = args };
                     }
                     else if (tokens.Peek() == "(")
-                    {
-                        var operands = new PathNode[] { new TypeValueNode { Name = typeName } };
-                        node = new OpNode { Op = Op.New, Operands = operands.Concat(ParseArguments()).ToList() };
-                    }
+                        node = new OpNode { Op = Op.New, Operands = new PathNode[] { typeNode }.Concat(ParseArguments()).ToList() };
                     else
-                        node = new TypeValueNode { Name = typeName };
+                        node = typeNode;
                 }
                 else if (c == '(')
                 {
@@ -324,6 +331,36 @@ namespace Markup.Programming.Core
                 nodeNext = false;
             }
             return node;
+        }
+
+        private TypeNode ParseType()
+        {
+            var token = tokens.Dequeue();
+            var typeName = "";
+            var typeArgs = null as List<TypeNode>;
+            while (tokens.Count > 0 && tokens.Peek() != "]" && tokens.Peek() != "<") typeName += tokens.Dequeue();
+            if (tokens.Peek() == "<")
+            {
+                tokens.Dequeue();
+                typeArgs = new List<TypeNode>();
+                var arg = "";
+                for (token = tokens.Dequeue(); tokens.Count > 0; token = tokens.Dequeue())
+                {
+                    if (token == "," || token == ">")
+                    {
+                        typeArgs.Add(arg != "" ? new TypeNode { Name = arg } : null);
+                        if (token == ">")
+                            break;
+                        arg = "";
+                    }
+                    else
+                        arg += token;
+                }
+                typeName += "`" + typeArgs.Count;
+                if (typeArgs.All(typeArg => typeArg == null)) typeArgs = null;
+                else if (!typeArgs.All(typeArg => typeArg != null)) engine.Throw("generic type partially specified");
+            }
+            return new TypeNode { Name = typeName, TypeArguments = typeArgs };
         }
 
         private object ParseDouble(string token)
