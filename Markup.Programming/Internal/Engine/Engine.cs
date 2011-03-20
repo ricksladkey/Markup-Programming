@@ -325,6 +325,11 @@ namespace Markup.Programming.Core
             DefineVariable(Engine.ContextKey, context, false, true);
         }
 
+        public bool HasBindingOrValue(DependencyProperty property)
+        {
+            return HasBindingOrValue(property, null);
+        }
+
         public bool HasBindingOrValue(DependencyProperty property, string path)
         {
             var caller = CurrentFrame.Caller as DependencyObject;

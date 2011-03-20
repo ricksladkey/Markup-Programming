@@ -28,11 +28,6 @@ namespace Markup.Programming
         public static readonly DependencyProperty SourceProperty =
             DependencyProperty.Register("Source", typeof(object), typeof(Get), null);
 
-        public string SourcePath { get; set; }
-
-        private PathExpression sourcePathExpression = new PathExpression();
-        protected PathExpression SourcePathExpression { get { return sourcePathExpression; } }
-
         public string Var { get; set; }
 
         public string PropertyName { get; set; }
@@ -68,9 +63,7 @@ namespace Markup.Programming
                 return PathHelper.GetStaticField(engine, type, StaticFieldName);
             if (Path != null)
                 return context;
-            if (Source != null)
-                return engine.Evaluate(SourceProperty, SourcePath, SourcePathExpression);
-            return engine.Throw("nothing to get");
+            return engine.Evaluate(SourceProperty);
         }
     }
 }

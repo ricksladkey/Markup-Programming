@@ -50,11 +50,6 @@ namespace Markup.Programming
         public static readonly DependencyProperty TargetProperty =
             DependencyProperty.Register("Target", typeof(object), typeof(Set), null);
 
-        public string TargetPath { get; set; }
-
-        private PathExpression targetPathExpression = new PathExpression();
-        protected PathExpression TargetPathExpression { get { return targetPathExpression; } }
-
         public string Var { get; set; }
 
         public string PropertyName { get; set; }
@@ -93,7 +88,7 @@ namespace Markup.Programming
             }
             if (IsBareTarget)
             {
-                var target = engine.Evaluate(TargetProperty, TargetPath, TargetPathExpression);
+                var target = engine.Evaluate(TargetProperty);
                 target = engine.Evaluate(Op, target, value);
                 Target = value;
                 return value;
