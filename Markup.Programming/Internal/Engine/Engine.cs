@@ -219,7 +219,7 @@ namespace Markup.Programming.Core
 
         private void DefineVariable(string name, object value, bool parentFrame, bool noError)
         {
-            if (!noError && !PathExpression.IsValidIdentifier(name)) Throw("invalid identifier: " + name);
+            if (!noError && !PathExpression.IsValidVariable(name)) Throw("invalid variable: " + name);
             Trace(TraceFlags.Variable, "DefineVariable: {0} = {1}", name, value);
             var frame = parentFrame ? (ParentFrame ?? CurrentFrame) : CurrentFrame;
             if (frame == null) Throw("no frame for variable: " + name);

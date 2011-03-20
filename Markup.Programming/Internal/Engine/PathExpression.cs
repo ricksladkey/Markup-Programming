@@ -299,6 +299,7 @@ namespace Markup.Programming.Core
                 }
                 else if (c == '[')
                 {
+                    tokens.Dequeue();
                     var typeNode = ParseType();
                     VerifyToken("]");
                     if (tokens.Peek() == ".")
@@ -335,32 +336,28 @@ namespace Markup.Programming.Core
 
         private TypeNode ParseType()
         {
-            var token = tokens.Dequeue();
+            var token = null as string;
             var typeName = "";
             var typeArgs = null as List<TypeNode>;
-            while (tokens.Count > 0 && tokens.Peek() != "]" && tokens.Peek() != "<") typeName += tokens.Dequeue();
+            while (tokens.Count > 0 && (IsIdentifier(tokens.Peek()) || tokens.Peek() == ".")) typeName += tokens.Dequeue();
             if (tokens.Peek() == "<")
             {
                 tokens.Dequeue();
                 typeArgs = new List<TypeNode>();
-                var arg = "";
-                for (token = tokens.Dequeue(); tokens.Count > 0; token = tokens.Dequeue())
+                while (true)
                 {
-                    if (token == "," || token == ">")
-                    {
-                        typeArgs.Add(arg != "" ? new TypeNode { Name = arg } : null);
-                        if (token == ">")
-                            break;
-                        arg = "";
-                    }
-                    else
-                        arg += token;
+                    typeArgs.Add(ParseType());
+                    token = tokens.Peek();
+                    if (token == ">") break;
+                    if (token != ",") engine.Throw("unexpected token");
+                    tokens.Dequeue();
                 }
                 typeName += "`" + typeArgs.Count;
                 if (typeArgs.All(typeArg => typeArg == null)) typeArgs = null;
                 else if (!typeArgs.All(typeArg => typeArg != null)) engine.Throw("generic type partially specified");
+                tokens.Dequeue();
             }
-            return new TypeNode { Name = typeName, TypeArguments = typeArgs };
+            return typeName != "" ? new TypeNode { Name = typeName, TypeArguments = typeArgs } : null;
         }
 
         private object ParseDouble(string token)
@@ -457,13 +454,17 @@ namespace Markup.Programming.Core
 
         }
 
+        private bool IsIdentifier(string id)
+        {
+            return id != null && id.Length > 0 && IsInitialIdChar(id[0]) && id.Skip(1).All(c => IsIdChar(c));
+        }
         private static string IdChars { get { return "_"; } }
         private static bool IsInitialIdChar(char c) { return char.IsLetter(c) || IdChars.Contains(c); }
         private static bool IsIdChar(char c) { return char.IsLetterOrDigit(c) || IdChars.Contains(c); }
-        public static bool IsValidIdentifier(string identifier)
+        public static bool IsValidVariable(string variable)
         {
-            if (identifier.Length < 2 || identifier[0] != '$') return false;
-            return IsInitialIdChar(identifier[1]) && identifier.Skip(2).All(c => IsIdChar(c));
+            if (variable.Length < 2 || variable[0] != '$') return false;
+            return IsInitialIdChar(variable[1]) && variable.Skip(2).All(c => IsIdChar(c));
         }
         private static bool IsQuote(char c) { return "'\"".Contains(c); }
 

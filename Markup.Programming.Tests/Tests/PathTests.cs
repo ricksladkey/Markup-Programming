@@ -89,6 +89,7 @@ namespace Markup.Programming.Tests.Tests
             BasicGetTest(typeof(int), "[Int32]");
             BasicGetTest(typeof(List<>), "[List<>]");
             BasicGetTest(typeof(List<int>), "[List<Int32>]");
+            BasicGetTest(typeof(List<List<int>>), "[List<List<Int32>>]");
 
             BasicGetTest("Test1", "String1");
             BasicGetTest("Test2", "Object1.String1");
