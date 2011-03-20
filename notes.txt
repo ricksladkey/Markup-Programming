@@ -1,5 +1,4 @@
-- Object: if property is IList and property value is bare Collection, use IList.Add on contents
-- Object: if property is IDictionary 
+- Add support for dynamic objects in path expressions
 - write converter sample
 - add Attached event to all components
 - auto-increment version number

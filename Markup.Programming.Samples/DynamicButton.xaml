@@ -8,12 +8,9 @@
         <StackPanel Name="ContentHost">
             <Button Content="Add">
                 <p:Attached.Operations>
-                    <p:CallHandler Context="{Binding ElementName=ContentHost}" Path="Click.Children.Add">
-                        <p:Object Path="[Button]">
-                            <p:Property Prop="Content" Value="Click Me!"/>
-                            <p:Property Prop="Opacity" Value="0.5"/>
-                        </p:Object>
-                    </p:CallHandler>
+                    <p:CallHandler
+                        Context="{Binding ElementName=ContentHost}"
+                        Path="Click.Children.Add([Button] { Content = 'Click Me!', Opacity = 0.5 })"/>
                 </p:Attached.Operations>
             </Button>
         </StackPanel>
