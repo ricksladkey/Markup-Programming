@@ -170,6 +170,7 @@ namespace Markup.Programming.Core
                 var type = SearchAssembliesForType(prefix + "." + typeName);
                 if (type != null) return type;
             }
+            if (TypeAliases.ContainsKey(typeName)) return TypeAliases[typeName];
             return null;
         }
 
@@ -183,10 +184,22 @@ namespace Markup.Programming.Core
             return null;
         }
 
-        private static IEnumerable<string> Namespaces
+
+        public static IDictionary<string, Type> TypeAliases { get { return typeAliases; } }
+
+        private static Dictionary<string, Type> typeAliases = new Dictionary<string, Type>
         {
-            get { return namespaces; }
-        }
+            { "char", typeof(char) },
+            { "byte", typeof(byte) },
+            { "short", typeof(short) },
+            { "int", typeof(int) },
+            { "long", typeof(long) },
+            { "float", typeof(float) },
+            { "double", typeof(double) },
+            { "string", typeof(string) },
+        };
+
+        private static IEnumerable<string> Namespaces { get { return namespaces; } }
 
         private static string[] namespaces =
         {

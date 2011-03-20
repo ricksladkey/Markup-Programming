@@ -50,6 +50,62 @@ namespace Markup.Programming.Core
             }
         }
 
+        private class ValueNode : PathNode
+        {
+            public object Value { get; set; }
+            protected override object OnEvaluate(Engine engine, object value) { return Value; }
+            protected override void AddTokens() { Add(Value); }
+        }
+
+        private class PairNode : PathNode
+        {
+            public PathNode Key { get; set; }
+            public PathNode Value { get; set; }
+            protected override object OnEvaluate(Engine engine, object value)
+            {
+                return new DictionaryEntry(Key.Evaluate(engine, value), Value.Evaluate(engine, value));
+            }
+        }
+
+        private class PropertyInitializerNode : PathNode
+        {
+            public PathNode Value { get; set; }
+            protected override object OnEvaluate(Engine engine, object value)
+            {
+                var context = Context.Evaluate(engine, value);
+                PathHelper.SetProperty(engine, context, Name, Value.Evaluate(engine, value));
+                return context;
+            }
+        }
+
+        private class CollectionInitializerNode : PathNode
+        {
+            public PathNode Collection { get; set; }
+            public IList<PathNode> Items { get; set; }
+            protected override object OnEvaluate(Engine engine, object value)
+            {
+                var collection = Collection.Evaluate(engine, value) as IList;
+                foreach (var item in Items) collection.Add(item.Evaluate(engine, value));
+                return Context == Collection ? collection : Context.Evaluate(engine, value);
+            }
+        }
+
+        private class DictionaryInitializerNode : PathNode
+        {
+            public PathNode Dictionary { get; set; }
+            public IList<PathNode> Items { get; set; }
+            protected override object OnEvaluate(Engine engine, object value)
+            {
+                var dictionary = Dictionary.Evaluate(engine, value) as IDictionary;
+                foreach (var item in Items)
+                {
+                    var entry = (DictionaryEntry)item.Evaluate(engine, value);
+                    dictionary.Add(entry.Key, entry.Value);
+                }
+                return Context == Dictionary ? dictionary : Context.Evaluate(engine, value);
+            }
+        }
+
         private class SetNode : PathNode
         {
             public PathNode LValue { get; set; }
@@ -58,13 +114,6 @@ namespace Markup.Programming.Core
             {
                 return LValue.Evaluate(engine, RValue.Evaluate(engine, value));
             }
-        }
-
-        private class ValueNode : PathNode
-        {
-            public object Value { get; set; }
-            protected override object OnEvaluate(Engine engine, object value) { return Value; }
-            protected override void AddTokens() { Add(Value); }
         }
 
         private class TypeNode : PathNode
@@ -177,6 +226,7 @@ namespace Markup.Programming.Core
             private int current = 0;
             public void Enqueue(string item) { list.Add(item); }
             public string Dequeue() { return list[current++]; }
+            public void Undequeue() { --current; }
             public string Peek() { return current < list.Count ? list[current] : null; }
             public int Count { get { return list.Count - current; } }
             public IEnumerator<string> GetEnumerator() { return list.Skip(current).GetEnumerator(); }
@@ -311,6 +361,11 @@ namespace Markup.Programming.Core
                     }
                     else if (tokens.Peek() == "(")
                         node = new OpNode { Op = Op.New, Operands = new PathNode[] { typeNode }.Concat(ParseArguments()).ToList() };
+                    else if (tokens.Peek() == "{")
+                    {
+                        tokens.Dequeue();
+                        node = ParseInitializer(typeNode);
+                    }
                     else
                         node = typeNode;
                 }
@@ -334,6 +389,61 @@ namespace Markup.Programming.Core
             return node;
         }
 
+        private PathNode ParseInitializer(TypeNode typeNode)
+        {
+            var node = new OpNode { Op = Op.New, Operands = { typeNode } } as PathNode;
+            while (true)
+            {
+                if (tokens.Peek() == "{")
+                    return ParseDictionaryInitializer(node, node);
+                var property = tokens.Dequeue();
+                if (tokens.Peek() != "=")
+                {
+                    tokens.Undequeue();
+                    return ParseCollectionInitializer(node, node);
+                }
+                VerifyToken("=");
+                if (tokens.Peek() == "{")
+                {
+                    tokens.Dequeue();
+                    var propertyNode = new PropertyNode { Context = node, Name = property };
+                    if (tokens.Peek() == "{")
+                        node = ParseDictionaryInitializer(node, propertyNode);
+                    else
+                        node = ParseCollectionInitializer(node, propertyNode);
+                }
+                else
+                    node = new PropertyInitializerNode { Context = node, Name = property, Value = Parse() };
+                var token = tokens.Dequeue();
+                if (token == "}") break;
+                if (token != ",") engine.Throw("unexpected token: " + token);
+            }
+            return node;
+        }
+
+        private PathNode ParseCollectionInitializer(PathNode context, PathNode collection)
+        {
+            return new CollectionInitializerNode { Context = context, Collection = collection, Items = ParseList("}") };
+        }
+
+        private PathNode ParseDictionaryInitializer(PathNode context, PathNode dictionary)
+        {
+            var entries = new List<PathNode>();
+            while (true)
+            {
+                VerifyToken("{");
+                var key = Parse();
+                VerifyToken(",");
+                var value = Parse();
+                VerifyToken("}");
+                entries.Add(new PairNode { Key = key, Value = value });
+                var token = tokens.Dequeue();
+                if (token == "}") break;
+                if (token != ",") engine.Throw("unexpected token: " + token);
+            }
+            return new DictionaryInitializerNode { Context = context, Dictionary = dictionary, Items = entries };
+        }
+
         private TypeNode ParseType()
         {
             var token = null as string;
@@ -347,15 +457,13 @@ namespace Markup.Programming.Core
                 while (true)
                 {
                     typeArgs.Add(ParseType());
-                    token = tokens.Peek();
+                    token = tokens.Dequeue();
                     if (token == ">") break;
-                    if (token != ",") engine.Throw("unexpected token");
-                    tokens.Dequeue();
+                    if (token != ",") engine.Throw("unexpected token: " + token);
                 }
                 typeName += "`" + typeArgs.Count;
                 if (typeArgs.All(typeArg => typeArg == null)) typeArgs = null;
                 else if (!typeArgs.All(typeArg => typeArg != null)) engine.Throw("generic type partially specified");
-                tokens.Dequeue();
             }
             return typeName != "" ? new TypeNode { Name = typeName, TypeArguments = typeArgs } : null;
         }
@@ -383,20 +491,27 @@ namespace Markup.Programming.Core
 
         private IList<PathNode> ParseArguments()
         {
+            VerifyToken("(");
+            return ParseList(")");
+        }
+
+        private IList<PathNode> ParseList(string expectedToken)
+        {
             var nodes = new List<PathNode>();
-            var expectedTokens = new List<string> { ",", ")" };
-            var token = tokens.Dequeue();
-            if (token != "(") engine.Throw("missing opening parenthesis");
-            if (tokens.Count > 0 && tokens.Peek() == ")") { tokens.Dequeue(); return nodes; }
+            if (tokens.Count > 0 && tokens.Peek() == expectedToken)
+            {
+                tokens.Dequeue();
+                return nodes;
+            }
             while (tokens.Count > 0)
             {
                 nodes.Add(Parse());
-                if (tokens.Count == 0) break;
-                var nextToken = tokens.Dequeue();
-                if (!expectedTokens.Contains(nextToken)) engine.Throw("unexpected token: " + nextToken);
-                if (nextToken == ")") return nodes;
+                if (tokens.Count == 0) engine.Throw("missing token: " + expectedToken);
+                var token = tokens.Dequeue();
+                if (token == expectedToken) return nodes;
+                if (token != ",") engine.Throw("unexpected token: " + token);
             }
-            return engine.Throw("missing closing parenthesis") as IList<PathNode>;
+            return nodes;
         }
 
         private void Tokenize()
@@ -412,7 +527,7 @@ namespace Markup.Programming.Core
                     i += 2;
                     continue;
                 }
-                if (OperatorMap.ContainsKey(c.ToString()) || "=.[](),?:".Contains(c))
+                if (OperatorMap.ContainsKey(c.ToString()) || "=.[](){},?:".Contains(c))
                 {
                     tokens.Enqueue(c.ToString());
                     ++i;

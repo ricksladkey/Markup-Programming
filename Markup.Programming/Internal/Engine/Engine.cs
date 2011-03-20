@@ -294,8 +294,9 @@ namespace Markup.Programming.Core
 
         public Type LookupType(string name)
         {
-            if (name.Split(',').Length > 2) return TypeHelper.ConvertToType(name);
-            return TypeHelper.ResolvePartialType(name);
+            var result = name.Split(',').Length > 2 ? TypeHelper.ConvertToType(name) : TypeHelper.ResolvePartialType(name);
+            if (result == null) Throw("unable to resolve type: " + name);
+            return result;
         }
 
         public object Context

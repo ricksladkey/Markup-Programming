@@ -90,6 +90,9 @@ namespace Markup.Programming.Tests.Tests
             BasicGetTest(typeof(List<>), "[List<>]");
             BasicGetTest(typeof(List<int>), "[List<Int32>]");
             BasicGetTest(typeof(List<List<int>>), "[List<List<Int32>>]");
+            BasicGetTest("123", "123 .ToString()");
+            BasicGetTest(new Point { X = 1, Y = 2 }, "[Point] { X = 1,  Y =  2 }");
+            BasicGetTest(new List<int> { 1, 2, 3 }, "[List<int>] { 1, 2, 3 }");
 
             BasicGetTest("Test1", "String1");
             BasicGetTest("Test2", "Object1.String1");
