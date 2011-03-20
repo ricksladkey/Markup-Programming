@@ -1,3 +1,5 @@
+- Object: if property is IList and property value is bare Collection, use IList.Add on contents
+- Object: if property is IDictionary 
 - write converter sample
 - add Attached event to all components
 - auto-increment version number
@@ -27,3 +29,4 @@
 - delay evaluation of MarkupObject properties until parent inheritance context is set
 - figure out why MarkupObjectExtension cannot be first item in Resources
 - figure out why ExpressionCollection cannot be cast to an IEnumerable<IExpression>
+

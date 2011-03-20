@@ -109,6 +109,7 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="External\Objects\KeyValuePair.cs" />
     <Compile Include="Internal\Components\InterfaceComponent.cs" />
     <Compile Include="Internal\Components\LazyResourceComponent.cs" />
     <Compile Include="Internal\Interop\CommandInterop.cs" />
@@ -187,8 +188,8 @@
     <Compile Include="External\Expressions\Get.cs" />
     <Compile Include="External\Expressions\SetItem.cs" />
     <Compile Include="External\Statements\Switch.cs" />
-    <Compile Include="External\Expressions\Collection.cs" />
-    <Compile Include="External\Expressions\Object.cs" />
+    <Compile Include="External\Objects\Collection.cs" />
+    <Compile Include="External\Objects\Object.cs" />
     <Compile Include="External\Statements\When.cs" />
     <Compile Include="Internal\Collections\FunctionCollection.cs" />
     <Compile Include="Internal\Components\IComponent.cs" />
@@ -204,7 +205,7 @@
     <Compile Include="External\Handlers\AttachedHandler.cs" />
     <Compile Include="Internal\Collections\ExpressionCollection.cs" />
     <Compile Include="External\Functions\Module.cs" />
-    <Compile Include="External\Expressions\New.cs" />
+    <Compile Include="External\Objects\New.cs" />
     <Compile Include="External\Expressions\Operator.cs" />
     <Compile Include="Internal\Language\ExpressionBase.cs" />
     <Compile Include="External\Resources\ResourceCommand.cs" />
@@ -212,7 +213,7 @@
     <Compile Include="External\Functions\Parameter.cs" />
     <Compile Include="External\Statements\Return.cs" />
     <Compile Include="Internal\Dynamic\TypeDescriptorImplementor.cs" />
-    <Compile Include="External\Support\Property.cs" />
+    <Compile Include="External\Objects\Property.cs" />
     <Compile Include="Internal\Engine\PathHelper.cs" />
     <Compile Include="External\Resources\ResourceObject.cs" />
     <Compile Include="External\Resources\ResourceCollection.cs" />
