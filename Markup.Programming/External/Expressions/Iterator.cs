@@ -19,34 +19,40 @@ namespace Markup.Programming
     /// </summary>
     public class Iterator : BlockExpression
     {
-        public Type Type
+        public object Type
         {
-            get { return (Type)GetValue(TypeProperty); }
+            get { return (object)GetValue(TypeProperty); }
             set { SetValue(TypeProperty, value); }
         }
 
         public static readonly DependencyProperty TypeProperty =
-            DependencyProperty.Register("Type", typeof(Type), typeof(Iterator), null);
+            DependencyProperty.Register("Type", typeof(object), typeof(Iterator), null);
 
-        public string TypeName { get; set; }
+        public string TypePath { get; set; }
 
-        public Type TypeArgument
-        {
-            get { return (Type)GetValue(TypeArgumentProperty); }
-            set { SetValue(TypeArgumentProperty, value); }
-        }
+        private PathExpression typePathExpression = new PathExpression();
+        protected PathExpression TypePathExpression { get { return typePathExpression; } }
 
         public static readonly DependencyProperty TypeArgumentProperty =
-            DependencyProperty.Register("TypeArgument", typeof(Type), typeof(Iterator), null);
+            DependencyProperty.Register("TypeArgument", typeof(object), typeof(Iterator), null);
 
-        public string TypeArgumentName { get; set; }
+        public string TypeArgumentPath { get; set; }
+
+        private PathExpression typeArgumentPathExpression = new PathExpression();
+        protected PathExpression TypeArgumentPathExpression { get { return typeArgumentPathExpression; } }
+
+        protected override void OnAttached()
+        {
+            base.OnAttached();
+            Attach(TypeProperty, TypeArgumentProperty);
+        }
 
         protected override object OnEvaluate(Engine engine)
         {
             engine.SetYieldFrame();
             Body.Execute(engine);
-            var type = engine.EvaluateType(TypeProperty, TypeName);
-            var typeArgument = engine.EvaluateType(TypeArgumentProperty, TypeArgumentName);
+            var type = engine.EvaluateType(TypeProperty, TypePath, TypePathExpression);
+            var typeArgument = engine.EvaluateType(TypeArgumentProperty, TypeArgumentPath, TypeArgumentPathExpression);
             return TypeHelper.CreateCollection(engine.GetYieldedValues(), type, typeArgument);
         }
     }

@@ -41,7 +41,7 @@
                     <p:Path>$i</p:Path>
 
                     <!-- explicit type conversion -->
-                    <p:Eval Value="42" Type="sys:Int32"/>
+                    <p:Eval Value="42" TypePath="[Int32]"/>
                     
                     <!-- syntax without conversion -->
                     <p:Eval>
@@ -86,8 +86,8 @@
 
                     <!-- use operators with optional conversions -->
                     <p:Operator Value1="abc" Op="Plus" Value2="def"/>
-                    <p:Operator Type="sys:Int32" Value1="2" Op="Times" Value2="2"/>
-                    <p:Operator Type="sys:Boolean" Op="Not" Value="True"/>
+                    <p:Operator TypePath="[Int32]" Value1="2" Op="Times" Value2="2"/>
+                    <p:Operator TypePath="[Boolean]" Op="Not" Value="True"/>
                     
                     <!-- use binary operator with one or two parameters -->
                     <p:Operator Path1="$i" Op="LessThan" Value2="10"/>
@@ -95,9 +95,9 @@
                         
                     <!-- use operators in params mode -->
                     <p:Operator Op="Plus">
-                        <p:Eval Type="sys:Int32" Value="1"/>
-                        <p:Eval Type="sys:Int32" Value="2"/>
-                        <p:Eval Type="sys:Int32" Value="3"/>
+                        <p:Eval TypePath="[Int32]" Value="1"/>
+                        <p:Eval TypePath="[Int32]" Value="2"/>
+                        <p:Eval TypePath="[Int32]" Value="3"/>
                     </p:Operator>
                     
                     <!-- use short-circuit operators to avoid crashes -->
@@ -113,14 +113,14 @@
                     </p:Object>
                     
                     <!-- create a traditional object -->
-                    <p:Object Type="Button">
+                    <p:Object Path="[Button]">
                         <p:Property Prop="Content" Value="Click Me!"/>
                         <p:Property Prop="Opacity" Value="0.5"/>
                     </p:Object>
 
                     <!-- don't be seduced into thinking this is static -->
                     <!-- it is a brand new object with new computed values -->
-                    <p:Object Type="Button">
+                    <p:Object Path="[Button]">
                         <p:Property Prop="Content" Value="{Binding Firstname}"/>
                         <p:Property Prop="Opacity">
                             <p:Operator Op="Divide">

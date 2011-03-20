@@ -68,7 +68,7 @@ namespace Markup.Programming
         protected override object OnEvaluate(Engine engine)
         {
             if (Op == default(Op)) engine.Throw("missing operator");
-            var type = engine.EvaluateType(TypeProperty, TypeName);
+            var type = engine.EvaluateType(TypeProperty, TypePath, TypePathExpression);
             if (Arguments.Count == 0)
             {
                 var arity = Op.GetArity();

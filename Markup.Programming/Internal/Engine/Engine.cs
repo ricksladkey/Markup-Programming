@@ -439,13 +439,9 @@ namespace Markup.Programming.Core
             return TypeHelper.Convert(value, type);
         }
 
-        public Type EvaluateType(DependencyProperty property, string name)
+        public Type EvaluateType(DependencyProperty property, string path, PathExpression pathExpression)
         {
-            var parent = CurrentFrame.Caller as DependencyObject;
-            if (name == null && !PathHelper.HasBindingOrValue(parent, property)) return null;
-            var type = name != null ? LookupType(name) : parent.GetValue(property) as Type;
-            if (type != null) return type;
-            return Throw("missing type") as Type;
+            return Evaluate(property, path, pathExpression, typeof(Type)) as Type;
         }
 
         public object Quote(DependencyProperty property)

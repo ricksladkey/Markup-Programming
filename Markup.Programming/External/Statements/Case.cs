@@ -20,7 +20,7 @@ namespace Markup.Programming
 
         private object EvaluateValue(Engine engine)
         {
-            var type = engine.EvaluateType(TypeProperty, TypeName);
+            var type = engine.EvaluateType(TypeProperty, TypePath, TypePathExpression);
             return engine.Evaluate(ValueProperty, Path, PathExpression, type);
         }
     }

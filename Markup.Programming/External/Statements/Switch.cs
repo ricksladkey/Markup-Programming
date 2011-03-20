@@ -32,7 +32,7 @@ namespace Markup.Programming
 
         protected override void OnExecute(Engine engine)
         {
-            var type = engine.EvaluateType(TypeProperty, TypeName);
+            var type = engine.EvaluateType(TypeProperty, TypePath, TypePathExpression);
             var value = engine.Evaluate(ValueProperty, Path, PathExpression, type);
             bool foundMatch = false;
             bool executedStatement = false;

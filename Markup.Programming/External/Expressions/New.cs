@@ -20,14 +20,14 @@ namespace Markup.Programming
             TypeArguments = new ExpressionCollection();
         }
 
-        public Type Type
+        public object Type
         {
-            get { return (Type)GetValue(TypeProperty); }
+            get { return (object)GetValue(TypeProperty); }
             set { SetValue(TypeProperty, value); }
         }
 
         public static readonly DependencyProperty TypeProperty =
-            DependencyProperty.Register("Type", typeof(Type), typeof(New), null);
+            DependencyProperty.Register("Type", typeof(object), typeof(New), null);
 
         public ExpressionCollection TypeArguments
         {
@@ -41,12 +41,12 @@ namespace Markup.Programming
         protected override void OnAttached()
         {
             base.OnAttached();
-            Attach(TypeArgumentsProperty);
+            Attach(TypeProperty, TypeArgumentsProperty);
         }
 
         protected override object OnEvaluate(Engine engine)
         {
-            var type = Type;
+            var type = engine.EvaluateType(TypeProperty, Path, PathExpression);
             if (TypeArguments.Count != 0)
                 type = type.MakeGenericType(TypeArguments.Evaluate(engine).Cast<Type>().ToArray());
             return TypeHelper.CreateInstance(type, Arguments.Evaluate(engine));

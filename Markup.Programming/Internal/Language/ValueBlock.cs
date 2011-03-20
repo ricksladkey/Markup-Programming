@@ -8,15 +8,24 @@ namespace Markup.Programming.Core
 {
     public abstract class ValueBlock : UntypedValueBlock
     {
-        public Type Type
+        public object Type
         {
-            get { return (Type)GetValue(TypeProperty); }
+            get { return (object)GetValue(TypeProperty); }
             set { SetValue(TypeProperty, value); }
         }
 
         public static readonly DependencyProperty TypeProperty =
-            DependencyProperty.Register("Type", typeof(Type), typeof(ValueBlock), null);
+            DependencyProperty.Register("Type", typeof(object), typeof(ValueBlock), null);
 
-        public string TypeName { get; set; }
+        public string TypePath { get; set; }
+
+        private PathExpression typePathExpression = new PathExpression();
+        protected PathExpression TypePathExpression { get { return typePathExpression; } }
+
+        protected override void OnAttached()
+        {
+            base.OnAttached();
+            Attach(TypeProperty);
+        }
     }
 }

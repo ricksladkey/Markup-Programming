@@ -10,7 +10,7 @@
             <Button Content="Standard For">
                 <p:Attached.Operations>
                     <p:EventHandler Path="Click">
-                        <p:For Var="i" TypeName="Int32">
+                        <p:For Var="i" TypePath="[Int32]">
                             <p:For.Value>
                                 <p:Path>0</p:Path>
                             </p:For.Value>

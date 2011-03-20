@@ -50,7 +50,7 @@ namespace Markup.Programming.Core
                 if (isSet) combinedArgs.Concat(new object[] { value });
                 return engine.Evaluate(op, combinedArgs.ToArray());
             }
-            var type = engine.EvaluateType(TypeProperty, TypeName);
+            var type = engine.EvaluateType(TypeProperty, TypePath, TypePathExpression);
             var index = engine.Evaluate(IndexProperty, IndexPath, IndexPathExpression, type);
             if (!isSet) return engine.Evaluate(op, context, index);
             return engine.Evaluate(op, context, index, value);

@@ -49,7 +49,7 @@ namespace Markup.Programming.Core
         public string ContextPath { get; set; }
 
         public static readonly DependencyProperty ContextProperty =
-            DependencyProperty.Register("Context", typeof(object), typeof(Handler), null);
+            DependencyProperty.Register("Context", typeof(object), typeof(PrimitiveActiveComponent), null);
 
         private PathExpression contextPathExpression = new PathExpression();
         protected PathExpression ContextPathExpression { get { return contextPathExpression; } }

@@ -25,16 +25,14 @@ namespace Markup.Programming
             Properties = new PropertyCollection();
         }
 
-        public Type Type
+        public object Type
         {
-            get { return (Type)GetValue(TypeProperty); }
+            get { return (object)GetValue(TypeProperty); }
             set { SetValue(TypeProperty, value); }
         }
 
         public static readonly DependencyProperty TypeProperty =
-            DependencyProperty.Register("Type", typeof(Type), typeof(Object), null);
-
-        public string TypeName { get; set; }
+            DependencyProperty.Register("Type", typeof(object), typeof(Object), null);
 
         public PropertyCollection Properties
         {
@@ -47,11 +45,17 @@ namespace Markup.Programming
 
         private Type dynamicType;
 
+        protected override void OnAttached()
+        {
+            base.OnAttached();
+            Attach(TypeProperty);
+        }
+
         protected override object OnEvaluate(Engine engine)
         {
             var pairs = Properties.Select(property =>
                 new NameValuePair(property.Prop, property.Evaluate(engine))).ToArray();
-            var type = engine.EvaluateType(TypeProperty, TypeName);
+            var type = engine.EvaluateType(TypeProperty, Path, PathExpression);
             if (type != null)
             {
                 var target = Activator.CreateInstance(type);

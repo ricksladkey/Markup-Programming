@@ -18,16 +18,19 @@ namespace Markup.Programming
             TypeArguments = new ExpressionCollection();
         }
 
-        public Type Type
+        public object Type
         {
-            get { return (Type)GetValue(TypeProperty); }
+            get { return (object)GetValue(TypeProperty); }
             set { SetValue(TypeProperty, value); }
         }
 
         public static readonly DependencyProperty TypeProperty =
-            DependencyProperty.Register("Type", typeof(Type), typeof(Call), null);
+            DependencyProperty.Register("Type", typeof(object), typeof(Call), null);
 
-        public string TypeName { get; set; }
+        public string TypePath { get; set; }
+
+        private PathExpression typePathExpression = new PathExpression();
+        protected PathExpression TypePathExpression { get { return typePathExpression; } }
 
         public object Argument
         {
@@ -72,7 +75,7 @@ namespace Markup.Programming
         protected override void OnAttached()
         {
             base.OnAttached();
-            Attach(ArgumentsProperty, TypeArgumentsProperty);
+            Attach(TypeProperty, ArgumentsProperty, TypeArgumentsProperty);
         }
 
         protected override object OnEvaluate(Engine engine)
@@ -84,7 +87,7 @@ namespace Markup.Programming
                 args = new object[] { engine.EvaluateObject(parameter) }.Concat(args).ToArray();
             }
             return CallHelper.Call(Path, PathExpression, StaticMethodName, MethodName, FunctionName, BuiltinFunction,
-                engine.EvaluateType(TypeProperty, TypeName), TypeArguments, args, engine);
+                engine.EvaluateType(TypeProperty, TypePath, TypePathExpression), TypeArguments, args, engine);
         }
     }
 }

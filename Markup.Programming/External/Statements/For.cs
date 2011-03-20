@@ -94,7 +94,7 @@ namespace Markup.Programming
         {
             // Use the same name and type for the whole loop.
             var name = "$" + Var;
-            var type = engine.EvaluateType(TypeProperty, TypeName);
+            var type = engine.EvaluateType(TypeProperty, TypePath, TypePathExpression);
             if (type == null && (UpperLimit != null || Increment != null)) type = typeof(int);
 
             // If no name is specified then forever.

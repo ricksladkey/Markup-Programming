@@ -94,7 +94,7 @@ namespace Markup.Programming
                 return value;
             }
             var context = engine.Context;
-            var type = engine.EvaluateType(TypeProperty, TypeName);
+            var type = engine.EvaluateType(TypeProperty, TypePath, TypePathExpression);
             if (Op != AssignmentOp.Assign)
             {
                 object oldValue = null;

@@ -17,16 +17,19 @@ namespace Markup.Programming
     {
         public string Prop { get; set; }
 
-        public Type Type
+        public object Type
         {
-            get { return (Type)GetValue(TypeProperty); }
+            get { return (object)GetValue(TypeProperty); }
             set { SetValue(TypeProperty, value); }
         }
 
         public static readonly DependencyProperty TypeProperty =
-            DependencyProperty.Register("Type", typeof(Type), typeof(Property), null);
+            DependencyProperty.Register("Type", typeof(object), typeof(Property), null);
 
-        public string TypeName { get; set; }
+        public string TypePath { get; set; }
+
+        private PathExpression typePathExpression = new PathExpression();
+        protected PathExpression TypePathExpression { get { return typePathExpression; } }
 
         public override object Value
         {
@@ -45,21 +48,20 @@ namespace Markup.Programming
         protected override void OnAttached()
         {
             base.OnAttached();
-            Attach(ValueProperty);
+            Attach(TypeProperty, ValueProperty);
         }
 
         public object Process(Engine engine) { return Evaluate(engine); }
         public void Execute(Engine engine) { Evaluate(engine); }
 
-        public object Evaluate(Engine engine)
+        public Type GetType(Engine engine)
         {
-            return engine.With(this, e => GetPropertyValue(engine));
+            return engine.With(this, e => engine.EvaluateType(TypeProperty, TypePath, TypePathExpression));
         }
 
-        private object GetPropertyValue(Engine engine)
+        public object Evaluate(Engine engine)
         {
-            var type = engine.EvaluateType(TypeProperty, TypeName);
-            return engine.Evaluate(ValueProperty, Path, PathExpression, type);
+            return engine.With(this, e => engine.Evaluate(ValueProperty, Path, PathExpression));
         }
     }
 }

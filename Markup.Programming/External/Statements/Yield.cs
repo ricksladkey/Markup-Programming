@@ -29,7 +29,7 @@ namespace Markup.Programming
         protected override void OnExecute(Engine engine)
         {
             if (!ShouldExecute(engine)) return;
-            var type = engine.EvaluateType(TypeProperty, TypeName);
+            var type = engine.EvaluateType(TypeProperty, TypePath, TypePathExpression);
             var value = engine.Evaluate(ValueProperty, Path, PathExpression, type);
             if (Merge)
                 foreach (var item in value as IList) engine.YieldValue(TypeHelper.Convert(item, type));

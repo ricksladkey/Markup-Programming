@@ -50,7 +50,7 @@ namespace Markup.Programming
         {
             if (Var != null) return engine.LookupVariable("$" + Var);
             var context = engine.GetContext(Path, PathExpression);
-            var type = engine.EvaluateType(TypeProperty, TypeName);
+            var type = engine.EvaluateType(TypeProperty, TypePath, TypePathExpression);
             if (PropertyName != null)
                 return PathHelper.GetProperty(engine, context, PropertyName);
             if (FieldName != null)

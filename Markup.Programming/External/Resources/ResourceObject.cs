@@ -111,18 +111,18 @@ namespace Markup.Programming
         {
             foreach (var property in Properties)
             {
+                var type = property.GetType(engine);
                 var value = property.Evaluate(engine);
-                var type = property.Type;
                 value = TypeHelper.Convert(value, type);
                 propertyStore.Add(property.Prop, value);
             }
-            dynamicProperties = Properties.Select(property => GetPair(property)).ToArray();
+            dynamicProperties = Properties.Select(property => GetPair(engine, property)).ToArray();
         }
 
-        private NameTypePair GetPair(Property property)
+        private NameTypePair GetPair(Engine engine, Property property)
         {
             var name = property.Prop;
-            var type = property.Type ?? typeof(object);
+            var type = property.GetType(engine) ?? typeof(object);
             return new NameTypePair(name, type);
         }
     }

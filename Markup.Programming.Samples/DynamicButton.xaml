@@ -14,7 +14,7 @@
                                 <p:Get Context="{Binding ElementName=ContentHost}" PropertyName="Children"/>
                             </p:Set>
                             <p:Set Path="$child">
-                                <p:Object TypeName="Button">
+                                <p:Object Path="[Button]">
                                     <p:Property Prop="Content" Value="Click Me!"/>
                                     <p:Property Prop="Opacity" Value="0.5"/>
                                 </p:Object>

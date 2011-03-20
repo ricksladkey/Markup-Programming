@@ -17,23 +17,32 @@ namespace Markup.Programming
     /// </summary>
     public class Collection : ArgumentsExpressionWithType
     {
-        public Type TypeArgument
+        public object TypeArgument
         {
-            get { return (Type)GetValue(TypeArgumentProperty); }
+            get { return (object)GetValue(TypeArgumentProperty); }
             set { SetValue(TypeArgumentProperty, value); }
         }
 
         public static readonly DependencyProperty TypeArgumentProperty =
-            DependencyProperty.Register("TypeArgument", typeof(Type), typeof(Collection), null);
+            DependencyProperty.Register("TypeArgument", typeof(object), typeof(Collection), null);
 
-        public string TypeArgumentName { get; set; }
+        public string TypeArgumentPath { get; set; }
+
+        private PathExpression typeArgumentPathExpression = new PathExpression();
+        protected PathExpression TypeArgumentPathExpression { get { return typeArgumentPathExpression; } }
+
+        protected override void OnAttached()
+        {
+            base.OnAttached();
+            Attach(TypeProperty, TypeArgumentProperty);
+        }
 
         protected override object OnEvaluate(Engine engine)
         {
             var items = Arguments.Evaluate(engine);
-            var type = engine.EvaluateType(TypeProperty, TypeName);
-            var typeArgument = engine.EvaluateType(TypeArgumentProperty, TypeArgumentName);
-            return TypeHelper.CreateCollection(items, type, TypeArgument);
+            var type = engine.EvaluateType(TypeProperty, TypePath, TypePathExpression);
+            var typeArgument = engine.EvaluateType(TypeArgumentProperty, TypeArgumentPath, TypeArgumentPathExpression);
+            return TypeHelper.CreateCollection(items, type, typeArgument);
         }
     }
 }
