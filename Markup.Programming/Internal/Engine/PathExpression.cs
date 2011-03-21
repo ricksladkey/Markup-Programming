@@ -355,16 +355,16 @@ namespace Markup.Programming.Core
                 }
                 else if (c == '"')
                     node = new ValueNode { Value = tokens.Dequeue().Substring(1) };
-                else if (IsIdChar(c))
+                else if (c == '`')
                 {
-                    tokens.Dequeue();
+                    var identifier = VerifyIdentifier();
                     if (IsCurrentCall)
                     {
                         var args = tokens.Peek() == "(" ? ParseArguments() : null;
-                        node = new MethodNode { Context = node, Name = token, Arguments = args };
+                        node = new MethodNode { Context = node, Name = identifier, Arguments = args };
                     }
                     else
-                        node = new PropertyNode { IsSet = IsCurrentSet, Context = node, Name = token };
+                        node = new PropertyNode { IsSet = IsCurrentSet, Context = node, Name = identifier };
                 }
                 else if (c == '$' || c == '@')
                 {
@@ -385,7 +385,7 @@ namespace Markup.Programming.Core
                     if (tokens.Peek() == ".")
                     {
                         VerifyToken(".");
-                        var methodName = tokens.Dequeue();
+                        var methodName = VerifyIdentifier();
                         var args = tokens.Peek() == "(" ? ParseArguments() : null;
                         node = new StaticMethodNode { Type = typeNode, Name = methodName, Arguments = args };
                     }
@@ -424,14 +424,12 @@ namespace Markup.Programming.Core
             var node = new OpNode { Op = Op.New, Operands = { typeNode } } as PathNode;
             while (true)
             {
-                if (tokens.Peek() == "{")
-                    return ParseDictionaryInitializer(node, node);
-                var property = tokens.Dequeue();
-                if (tokens.Peek() != "=")
-                {
-                    tokens.Undequeue();
-                    return ParseCollectionInitializer(node, node);
-                }
+                if (tokens.Peek() == "{") return ParseDictionaryInitializer(node, node);
+                tokens.Dequeue();
+                var isCollection = tokens.Peek() != "=";
+                tokens.Undequeue();
+                if (isCollection) return ParseCollectionInitializer(node, node);
+                var property = VerifyIdentifier();
                 VerifyToken("=");
                 if (tokens.Peek() == "{")
                 {
@@ -476,10 +474,14 @@ namespace Markup.Programming.Core
 
         private TypeNode ParseType()
         {
-            var token = null as string;
-            var typeName = "";
+            if (tokens.Peek() == "," || tokens.Peek() == ">") return null;
+            var typeName = VerifyIdentifier();
+            while (tokens.Peek() == ".")
+            {
+                tokens.Dequeue();
+                typeName += "." + VerifyIdentifier();
+            }
             var typeArgs = null as List<TypeNode>;
-            while (tokens.Count > 0 && (IsIdentifier(tokens.Peek()) || tokens.Peek() == ".")) typeName += tokens.Dequeue();
             if (tokens.Peek() == "<")
             {
                 tokens.Dequeue();
@@ -487,7 +489,7 @@ namespace Markup.Programming.Core
                 while (true)
                 {
                     typeArgs.Add(ParseType());
-                    token = tokens.Dequeue();
+                    var token = tokens.Dequeue();
                     if (token == ">") break;
                     if (token != ",") engine.Throw("unexpected token: " + token);
                 }
@@ -495,7 +497,7 @@ namespace Markup.Programming.Core
                 if (typeArgs.All(typeArg => typeArg == null)) typeArgs = null;
                 else if (!typeArgs.All(typeArg => typeArg != null)) engine.Throw("generic type partially specified");
             }
-            return typeName != "" ? new TypeNode { Name = typeName, TypeArguments = typeArgs } : null;
+            return new TypeNode { Name = typeName, TypeArguments = typeArgs };
         }
 
         private object ParseDouble(string token)
@@ -516,9 +518,16 @@ namespace Markup.Programming.Core
         private bool IsCurrentSet { get { return IsSet && tokens != null && tokens.Count == 0; } }
         private bool IsCurrentCall { get { return IsCall && tokens != null && tokens.Count == 0 || tokens.Peek() == "("; } }
 
-        private void VerifyToken(string token)
+        private string VerifyToken(string token)
         {
-            if (tokens.Count == 0 || tokens.Dequeue() != token) engine.Throw("missing token: " + token);
+            if (tokens.Count == 0 || tokens.Peek() != token) engine.Throw("missing token: " + token);
+            return tokens.Dequeue();
+        }
+
+        private string VerifyIdentifier()
+        {
+            if (tokens.Count == 0 || tokens.Peek()[0] != '`') engine.Throw("expected identifier");
+            return tokens.Dequeue().Substring(1);
         }
 
         private IList<PathNode> ParseArguments()
@@ -552,42 +561,36 @@ namespace Markup.Programming.Core
             for (int i = 0; i < Path.Length; )
             {
                 char c = Path[i];
-                if (char.IsWhiteSpace(c)) { ++i; continue; }
-                if (i < Path.Length - 1 && Path.Substring(i, 2) == "/*")
-                {
+                if (char.IsWhiteSpace(c)) ++i;
+                else if (i < Path.Length - 1 && Path.Substring(i, 2) == "/*")
                     i = EatComment(i);
-                    continue;
-                }
-                if (i < Path.Length - 1 && OperatorMap.ContainsKey(Path.Substring(i, 2)))
+                else if (i < Path.Length - 1 && OperatorMap.ContainsKey(Path.Substring(i, 2)))
                 {
                     tokens.Enqueue(Path.Substring(i, 2));
                     i += 2;
-                    continue;
                 }
-                if (OperatorMap.ContainsKey(c.ToString()) || "=.[](){},?:;".Contains(c))
+                else if (OperatorMap.ContainsKey(c.ToString()) || "=.[](){},?:;".Contains(c))
                 {
                     tokens.Enqueue(c.ToString());
                     ++i;
-                    continue;
                 }
-                if (IsQuote(c))
+                else if (IsQuote(c))
                 {
                     var start = ++i;
                     for (++i; i < Path.Length && Path[i] != c; ++i) continue;
                     if (Path[i] == Path.Length) engine.Throw("missing closing quote: " + Path);
                     tokens.Enqueue('"' + Path.Substring(start, i++ - start));
-                    continue;
                 }
-                if (char.IsDigit(c))
+                else if (char.IsDigit(c))
                 {
                     var start = i;
                     for (++i; i < Path.Length && (char.IsDigit(Path[i]) || Path[i] == '.'); i++) continue;
                     tokens.Enqueue(Path.Substring(start, i - start));
-                    continue;
                 }
-                if (c == '$' || c == '@' || IsInitialIdChar(c))
+                else if (c == '$' || c == '@' || IsInitialIdChar(c))
                 {
                     var start = i;
+                    var prefix = "";
                     if (c == '$' || c == '@')
                     {
                         ++i;
@@ -597,11 +600,13 @@ namespace Markup.Programming.Core
                             if (c == '@') { tokens.Enqueue("@"); continue; }
                         }
                     }
+                    else
+                        prefix = "`";
                     for (++i; i < Path.Length && IsIdChar(Path[i]); ++i) continue;
-                    tokens.Enqueue(Path.Substring(start, i - start));
-                    continue;
+                    tokens.Enqueue(prefix + Path.Substring(start, i - start));
                 }
-                engine.Throw("invalid token: " + Path.Substring(i));
+                else
+                    engine.Throw("invalid token: " + Path.Substring(i));
             }
 
         }
@@ -613,10 +618,6 @@ namespace Markup.Programming.Core
             return i + 2;
         }
 
-        private bool IsIdentifier(string id)
-        {
-            return id != null && id.Length > 0 && IsInitialIdChar(id[0]) && id.Skip(1).All(c => IsIdChar(c));
-        }
         private static string IdChars { get { return "_"; } }
         private static bool IsInitialIdChar(char c) { return char.IsLetter(c) || IdChars.Contains(c); }
         private static bool IsIdChar(char c) { return char.IsLetterOrDigit(c) || IdChars.Contains(c); }

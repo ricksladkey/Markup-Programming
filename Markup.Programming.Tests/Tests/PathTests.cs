@@ -109,6 +109,7 @@ namespace Markup.Programming.Tests.Tests
         [TestMethod]
         public void PathTestSandbox()
         {
+            BasicGetTest(new List<int> { 1, 2, 3 }, "[List<int>] { 1, 2, 3 }");
         }
 
 #if DEBUG
