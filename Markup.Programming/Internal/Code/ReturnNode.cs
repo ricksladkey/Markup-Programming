@@ -2,9 +2,10 @@
 {
     public class ReturnNode : ExpressionNode
     {
+        public ExpressionNode Value { get; set; }
         protected override object OnEvaluate(Engine engine, object value)
         {
-            engine.SetReturnValue(Context.Evaluate(engine, value));
+            engine.SetReturnValue(Value.Evaluate(engine, value));
             return null;
         }
     }

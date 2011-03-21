@@ -53,6 +53,7 @@ namespace Markup.Programming.Core
         {
             keywordMap = new Dictionary<string, Func<StatementNode>>
             {
+                { "var", ParseVar },
                 { "if", ParseIf },
                 { "while", ParseWhile },
                 { "break", ParseBreak },
@@ -64,7 +65,7 @@ namespace Markup.Programming.Core
         public string GetVariable(Engine engine)
         {
             engine.Trace(TraceFlags.Path, "Path: Variable {0}", Path);
-            return (root as VariableNode).Name;
+            return (root as VariableNode).VariableName;
         }
 
         public object Evaluate(Engine engine)
@@ -144,6 +145,16 @@ namespace Markup.Programming.Core
             return block;
         }
 
+        private StatementNode ParseVar()
+        {
+            ParseKeyword("var");
+            var variable = ParseVariable();
+            ParseToken("=");
+            var expression = ParseExpression();
+            ParseToken(";");
+            return new SetNode { LValue = new VariableNode { IsSet = true, VariableName = variable }, RValue = expression };
+        }
+
         private StatementNode ParseIf()
         {
             var pairs = new List<IfNode.Pair>();
@@ -179,7 +190,7 @@ namespace Markup.Programming.Core
             var expression = ParseExpression();
             ParseToken(")");
             var statement = ParseStatement();
-            return new WhileNode { Context = expression, Body = statement };
+            return new WhileNode { Condition = expression, Body = statement };
         }
 
         private StatementNode ParseBreak()
@@ -193,13 +204,13 @@ namespace Markup.Programming.Core
         {
             ParseKeyword("foreach");
             ParseToken("(");
-            ParseKeyword("var");
+            if (PeekKeyword("var")) ParseKeyword("var");
             var name = ParseVariable();
             ParseKeyword("in");
             var expression = ParseExpression();
             ParseToken(")");
             var statement = ParseStatement();
-            return new ForEachNode { Context = expression, Name = name, Body = statement };
+            return new ForEachNode { Collection = expression, VariableName = name, Body = statement };
         }
 
         private StatementNode ParseReturn()
@@ -207,7 +218,7 @@ namespace Markup.Programming.Core
             ParseKeyword("return");
             var value = ParseExpression();
             ParseToken(";");
-            return new ReturnNode { Context = value };
+            return new ReturnNode { Value = value };
         }
 
         private ExpressionNode ParseExpression() { return ParseExpression(false); }
@@ -287,14 +298,14 @@ namespace Markup.Programming.Core
             var ifTrue = ParseExpression();
             ParseToken(":");
             var ifFalse = ParseExpression();
-            return new ConditionalNode { Context = node, IfTrue = ifTrue, IfFalse = ifFalse };
+            return new ConditionalNode { Conditional = node, IfTrue = ifTrue, IfFalse = ifFalse };
         }
 
         private ExpressionNode ParseComma(ExpressionNode node)
         {
             tokens.Dequeue();
             var value = ParseExpression();
-            return new CommaNode { Context = node, Value = value };
+            return new CommaNode { Operand1 = node, Operand2= value };
         }
 
         private ExpressionNode ParseIdentifierExpression(ExpressionNode node)
@@ -306,10 +317,10 @@ namespace Markup.Programming.Core
                 if (IsCurrentCall)
                 {
                     var args = PeekToken("(") ? ParseArguments() : null;
-                    node = new MethodNode { Context = node, Name = identifier, Arguments = args };
+                    node = new MethodNode { Callee = node, MethodName = identifier, Arguments = args };
                 }
                 else
-                    node = new PropertyNode { IsSet = IsCurrentSet, Context = node, Name = identifier };
+                    node = new PropertyNode { IsSet = IsCurrentSet, Context = node, PropertyName = identifier };
             }
             else if (c == '$' || c == '@')
             {
@@ -317,17 +328,17 @@ namespace Markup.Programming.Core
                 if (IsCurrentCall)
                 {
                     var args = PeekToken("(") ? ParseArguments() : null;
-                    node = new FunctionNode { Context = node, Name = token, Arguments = args };
+                    node = new FunctionNode { FunctionName = token, Arguments = args };
                 }
                 else
-                    node = new VariableNode { IsSet = IsCurrentSet, Name = token };
+                    node = new VariableNode { IsSet = IsCurrentSet, VariableName = token };
             }
             return node;
         }
 
         private ExpressionNode ParseVariableExpression()
         {
-            return new VariableNode { Name = ParseVariable() };
+            return new VariableNode { VariableName = ParseVariable() };
         }
 
         private ExpressionNode ParseItems(ExpressionNode node)
@@ -352,7 +363,7 @@ namespace Markup.Programming.Core
                 ParseToken(".");
                 var methodName = ParseIdentifier();
                 var args = PeekToken("(") ? ParseArguments() : null;
-                return new StaticMethodNode { Type = typeNode, Name = methodName, Arguments = args };
+                return new StaticMethodNode { Type = typeNode, MethodName = methodName, Arguments = args };
             }
             if (PeekToken("("))
                 return new OpNode { Op = Op.New, Operands = new ExpressionNode[] { typeNode }.Concat(ParseArguments()).ToList() };
@@ -379,14 +390,14 @@ namespace Markup.Programming.Core
                 if (PeekToken("{"))
                 {
                     tokens.Dequeue();
-                    var propertyNode = new PropertyNode { Context = node, Name = property };
+                    var propertyNode = new PropertyNode { Context = node, PropertyName = property };
                     if (PeekToken("{"))
                         node = ParseDictionaryInitializer(node, propertyNode);
                     else
                         node = ParseCollectionInitializer(node, propertyNode);
                 }
                 else
-                    node = new PropertyInitializerNode { Context = node, Name = property, Value = ParseExpression(true) };
+                    node = new PropertyInitializerNode { Context = node, PropertyName = property, Value = ParseExpression(true) };
                 var token = tokens.Dequeue();
                 if (token == "}") break;
                 if (token != ",") engine.Throw("unexpected token: " + token);
@@ -442,7 +453,7 @@ namespace Markup.Programming.Core
                 if (typeArgs.All(typeArg => typeArg == null)) typeArgs = null;
                 else if (!typeArgs.All(typeArg => typeArg != null)) engine.Throw("generic type partially specified");
             }
-            return new TypeNode { Name = typeName, TypeArguments = typeArgs };
+            return new TypeNode { TypeName = typeName, TypeArguments = typeArgs };
         }
 
         private object ParseDouble(string token)

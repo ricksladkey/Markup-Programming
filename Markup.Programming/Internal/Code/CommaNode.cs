@@ -2,11 +2,12 @@
 {
     public class CommaNode : ExpressionNode
     {
-        public ExpressionNode Value { get; set; }
+        public ExpressionNode Operand1 { get; set; }
+        public ExpressionNode Operand2 { get; set; }
         protected override object OnEvaluate(Engine engine, object value)
         {
-            Context.Evaluate(engine, value);
-            return Value.Evaluate(engine, value);
+            Operand1.Evaluate(engine, value);
+            return Operand2.Evaluate(engine, value);
         }
     }
 }

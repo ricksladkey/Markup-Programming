@@ -111,9 +111,8 @@
   <ItemGroup>
     <Compile Include="External\Expressions\Script.cs" />
     <Compile Include="External\Objects\Pair.cs" />
-    <Compile Include="Internal\Code\BodyNode.cs" />
+    <Compile Include="Internal\Code\FrameNode.cs" />
     <Compile Include="Internal\Code\BreakNode.cs" />
-    <Compile Include="Internal\Code\ExpressionWithNameNode.cs" />
     <Compile Include="Internal\Code\ForEachNode.cs" />
     <Compile Include="Internal\Code\Node.cs" />
     <Compile Include="Internal\Code\WhileNode.cs" />

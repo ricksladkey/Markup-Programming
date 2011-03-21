@@ -133,6 +133,7 @@ namespace Markup.Programming.Tests.Tests
         [TestMethod]
         public void ScriptTestSandbox()
         {
+            TestHelper.ScriptTest(3, "var $i = 2; return $i + 1;");
         }
     }
 }

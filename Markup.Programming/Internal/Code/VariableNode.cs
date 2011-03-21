@@ -1,11 +1,12 @@
 ﻿namespace Markup.Programming.Core
 {
-    public class VariableNode : ExpressionWithNameNode
+    public class VariableNode : ExpressionNode
     {
+        public string VariableName { get; set; }
         protected override object OnEvaluate(Engine engine, object value)
         {
-            if (!IsSet) return engine.LookupVariable(Name);
-            return engine.DefineVariableInParentScope(Name, value);
+            if (!IsSet) return engine.LookupVariable(VariableName);
+            return engine.DefineVariableInParentScope(VariableName, value);
         }
     }
 }

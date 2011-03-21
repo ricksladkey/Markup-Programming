@@ -2,6 +2,7 @@
 {
     public class ItemNode : ExpressionNode
     {
+        public ExpressionNode Context { get; set; }
         public ExpressionNode Index { get; set; }
         protected override object OnEvaluate(Engine engine, object value)
         {

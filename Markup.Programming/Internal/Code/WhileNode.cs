@@ -1,11 +1,12 @@
 ﻿namespace Markup.Programming.Core
 {
-    public class WhileNode : BodyNode
+    public class WhileNode : FrameNode
     {
+        public ExpressionNode Condition { get; set; }
         protected override void OnExecuteFrame(Engine engine)
         {
             engine.SetBreakFrame();
-            while (TypeHelper.ConvertToBool(Context.Evaluate(engine)))
+            while (TypeHelper.ConvertToBool(Condition.Evaluate(engine)))
             {
                 Body.Execute(engine);
                 if (engine.ShouldInterrupt) break;

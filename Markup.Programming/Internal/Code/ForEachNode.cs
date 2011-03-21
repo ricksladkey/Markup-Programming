@@ -2,15 +2,16 @@
 
 namespace Markup.Programming.Core
 {
-    public class ForEachNode : BodyNode
+    public class ForEachNode : FrameNode
     {
-        public string Name { get; set; }
+        public ExpressionNode Collection { get; set; }
+        public string VariableName { get; set; }
         protected override void OnExecuteFrame(Engine engine)
         {
             engine.SetBreakFrame();
-            foreach (var item in Context.Evaluate(engine) as IEnumerable)
+            foreach (var item in Collection.Evaluate(engine) as IEnumerable)
             {
-                engine.DefineVariable(Name, item);
+                engine.DefineVariable(VariableName, item);
                 Body.Execute(engine);
                 if (engine.ShouldInterrupt) break;
             }

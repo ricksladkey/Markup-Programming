@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace Markup.Programming.Core
 {
-    public abstract class CallNode : ExpressionWithNameNode
+    public abstract class CallNode : ExpressionNode
     {
         public IList<ExpressionNode> Arguments { get; set; }
         protected override object OnEvaluate(Engine engine, object value)

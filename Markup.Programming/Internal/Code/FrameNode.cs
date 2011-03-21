@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Markup.Programming.Core
 {
-    public abstract class BodyNode : StatementNode
+    public abstract class FrameNode : StatementNode
     {
         public StatementNode Body { get; set; }
         protected override void OnExecute(Engine engine)

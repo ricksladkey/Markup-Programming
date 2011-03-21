@@ -2,10 +2,10 @@
 
 namespace Markup.Programming.Core
 {
-    public class BlockNode : StatementNode
+    public class BlockNode : FrameNode
     {
         public IList<StatementNode> Nodes { get; set; }
-        protected override void OnExecute(Engine engine)
+        protected override void OnExecuteFrame(Engine engine)
         {
             foreach (var node in Nodes)
             {
