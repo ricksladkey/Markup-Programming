@@ -14,8 +14,10 @@ namespace Markup.Programming
 
         protected override object OnEvaluate(Engine engine)
         {
+            engine.SetReturnFrame();
             if (Body == null) return null;
-            return engine.GetPathBlock(Body, PathExpression);
+            engine.ExecutePathBlock(Body, PathExpression);
+            return engine.GetAndResetReturnValue();
         }
     }
 }

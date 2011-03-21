@@ -16,6 +16,10 @@ namespace Markup.Programming.Core
             if (args == null) engine.Throw("missing arguments");
             return args;
         }
-        public abstract object Call(Engine engine, IEnumerable<object> args);
+        public object Call(Engine engine, IEnumerable<object> args)
+        {
+            return OnCall(engine, args);
+        }
+        public abstract object OnCall(Engine engine, IEnumerable<object> args);
     }
 }

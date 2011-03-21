@@ -235,6 +235,7 @@
     <Compile Include="Internal\Paths\PathNode.cs" />
     <Compile Include="Internal\Paths\PropertyInitializerNode.cs" />
     <Compile Include="Internal\Paths\PropertyNode.cs" />
+    <Compile Include="Internal\Paths\ReturnNode.cs" />
     <Compile Include="Internal\Paths\SetNode.cs" />
     <Compile Include="Internal\Paths\StaticMethodNode.cs" />
     <Compile Include="Internal\Paths\TokenQueue.cs" />

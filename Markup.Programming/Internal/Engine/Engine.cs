@@ -343,10 +343,10 @@ namespace Markup.Programming.Core
             return pathExpression.Compile(this, ExpressionType.Standard, path).Evaluate(this);
         }
 
-        public object GetPathBlock(string path, PathExpression pathExpression)
+        public void ExecutePathBlock(string path, PathExpression pathExpression)
         {
             if (pathExpression == null) pathExpression = new PathExpression();
-            return pathExpression.Compile(this, ExpressionType.Block, path).Evaluate(this);
+            pathExpression.Compile(this, ExpressionType.Block, path).Execute(this);
         }
 
         public object SetPath(string path, PathExpression pathExpression, object value)

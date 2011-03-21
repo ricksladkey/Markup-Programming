@@ -7,8 +7,17 @@ namespace Markup.Programming.Core
         public IList<PathNode> Nodes { get; set; }
         protected override object OnEvaluate(Engine engine, object value)
         {
-            foreach (var node in Nodes) node.Evaluate(engine, value);
+            Execute(engine);
             return null;
+        }
+        public void Execute(Engine engine)
+        {
+            OnExecute(engine);
+        }
+
+        protected virtual void OnExecute(Engine engine)
+        {
+            foreach (var node in Nodes) node.Evaluate(engine, UnsetValue.Value);
         }
     }
 }

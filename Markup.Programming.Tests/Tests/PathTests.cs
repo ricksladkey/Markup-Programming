@@ -11,6 +11,11 @@ namespace Markup.Programming.Tests.Tests
     [TestClass]
     public class PathTests
     {
+        /// <summary>
+        /// THe PathEvaluator is sort of a hybrid between p:Get and p:Set
+        /// which allows us to retrieve the entire variable state after
+        /// evaluation.
+        /// </summary>
         private class PathEvaluator : IComponent
         {
             public void Attach(DependencyObject dependencyObject) { throw new NotImplementedException(); }
@@ -110,6 +115,16 @@ namespace Markup.Programming.Tests.Tests
         public void PathTestSandbox()
         {
             BasicGetTest(new List<int> { 1, 2, 3 }, "[List<int>] { 1, 2, 3 }");
+        }
+
+        [TestMethod]
+        public void PathBlockTests()
+        {
+            TestHelper.ExpressionTest(21,
+                new PathBlock
+                {
+                    Body = "$x = 1 + 2; return 42 / 2;"
+                });
         }
     }
 }

@@ -16,6 +16,31 @@ namespace Markup.Programming.Core
         private Engine engine;
         private TokenQueue tokens;
         private PathNode root;
+        private Dictionary<string, Func<PathNode>> keywordMap;
+        private static Dictionary<string, Op> operatorMap = new Dictionary<string, Op>
+        {
+            { "+", Op.Plus },
+            { "-", Op.Minus },
+            { "*", Op.Times },
+            { "/", Op.Divide },
+            { "&&", Op.AndAnd },
+            { "||", Op.OrOr },
+            { "&", Op.And },
+            { "|", Op.Or },
+            { "!", Op.Not },
+            { "==", Op.Equals },
+            { "!=", Op.NotEquals },
+            { "<", Op.LessThan },
+            { "<=", Op.LessThanOrEqual },
+            { ">", Op.GreaterThan },
+            { ">=", Op.GreaterThanOrEqual },
+        };
+
+        private static string IdChars { get { return "_"; } }
+        private static IDictionary<string, Op> OperatorMap { get { return operatorMap; } }
+        private IDictionary<string, Func<PathNode>> KeywordMap { get { return keywordMap; } }
+        private bool IsCurrentSet { get { return IsSet && tokens != null && tokens.Count == 0; } }
+        private bool IsCurrentCall { get { return IsCall && tokens != null && tokens.Count == 0 || tokens.Peek() == "("; } }
 
         public ExpressionType ExpressionType { get; private set; }
         public bool IsSet { get { return (ExpressionType & ExpressionType.Set) == ExpressionType.Set; } }
@@ -40,6 +65,12 @@ namespace Markup.Programming.Core
             if (call == null) engine.Throw("not a call node");
             return call.Call(engine, args);
         }
+        public void Execute(Engine engine)
+        {
+            engine.Trace(TraceFlags.Path, "Path: Execute {0}", Path);
+            var block = root as BlockNode;
+            block.Execute(engine);
+        }
 
         public PathExpression Compile(Engine engine, ExpressionType expressionType, string path)
         {
@@ -57,14 +88,28 @@ namespace Markup.Programming.Core
 
         private PathNode ParseBlock()
         {
+            keywordMap = new Dictionary<string, Func<PathNode>>
+            {
+                { "return", ParseReturn },
+            }; 
             var nodes = new List<PathNode>();
             while (true)
             {
-                nodes.Add(Parse());
-                VerifyToken(";");
+                var token = tokens.Peek();
+                if (token != null && token[0] == '`' && keywordMap.ContainsKey(token.Substring(1)))
+                    nodes.Add(keywordMap[token.Substring(1)]());
+                else
+                    nodes.Add(Parse());
+                ParseToken(";");
                 if (tokens.Count == 0) break;
             }
             return new BlockNode { Nodes = nodes };
+        }
+
+        private PathNode ParseReturn()
+        {
+            tokens.Dequeue();
+            return new ReturnNode { Context = Parse() };
         }
 
         private PathNode Parse() { return Parse(false); }
@@ -108,7 +153,7 @@ namespace Markup.Programming.Core
                 {
                     tokens.Dequeue();
                     var ifTrue = Parse();
-                    VerifyToken(":");
+                    ParseToken(":");
                     var ifFalse = Parse();
                     node = new OpNode { Op = Op.Conditional, Operands = { node, ifTrue, ifFalse } };
                     continue;
@@ -130,7 +175,7 @@ namespace Markup.Programming.Core
                     node = new ValueNode { Value = tokens.Dequeue().Substring(1) };
                 else if (c == '`')
                 {
-                    var identifier = VerifyIdentifier();
+                    var identifier = ParseIdentifier();
                     if (IsCurrentCall)
                     {
                         var args = tokens.Peek() == "(" ? ParseArguments() : null;
@@ -154,11 +199,11 @@ namespace Markup.Programming.Core
                 {
                     tokens.Dequeue();
                     var typeNode = ParseType();
-                    VerifyToken("]");
+                    ParseToken("]");
                     if (tokens.Peek() == ".")
                     {
-                        VerifyToken(".");
-                        var methodName = VerifyIdentifier();
+                        ParseToken(".");
+                        var methodName = ParseIdentifier();
                         var args = tokens.Peek() == "(" ? ParseArguments() : null;
                         node = new StaticMethodNode { Type = typeNode, Name = methodName, Arguments = args };
                     }
@@ -176,7 +221,7 @@ namespace Markup.Programming.Core
                 {
                     tokens.Dequeue();
                     node = Parse();
-                    VerifyToken(")");
+                    ParseToken(")");
                 }
                 else
                     return node;
@@ -184,7 +229,7 @@ namespace Markup.Programming.Core
                 {
                     tokens.Dequeue();
                     var index = Parse(true);
-                    VerifyToken("]");
+                    ParseToken("]");
                     node = new ItemNode { IsSet = IsCurrentSet, Context = node, Index = index };
                 }
                 nodeNext = false;
@@ -202,8 +247,8 @@ namespace Markup.Programming.Core
                 var isCollection = tokens.Peek() != "=";
                 tokens.Undequeue();
                 if (isCollection) return ParseCollectionInitializer(node, node);
-                var property = VerifyIdentifier();
-                VerifyToken("=");
+                var property = ParseIdentifier();
+                ParseToken("=");
                 if (tokens.Peek() == "{")
                 {
                     tokens.Dequeue();
@@ -232,11 +277,11 @@ namespace Markup.Programming.Core
             var entries = new List<PathNode>();
             while (true)
             {
-                VerifyToken("{");
+                ParseToken("{");
                 var key = Parse(true);
-                VerifyToken(",");
+                ParseToken(",");
                 var value = Parse(true);
-                VerifyToken("}");
+                ParseToken("}");
                 entries.Add(new PairNode { Key = key, Value = value });
                 var token = tokens.Dequeue();
                 if (token == "}") break;
@@ -248,11 +293,11 @@ namespace Markup.Programming.Core
         private TypeNode ParseType()
         {
             if (tokens.Peek() == "," || tokens.Peek() == ">") return null;
-            var typeName = VerifyIdentifier();
+            var typeName = ParseIdentifier();
             while (tokens.Peek() == ".")
             {
                 tokens.Dequeue();
-                typeName += "." + VerifyIdentifier();
+                typeName += "." + ParseIdentifier();
             }
             var typeArgs = null as List<TypeNode>;
             if (tokens.Peek() == "<")
@@ -288,16 +333,13 @@ namespace Markup.Programming.Core
             return i;
         }
 
-        private bool IsCurrentSet { get { return IsSet && tokens != null && tokens.Count == 0; } }
-        private bool IsCurrentCall { get { return IsCall && tokens != null && tokens.Count == 0 || tokens.Peek() == "("; } }
-
-        private string VerifyToken(string token)
+        private string ParseToken(string token)
         {
             if (tokens.Count == 0 || tokens.Peek() != token) engine.Throw("missing token: " + token);
             return tokens.Dequeue();
         }
 
-        private string VerifyIdentifier()
+        private string ParseIdentifier()
         {
             if (tokens.Count == 0 || tokens.Peek()[0] != '`') engine.Throw("expected identifier");
             return tokens.Dequeue().Substring(1);
@@ -305,7 +347,7 @@ namespace Markup.Programming.Core
 
         private IList<PathNode> ParseArguments()
         {
-            VerifyToken("(");
+            ParseToken("(");
             return ParseList(")");
         }
 
@@ -391,34 +433,16 @@ namespace Markup.Programming.Core
             return i + 2;
         }
 
-        private static string IdChars { get { return "_"; } }
         private static bool IsInitialIdChar(char c) { return char.IsLetter(c) || IdChars.Contains(c); }
+
         private static bool IsIdChar(char c) { return char.IsLetterOrDigit(c) || IdChars.Contains(c); }
+
         public static bool IsValidVariable(string variable)
         {
             if (variable.Length < 2 || variable[0] != '$') return false;
             return IsInitialIdChar(variable[1]) && variable.Skip(2).All(c => IsIdChar(c));
         }
-        private static bool IsQuote(char c) { return "'\"".Contains(c); }
 
-        public static IDictionary<string, Op> OperatorMap { get { return operatorMap; } }
-        private static Dictionary<string, Op> operatorMap = new Dictionary<string, Op>
-        {
-            { "+", Op.Plus },
-            { "-", Op.Minus },
-            { "*", Op.Times },
-            { "/", Op.Divide },
-            { "&&", Op.AndAnd },
-            { "||", Op.OrOr },
-            { "&", Op.And },
-            { "|", Op.Or },
-            { "!", Op.Not },
-            { "==", Op.Equals },
-            { "!=", Op.NotEquals },
-            { "<", Op.LessThan },
-            { "<=", Op.LessThanOrEqual },
-            { ">", Op.GreaterThan },
-            { ">=", Op.GreaterThanOrEqual },
-        };
+        private static bool IsQuote(char c) { return "'\"".Contains(c); }
     }
 }
