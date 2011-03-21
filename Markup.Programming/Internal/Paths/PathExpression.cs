@@ -123,15 +123,8 @@ namespace Markup.Programming.Core
             {
                 if (OperatorMap.ContainsKey(token))
                 {
-                    var op = OperatorMap[token];
-                    var unary = op.GetArity() == 1;
-                    if (nodeNext != unary) engine.Throw("unexpected operator" + op);
+                    node = ParseOperator(node, nodeNext);
                     nodeNext = true;
-                    tokens.Dequeue();
-                    if (unary)
-                        node = new OpNode { Op = op, Operands = { Parse() } };
-                    else
-                        node = new OpNode { Op = op, Operands = { node, Parse() } };
                     continue;
                 }
                 if ("=.?,".Contains(token[0]) && nodeNext) engine.Throw("unexpected operator: " + token);
@@ -150,20 +143,9 @@ namespace Markup.Programming.Core
                     continue;
                 }
                 if (token == "?")
-                {
-                    tokens.Dequeue();
-                    var ifTrue = Parse();
-                    ParseToken(":");
-                    var ifFalse = Parse();
-                    node = new OpNode { Op = Op.Conditional, Operands = { node, ifTrue, ifFalse } };
-                    continue;
-                }
+                    node = ParseConditional(node);
                 if (token == "," && !noComma)
-                {
-                    tokens.Dequeue();
-                    node = new OpNode { Op = Op.Comma, Operands = { node, Parse() } };
-                    continue;
-                }
+                    node = ParseComma(node);
                 if (!nodeNext) return node;
                 char c = token[0];
                 if (char.IsDigit(c))
@@ -173,50 +155,10 @@ namespace Markup.Programming.Core
                 }
                 else if (c == '"')
                     node = new ValueNode { Value = tokens.Dequeue().Substring(1) };
-                else if (c == '`')
-                {
-                    var identifier = ParseIdentifier();
-                    if (IsCurrentCall)
-                    {
-                        var args = tokens.Peek() == "(" ? ParseArguments() : null;
-                        node = new MethodNode { Context = node, Name = identifier, Arguments = args };
-                    }
-                    else
-                        node = new PropertyNode { IsSet = IsCurrentSet, Context = node, Name = identifier };
-                }
-                else if (c == '$' || c == '@')
-                {
-                    tokens.Dequeue();
-                    if (IsCurrentCall)
-                    {
-                        var args = tokens.Peek() == "(" ? ParseArguments() : null;
-                        node = new FunctionNode { Context = node, Name = token, Arguments = args };
-                    }
-                    else
-                        node = new VariableNode { IsSet = IsCurrentSet, Name = token };
-                }
+                else if ("`$@".Contains(c))
+                    node = ParseIdentifierExpression(node);
                 else if (c == '[')
-                {
-                    tokens.Dequeue();
-                    var typeNode = ParseType();
-                    ParseToken("]");
-                    if (tokens.Peek() == ".")
-                    {
-                        ParseToken(".");
-                        var methodName = ParseIdentifier();
-                        var args = tokens.Peek() == "(" ? ParseArguments() : null;
-                        node = new StaticMethodNode { Type = typeNode, Name = methodName, Arguments = args };
-                    }
-                    else if (tokens.Peek() == "(")
-                        node = new OpNode { Op = Op.New, Operands = new PathNode[] { typeNode }.Concat(ParseArguments()).ToList() };
-                    else if (tokens.Peek() == "{")
-                    {
-                        tokens.Dequeue();
-                        node = ParseInitializer(typeNode);
-                    }
-                    else
-                        node = typeNode;
-                }
+                    node = ParseTypeExpression();
                 else if (c == '(')
                 {
                     tokens.Dequeue();
@@ -225,16 +167,97 @@ namespace Markup.Programming.Core
                 }
                 else
                     return node;
-                while (tokens.Peek() == "[")
-                {
-                    tokens.Dequeue();
-                    var index = Parse(true);
-                    ParseToken("]");
-                    node = new ItemNode { IsSet = IsCurrentSet, Context = node, Index = index };
-                }
+                node = ParseItems(node);
                 nodeNext = false;
             }
             return node;
+        }
+
+        private PathNode ParseOperator(PathNode node, bool nodeNext)
+        {
+            var token = tokens.Dequeue();
+            var op = OperatorMap[token];
+            var unary = op.GetArity() == 1;
+            if (nodeNext != unary) engine.Throw("unexpected operator" + op);
+            if (unary) return new OpNode { Op = op, Operands = { Parse() } };
+            return new OpNode { Op = op, Operands = { node, Parse() } };
+        }
+
+        private PathNode ParseConditional(PathNode node)
+        {
+            tokens.Dequeue();
+            var ifTrue = Parse();
+            ParseToken(":");
+            var ifFalse = Parse();
+            return new OpNode { Op = Op.Conditional, Operands = { node, ifTrue, ifFalse } };
+        }
+
+        private PathNode ParseComma(PathNode node)
+        {
+            tokens.Dequeue();
+            return new OpNode { Op = Op.Comma, Operands = { node, Parse() } };
+        }
+
+        private PathNode ParseIdentifierExpression(PathNode node)
+        {
+            var c = tokens.Peek()[0];
+            if (c == '`')
+            {
+                var identifier = ParseIdentifier();
+                if (IsCurrentCall)
+                {
+                    var args = tokens.Peek() == "(" ? ParseArguments() : null;
+                    node = new MethodNode { Context = node, Name = identifier, Arguments = args };
+                }
+                else
+                    node = new PropertyNode { IsSet = IsCurrentSet, Context = node, Name = identifier };
+            }
+            else if (c == '$' || c == '@')
+            {
+                var token = tokens.Dequeue();
+                if (IsCurrentCall)
+                {
+                    var args = tokens.Peek() == "(" ? ParseArguments() : null;
+                    node = new FunctionNode { Context = node, Name = token, Arguments = args };
+                }
+                else
+                    node = new VariableNode { IsSet = IsCurrentSet, Name = token };
+            }
+            return node;
+        }
+
+        private PathNode ParseItems(PathNode node)
+        {
+            while (tokens.Peek() == "[")
+            {
+                tokens.Dequeue();
+                var index = Parse(true);
+                ParseToken("]");
+                node = new ItemNode { IsSet = IsCurrentSet, Context = node, Index = index };
+            }
+            return node;
+        }
+
+        private PathNode ParseTypeExpression()
+        {
+            tokens.Dequeue();
+            var typeNode = ParseType();
+            ParseToken("]");
+            if (tokens.Peek() == ".")
+            {
+                ParseToken(".");
+                var methodName = ParseIdentifier();
+                var args = tokens.Peek() == "(" ? ParseArguments() : null;
+                return new StaticMethodNode { Type = typeNode, Name = methodName, Arguments = args };
+            }
+            if (tokens.Peek() == "(")
+                return new OpNode { Op = Op.New, Operands = new PathNode[] { typeNode }.Concat(ParseArguments()).ToList() };
+            if (tokens.Peek() == "{")
+            {
+                tokens.Dequeue();
+                return ParseInitializer(typeNode);
+            }
+            return typeNode;
         }
 
         private PathNode ParseInitializer(TypeNode typeNode)
