@@ -17,10 +17,10 @@
 
                 <p:Attached.Operations>
                     <p:ChangedHandler Value="{Binding Text, ElementName=Password}">
-                        <p:PathBlock>
+                        <p:Script>
                             $isRight = @EventArgs.NewValue == "xyzzy";
                             @AssociatedObject.Children[0].Text = $isRight ? "On the money!" : "Guess again.";
-                        </p:PathBlock>
+                        </p:Script>
                         <p:Set Path="@AssociatedObject.Background">
                             <p:Operator Op="Conditional">
                                 <p:Get Var="isRight"/>

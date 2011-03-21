@@ -11,6 +11,6 @@ namespace Markup.Programming.Core
         Standard = 0x00,
         Set = 0x01,
         Call = 0x02,
-        Block = 0x04,
+        Script = 0x04,
     }
 }

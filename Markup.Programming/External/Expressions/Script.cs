@@ -8,7 +8,7 @@ using Markup.Programming.Core;
 namespace Markup.Programming
 {
     [ContentProperty("Body")]
-    public class PathBlock : ExpressionBase
+    public class Script : ExpressionBase
     {
         public string Body { get; set; }
 
@@ -16,7 +16,7 @@ namespace Markup.Programming
         {
             engine.SetReturnFrame();
             if (Body == null) return null;
-            engine.ExecutePathBlock(Body, PathExpression);
+            engine.ExecuteScript(Body, PathExpression);
             return engine.GetAndResetReturnValue();
         }
     }

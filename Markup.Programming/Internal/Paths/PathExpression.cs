@@ -45,7 +45,7 @@ namespace Markup.Programming.Core
         public ExpressionType ExpressionType { get; private set; }
         public bool IsSet { get { return (ExpressionType & ExpressionType.Set) == ExpressionType.Set; } }
         public bool IsCall { get { return (ExpressionType & ExpressionType.Call) == ExpressionType.Call; } }
-        public bool IsBlock { get { return (ExpressionType & ExpressionType.Block) == ExpressionType.Block; } }
+        public bool IsScript { get { return (ExpressionType & ExpressionType.Script) == ExpressionType.Script; } }
         public string Path { get; private set; }
 
         public PathExpression()
@@ -88,7 +88,7 @@ namespace Markup.Programming.Core
             ExpressionType = expressionType;
             Path = path;
             Tokenize();
-            root = IsBlock ? ParseStatements() : ParseExpression();
+            root = IsScript ? ParseStatements() : ParseExpression();
             if (tokens.Count > 0) engine.Throw("unexpected token: " + tokens.Dequeue());
             this.engine = null;
             tokens = null;
@@ -132,18 +132,30 @@ namespace Markup.Programming.Core
 
         private StatementNode ParseIf()
         {
-            ParseKeyword("if");
-            ParseToken("(");
-            var condition = ParseExpression();
-            ParseToken(")");
-            var thenNode = ParseStatement();
+            var pairs = new List<IfNode.Pair>();
+            pairs.Add(ParseIfPair());
             var elseNode = null as StatementNode;
-            if (PeekKeyword("else"))
+            while (PeekKeyword("else"))
             {
                 ParseKeyword("else");
-                elseNode = ParseStatement();
+                if (!PeekKeyword("if"))
+                {
+                    elseNode = ParseStatement();
+                    break;
+                }
+                pairs.Add(ParseIfPair());
             }
-            return new IfNode { Context = condition, Then = thenNode, Else = elseNode };
+            return new IfNode { Pairs = pairs, Else = elseNode };
+        }
+
+        private IfNode.Pair ParseIfPair()
+        {
+            ParseKeyword("if");
+            ParseToken("(");
+            var expression = ParseExpression();
+            ParseToken(")");
+            var statement = ParseStatement();
+            return new IfNode.Pair { Expression = expression, Statement = statement };
         }
 
         private StatementNode ParseReturn()

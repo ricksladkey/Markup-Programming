@@ -118,11 +118,12 @@ namespace Markup.Programming.Tests.Tests
         }
 
         [TestMethod]
-        public void PathBlockTests()
+        public void ScriptTests()
         {
-            TestHelper.PathBlockTest(21, "$x = 1 + 2; return 42 / 2;");
-            TestHelper.PathBlockTest(42, "$x = @true; if ($x) return 42; return 21;");
-            TestHelper.PathBlockTest(42, "$x = @true; if (!$x) return 21; else return 42;");
+            TestHelper.ScriptTest(21, "$x = 1 + 2; return 42 / 2;");
+            TestHelper.ScriptTest(42, "$x = @true; if ($x) return 42; return 21;");
+            TestHelper.ScriptTest(42, "$x = @true; if (!$x) return 21; else return 42;");
+            TestHelper.ScriptTest("b", "$x = 2; if ($x == 1) return 'a'; else if ($x == 2) return 'b'; else return 'c';");
         }
     }
 }

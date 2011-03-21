@@ -1,13 +1,27 @@
-﻿namespace Markup.Programming.Core
+﻿using System.Collections.Generic;
+namespace Markup.Programming.Core
 {
     public class IfNode : StatementNode
     {
-        public StatementNode Then { get; set; }
+        public struct Pair
+        {
+            public ExpressionNode Expression { get; set; }
+            public StatementNode Statement { get; set; }
+        };
+        public IList<Pair> Pairs { get; set; }
         public StatementNode Else { get; set; }
         protected override void OnExecute(Engine engine)
         {
-            if (TypeHelper.ConvertToBool(Context.Evaluate(engine))) Then.Execute(engine);
-            else if (Else != null) Else.Execute(engine);
+            foreach (var pair in Pairs)
+            {
+                if (TypeHelper.ConvertToBool(pair.Expression.Evaluate(engine)))
+                {
+                    pair.Statement.Execute(engine);
+                    return;
+                }
+                if (engine.ShouldInterrupt) return;
+            }
+            Else.Execute(engine);
         }
     }
 }
