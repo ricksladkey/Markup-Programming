@@ -1,3 +1,4 @@
+- test designer errors, e.g. syntax error in path
 - clean up event/path interaction
 - add support for multiple indexers in path expression
 

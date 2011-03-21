@@ -66,5 +66,10 @@ namespace Markup.Programming.Tests
             AttachAndExecute(window, statement);
             TestHelper.AreStructurallyEqual(expectedValue, viewModel.Object1);
         }
+
+        public static void PathBlockTest(object expectedValue, string body)
+        {
+            ExpressionTest(expectedValue, new PathBlock { Body = body });
+        }
     }
 }

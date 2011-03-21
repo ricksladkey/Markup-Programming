@@ -3,9 +3,9 @@ using System.Linq;
 
 namespace Markup.Programming.Core
 {
-    public abstract class CallNode : PathNode
+    public abstract class CallNode : ExpressionNode
     {
-        public IList<PathNode> Arguments { get; set; }
+        public IList<ExpressionNode> Arguments { get; set; }
         protected override object OnEvaluate(Engine engine, object value)
         {
             return Call(engine, GetArguments(engine, null));

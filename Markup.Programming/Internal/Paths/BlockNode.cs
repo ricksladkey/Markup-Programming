@@ -2,22 +2,16 @@
 
 namespace Markup.Programming.Core
 {
-    public class BlockNode : PathNode
+    public class BlockNode : StatementNode
     {
-        public IList<PathNode> Nodes { get; set; }
-        protected override object OnEvaluate(Engine engine, object value)
+        public IList<StatementNode> Nodes { get; set; }
+        protected override void OnExecute(Engine engine)
         {
-            Execute(engine);
-            return null;
-        }
-        public void Execute(Engine engine)
-        {
-            OnExecute(engine);
-        }
-
-        protected virtual void OnExecute(Engine engine)
-        {
-            foreach (var node in Nodes) node.Evaluate(engine, UnsetValue.Value);
+            foreach (var node in Nodes)
+            {
+                node.Execute(engine);
+                if (engine.ShouldInterrupt) break;
+            }
         }
     }
 }

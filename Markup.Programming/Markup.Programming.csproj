@@ -127,6 +127,9 @@
     <Compile Include="Internal\Components\ComponentBase.cs" />
     <Compile Include="Internal\Diagnostics\EngineDebugView.cs" />
     <Compile Include="Internal\Engine\CallHelper.cs" />
+    <Compile Include="Internal\Paths\CommaNode.cs" />
+    <Compile Include="Internal\Paths\ConditionalNode.cs" />
+    <Compile Include="Internal\Paths\IfNode.cs" />
     <Compile Include="Internal\Paths\PathExpression.cs" />
     <Compile Include="External\Support\Additional.cs" />
     <Compile Include="External\Handlers\EventHandler.cs" />
@@ -232,11 +235,13 @@
     <Compile Include="Internal\Paths\MethodNode.cs" />
     <Compile Include="Internal\Paths\OpNode.cs" />
     <Compile Include="Internal\Paths\PairNode.cs" />
+    <Compile Include="Internal\Paths\ExpressionNode.cs" />
     <Compile Include="Internal\Paths\PathNode.cs" />
     <Compile Include="Internal\Paths\PropertyInitializerNode.cs" />
     <Compile Include="Internal\Paths\PropertyNode.cs" />
     <Compile Include="Internal\Paths\ReturnNode.cs" />
     <Compile Include="Internal\Paths\SetNode.cs" />
+    <Compile Include="Internal\Paths\StatementNode.cs" />
     <Compile Include="Internal\Paths\StaticMethodNode.cs" />
     <Compile Include="Internal\Paths\TokenQueue.cs" />
     <Compile Include="Internal\Paths\TypeNode.cs" />

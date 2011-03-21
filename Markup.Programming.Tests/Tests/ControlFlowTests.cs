@@ -31,7 +31,7 @@ namespace Markup.Programming.Tests
         }
 
         [TestMethod]
-        public void InlineFunctionTest()
+        public void BlockTest()
         {
             // Set X = 21 and then return X * 2 and check that the result is 42.
             TestHelper.ExpressionTest(42,
@@ -48,7 +48,8 @@ namespace Markup.Programming.Tests
                                 Op = Op.Times,
                                 Value2 = 2,
                             }
-                        }
+                        },
+                        new Return { Value = 666 }
                     }
                 });
         }

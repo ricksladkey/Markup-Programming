@@ -102,6 +102,7 @@ namespace Markup.Programming.Tests.Tests
             BasicGetTest(42, "($theAnswer = 42), $theAnswer");
             BasicGetTest(3, "1 + /* 37 * 99 */ 2");
             BasicGetTest(3, "1 + /* /* 37 * 99 */ xyzzy */ 2");
+            BasicGetTest(2, "[List<int>] { 1, 2, 3 }[1]");
 
             BasicGetTest("Test1", "String1");
             BasicGetTest("Test2", "Object1.String1");
@@ -114,17 +115,14 @@ namespace Markup.Programming.Tests.Tests
         [TestMethod]
         public void PathTestSandbox()
         {
-            BasicGetTest(2, "[List<int>] { 1, 2, 3 }[1]");
         }
 
         [TestMethod]
         public void PathBlockTests()
         {
-            TestHelper.ExpressionTest(21,
-                new PathBlock
-                {
-                    Body = "$x = 1 + 2; return 42 / 2;"
-                });
+            TestHelper.PathBlockTest(21, "$x = 1 + 2; return 42 / 2;");
+            TestHelper.PathBlockTest(42, "$x = @true; if ($x) return 42; return 21;");
+            TestHelper.PathBlockTest(42, "$x = @true; if (!$x) return 21; else return 42;");
         }
     }
 }

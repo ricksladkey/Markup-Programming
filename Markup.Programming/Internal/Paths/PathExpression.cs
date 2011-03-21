@@ -16,7 +16,7 @@ namespace Markup.Programming.Core
         private Engine engine;
         private TokenQueue tokens;
         private PathNode root;
-        private Dictionary<string, Func<PathNode>> keywordMap;
+        private Dictionary<string, Func<StatementNode>> keywordMap;
         private static Dictionary<string, Op> operatorMap = new Dictionary<string, Op>
         {
             { "+", Op.Plus },
@@ -38,9 +38,9 @@ namespace Markup.Programming.Core
 
         private static string IdChars { get { return "_"; } }
         private static IDictionary<string, Op> OperatorMap { get { return operatorMap; } }
-        private IDictionary<string, Func<PathNode>> KeywordMap { get { return keywordMap; } }
+        private IDictionary<string, Func<StatementNode>> KeywordMap { get { return keywordMap; } }
         private bool IsCurrentSet { get { return IsSet && tokens != null && tokens.Count == 0; } }
-        private bool IsCurrentCall { get { return IsCall && tokens != null && tokens.Count == 0 || tokens.Peek() == "("; } }
+        private bool IsCurrentCall { get { return IsCall && tokens != null && tokens.Count == 0 || PeekToken("("); } }
 
         public ExpressionType ExpressionType { get; private set; }
         public bool IsSet { get { return (ExpressionType & ExpressionType.Set) == ExpressionType.Set; } }
@@ -48,15 +48,24 @@ namespace Markup.Programming.Core
         public bool IsBlock { get { return (ExpressionType & ExpressionType.Block) == ExpressionType.Block; } }
         public string Path { get; private set; }
 
+        public PathExpression()
+        {
+            keywordMap = new Dictionary<string, Func<StatementNode>>
+            {
+                { "if", ParseIf },
+                { "return", ParseReturn },
+            };
+        }
+
         public object Evaluate(Engine engine)
         {
             engine.Trace(TraceFlags.Path, "Path: Get {0}", Path);
-            return root.Evaluate(engine);
+            return (root as ExpressionNode).Evaluate(engine);
         }
         public object Evaluate(Engine engine, object value)
         {
             engine.Trace(TraceFlags.Path, "Path: Set {0} = {1}", Path, value);
-            return root.Evaluate(engine, value);
+            return (root as ExpressionNode).Evaluate(engine, value);
         }
         public object Call(Engine engine, IEnumerable<object> args)
         {
@@ -79,45 +88,78 @@ namespace Markup.Programming.Core
             ExpressionType = expressionType;
             Path = path;
             Tokenize();
-            root = IsBlock ? ParseBlock() : Parse();
+            root = IsBlock ? ParseStatements() : ParseExpression();
             if (tokens.Count > 0) engine.Throw("unexpected token: " + tokens.Dequeue());
             this.engine = null;
             tokens = null;
             return this;
         }
 
-        private PathNode ParseBlock()
+        private StatementNode ParseStatement()
         {
-            keywordMap = new Dictionary<string, Func<PathNode>>
+            var node = null as StatementNode;
+            var token = tokens.Peek();
+            if (token != null && token[0] == '`' && keywordMap.ContainsKey(token.Substring(1)))
+                node = keywordMap[token.Substring(1)]();
+            else if (token == "{")
+                node = ParseBlock();
+            else
             {
-                { "return", ParseReturn },
-            }; 
-            var nodes = new List<PathNode>();
-            while (true)
-            {
-                var token = tokens.Peek();
-                if (token != null && token[0] == '`' && keywordMap.ContainsKey(token.Substring(1)))
-                    nodes.Add(keywordMap[token.Substring(1)]());
-                else
-                    nodes.Add(Parse());
+                node = ParseExpression();
                 ParseToken(";");
+            }
+            return node;
+        }
+
+        private StatementNode ParseStatements()
+        {
+            var nodes = new List<StatementNode>();
+            while (tokens.Count > 0)
+            {
+                nodes.Add(ParseStatement());
                 if (tokens.Count == 0) break;
             }
             return new BlockNode { Nodes = nodes };
         }
 
-        private PathNode ParseReturn()
+        private StatementNode ParseBlock()
         {
-            tokens.Dequeue();
-            return new ReturnNode { Context = Parse() };
+            ParseToken("{");
+            var block = ParseStatements();
+            ParseToken("}");
+            return block;
         }
 
-        private PathNode Parse() { return Parse(false); }
+        private StatementNode ParseIf()
+        {
+            ParseKeyword("if");
+            ParseToken("(");
+            var condition = ParseExpression();
+            ParseToken(")");
+            var thenNode = ParseStatement();
+            var elseNode = null as StatementNode;
+            if (PeekKeyword("else"))
+            {
+                ParseKeyword("else");
+                elseNode = ParseStatement();
+            }
+            return new IfNode { Context = condition, Then = thenNode, Else = elseNode };
+        }
 
-        private PathNode Parse(bool noComma)
+        private StatementNode ParseReturn()
+        {
+            ParseKeyword("return");
+            var value = ParseExpression();
+            ParseToken(";");
+            return new ReturnNode { Context = value };
+        }
+
+        private ExpressionNode ParseExpression() { return ParseExpression(false); }
+
+        private ExpressionNode ParseExpression(bool noComma)
         {
             if (tokens.Count == 0) return new ValueNode { Value = null };
-            var node = new ContextNode() as PathNode;
+            var node = new ContextNode() as ExpressionNode;
             var nodeNext = true;
             for (var token = tokens.Peek(); token != null; token = tokens.Peek())
             {
@@ -132,7 +174,7 @@ namespace Markup.Programming.Core
                 {
                     node.IsSet = true;
                     tokens.Dequeue();
-                    var rvalue = Parse();
+                    var rvalue = ParseExpression();
                     node = new SetNode { LValue = node, RValue = rvalue };
                     continue;
                 }
@@ -162,7 +204,7 @@ namespace Markup.Programming.Core
                 else if (c == '(')
                 {
                     tokens.Dequeue();
-                    node = Parse();
+                    node = ParseExpression();
                     ParseToken(")");
                 }
                 else
@@ -173,32 +215,33 @@ namespace Markup.Programming.Core
             return node;
         }
 
-        private PathNode ParseOperator(PathNode node, bool nodeNext)
+        private ExpressionNode ParseOperator(ExpressionNode node, bool nodeNext)
         {
             var token = tokens.Dequeue();
             var op = OperatorMap[token];
             var unary = op.GetArity() == 1;
             if (nodeNext != unary) engine.Throw("unexpected operator" + op);
-            if (unary) return new OpNode { Op = op, Operands = { Parse() } };
-            return new OpNode { Op = op, Operands = { node, Parse() } };
+            if (unary) return new OpNode { Op = op, Operands = { ParseExpression() } };
+            return new OpNode { Op = op, Operands = { node, ParseExpression() } };
         }
 
-        private PathNode ParseConditional(PathNode node)
+        private ExpressionNode ParseConditional(ExpressionNode node)
         {
             tokens.Dequeue();
-            var ifTrue = Parse();
+            var ifTrue = ParseExpression();
             ParseToken(":");
-            var ifFalse = Parse();
-            return new OpNode { Op = Op.Conditional, Operands = { node, ifTrue, ifFalse } };
+            var ifFalse = ParseExpression();
+            return new ConditionalNode { Context = node, IfTrue = ifTrue, IfFalse = ifFalse };
         }
 
-        private PathNode ParseComma(PathNode node)
+        private ExpressionNode ParseComma(ExpressionNode node)
         {
             tokens.Dequeue();
-            return new OpNode { Op = Op.Comma, Operands = { node, Parse() } };
+            var value = ParseExpression();
+            return new CommaNode { Context = node, Value = value };
         }
 
-        private PathNode ParseIdentifierExpression(PathNode node)
+        private ExpressionNode ParseIdentifierExpression(ExpressionNode node)
         {
             var c = tokens.Peek()[0];
             if (c == '`')
@@ -206,7 +249,7 @@ namespace Markup.Programming.Core
                 var identifier = ParseIdentifier();
                 if (IsCurrentCall)
                 {
-                    var args = tokens.Peek() == "(" ? ParseArguments() : null;
+                    var args = PeekToken("(") ? ParseArguments() : null;
                     node = new MethodNode { Context = node, Name = identifier, Arguments = args };
                 }
                 else
@@ -217,7 +260,7 @@ namespace Markup.Programming.Core
                 var token = tokens.Dequeue();
                 if (IsCurrentCall)
                 {
-                    var args = tokens.Peek() == "(" ? ParseArguments() : null;
+                    var args = PeekToken("(") ? ParseArguments() : null;
                     node = new FunctionNode { Context = node, Name = token, Arguments = args };
                 }
                 else
@@ -226,33 +269,33 @@ namespace Markup.Programming.Core
             return node;
         }
 
-        private PathNode ParseItems(PathNode node)
+        private ExpressionNode ParseItems(ExpressionNode node)
         {
-            while (tokens.Peek() == "[")
+            while (PeekToken("["))
             {
                 tokens.Dequeue();
-                var index = Parse(true);
+                var index = ParseExpression(true);
                 ParseToken("]");
                 node = new ItemNode { IsSet = IsCurrentSet, Context = node, Index = index };
             }
             return node;
         }
 
-        private PathNode ParseTypeExpression()
+        private ExpressionNode ParseTypeExpression()
         {
             tokens.Dequeue();
             var typeNode = ParseType();
             ParseToken("]");
-            if (tokens.Peek() == ".")
+            if (PeekToken("."))
             {
                 ParseToken(".");
                 var methodName = ParseIdentifier();
-                var args = tokens.Peek() == "(" ? ParseArguments() : null;
+                var args = PeekToken("(") ? ParseArguments() : null;
                 return new StaticMethodNode { Type = typeNode, Name = methodName, Arguments = args };
             }
-            if (tokens.Peek() == "(")
-                return new OpNode { Op = Op.New, Operands = new PathNode[] { typeNode }.Concat(ParseArguments()).ToList() };
-            if (tokens.Peek() == "{")
+            if (PeekToken("("))
+                return new OpNode { Op = Op.New, Operands = new ExpressionNode[] { typeNode }.Concat(ParseArguments()).ToList() };
+            if (PeekToken("{"))
             {
                 tokens.Dequeue();
                 return ParseInitializer(typeNode);
@@ -260,29 +303,29 @@ namespace Markup.Programming.Core
             return typeNode;
         }
 
-        private PathNode ParseInitializer(TypeNode typeNode)
+        private ExpressionNode ParseInitializer(TypeNode typeNode)
         {
-            var node = new OpNode { Op = Op.New, Operands = { typeNode } } as PathNode;
+            var node = new OpNode { Op = Op.New, Operands = { typeNode } } as ExpressionNode;
             while (true)
             {
-                if (tokens.Peek() == "{") return ParseDictionaryInitializer(node, node);
+                if (PeekToken("{")) return ParseDictionaryInitializer(node, node);
                 tokens.Dequeue();
                 var isCollection = tokens.Peek() != "=";
                 tokens.Undequeue();
                 if (isCollection) return ParseCollectionInitializer(node, node);
                 var property = ParseIdentifier();
                 ParseToken("=");
-                if (tokens.Peek() == "{")
+                if (PeekToken("{"))
                 {
                     tokens.Dequeue();
                     var propertyNode = new PropertyNode { Context = node, Name = property };
-                    if (tokens.Peek() == "{")
+                    if (PeekToken("{"))
                         node = ParseDictionaryInitializer(node, propertyNode);
                     else
                         node = ParseCollectionInitializer(node, propertyNode);
                 }
                 else
-                    node = new PropertyInitializerNode { Context = node, Name = property, Value = Parse(true) };
+                    node = new PropertyInitializerNode { Context = node, Name = property, Value = ParseExpression(true) };
                 var token = tokens.Dequeue();
                 if (token == "}") break;
                 if (token != ",") engine.Throw("unexpected token: " + token);
@@ -290,20 +333,20 @@ namespace Markup.Programming.Core
             return node;
         }
 
-        private PathNode ParseCollectionInitializer(PathNode context, PathNode collection)
+        private ExpressionNode ParseCollectionInitializer(ExpressionNode context, ExpressionNode collection)
         {
             return new CollectionInitializerNode { Context = context, Collection = collection, Items = ParseList("}") };
         }
 
-        private PathNode ParseDictionaryInitializer(PathNode context, PathNode dictionary)
+        private ExpressionNode ParseDictionaryInitializer(ExpressionNode context, ExpressionNode dictionary)
         {
-            var entries = new List<PathNode>();
+            var entries = new List<ExpressionNode>();
             while (true)
             {
                 ParseToken("{");
-                var key = Parse(true);
+                var key = ParseExpression(true);
                 ParseToken(",");
-                var value = Parse(true);
+                var value = ParseExpression(true);
                 ParseToken("}");
                 entries.Add(new PairNode { Key = key, Value = value });
                 var token = tokens.Dequeue();
@@ -315,15 +358,15 @@ namespace Markup.Programming.Core
 
         private TypeNode ParseType()
         {
-            if (tokens.Peek() == "," || tokens.Peek() == ">") return null;
+            if (PeekToken(",") || PeekToken(">")) return null;
             var typeName = ParseIdentifier();
-            while (tokens.Peek() == ".")
+            while (PeekToken("."))
             {
                 tokens.Dequeue();
                 typeName += "." + ParseIdentifier();
             }
             var typeArgs = null as List<TypeNode>;
-            if (tokens.Peek() == "<")
+            if (PeekToken("<"))
             {
                 tokens.Dequeue();
                 typeArgs = new List<TypeNode>();
@@ -356,6 +399,11 @@ namespace Markup.Programming.Core
             return i;
         }
 
+        private bool PeekToken(string token)
+        {
+            return tokens.Peek() == token;
+        }
+
         private string ParseToken(string token)
         {
             if (tokens.Count == 0 || tokens.Peek() != token) engine.Throw("missing token: " + token);
@@ -368,15 +416,25 @@ namespace Markup.Programming.Core
             return tokens.Dequeue().Substring(1);
         }
 
-        private IList<PathNode> ParseArguments()
+        private bool PeekKeyword(string keyword)
+        {
+            return PeekToken("`" + keyword);
+        }
+
+        private void ParseKeyword(string keyword)
+        {
+            if (ParseIdentifier() != keyword) engine.Throw("expected keyword: " + keyword);
+        }
+
+        private IList<ExpressionNode> ParseArguments()
         {
             ParseToken("(");
             return ParseList(")");
         }
 
-        private IList<PathNode> ParseList(string expectedToken)
+        private IList<ExpressionNode> ParseList(string expectedToken)
         {
-            var nodes = new List<PathNode>();
+            var nodes = new List<ExpressionNode>();
             if (tokens.Count > 0 && tokens.Peek() == expectedToken)
             {
                 tokens.Dequeue();
@@ -384,7 +442,7 @@ namespace Markup.Programming.Core
             }
             while (tokens.Count > 0)
             {
-                nodes.Add(Parse(true));
+                nodes.Add(ParseExpression(true));
                 if (tokens.Count == 0) engine.Throw("missing token: " + expectedToken);
                 var token = tokens.Dequeue();
                 if (token == expectedToken) return nodes;

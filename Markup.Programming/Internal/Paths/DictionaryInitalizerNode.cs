@@ -3,10 +3,10 @@ using System.Collections.Generic;
 
 namespace Markup.Programming.Core
 {
-    public class DictionaryInitializerNode : PathNode
+    public class DictionaryInitializerNode : ExpressionNode
     {
-        public PathNode Dictionary { get; set; }
-        public IList<PathNode> Items { get; set; }
+        public ExpressionNode Dictionary { get; set; }
+        public IList<ExpressionNode> Items { get; set; }
         protected override object OnEvaluate(Engine engine, object value)
         {
             var dictionary = Dictionary.Evaluate(engine, value) as IDictionary;

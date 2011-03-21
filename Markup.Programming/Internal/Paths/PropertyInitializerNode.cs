@@ -1,8 +1,8 @@
 ﻿namespace Markup.Programming.Core
 {
-    public class PropertyInitializerNode : PathNode
+    public class PropertyInitializerNode : ExpressionNode
     {
-        public PathNode Value { get; set; }
+        public ExpressionNode Value { get; set; }
         protected override object OnEvaluate(Engine engine, object value)
         {
             var context = Context.Evaluate(engine, value);

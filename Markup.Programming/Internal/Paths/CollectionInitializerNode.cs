@@ -3,10 +3,10 @@ using System.Collections.Generic;
 
 namespace Markup.Programming.Core
 {
-    public class CollectionInitializerNode : PathNode
+    public class CollectionInitializerNode : ExpressionNode
     {
-        public PathNode Collection { get; set; }
-        public IList<PathNode> Items { get; set; }
+        public ExpressionNode Collection { get; set; }
+        public IList<ExpressionNode> Items { get; set; }
         protected override object OnEvaluate(Engine engine, object value)
         {
             var collection = Collection.Evaluate(engine, value) as IList;

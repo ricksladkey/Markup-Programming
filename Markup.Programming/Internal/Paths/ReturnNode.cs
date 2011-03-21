@@ -1,6 +1,6 @@
 ﻿namespace Markup.Programming.Core
 {
-    public class ReturnNode : PathNode
+    public class ReturnNode : ExpressionNode
     {
         protected override object OnEvaluate(Engine engine, object value)
         {
