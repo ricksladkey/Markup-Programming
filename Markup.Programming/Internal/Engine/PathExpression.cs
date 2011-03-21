@@ -553,6 +553,11 @@ namespace Markup.Programming.Core
             {
                 char c = Path[i];
                 if (char.IsWhiteSpace(c)) { ++i; continue; }
+                if (i < Path.Length - 1 && Path.Substring(i, 2) == "/*")
+                {
+                    i = EatComment(i);
+                    continue;
+                }
                 if (i < Path.Length - 1 && OperatorMap.ContainsKey(Path.Substring(i, 2)))
                 {
                     tokens.Enqueue(Path.Substring(i, 2));
@@ -599,6 +604,13 @@ namespace Markup.Programming.Core
                 engine.Throw("invalid token: " + Path.Substring(i));
             }
 
+        }
+
+        private int EatComment(int i)
+        {
+            for (i += 2; i < Path.Length - 1 && Path.Substring(i, 2) != "*/"; i++)
+                if (Path.Substring(i, 2) == "/*") i = EatComment(i) - 1;
+            return i + 2;
         }
 
         private bool IsIdentifier(string id)

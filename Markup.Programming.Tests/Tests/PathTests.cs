@@ -95,6 +95,8 @@ namespace Markup.Programming.Tests.Tests
             BasicGetTest(new List<int> { 1, 2, 3 }, "[List<int>] { 1, 2, 3 }");
             BasicGetTest(3, "1, 3");
             BasicGetTest(42, "($theAnswer = 42), $theAnswer");
+            BasicGetTest(3, "1 + /* 37 * 99 */ 2");
+            BasicGetTest(3, "1 + /* /* 37 * 99 */ xyzzy */ 2");
 
             BasicGetTest("Test1", "String1");
             BasicGetTest("Test2", "Object1.String1");
@@ -107,7 +109,6 @@ namespace Markup.Programming.Tests.Tests
         [TestMethod]
         public void PathTestSandbox()
         {
-            BasicGetTest(new Point { X = 1, Y = 2 }, "[Point] { X = 1,  Y =  2 }");
         }
 
 #if DEBUG
