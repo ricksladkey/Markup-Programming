@@ -287,7 +287,7 @@ namespace Markup.Programming.Core
             var nodes = new List<PathNode>();
             while (true)
             {
-                var node = Parse();
+                nodes.Add(Parse());
                 VerifyToken(";");
                 if (tokens.Count == 0) break;
             }

@@ -5,30 +5,33 @@
     xmlns:p="http://markupprogramming.codeplex.com/markup/programming"
     Width="300" Height="300">
     <Grid>
-        <StackPanel Name="ContentHost">
-            <Button Content="Add">
+        <StackPanel>
+            <StackPanel.Resources>
+                <SolidColorBrush Color="Red" x:Key="RedBrush"/>
+                <SolidColorBrush Color="Green" x:Key="GreenBrush"/>
+            </StackPanel.Resources>
+            <TextBlock FontSize="20" Text="The password is: xyzzy"/>
+            <TextBox FontSize="20" Name="Password"/>
+            <Grid>
+                <TextBlock FontSize="20" Foreground="White" FontWeight="Bold"/>
+
                 <p:Attached.Operations>
-                    <p:CallHandler Context="{Binding ElementName=ContentHost}" Path="Click.Children.Add">
-                        <p:Object Path="[Grid]">
-                            <p:Property Prop="Resources">
-                                <p:Collection>
-                                    <p:Pair Key="RedBrush">
-                                        <SolidColorBrush Color="Red"/>
-                                    </p:Pair>
-                                </p:Collection>
-                            </p:Property>
-                            <p:Property Prop="Children">
-                                <p:Collection>
-                                    <p:Object Path="[Button]">
-                                        <p:Property Prop="Content" Value="Click Me!"/>
-                                        <p:Property Prop="Opacity" Path="0.5"/>
-                                    </p:Object>
-                                </p:Collection>
-                            </p:Property>
-                        </p:Object>
-                    </p:CallHandler>
+                    <p:ChangedHandler Value="{Binding Text, ElementName=Password}">
+                        <p:PathBlock>
+                            $isRight = @EventArgs.NewValue == "xyzzy";
+                            @AssociatedObject.Children[0].Text = $isRight ? "On the money!" : "Guess again.";
+                        </p:PathBlock>
+                        <p:Set Path="@AssociatedObject.Background">
+                            <p:Operator Op="Conditional">
+                                <p:Get Var="isRight"/>
+                                <p:Get Source="{StaticResource GreenBrush}"/>
+                                <p:Get Source="{StaticResource RedBrush}"/>
+                            </p:Operator>
+                        </p:Set>
+                    </p:ChangedHandler>
                 </p:Attached.Operations>
-            </Button>
+
+            </Grid>
         </StackPanel>
     </Grid>
 </Window>

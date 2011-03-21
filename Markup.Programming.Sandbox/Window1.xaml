@@ -1,0 +1,39 @@
+﻿<Window
+    x:Class="Markup.Programming.Sandbox.Window1"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:p="http://markupprogramming.codeplex.com/markup/programming"
+    Title="Window1" Height="300" Width="300">
+    <Grid>
+        
+        <!-- object initializer test -->
+        <Grid>
+            <StackPanel Name="ContentHost">
+                <Button Content="Add">
+                    <p:Attached.Operations>
+                        <p:CallHandler Context="{Binding ElementName=ContentHost}" Path="Click.Children.Add">
+                            <p:Object Path="[Grid]">
+                                <p:Property Prop="Resources">
+                                    <p:Collection>
+                                        <p:Pair Key="RedBrush">
+                                            <SolidColorBrush Color="Red"/>
+                                        </p:Pair>
+                                    </p:Collection>
+                                </p:Property>
+                                <p:Property Prop="Children">
+                                    <p:Collection>
+                                        <p:Object Path="[Button]">
+                                            <p:Property Prop="Content" Value="Click Me!"/>
+                                            <p:Property Prop="Opacity" Path="0.5"/>
+                                        </p:Object>
+                                    </p:Collection>
+                                </p:Property>
+                            </p:Object>
+                        </p:CallHandler>
+                    </p:Attached.Operations>
+                </Button>
+            </StackPanel>
+        </Grid>
+        
+    </Grid>
+</Window>
