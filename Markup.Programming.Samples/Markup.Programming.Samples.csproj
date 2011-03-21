@@ -147,7 +147,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="MarkupObjectSample.xaml">
+    <Page Include="ResourceObjectSample.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -187,8 +187,8 @@
     <Compile Include="HelloWorld.xaml.cs">
       <DependentUpon>HelloWorld.xaml</DependentUpon>
     </Compile>
-    <Compile Include="MarkupObjectSample.xaml.cs">
-      <DependentUpon>MarkupObjectSample.xaml</DependentUpon>
+    <Compile Include="ResourceObjectSample.xaml.cs">
+      <DependentUpon>ResourceObjectSample.xaml</DependentUpon>
     </Compile>
     <Compile Include="PasswordSample.xaml.cs">
       <DependentUpon>PasswordSample.xaml</DependentUpon>

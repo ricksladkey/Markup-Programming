@@ -133,13 +133,13 @@
       <Link>HelloWorld.xaml.cs</Link>
       <DependentUpon>HelloWorld.xaml</DependentUpon>
     </Compile>
-    <Compile Include="..\Markup.Programming.Samples\MarkupObjectSample.xaml.cs">
-      <Link>MarkupObjectSample.xaml.cs</Link>
-      <DependentUpon>MarkupObjectSample.xaml</DependentUpon>
-    </Compile>
     <Compile Include="..\Markup.Programming.Samples\PasswordSample.xaml.cs">
       <Link>PasswordSample.xaml.cs</Link>
       <DependentUpon>PasswordSample.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="..\Markup.Programming.Samples\ResourceObjectSample.xaml.cs">
+      <Link>ResourceObjectSample.xaml.cs</Link>
+      <DependentUpon>ResourceObjectSample.xaml</DependentUpon>
     </Compile>
     <Compile Include="..\Markup.Programming.Samples\SelectOnFocus.xaml.cs">
       <Link>SelectOnFocus.xaml.cs</Link>
@@ -195,13 +195,13 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="..\Markup.Programming.Samples\MarkupObjectSample.xaml">
-      <Link>MarkupObjectSample.xaml</Link>
+    <Page Include="..\Markup.Programming.Samples\PasswordSample.xaml">
+      <Link>PasswordSample.xaml</Link>
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="..\Markup.Programming.Samples\PasswordSample.xaml">
-      <Link>PasswordSample.xaml</Link>
+    <Page Include="..\Markup.Programming.Samples\ResourceObjectSample.xaml">
+      <Link>ResourceObjectSample.xaml</Link>
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

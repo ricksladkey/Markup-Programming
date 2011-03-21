@@ -18,7 +18,7 @@
             <samples:ForLoops/>
             <samples:DynamicButton/>
             <samples:PasswordSample/>
-            <samples:MarkupObjectSample/>
+            <samples:ResourceObjectSample/>
             <samples:CrashSample/>
         </p:ResourceCollection>
         <p:ResourceObject x:Key="ViewModel">

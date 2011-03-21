@@ -2,9 +2,9 @@
 
 namespace Markup.Programming.Samples
 {
-    public partial class MarkupObjectSample : UserControl
+    public partial class ResourceObjectSample : UserControl
     {
-        public MarkupObjectSample()
+        public ResourceObjectSample()
         {
             InitializeComponent();
         }
