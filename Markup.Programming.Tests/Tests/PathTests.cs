@@ -107,6 +107,7 @@ namespace Markup.Programming.Tests.Tests
         [TestMethod]
         public void PathTestSandbox()
         {
+            BasicGetTest(new Point { X = 1, Y = 2 }, "[Point] { X = 1,  Y =  2 }");
         }
 
 #if DEBUG
@@ -117,7 +118,7 @@ namespace Markup.Programming.Tests.Tests
             var engine = new Engine();
             var path = "1 + 2 + 3";
             var expression = new PathExpression();
-            var tokens = expression.DebugCompile(engine, false, false, path);
+            var tokens = expression.DebugCompile(engine, ExpressionType.Standard, path);
             var newPath = tokens.Aggregate("", (sofar, next) => sofar + next);
             Assert.AreEqual(newPath, "Plus(1,Plus(2,3))");
         }

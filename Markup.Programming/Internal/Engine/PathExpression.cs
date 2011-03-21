@@ -50,6 +50,16 @@ namespace Markup.Programming.Core
             }
         }
 
+        private class BlockNode : PathNode
+        {
+            public IList<PathNode> Nodes { get; set; }
+            protected override object OnEvaluate(Engine engine, object value)
+            {
+                foreach (var node in Nodes) node.Evaluate(engine, value);
+                return null;
+            }
+        }
+
         private class ValueNode : PathNode
         {
             public object Value { get; set; }
@@ -220,6 +230,7 @@ namespace Markup.Programming.Core
                 return engine.CallFunction(Name, GetArguments(engine, args));
             }
         }
+
         private class TokenQueue : IEnumerable<string>
         {
             private List<string> list = new List<string>();
@@ -237,8 +248,10 @@ namespace Markup.Programming.Core
         private TokenQueue tokens;
         private PathNode root;
 
-        public bool IsSet { get; private set; }
-        public bool IsCall { get; private set; }
+        public ExpressionType ExpressionType { get; private set; }
+        public bool IsSet { get { return (ExpressionType & ExpressionType.Set) == ExpressionType.Set; } }
+        public bool IsCall { get { return (ExpressionType & ExpressionType.Call) == ExpressionType.Call; } }
+        public bool IsBlock { get { return (ExpressionType & ExpressionType.Block) == ExpressionType.Block; } }
         public string Path { get; private set; }
 
         public object Evaluate(Engine engine) { return Evaluate(engine, Value.UnsetValue); }
@@ -255,22 +268,35 @@ namespace Markup.Programming.Core
             return call.Call(engine, args);
         }
 
-        public PathExpression Compile(Engine engine, bool isSet, bool isCall, string path)
+        public PathExpression Compile(Engine engine, ExpressionType expressionType, string path)
         {
-            if (isSet == IsSet && IsCall == isCall && object.ReferenceEquals(Path, path)) return this;
+            if (expressionType == ExpressionType && object.ReferenceEquals(Path, path)) return this;
             this.engine = engine;
-            IsSet = isSet;
-            IsCall = isCall;
+            ExpressionType = expressionType;
             Path = path;
             Tokenize();
-            root = Parse();
+            root = IsBlock ? ParseBlock() : Parse();
             if (tokens.Count > 0) engine.Throw("unexpected token: " + tokens.Dequeue());
             this.engine = null;
             tokens = null;
             return this;
         }
 
-        private PathNode Parse()
+        private PathNode ParseBlock()
+        {
+            var nodes = new List<PathNode>();
+            while (true)
+            {
+                var node = Parse();
+                VerifyToken(";");
+                if (tokens.Count == 0) break;
+            }
+            return new BlockNode { Nodes = nodes };
+        }
+
+        private PathNode Parse() { return Parse(false); }
+
+        private PathNode Parse(bool noComma)
         {
             if (tokens.Count == 0) return new ValueNode { Value = null };
             var node = new ContextNode() as PathNode;
@@ -290,7 +316,7 @@ namespace Markup.Programming.Core
                         node = new OpNode { Op = op, Operands = { node, Parse() } };
                     continue;
                 }
-                if ("=.?,?".Contains(token[0]) & nodeNext) engine.Throw("unexpected operator: " + token);
+                if ("=.?,".Contains(token[0]) && nodeNext) engine.Throw("unexpected operator: " + token);
                 if (token == "=")
                 {
                     node.IsSet = true;
@@ -314,7 +340,7 @@ namespace Markup.Programming.Core
                     node = new OpNode { Op = Op.Conditional, Operands = { node, ifTrue, ifFalse } };
                     continue;
                 }
-                if (token == ",")
+                if (token == "," && !noComma)
                 {
                     tokens.Dequeue();
                     node = new OpNode { Op = Op.Comma, Operands = { node, Parse() } };
@@ -384,7 +410,7 @@ namespace Markup.Programming.Core
                 while (tokens.Peek() == "[")
                 {
                     tokens.Dequeue();
-                    var index = Parse();
+                    var index = Parse(true);
                     VerifyToken("]");
                     node = new ItemNode { IsSet = IsCurrentSet, Context = node, Index = index };
                 }
@@ -417,7 +443,7 @@ namespace Markup.Programming.Core
                         node = ParseCollectionInitializer(node, propertyNode);
                 }
                 else
-                    node = new PropertyInitializerNode { Context = node, Name = property, Value = Parse() };
+                    node = new PropertyInitializerNode { Context = node, Name = property, Value = Parse(true) };
                 var token = tokens.Dequeue();
                 if (token == "}") break;
                 if (token != ",") engine.Throw("unexpected token: " + token);
@@ -436,9 +462,9 @@ namespace Markup.Programming.Core
             while (true)
             {
                 VerifyToken("{");
-                var key = Parse();
+                var key = Parse(true);
                 VerifyToken(",");
-                var value = Parse();
+                var value = Parse(true);
                 VerifyToken("}");
                 entries.Add(new PairNode { Key = key, Value = value });
                 var token = tokens.Dequeue();
@@ -511,7 +537,7 @@ namespace Markup.Programming.Core
             }
             while (tokens.Count > 0)
             {
-                nodes.Add(Parse());
+                nodes.Add(Parse(true));
                 if (tokens.Count == 0) engine.Throw("missing token: " + expectedToken);
                 var token = tokens.Dequeue();
                 if (token == expectedToken) return nodes;
@@ -533,7 +559,7 @@ namespace Markup.Programming.Core
                     i += 2;
                     continue;
                 }
-                if (OperatorMap.ContainsKey(c.ToString()) || "=.[](){},?:".Contains(c))
+                if (OperatorMap.ContainsKey(c.ToString()) || "=.[](){},?:;".Contains(c))
                 {
                     tokens.Enqueue(c.ToString());
                     ++i;
@@ -610,9 +636,9 @@ namespace Markup.Programming.Core
         };
 
 #if DEBUG
-        public List<string> DebugCompile(Engine engine, bool isSet, bool isCall, string path)
+        public List<string> DebugCompile(Engine engine, ExpressionType expressionType, string path)
         {
-            Compile(engine, isSet, isCall, path);
+            Compile(engine, expressionType, path);
             var newTokens = new TokenQueue();
             root.Tokenize(newTokens);
             return new List<string>(newTokens);

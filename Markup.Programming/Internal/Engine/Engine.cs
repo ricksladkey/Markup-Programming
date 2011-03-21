@@ -340,19 +340,25 @@ namespace Markup.Programming.Core
         public object GetPath(string path, PathExpression pathExpression)
         {
             if (pathExpression == null) pathExpression = new PathExpression();
-            return pathExpression.Compile(this, false, false, path).Evaluate(this);
+            return pathExpression.Compile(this, ExpressionType.Standard, path).Evaluate(this);
+        }
+
+        public object GetPathBlock(string path, PathExpression pathExpression)
+        {
+            if (pathExpression == null) pathExpression = new PathExpression();
+            return pathExpression.Compile(this, ExpressionType.Block, path).Evaluate(this);
         }
 
         public object SetPath(string path, PathExpression pathExpression, object value)
         {
             if (pathExpression == null) pathExpression = new PathExpression();
-            return pathExpression.Compile(this, true, false, path).Evaluate(this, value);
+            return pathExpression.Compile(this, ExpressionType.Set, path).Evaluate(this, value);
         }
 
         public object CallPath(string path, PathExpression pathExpression, IEnumerable<object> args)
         {
             if (pathExpression == null) pathExpression = new PathExpression();
-            return pathExpression.Compile(this, false, true, path).Call(this, args);
+            return pathExpression.Compile(this, ExpressionType.Call, path).Call(this, args);
         }
 
         public bool ShouldTrace(TraceFlags flags)
