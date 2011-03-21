@@ -9,7 +9,7 @@ using System.Collections;
 namespace Markup.Programming.Tests.Tests
 {
     [TestClass]
-    public class PathTests
+    public class CodeTests
     {
         /// <summary>
         /// THe PathEvaluator is sort of a hybrid between p:Get and p:Set
@@ -127,6 +127,7 @@ namespace Markup.Programming.Tests.Tests
             TestHelper.ScriptTest(5, "$i = 0; while ($i < 5) $i = $i + 1; return $i;");
             TestHelper.ScriptTest(0, "{ 1; 2; } return 0;");
             TestHelper.ScriptTest(5, "$i = 0; while ($i < 10) { $i = $i + 1; if ($i == 5) break; } return $i;");
+            TestHelper.ScriptTest(6, "$x = 0; foreach (var $item in [List<int>] { 1, 2, 3 }) $x = $x + $item; return $x;");
         }
 
         [TestMethod]

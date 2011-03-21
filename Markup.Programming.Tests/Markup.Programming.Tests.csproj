@@ -107,7 +107,7 @@
     <Compile Include="Tests\EvaluationTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tests\BasicTests.cs" />
-    <Compile Include="Tests\PathTests.cs" />
+    <Compile Include="Tests\CodeTests.cs" />
     <Compile Include="Tests\TestHelper.cs" />
   </ItemGroup>
   <ItemGroup>

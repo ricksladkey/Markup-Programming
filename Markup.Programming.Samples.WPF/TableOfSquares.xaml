@@ -8,7 +8,7 @@
         <p:ResourceObject x:Key="ViewModel">
             <p:Property Prop="Table">
                 <p:Iterator>
-                    <p:For Var="i" Value="0" UpperLimit="5" Increment="1">
+                    <p:For Var="$i" Value="0" UpperLimit="5" Increment="1">
                         <p:Yield>
                             <p:Object>
                                 <p:Property Prop="Number" Path="$i"/>

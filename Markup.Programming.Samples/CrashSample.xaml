@@ -16,7 +16,7 @@
                                     <p:Block>
                                         <p:Switch Value="2">
                                             <p:Case Value="1"/>
-                                            <p:Set Var="xyzzy" Value="42"/>
+                                            <p:Set Var="$xyzzy" Value="42"/>
                                             <p:Case Value="2"/>
                                             <p:GetItem Index="0"/>
                                         </p:Switch>

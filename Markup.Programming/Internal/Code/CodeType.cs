@@ -5,12 +5,12 @@ using System.Text;
 
 namespace Markup.Programming.Core
 {
-    [Flags]
-    public enum ExpressionType
+    public enum CodeType
     {
-        Standard = 0x00,
-        Set = 0x01,
-        Call = 0x02,
-        Script = 0x04,
+        Variable,
+        GetExpression,
+        SetExpression,
+        Call,
+        Script,
     }
 }

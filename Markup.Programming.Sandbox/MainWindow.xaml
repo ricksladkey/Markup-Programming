@@ -23,7 +23,7 @@
                         </p:Script>
                         <p:Set Path="@AssociatedObject.Background">
                             <p:Operator Op="Conditional">
-                                <p:Get Var="isRight"/>
+                                <p:Get Var="$isRight"/>
                                 <p:Get Source="{StaticResource GreenBrush}"/>
                                 <p:Get Source="{StaticResource RedBrush}"/>
                             </p:Operator>

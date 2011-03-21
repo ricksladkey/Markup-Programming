@@ -57,14 +57,14 @@
                     </p:Eval>
 
                     <!-- use get accessors -->
-                    <p:Get Var="i"/>
+                    <p:Get Var="$i"/>
                     <p:Get Source="{StaticResource BlueBrush}"/>
                     <p:Get Context="{StaticResource BlueBrush}" PropertyName="Color"/>
                     <p:Get Path="$c" PropertyName="Count"/>
                     <p:Get Context="{Binding ElementName=Button}" DependencyProperty="Button.Command"/>
                     
                     <!-- use set accessors -->
-                    <p:Set Var="s" Value="New Value"/>
+                    <p:Set Var="$s" Value="New Value"/>
                     <p:Set Target="{Binding FirstName, Mode=TwoWay}" Value="Bill"/>
                     <p:Set Target="{Binding}" PropertyName="FirstName" Value="Bill"/>
                     <p:Set Path="$c" PropertyName="Count" Value="10"/>
@@ -139,7 +139,7 @@
 
                     <!-- filter collections using iterators -->
                     <p:Iterator>
-                        <p:ForEach Var="operator">
+                        <p:ForEach Var="$operator">
                             <p:ForEach.Value>
                                 <p:Call Path="[Enum].GetValues([Op])"/>
                             </p:ForEach.Value>

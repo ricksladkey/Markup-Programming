@@ -352,28 +352,34 @@ namespace Markup.Programming.Core
             return PathHelper.HasBindingOrValue(caller, property, path);
         }
 
+        public string GetVariable(string path, CodeTree codeTree)
+        {
+            if (codeTree == null) codeTree = new CodeTree();
+            return codeTree.Compile(this, CodeType.Variable, path).GetVariable(this);
+        }
+
         public object GetPath(string path, CodeTree codeTree)
         {
             if (codeTree == null) codeTree = new CodeTree();
-            return codeTree.Compile(this, ExpressionType.Standard, path).Evaluate(this);
+            return codeTree.Compile(this, CodeType.GetExpression, path).Evaluate(this);
         }
 
         public void ExecuteScript(string path, CodeTree codeTree)
         {
             if (codeTree == null) codeTree = new CodeTree();
-            codeTree.Compile(this, ExpressionType.Script, path).Execute(this);
+            codeTree.Compile(this, CodeType.Script, path).Execute(this);
         }
 
         public object SetPath(string path, CodeTree codeTree, object value)
         {
             if (codeTree == null) codeTree = new CodeTree();
-            return codeTree.Compile(this, ExpressionType.Set, path).Evaluate(this, value);
+            return codeTree.Compile(this, CodeType.SetExpression, path).Evaluate(this, value);
         }
 
         public object CallPath(string path, CodeTree codeTree, IEnumerable<object> args)
         {
             if (codeTree == null) codeTree = new CodeTree();
-            return codeTree.Compile(this, ExpressionType.Call, path).Call(this, args);
+            return codeTree.Compile(this, CodeType.Call, path).Call(this, args);
         }
 
         public bool ShouldTrace(TraceFlags flags)

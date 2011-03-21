@@ -42,10 +42,11 @@ namespace Markup.Programming.Core
         private bool IsCurrentSet { get { return IsSet && tokens != null && tokens.Count == 0; } }
         private bool IsCurrentCall { get { return IsCall && tokens != null && tokens.Count == 0 || PeekToken("("); } }
 
-        public ExpressionType ExpressionType { get; private set; }
-        public bool IsSet { get { return (ExpressionType & ExpressionType.Set) == ExpressionType.Set; } }
-        public bool IsCall { get { return (ExpressionType & ExpressionType.Call) == ExpressionType.Call; } }
-        public bool IsScript { get { return (ExpressionType & ExpressionType.Script) == ExpressionType.Script; } }
+        public CodeType CodeType { get; private set; }
+        public bool IsVariable { get { return CodeType == CodeType.Variable; } }
+        public bool IsSet { get { return CodeType == CodeType.SetExpression; } }
+        public bool IsCall { get { return CodeType == CodeType.Call; } }
+        public bool IsScript { get { return CodeType == CodeType.Script; } }
         public string Path { get; private set; }
 
         public CodeTree()
@@ -55,8 +56,15 @@ namespace Markup.Programming.Core
                 { "if", ParseIf },
                 { "while", ParseWhile },
                 { "break", ParseBreak },
+                { "foreach", ParseForEach },
                 { "return", ParseReturn },
             };
+        }
+
+        public string GetVariable(Engine engine)
+        {
+            engine.Trace(TraceFlags.Path, "Path: Variable {0}", Path);
+            return (root as VariableNode).Name;
         }
 
         public object Evaluate(Engine engine)
@@ -83,14 +91,16 @@ namespace Markup.Programming.Core
             block.Execute(engine);
         }
 
-        public CodeTree Compile(Engine engine, ExpressionType expressionType, string path)
+        public CodeTree Compile(Engine engine, CodeType expressionType, string path)
         {
-            if (expressionType == ExpressionType && object.ReferenceEquals(Path, path)) return this;
+            if (expressionType == CodeType && object.ReferenceEquals(Path, path)) return this;
             this.engine = engine;
-            ExpressionType = expressionType;
+            CodeType = expressionType;
             Path = path;
             Tokenize();
-            root = IsScript ? ParseStatements() : ParseExpression();
+            if (IsVariable) root = ParseVariableExpression();
+            else if (IsScript) root = ParseStatements();
+            else root = ParseExpression();
             if (tokens.Count > 0) engine.Throw("unexpected token: " + tokens.Dequeue());
             this.engine = null;
             tokens = null;
@@ -177,6 +187,19 @@ namespace Markup.Programming.Core
             ParseKeyword("break");
             ParseToken(";");
             return new BreakNode();
+        }
+
+        private StatementNode ParseForEach()
+        {
+            ParseKeyword("foreach");
+            ParseToken("(");
+            ParseKeyword("var");
+            var name = ParseVariable();
+            ParseKeyword("in");
+            var expression = ParseExpression();
+            ParseToken(")");
+            var statement = ParseStatement();
+            return new ForEachNode { Context = expression, Name = name, Body = statement };
         }
 
         private StatementNode ParseReturn()
@@ -300,6 +323,11 @@ namespace Markup.Programming.Core
                     node = new VariableNode { IsSet = IsCurrentSet, Name = token };
             }
             return node;
+        }
+
+        private ExpressionNode ParseVariableExpression()
+        {
+            return new VariableNode { Name = ParseVariable() };
         }
 
         private ExpressionNode ParseItems(ExpressionNode node)
@@ -447,6 +475,12 @@ namespace Markup.Programming.Core
         {
             if (tokens.Count == 0 || tokens.Peek()[0] != '`') engine.Throw("expected identifier");
             return tokens.Dequeue().Substring(1);
+        }
+
+        private string ParseVariable()
+        {
+            if (tokens.Count == 0 || tokens.Peek()[0] != '$') engine.Throw("expected variable");
+            return tokens.Dequeue();
         }
 
         private bool PeekKeyword(string keyword)

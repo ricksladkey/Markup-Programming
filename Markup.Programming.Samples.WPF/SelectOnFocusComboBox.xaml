@@ -17,7 +17,7 @@
             <ComboBox Text="SelectOnFocus ComboBox" IsEditable="True">
                 <p:Attached.Operations>
                     <p:EventHandler Path="Loaded">
-                        <p:Set Var="textBox">
+                        <p:Set Var="$textBox">
                             <p:Path>@Sender.Template.FindName("PART_EditableTextBox", @Sender)</p:Path>
                         </p:Set>
                         <p:CallHandler Path="GotFocus.$textBox.SelectAll()"/>

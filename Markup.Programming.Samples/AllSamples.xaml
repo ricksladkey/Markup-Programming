@@ -24,7 +24,7 @@
         <p:ResourceObject x:Key="ViewModel">
             <p:Property Prop="Samples">
                 <p:Iterator>
-                    <p:ForEach Var="userControl" Value="{StaticResource UserControls}">
+                    <p:ForEach Var="$userControl" Value="{StaticResource UserControls}">
                         <p:Yield>
                             <p:Object>
                                 <p:Property Prop="Name" Path="$userControl.ToString()"/>

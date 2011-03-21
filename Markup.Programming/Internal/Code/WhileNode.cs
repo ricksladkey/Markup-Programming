@@ -1,14 +1,8 @@
 ﻿namespace Markup.Programming.Core
 {
-    public class WhileNode : StatementNode
+    public class WhileNode : BodyNode
     {
-        public StatementNode Body { get; set; }
-        protected override void OnExecute(Engine engine)
-        {
-            engine.With(this, e => ExecuteWhile(engine));
-        }
-
-        private void ExecuteWhile(Engine engine)
+        protected override void OnExecuteFrame(Engine engine)
         {
             engine.SetBreakFrame();
             while (TypeHelper.ConvertToBool(Context.Evaluate(engine)))

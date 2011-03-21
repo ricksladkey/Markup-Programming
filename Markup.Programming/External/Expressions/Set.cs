@@ -52,6 +52,9 @@ namespace Markup.Programming
 
         public string Var { get; set; }
 
+        private CodeTree varCodeTree = new CodeTree();
+        protected CodeTree VarCodeTree { get { return varCodeTree; } }
+
         public string PropertyName { get; set; }
 
         public DependencyProperty DependencyProperty { get; set; }
@@ -77,7 +80,7 @@ namespace Markup.Programming
             var value = engine.Evaluate(ValueProperty, ValuePath, ValueCodeTree);
             if (Var != null)
             {
-                var variable = "$" + Var;
+                var variable = engine.GetVariable(Var, VarCodeTree);
                 if (Op != AssignmentOp.Assign)
                 {
                     var oldValue = engine.LookupVariable(variable);

@@ -9,5 +9,8 @@ namespace Markup.Programming.Core
     public abstract class VariableBlock : ValueBlock
     {
         public string Var { get; set; }
+
+        private CodeTree varCodeTree = new CodeTree();
+        protected CodeTree VarCodeTree { get { return varCodeTree; } }
     }
 }

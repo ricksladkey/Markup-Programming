@@ -111,13 +111,15 @@
   <ItemGroup>
     <Compile Include="External\Expressions\Script.cs" />
     <Compile Include="External\Objects\Pair.cs" />
+    <Compile Include="Internal\Code\BodyNode.cs" />
     <Compile Include="Internal\Code\BreakNode.cs" />
     <Compile Include="Internal\Code\ExpressionWithNameNode.cs" />
+    <Compile Include="Internal\Code\ForEachNode.cs" />
     <Compile Include="Internal\Code\Node.cs" />
     <Compile Include="Internal\Code\WhileNode.cs" />
     <Compile Include="Internal\Components\InterfaceComponent.cs" />
     <Compile Include="Internal\Components\LazyResourceComponent.cs" />
-    <Compile Include="Internal\Engine\ExpressionType.cs" />
+    <Compile Include="Internal\Code\CodeType.cs" />
     <Compile Include="Internal\Interop\CommandInterop.cs" />
     <Compile Include="Internal\Engine\IInteropHost.cs" />
     <Compile Include="Internal\Interop\ConverterInterop.cs" />
