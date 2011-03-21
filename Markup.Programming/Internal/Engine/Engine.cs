@@ -126,6 +126,13 @@ namespace Markup.Programming.Core
             PopFrame();
         }
 
+        public void With(Node caller, Action<Engine> action)
+        {
+            PushFrame(CurrentFrame.Caller);
+            action(this);
+            PopFrame();
+        }
+
         public TResult With<TResult>(IComponent caller, Func<Engine, TResult> func)
         {
             PushFrame(caller);
@@ -138,6 +145,14 @@ namespace Markup.Programming.Core
         {
             PushFrame(caller);
             foreach (var pair in variables) DefineVariable(pair.Key, pair.Value, false, true);
+            var result = func(this);
+            PopFrame();
+            return result;
+        }
+
+        public TResult With<TResult>(Node node, Func<Engine, TResult> func)
+        {
+            PushFrame(CurrentFrame.Caller);
             var result = func(this);
             PopFrame();
             return result;

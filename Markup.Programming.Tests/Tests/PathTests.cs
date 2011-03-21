@@ -124,6 +124,14 @@ namespace Markup.Programming.Tests.Tests
             TestHelper.ScriptTest(42, "$x = @true; if ($x) return 42; return 21;");
             TestHelper.ScriptTest(42, "$x = @true; if (!$x) return 21; else return 42;");
             TestHelper.ScriptTest("b", "$x = 2; if ($x == 1) return 'a'; else if ($x == 2) return 'b'; else return 'c';");
+            TestHelper.ScriptTest(5, "$i = 0; while ($i < 5) $i = $i + 1; return $i;");
+            TestHelper.ScriptTest(0, "{ 1; 2; } return 0;");
+            TestHelper.ScriptTest(5, "$i = 0; while ($i < 10) { $i = $i + 1; if ($i == 5) break; } return $i;");
+        }
+
+        [TestMethod]
+        public void ScriptTestSandbox()
+        {
         }
     }
 }

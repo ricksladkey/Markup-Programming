@@ -53,6 +53,8 @@ namespace Markup.Programming.Core
             keywordMap = new Dictionary<string, Func<StatementNode>>
             {
                 { "if", ParseIf },
+                { "while", ParseWhile },
+                { "break", ParseBreak },
                 { "return", ParseReturn },
             };
         }
@@ -97,6 +99,7 @@ namespace Markup.Programming.Core
 
         private StatementNode ParseStatement()
         {
+            if (tokens.Count == 0 || PeekToken("}")) return null;
             var node = null as StatementNode;
             var token = tokens.Peek();
             if (token != null && token[0] == '`' && keywordMap.ContainsKey(token.Substring(1)))
@@ -114,10 +117,11 @@ namespace Markup.Programming.Core
         private StatementNode ParseStatements()
         {
             var nodes = new List<StatementNode>();
-            while (tokens.Count > 0)
+            while (true)
             {
-                nodes.Add(ParseStatement());
-                if (tokens.Count == 0) break;
+                var node = ParseStatement();
+                if (node == null) break;
+                nodes.Add(node);
             }
             return new BlockNode { Nodes = nodes };
         }
@@ -156,6 +160,23 @@ namespace Markup.Programming.Core
             ParseToken(")");
             var statement = ParseStatement();
             return new IfNode.Pair { Expression = expression, Statement = statement };
+        }
+
+        private StatementNode ParseWhile()
+        {
+            ParseKeyword("while");
+            ParseToken("(");
+            var expression = ParseExpression();
+            ParseToken(")");
+            var statement = ParseStatement();
+            return new WhileNode { Context = expression, Body = statement };
+        }
+
+        private StatementNode ParseBreak()
+        {
+            ParseKeyword("break");
+            ParseToken(";");
+            return new BreakNode();
         }
 
         private StatementNode ParseReturn()

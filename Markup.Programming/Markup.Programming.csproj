@@ -111,8 +111,10 @@
   <ItemGroup>
     <Compile Include="External\Expressions\Script.cs" />
     <Compile Include="External\Objects\Pair.cs" />
+    <Compile Include="Internal\Code\BreakNode.cs" />
     <Compile Include="Internal\Code\ExpressionWithNameNode.cs" />
     <Compile Include="Internal\Code\Node.cs" />
+    <Compile Include="Internal\Code\WhileNode.cs" />
     <Compile Include="Internal\Components\InterfaceComponent.cs" />
     <Compile Include="Internal\Components\LazyResourceComponent.cs" />
     <Compile Include="Internal\Engine\ExpressionType.cs" />

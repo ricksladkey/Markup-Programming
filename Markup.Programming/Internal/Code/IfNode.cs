@@ -21,7 +21,7 @@ namespace Markup.Programming.Core
                 }
                 if (engine.ShouldInterrupt) return;
             }
-            Else.Execute(engine);
+            if (Else != null) Else.Execute(engine);
         }
     }
 }
