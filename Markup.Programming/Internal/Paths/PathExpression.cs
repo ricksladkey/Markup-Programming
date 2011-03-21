@@ -13,237 +13,6 @@ namespace Markup.Programming.Core
     /// </summary>
     public class PathExpression
     {
-        private enum Value { UnsetValue = 0 };
-        private abstract class PathNode
-        {
-            public bool IsSet { get; set; }
-            public PathNode Context { get; set; }
-            public string Name { get; set; }
-            public object Evaluate(Engine engine, object value)
-            {
-                engine.Trace(TraceFlags.Path, "Path: {0} {1} {2}", this.GetType().Name, IsSet, Name);
-                if (IsSet && value.Equals(Value.UnsetValue)) engine.Throw("value not supplied");
-                var result = OnEvaluate(engine, value);
-                engine.Trace(TraceFlags.Path, "Path: {0} = {1}", this.GetType().Name, result);
-                return result;
-            }
-            protected abstract object OnEvaluate(Engine engine, object value);
-
-            /// <summary>
-            /// Convert a path node back into a stream of tokens.
-            /// This infrastructure is used for unit testing.
-            /// </summary>
-            /// <param name="tokens">The queue of tokens to populate</param>
-            [Conditional("DEBUG")]
-            public void Tokenize(TokenQueue tokens) { this.tokens = tokens; AddTokens(); }
-            private TokenQueue tokens;
-            [Conditional("DEBUG")]
-            protected virtual void AddTokens() { }
-            [Conditional("DEBUG")]
-            protected void Add(params object[] items) { foreach (var item in items) this.tokens.Enqueue(item.ToString()); }
-            [Conditional("DEBUG")]
-            protected void Add(params PathNode[] nodes)
-            {
-                if (nodes.Length == 0) return;
-                nodes.First().Tokenize(tokens);
-                foreach (var node in nodes.Skip(1)) { Add(","); node.Tokenize(tokens); }
-            }
-        }
-
-        private class BlockNode : PathNode
-        {
-            public IList<PathNode> Nodes { get; set; }
-            protected override object OnEvaluate(Engine engine, object value)
-            {
-                foreach (var node in Nodes) node.Evaluate(engine, value);
-                return null;
-            }
-        }
-
-        private class ValueNode : PathNode
-        {
-            public object Value { get; set; }
-            protected override object OnEvaluate(Engine engine, object value) { return Value; }
-            protected override void AddTokens() { Add(Value); }
-        }
-
-        private class PairNode : PathNode
-        {
-            public PathNode Key { get; set; }
-            public PathNode Value { get; set; }
-            protected override object OnEvaluate(Engine engine, object value)
-            {
-                return new DictionaryEntry(Key.Evaluate(engine, value), Value.Evaluate(engine, value));
-            }
-        }
-
-        private class PropertyInitializerNode : PathNode
-        {
-            public PathNode Value { get; set; }
-            protected override object OnEvaluate(Engine engine, object value)
-            {
-                var context = Context.Evaluate(engine, value);
-                PathHelper.SetProperty(engine, context, Name, Value.Evaluate(engine, value));
-                return context;
-            }
-        }
-
-        private class CollectionInitializerNode : PathNode
-        {
-            public PathNode Collection { get; set; }
-            public IList<PathNode> Items { get; set; }
-            protected override object OnEvaluate(Engine engine, object value)
-            {
-                var collection = Collection.Evaluate(engine, value) as IList;
-                foreach (var item in Items) collection.Add(item.Evaluate(engine, value));
-                return Context == Collection ? collection : Context.Evaluate(engine, value);
-            }
-        }
-
-        private class DictionaryInitializerNode : PathNode
-        {
-            public PathNode Dictionary { get; set; }
-            public IList<PathNode> Items { get; set; }
-            protected override object OnEvaluate(Engine engine, object value)
-            {
-                var dictionary = Dictionary.Evaluate(engine, value) as IDictionary;
-                foreach (var item in Items)
-                {
-                    var entry = (DictionaryEntry)item.Evaluate(engine, value);
-                    dictionary.Add(entry.Key, entry.Value);
-                }
-                return Context == Dictionary ? dictionary : Context.Evaluate(engine, value);
-            }
-        }
-
-        private class SetNode : PathNode
-        {
-            public PathNode LValue { get; set; }
-            public PathNode RValue { get; set; }
-            protected override object OnEvaluate(Engine engine, object value)
-            {
-                return LValue.Evaluate(engine, RValue.Evaluate(engine, value));
-            }
-        }
-
-        private class TypeNode : PathNode
-        {
-            public IList<TypeNode> TypeArguments { get; set; }
-            protected override object OnEvaluate(Engine engine, object value)
-            {
-                var type = engine.LookupType(Name);
-                if (TypeArguments == null || TypeArguments.Count == 0) return type;
-                var typeArgs = TypeArguments.Select(arg => arg.Evaluate(engine, value)).Cast<Type>().ToArray();
-                return type.MakeGenericType(typeArgs);
-            }
-            protected override void AddTokens()
-            {
-                if (TypeArguments == null || TypeArguments.Count == 0) { Add("[", Name, "]"); return; }
-                Add("[", Name, "<"); Add(TypeArguments.ToArray()); Add(">", "]");
-            }
-        }
-
-        private class OpNode : PathNode
-        {
-            public OpNode() { Operands = new List<PathNode>(); }
-            public Op Op { get; set; }
-            public IList<PathNode> Operands { get; set; }
-            protected override object OnEvaluate(Engine engine, object value)
-            {
-                return engine.Evaluate(Op, Operands.Select(operand => operand.Evaluate(engine, value)).ToArray());
-            }
-            protected override void AddTokens() { Add(Op, "("); Add(Operands.ToArray()); Add(")"); }
-        }
-
-        private class ContextNode : PathNode
-        {
-            protected override object OnEvaluate(Engine engine, object value) { return engine.Context; }
-        }
-
-        private class VariableNode : PathNode
-        {
-            protected override object OnEvaluate(Engine engine, object value)
-            {
-                if (!IsSet) return engine.LookupVariable(Name);
-                return engine.DefineVariableInParentScope(Name, value);
-            }
-        }
-
-        private class PropertyNode : PathNode
-        {
-            protected override object OnEvaluate(Engine engine, object value)
-            {
-                if (!IsSet) return PathHelper.GetProperty(engine, Context.Evaluate(engine, value), Name);
-                return PathHelper.SetProperty(engine, Context.Evaluate(engine, value), Name, value);
-            }
-        }
-
-        private class ItemNode : PathNode
-        {
-            public PathNode Index { get; set; }
-            protected override object OnEvaluate(Engine engine, object value)
-            {
-                if (!IsSet) return PathHelper.GetItem(engine, Context.Evaluate(engine, value), Index.Evaluate(engine, value));
-                return PathHelper.SetItem(engine, Context.Evaluate(engine, value), Index.Evaluate(engine, value), value);
-            }
-        }
-
-        private abstract class CallNode : PathNode
-        {
-            public IList<PathNode> Arguments { get; set; }
-            protected override object OnEvaluate(Engine engine, object value)
-            {
-                return Call(engine, GetArguments(engine, null));
-            }
-            protected IEnumerable<object> GetArguments(Engine engine, IEnumerable<object> args)
-            {
-                if (Arguments != null) return Arguments.Select(argument => argument.Evaluate(engine, Value.UnsetValue)).ToArray();
-                if (args == null) engine.Throw("missing arguments");
-                return args;
-            }
-            public abstract object Call(Engine engine, IEnumerable<object> args);
-        }
-
-        private class MethodNode : CallNode
-        {
-            public override object Call(Engine engine, IEnumerable<object> args)
-            {
-                var context = Context.Evaluate(engine, Value.UnsetValue);
-                return CallHelper.CallMethod(Name, false, context.GetType(), context, GetArguments(engine, args), null, engine);
-            }
-        }
-
-        private class StaticMethodNode : CallNode
-        {
-            public TypeNode Type { get; set; }
-            public override object Call(Engine engine, IEnumerable<object> args)
-            {
-                var type = Type.Evaluate(engine, null) as Type;
-                return CallHelper.CallMethod(Name, true, type, null, GetArguments(engine, args), null, engine);
-            }
-        }
-
-        private class FunctionNode : CallNode
-        {
-            public override object Call(Engine engine, IEnumerable<object> args)
-            {
-                return engine.CallFunction(Name, GetArguments(engine, args));
-            }
-        }
-
-        private class TokenQueue : IEnumerable<string>
-        {
-            private List<string> list = new List<string>();
-            private int current = 0;
-            public void Enqueue(string item) { list.Add(item); }
-            public string Dequeue() { return list[current++]; }
-            public void Undequeue() { --current; }
-            public string Peek() { return current < list.Count ? list[current] : null; }
-            public int Count { get { return list.Count - current; } }
-            public IEnumerator<string> GetEnumerator() { return list.Skip(current).GetEnumerator(); }
-            IEnumerator IEnumerable.GetEnumerator() { return GetEnumerator(); }
-        }
-
         private Engine engine;
         private TokenQueue tokens;
         private PathNode root;
@@ -254,10 +23,14 @@ namespace Markup.Programming.Core
         public bool IsBlock { get { return (ExpressionType & ExpressionType.Block) == ExpressionType.Block; } }
         public string Path { get; private set; }
 
-        public object Evaluate(Engine engine) { return Evaluate(engine, Value.UnsetValue); }
+        public object Evaluate(Engine engine)
+        {
+            engine.Trace(TraceFlags.Path, "Path: Get {0}", Path);
+            return root.Evaluate(engine);
+        }
         public object Evaluate(Engine engine, object value)
         {
-            engine.Trace(TraceFlags.Path, "Path: {0}: {0}", Path, value.Equals(Value.UnsetValue) ? "Get" : "Set");
+            engine.Trace(TraceFlags.Path, "Path: Set {0} = {1}", Path, value);
             return root.Evaluate(engine, value);
         }
         public object Call(Engine engine, IEnumerable<object> args)
@@ -647,16 +420,5 @@ namespace Markup.Programming.Core
             { ">", Op.GreaterThan },
             { ">=", Op.GreaterThanOrEqual },
         };
-
-#if DEBUG
-        public List<string> DebugCompile(Engine engine, ExpressionType expressionType, string path)
-        {
-            Compile(engine, expressionType, path);
-            var newTokens = new TokenQueue();
-            root.Tokenize(newTokens);
-            return new List<string>(newTokens);
-        }
-#endif
-
     }
 }

@@ -111,21 +111,5 @@ namespace Markup.Programming.Tests.Tests
         {
             BasicGetTest(new List<int> { 1, 2, 3 }, "[List<int>] { 1, 2, 3 }");
         }
-
-#if DEBUG
-
-        [TestMethod]
-        public void DebugParseTest()
-        {
-            var engine = new Engine();
-            var path = "1 + 2 + 3";
-            var expression = new PathExpression();
-            var tokens = expression.DebugCompile(engine, ExpressionType.Standard, path);
-            var newPath = tokens.Aggregate("", (sofar, next) => sofar + next);
-            Assert.AreEqual(newPath, "Plus(1,Plus(2,3))");
-        }
-
-#endif
-
     }
 }

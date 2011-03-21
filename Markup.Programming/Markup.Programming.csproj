@@ -127,7 +127,7 @@
     <Compile Include="Internal\Components\ComponentBase.cs" />
     <Compile Include="Internal\Diagnostics\EngineDebugView.cs" />
     <Compile Include="Internal\Engine\CallHelper.cs" />
-    <Compile Include="Internal\Engine\PathExpression.cs" />
+    <Compile Include="Internal\Paths\PathExpression.cs" />
     <Compile Include="External\Support\Additional.cs" />
     <Compile Include="External\Handlers\EventHandler.cs" />
     <Compile Include="External\Support\Attached.cs" />
@@ -222,6 +222,25 @@
     <Compile Include="External\Expressions\Set.cs" />
     <Compile Include="Internal\Language\Statement.cs" />
     <Compile Include="Internal\Collections\HandlerCollection.cs" />
+    <Compile Include="Internal\Paths\BlockNode.cs" />
+    <Compile Include="Internal\Paths\CallNode.cs" />
+    <Compile Include="Internal\Paths\CollectionInitializerNode.cs" />
+    <Compile Include="Internal\Paths\ContextNode.cs" />
+    <Compile Include="Internal\Paths\DictionaryInitalizerNode.cs" />
+    <Compile Include="Internal\Paths\FunctionNode.cs" />
+    <Compile Include="Internal\Paths\ItemNode.cs" />
+    <Compile Include="Internal\Paths\MethodNode.cs" />
+    <Compile Include="Internal\Paths\OpNode.cs" />
+    <Compile Include="Internal\Paths\PairNode.cs" />
+    <Compile Include="Internal\Paths\PathNode.cs" />
+    <Compile Include="Internal\Paths\PropertyInitializerNode.cs" />
+    <Compile Include="Internal\Paths\PropertyNode.cs" />
+    <Compile Include="Internal\Paths\SetNode.cs" />
+    <Compile Include="Internal\Paths\StaticMethodNode.cs" />
+    <Compile Include="Internal\Paths\TokenQueue.cs" />
+    <Compile Include="Internal\Paths\TypeNode.cs" />
+    <Compile Include="Internal\Paths\ValueNode.cs" />
+    <Compile Include="Internal\Paths\VariableNode.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
