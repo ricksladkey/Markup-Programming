@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace Markup.Programming.Core
 {
-    public class TypeNode : ExpressionNode
+    public class TypeNode : ExpressionWithNameNode
     {
         public IList<TypeNode> TypeArguments { get; set; }
         protected override object OnEvaluate(Engine engine, object value)

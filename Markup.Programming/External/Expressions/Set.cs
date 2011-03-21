@@ -66,15 +66,15 @@ namespace Markup.Programming
 
         public string ValuePath { get; set; }
 
-        private PathExpression valuePathExpression = new PathExpression();
-        protected PathExpression ValuePathExpression { get { return valuePathExpression; } }
+        private CodeTree valueCodeTree = new CodeTree();
+        protected CodeTree ValueCodeTree { get { return valueCodeTree; } }
 
-        private PathExpression setPathExpression = new PathExpression();
-        protected PathExpression SetPathExpression { get { return setPathExpression; } }
+        private CodeTree setCodeTree = new CodeTree();
+        protected CodeTree SetCodeTree { get { return setCodeTree; } }
 
         protected override object OnEvaluate(Engine engine)
         {
-            var value = engine.Evaluate(ValueProperty, ValuePath, ValuePathExpression);
+            var value = engine.Evaluate(ValueProperty, ValuePath, ValueCodeTree);
             if (Var != null)
             {
                 var variable = "$" + Var;
@@ -94,7 +94,7 @@ namespace Markup.Programming
                 return value;
             }
             var context = engine.Context;
-            var type = engine.EvaluateType(TypeProperty, TypePath, TypePathExpression);
+            var type = engine.EvaluateType(TypeProperty, TypePath, TypeCodeTree);
             if (Op != AssignmentOp.Assign)
             {
                 object oldValue = null;
@@ -109,7 +109,7 @@ namespace Markup.Programming
                 else if (StaticFieldName != null)
                     oldValue = PathHelper.GetStaticField(engine, type, StaticFieldName);
                 else if (Path != null)
-                    oldValue = engine.GetPath(Path, PathExpression);
+                    oldValue = engine.GetPath(Path, CodeTree);
                 else
                     oldValue = context;
                 value = engine.Evaluate(Op, oldValue, value);
@@ -125,7 +125,7 @@ namespace Markup.Programming
             else if (StaticFieldName != null)
                 PathHelper.SetStaticField(engine, type, StaticFieldName, value);
             else if (Path != null)
-                engine.SetPath(Path, SetPathExpression, value);
+                engine.SetPath(Path, SetCodeTree, value);
             else
                 Context = value;
             return value;

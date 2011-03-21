@@ -14,7 +14,7 @@ namespace Markup.Programming.Core
         public object Evaluate(Engine engine) { return Evaluate(engine, UnsetValue.Value); }
         public object Evaluate(Engine engine, object value)
         {
-            engine.Trace(TraceFlags.Path, "Path: {0} {1} {2}", this.GetType().Name, IsSet, Name);
+            engine.Trace(TraceFlags.Path, "Path: {0} {1}", this.GetType().Name, IsSet);
             if (IsSet && value.Equals(UnsetValue.Value)) engine.Throw("value not supplied");
             var result = OnEvaluate(engine, value);
             engine.Trace(TraceFlags.Path, "Path: {0} = {1}", this.GetType().Name, result);

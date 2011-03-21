@@ -21,7 +21,7 @@ namespace Markup.Programming
                 if (engine.ShouldInterrupt) break;
                 if (Value != null)
                 {
-                    var value = (bool)engine.Evaluate(ValueProperty, Path, PathExpression, typeof(bool));
+                    var value = (bool)engine.Evaluate(ValueProperty, Path, CodeTree, typeof(bool));
                     if (!value) break;
                 }
                 Body.Execute(engine);

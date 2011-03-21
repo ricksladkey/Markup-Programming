@@ -16,7 +16,7 @@ namespace Markup.Programming
         {
             engine.SetReturnFrame();
             if (Body == null) return null;
-            engine.ExecuteScript(Body, PathExpression);
+            engine.ExecuteScript(Body, CodeTree);
             return engine.GetAndResetReturnValue();
         }
     }

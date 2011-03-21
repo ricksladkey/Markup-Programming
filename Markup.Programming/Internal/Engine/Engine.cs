@@ -219,7 +219,7 @@ namespace Markup.Programming.Core
 
         private void DefineVariable(string name, object value, bool parentFrame, bool noError)
         {
-            if (!noError && !PathExpression.IsValidVariable(name)) Throw("invalid variable: " + name);
+            if (!noError && !CodeTree.IsValidVariable(name)) Throw("invalid variable: " + name);
             Trace(TraceFlags.Variable, "DefineVariable: {0} = {1}", name, value);
             var frame = parentFrame ? (ParentFrame ?? CurrentFrame) : CurrentFrame;
             if (frame == null) Throw("no frame for variable: " + name);
@@ -309,15 +309,15 @@ namespace Markup.Programming.Core
             }
         }
 
-        public object GetContext(string path, PathExpression pathExpression)
+        public object GetContext(string path, CodeTree codeTree)
         {
-            return path != null ? GetPath(path, pathExpression) : Context;
+            return path != null ? GetPath(path, codeTree) : Context;
         }
 
-        public void SetContext(DependencyProperty property, string path, PathExpression pathExpression)
+        public void SetContext(DependencyProperty property, string path, CodeTree codeTree)
         {
             if (HasBindingOrValue(property, path))
-                SetContext(Evaluate(property, path, pathExpression));
+                SetContext(Evaluate(property, path, codeTree));
         }
 
         public void SetContext(object context)
@@ -337,28 +337,28 @@ namespace Markup.Programming.Core
             return PathHelper.HasBindingOrValue(caller, property, path);
         }
 
-        public object GetPath(string path, PathExpression pathExpression)
+        public object GetPath(string path, CodeTree codeTree)
         {
-            if (pathExpression == null) pathExpression = new PathExpression();
-            return pathExpression.Compile(this, ExpressionType.Standard, path).Evaluate(this);
+            if (codeTree == null) codeTree = new CodeTree();
+            return codeTree.Compile(this, ExpressionType.Standard, path).Evaluate(this);
         }
 
-        public void ExecuteScript(string path, PathExpression pathExpression)
+        public void ExecuteScript(string path, CodeTree codeTree)
         {
-            if (pathExpression == null) pathExpression = new PathExpression();
-            pathExpression.Compile(this, ExpressionType.Script, path).Execute(this);
+            if (codeTree == null) codeTree = new CodeTree();
+            codeTree.Compile(this, ExpressionType.Script, path).Execute(this);
         }
 
-        public object SetPath(string path, PathExpression pathExpression, object value)
+        public object SetPath(string path, CodeTree codeTree, object value)
         {
-            if (pathExpression == null) pathExpression = new PathExpression();
-            return pathExpression.Compile(this, ExpressionType.Set, path).Evaluate(this, value);
+            if (codeTree == null) codeTree = new CodeTree();
+            return codeTree.Compile(this, ExpressionType.Set, path).Evaluate(this, value);
         }
 
-        public object CallPath(string path, PathExpression pathExpression, IEnumerable<object> args)
+        public object CallPath(string path, CodeTree codeTree, IEnumerable<object> args)
         {
-            if (pathExpression == null) pathExpression = new PathExpression();
-            return pathExpression.Compile(this, ExpressionType.Call, path).Call(this, args);
+            if (codeTree == null) codeTree = new CodeTree();
+            return codeTree.Compile(this, ExpressionType.Call, path).Call(this, args);
         }
 
         public bool ShouldTrace(TraceFlags flags)
@@ -435,20 +435,20 @@ namespace Markup.Programming.Core
             return EvaluateObject(parent.GetValue(property));
         }
 
-        public object Evaluate(DependencyProperty property, string path, PathExpression pathExpression)
+        public object Evaluate(DependencyProperty property, string path, CodeTree codeTree)
         {
-            return Evaluate(property, path, pathExpression, null);
+            return Evaluate(property, path, codeTree, null);
         }
 
-        public object Evaluate(DependencyProperty property, string path, PathExpression pathExpression, Type type)
+        public object Evaluate(DependencyProperty property, string path, CodeTree codeTree, Type type)
         {
-            var value = (path != null) ? GetPath(path, pathExpression) : Evaluate(property);
+            var value = (path != null) ? GetPath(path, codeTree) : Evaluate(property);
             return TypeHelper.Convert(value, type);
         }
 
-        public Type EvaluateType(DependencyProperty property, string path, PathExpression pathExpression)
+        public Type EvaluateType(DependencyProperty property, string path, CodeTree codeTree)
         {
-            return Evaluate(property, path, pathExpression, typeof(Type)) as Type;
+            return Evaluate(property, path, codeTree, typeof(Type)) as Type;
         }
 
         public object Quote(DependencyProperty property)

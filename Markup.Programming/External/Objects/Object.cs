@@ -54,7 +54,7 @@ namespace Markup.Programming
 
         protected override object OnEvaluate(Engine engine)
         {
-            var type = engine.EvaluateType(TypeProperty, Path, PathExpression);
+            var type = engine.EvaluateType(TypeProperty, Path, CodeTree);
             if (type == null)
             {
                 var pairs = Properties.Select(property => new NameValuePair(property.Prop, property.Evaluate(engine)));

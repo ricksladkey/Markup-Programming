@@ -17,7 +17,7 @@ namespace Markup.Programming
         {
             if (engine.HasBindingOrValue(ValueProperty, Path))
             {
-                if ((bool)engine.Evaluate(ValueProperty, Path, PathExpression, typeof(bool))) Body.Execute(engine);
+                if ((bool)engine.Evaluate(ValueProperty, Path, CodeTree, typeof(bool))) Body.Execute(engine);
                 return;
             }
             if (Body.Count == 0) engine.Throw("missing condition");

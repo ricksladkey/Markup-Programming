@@ -19,8 +19,8 @@ namespace Markup.Programming.Core
 
         public string Path { get; set; }
 
-        private PathExpression pathExpression = new PathExpression();
-        protected PathExpression PathExpression { get { return pathExpression; } }
+        private CodeTree codeTree = new CodeTree();
+        protected CodeTree CodeTree { get { return codeTree; } }
 
         protected override void OnAttached()
         {

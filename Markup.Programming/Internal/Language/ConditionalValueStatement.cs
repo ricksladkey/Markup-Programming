@@ -19,8 +19,8 @@ namespace Markup.Programming.Core
 
         public string WhenPath { get; set; }
 
-        private PathExpression whenPathExpression = new PathExpression();
-        protected PathExpression WhenPathExpression { get { return whenPathExpression; } }
+        private CodeTree whenCodeTree = new CodeTree();
+        protected CodeTree WhenCodeTree { get { return whenCodeTree; } }
 
         protected override void OnAttached()
         {
@@ -30,7 +30,7 @@ namespace Markup.Programming.Core
 
         protected bool ShouldExecute(Engine engine)
         {
-            var when = engine.Evaluate(WhenProperty, WhenPath, WhenPathExpression);
+            var when = engine.Evaluate(WhenProperty, WhenPath, WhenCodeTree);
             if (when == null) return true;
             return TypeHelper.ConvertToBool(when);
         }

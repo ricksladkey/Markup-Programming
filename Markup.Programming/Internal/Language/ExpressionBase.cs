@@ -13,8 +13,8 @@ namespace Markup.Programming.Core
     {
         public string Path { get; set; }
 
-        private PathExpression pathExpression = new PathExpression();
-        protected PathExpression PathExpression { get { return pathExpression; } }
+        private CodeTree codeTree = new CodeTree();
+        protected CodeTree CodeTree { get { return codeTree; } }
 
         protected override void OnExecute(Engine engine)
         {
@@ -28,7 +28,7 @@ namespace Markup.Programming.Core
 
         protected override object OnProcess(Engine engine)
         {
-            engine.SetContext(ContextProperty, ContextPath, ContextPathExpression);
+            engine.SetContext(ContextProperty, ContextPath, ContextCodeTree);
             return OnEvaluate(engine);
         }
 

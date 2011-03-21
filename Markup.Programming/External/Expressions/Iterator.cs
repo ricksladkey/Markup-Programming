@@ -30,16 +30,16 @@ namespace Markup.Programming
 
         public string TypePath { get; set; }
 
-        private PathExpression typePathExpression = new PathExpression();
-        protected PathExpression TypePathExpression { get { return typePathExpression; } }
+        private CodeTree typeCodeTree = new CodeTree();
+        protected CodeTree TypeCodeTree { get { return typeCodeTree; } }
 
         public static readonly DependencyProperty TypeArgumentProperty =
             DependencyProperty.Register("TypeArgument", typeof(object), typeof(Iterator), null);
 
         public string TypeArgumentPath { get; set; }
 
-        private PathExpression typeArgumentPathExpression = new PathExpression();
-        protected PathExpression TypeArgumentPathExpression { get { return typeArgumentPathExpression; } }
+        private CodeTree typeArgumentCodeTree = new CodeTree();
+        protected CodeTree TypeArgumentCodeTree { get { return typeArgumentCodeTree; } }
 
         protected override void OnAttached()
         {
@@ -51,8 +51,8 @@ namespace Markup.Programming
         {
             engine.SetYieldFrame();
             Body.Execute(engine);
-            var type = engine.EvaluateType(TypeProperty, TypePath, TypePathExpression);
-            var typeArgument = engine.EvaluateType(TypeArgumentProperty, TypeArgumentPath, TypeArgumentPathExpression);
+            var type = engine.EvaluateType(TypeProperty, TypePath, TypeCodeTree);
+            var typeArgument = engine.EvaluateType(TypeArgumentProperty, TypeArgumentPath, TypeArgumentCodeTree);
             return TypeHelper.CreateCollection(engine.GetYieldedValues(), type, typeArgument);
         }
     }

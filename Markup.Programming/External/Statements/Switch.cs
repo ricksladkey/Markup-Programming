@@ -32,8 +32,8 @@ namespace Markup.Programming
 
         protected override void OnExecute(Engine engine)
         {
-            var type = engine.EvaluateType(TypeProperty, TypePath, TypePathExpression);
-            var value = engine.Evaluate(ValueProperty, Path, PathExpression, type);
+            var type = engine.EvaluateType(TypeProperty, TypePath, TypeCodeTree);
+            var value = engine.Evaluate(ValueProperty, Path, CodeTree, type);
             bool foundMatch = false;
             bool executedStatement = false;
             foreach (var statement in Body)

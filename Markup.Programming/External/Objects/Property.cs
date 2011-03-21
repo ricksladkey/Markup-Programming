@@ -28,8 +28,8 @@ namespace Markup.Programming
 
         public string TypePath { get; set; }
 
-        private PathExpression typePathExpression = new PathExpression();
-        protected PathExpression TypePathExpression { get { return typePathExpression; } }
+        private CodeTree typeCodeTree = new CodeTree();
+        protected CodeTree TypeCodeTree { get { return typeCodeTree; } }
 
         public override object Value
         {
@@ -42,8 +42,8 @@ namespace Markup.Programming
 
         public string Path { get; set; }
 
-        private PathExpression pathExpression = new PathExpression();
-        protected PathExpression PathExpression { get { return pathExpression; } }
+        private CodeTree codeTree = new CodeTree();
+        protected CodeTree CodeTree { get { return codeTree; } }
 
         protected override void OnAttached()
         {
@@ -56,12 +56,12 @@ namespace Markup.Programming
 
         public Type GetType(Engine engine)
         {
-            return engine.With(this, e => engine.EvaluateType(TypeProperty, TypePath, TypePathExpression));
+            return engine.With(this, e => engine.EvaluateType(TypeProperty, TypePath, TypeCodeTree));
         }
 
         public object Evaluate(Engine engine)
         {
-            return engine.With(this, e => engine.Evaluate(ValueProperty, Path, PathExpression));
+            return engine.With(this, e => engine.Evaluate(ValueProperty, Path, CodeTree));
         }
     }
 }

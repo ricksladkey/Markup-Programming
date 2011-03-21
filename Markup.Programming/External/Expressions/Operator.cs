@@ -46,8 +46,8 @@ namespace Markup.Programming
 
         public string Path1 { get; set; }
 
-        private PathExpression pathExpression1 = new PathExpression();
-        protected PathExpression PathExpression1 { get { return pathExpression1; } }
+        private CodeTree codeTree1 = new CodeTree();
+        protected CodeTree CodeTree1 { get { return codeTree1; } }
 
         public Op Op { get; set; }
 
@@ -62,20 +62,20 @@ namespace Markup.Programming
 
         public string Path2 { get; set; }
 
-        private PathExpression pathExpression2 = new PathExpression();
-        protected PathExpression PathExpression2 { get { return pathExpression2; } }
+        private CodeTree codeTree2 = new CodeTree();
+        protected CodeTree CodeTree2 { get { return codeTree2; } }
 
         protected override object OnEvaluate(Engine engine)
         {
             if (Op == default(Op)) engine.Throw("missing operator");
-            var type = engine.EvaluateType(TypeProperty, TypePath, TypePathExpression);
+            var type = engine.EvaluateType(TypeProperty, TypePath, TypeCodeTree);
             if (Arguments.Count == 0)
             {
                 var arity = Op.GetArity();
                 if (arity == 1)
-                    return engine.Evaluate(Op, engine.Evaluate(ValueProperty, Path, PathExpression, type));
-                var value1 = engine.Evaluate(Value1Property, Path1, PathExpression1, type);
-                var value2 = engine.Evaluate(Value2Property, Path2, PathExpression2, type);
+                    return engine.Evaluate(Op, engine.Evaluate(ValueProperty, Path, CodeTree, type));
+                var value1 = engine.Evaluate(Value1Property, Path1, CodeTree1, type);
+                var value2 = engine.Evaluate(Value2Property, Path2, CodeTree2, type);
                 return engine.Evaluate(Op, value1, value2);
             }
             return engine.Evaluate(Op, Arguments);

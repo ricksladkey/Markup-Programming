@@ -8,14 +8,14 @@ using System.Globalization;
 namespace Markup.Programming.Core
 {
     /// <summary>
-    /// The PathExpression class compiles paths into expression objects that
-    /// can be evaluated to produces values corresponding to the paths.
+    /// The CodeTree class compiles code into a tree structure that can be
+    /// executed to produce side-effects or results.
     /// </summary>
-    public class PathExpression
+    public class CodeTree
     {
         private Engine engine;
         private TokenQueue tokens;
-        private PathNode root;
+        private Node root;
         private Dictionary<string, Func<StatementNode>> keywordMap;
         private static Dictionary<string, Op> operatorMap = new Dictionary<string, Op>
         {
@@ -48,7 +48,7 @@ namespace Markup.Programming.Core
         public bool IsScript { get { return (ExpressionType & ExpressionType.Script) == ExpressionType.Script; } }
         public string Path { get; private set; }
 
-        public PathExpression()
+        public CodeTree()
         {
             keywordMap = new Dictionary<string, Func<StatementNode>>
             {
@@ -81,7 +81,7 @@ namespace Markup.Programming.Core
             block.Execute(engine);
         }
 
-        public PathExpression Compile(Engine engine, ExpressionType expressionType, string path)
+        public CodeTree Compile(Engine engine, ExpressionType expressionType, string path)
         {
             if (expressionType == ExpressionType && object.ReferenceEquals(Path, path)) return this;
             this.engine = engine;

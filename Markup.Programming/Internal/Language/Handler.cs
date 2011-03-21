@@ -11,8 +11,8 @@ namespace Markup.Programming.Core
 
         public string Path { get; set; }
 
-        private PathExpression pathExpression = new PathExpression();
-        protected PathExpression PathExpression { get { return pathExpression; } }
+        private CodeTree codeTree = new CodeTree();
+        protected CodeTree CodeTree { get { return codeTree; } }
 
         public string EventName
         {
@@ -58,7 +58,7 @@ namespace Markup.Programming.Core
 
         protected void SetContext(Engine engine)
         {
-            engine.SetContext(ContextProperty, ContextPath, ContextPathExpression);
+            engine.SetContext(ContextProperty, ContextPath, ContextCodeTree);
         }
 
         private string registeredEventName;

@@ -22,8 +22,8 @@ namespace Markup.Programming.Core
 
         public string ContextPath { get; set; }
 
-        private PathExpression contextPathExpression = new PathExpression();
-        protected PathExpression ContextPathExpression { get { return contextPathExpression; } }
+        private CodeTree contextCodeTree = new CodeTree();
+        protected CodeTree ContextCodeTree { get { return contextCodeTree; } }
 
         protected override void OnAttached()
         {

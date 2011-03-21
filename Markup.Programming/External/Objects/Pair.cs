@@ -17,8 +17,8 @@ namespace Markup.Programming
 
         public string KeyPath { get; set; }
 
-        private PathExpression keyPathExpression = new PathExpression();
-        protected PathExpression KeyPathExpression { get { return keyPathExpression; } }
+        private CodeTree keyCodeTree = new CodeTree();
+        protected CodeTree KeyCodeTree { get { return keyCodeTree; } }
 
         public string ValuePath { get { return Path; } set { Path = value; } }
 
@@ -30,7 +30,7 @@ namespace Markup.Programming
 
         protected override object OnEvaluate(Engine engine)
         {
-            return new DictionaryEntry(engine.Evaluate(KeyProperty, KeyPath, KeyPathExpression), engine.Evaluate(ValueProperty, ValuePath, PathExpression));
+            return new DictionaryEntry(engine.Evaluate(KeyProperty, KeyPath, KeyCodeTree), engine.Evaluate(ValueProperty, ValuePath, CodeTree));
         }
     }
 }

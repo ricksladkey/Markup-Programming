@@ -51,8 +51,8 @@ namespace Markup.Programming.Core
         public static readonly DependencyProperty ContextProperty =
             DependencyProperty.Register("Context", typeof(object), typeof(PrimitiveActiveComponent), null);
 
-        private PathExpression contextPathExpression = new PathExpression();
-        protected PathExpression ContextPathExpression { get { return contextPathExpression; } }
+        private CodeTree contextCodeTree = new CodeTree();
+        protected CodeTree ContextCodeTree { get { return contextCodeTree; } }
 
         protected void Attach(params DependencyProperty[] properties)
         {

@@ -20,12 +20,12 @@ namespace Markup.Programming
 
         public string ValuePath { get; set; }
 
-        private PathExpression valuePathExpression = new PathExpression();
-        protected PathExpression ValuePathExpression { get { return valuePathExpression; } }
+        private CodeTree valueCodeTree = new CodeTree();
+        protected CodeTree ValueCodeTree { get { return valueCodeTree; } }
 
         protected override object OnEvaluate(Engine engine)
         {
-            return Set(engine, engine.Evaluate(ValueProperty, ValuePath, ValuePathExpression));
+            return Set(engine, engine.Evaluate(ValueProperty, ValuePath, ValueCodeTree));
         }
     }
 }

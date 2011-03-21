@@ -46,7 +46,7 @@ namespace Markup.Programming
 
         protected override object OnEvaluate(Engine engine)
         {
-            var type = engine.EvaluateType(TypeProperty, Path, PathExpression);
+            var type = engine.EvaluateType(TypeProperty, Path, CodeTree);
             if (TypeArguments.Count != 0)
                 type = type.MakeGenericType(TypeArguments.Evaluate(engine).Cast<Type>().ToArray());
             return TypeHelper.CreateInstance(type, Arguments.Evaluate(engine));

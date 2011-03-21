@@ -23,8 +23,8 @@ namespace Markup.Programming.Core
 
         public string TypePath { get; set; }
 
-        private PathExpression typePathExpression = new PathExpression();
-        protected PathExpression TypePathExpression { get { return typePathExpression; } }
+        private CodeTree typeCodeTree = new CodeTree();
+        protected CodeTree TypeCodeTree { get { return typeCodeTree; } }
 
         protected override void OnAttached()
         {

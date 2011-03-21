@@ -44,7 +44,7 @@ namespace Markup.Programming
 
         protected override void OnExecute(Engine engine)
         {
-            if ((bool)engine.Evaluate(ValueProperty, Path, PathExpression, typeof(bool)))
+            if ((bool)engine.Evaluate(ValueProperty, Path, CodeTree, typeof(bool)))
                 Then.Execute(engine);
             else
                 Else.Execute(engine);

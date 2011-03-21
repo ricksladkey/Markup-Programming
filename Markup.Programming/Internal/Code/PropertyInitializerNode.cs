@@ -1,6 +1,6 @@
 ﻿namespace Markup.Programming.Core
 {
-    public class PropertyInitializerNode : ExpressionNode
+    public class PropertyInitializerNode : ExpressionWithNameNode
     {
         public ExpressionNode Value { get; set; }
         protected override object OnEvaluate(Engine engine, object value)

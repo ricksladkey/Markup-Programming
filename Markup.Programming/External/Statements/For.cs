@@ -41,8 +41,8 @@ namespace Markup.Programming
 
         public string WhilePath { get; set; }
 
-        private PathExpression whilePathExpression = new PathExpression();
-        protected PathExpression WhilePathExpression { get { return whilePathExpression; } }
+        private CodeTree whileCodeTree = new CodeTree();
+        protected CodeTree WhileCodeTree { get { return whileCodeTree; } }
 
         public static readonly DependencyProperty WhileProperty =
             DependencyProperty.Register("While", typeof(object), typeof(For), null);
@@ -64,8 +64,8 @@ namespace Markup.Programming
 
         public string UpperLimitPath { get; set; }
 
-        private PathExpression upperLimitPathExpression = new PathExpression();
-        protected PathExpression UpperLimitPathExpression { get { return upperLimitPathExpression; } }
+        private CodeTree upperLimitCodeTree = new CodeTree();
+        protected CodeTree UpperLimitCodeTree { get { return upperLimitCodeTree; } }
 
         public static readonly DependencyProperty UpperLimitProperty =
             DependencyProperty.Register("UpperLimit", typeof(object), typeof(For), null);
@@ -78,8 +78,8 @@ namespace Markup.Programming
 
         public string IncrementPath { get; set; }
 
-        private PathExpression incrementPathExpression = new PathExpression();
-        protected PathExpression IncrementPathExpression { get { return incrementPathExpression; } }
+        private CodeTree incrementCodeTree = new CodeTree();
+        protected CodeTree IncrementCodeTree { get { return incrementCodeTree; } }
 
         public static readonly DependencyProperty IncrementProperty =
             DependencyProperty.Register("Increment", typeof(object), typeof(For), null);
@@ -94,7 +94,7 @@ namespace Markup.Programming
         {
             // Use the same name and type for the whole loop.
             var name = "$" + Var;
-            var type = engine.EvaluateType(TypeProperty, TypePath, TypePathExpression);
+            var type = engine.EvaluateType(TypeProperty, TypePath, TypeCodeTree);
             if (type == null && (UpperLimit != null || Increment != null)) type = typeof(int);
 
             // If no name is specified then forever.
@@ -106,18 +106,18 @@ namespace Markup.Programming
             }
 
             // Normal loop processing.
-            SetLoopValue(name, engine.Evaluate(ValueProperty, Path, PathExpression, type), type, engine);
+            SetLoopValue(name, engine.Evaluate(ValueProperty, Path, CodeTree, type), type, engine);
             engine.SetBreakFrame();
             while (true)
             {
                 if (engine.ShouldInterrupt) break;
                 if (While != null)
                 {
-                    if (!(bool)engine.Evaluate(WhileProperty, WhilePath, WhilePathExpression, typeof(bool))) break;
+                    if (!(bool)engine.Evaluate(WhileProperty, WhilePath, WhileCodeTree, typeof(bool))) break;
                 }
                 else if (UpperLimit != null)
                 {
-                    var limit = engine.Evaluate(UpperLimitProperty, UpperLimitPath, UpperLimitPathExpression, type);
+                    var limit = engine.Evaluate(UpperLimitProperty, UpperLimitPath, UpperLimitCodeTree, type);
                     if (!(bool)engine.Evaluate(Op.LessThan, GetLoopValue(name, type, engine), limit)) break;
                 }
                 Body.Execute(engine);
@@ -125,7 +125,7 @@ namespace Markup.Programming
                     Next.Execute(engine);
                 else if (Increment != null)
                 {
-                    var increment = engine.Evaluate(IncrementProperty, IncrementPath, IncrementPathExpression, type);
+                    var increment = engine.Evaluate(IncrementProperty, IncrementPath, IncrementCodeTree, type);
                     SetLoopValue(name, engine.Evaluate(Op.Plus, GetLoopValue(name, type, engine), increment), type, engine);
                 }
             }

@@ -19,8 +19,8 @@ namespace Markup.Programming
         protected override void OnExecute(Engine engine)
         {
             if (!ShouldExecute(engine)) return;
-            var type = engine.EvaluateType(TypeProperty, TypePath, TypePathExpression);
-            var value = engine.Evaluate(ValueProperty, Path, PathExpression, type);
+            var type = engine.EvaluateType(TypeProperty, TypePath, TypeCodeTree);
+            var value = engine.Evaluate(ValueProperty, Path, CodeTree, type);
             engine.SetReturnValue(value);
         }
     }

@@ -21,8 +21,8 @@ namespace Markup.Programming.Core
 
         public string IndexPath { get; set; }
 
-        private PathExpression indexPathExpression = new PathExpression();
-        protected PathExpression IndexPathExpression { get { return indexPathExpression; } }
+        private CodeTree indexCodeTree = new CodeTree();
+        protected CodeTree IndexCodeTree { get { return indexCodeTree; } }
 
         protected override void OnAttached()
         {
@@ -43,15 +43,15 @@ namespace Markup.Programming.Core
         private object Evaluate(bool isSet, Engine engine, object value)
         {
             var op = isSet ? Op.SetItem : Op.GetItem;
-            var context = engine.GetContext(Path, PathExpression);
+            var context = engine.GetContext(Path, CodeTree);
             if (Arguments.Count != 0)
             {
                 var combinedArgs = new object[] { context }.Concat(Arguments.Evaluate(engine));
                 if (isSet) combinedArgs.Concat(new object[] { value });
                 return engine.Evaluate(op, combinedArgs.ToArray());
             }
-            var type = engine.EvaluateType(TypeProperty, TypePath, TypePathExpression);
-            var index = engine.Evaluate(IndexProperty, IndexPath, IndexPathExpression, type);
+            var type = engine.EvaluateType(TypeProperty, TypePath, TypeCodeTree);
+            var index = engine.Evaluate(IndexProperty, IndexPath, IndexCodeTree, type);
             if (!isSet) return engine.Evaluate(op, context, index);
             return engine.Evaluate(op, context, index, value);
         }

@@ -30,8 +30,8 @@ namespace Markup.Programming
 
         public string TypePath { get; set; }
 
-        private PathExpression typePathExpression = new PathExpression();
-        protected PathExpression TypePathExpression { get { return typePathExpression; } }
+        private CodeTree typeCodeTree = new CodeTree();
+        protected CodeTree TypeCodeTree { get { return typeCodeTree; } }
 
         public object Argument
         {
@@ -44,8 +44,8 @@ namespace Markup.Programming
 
         public string ArgumentPath { get; set; }
 
-        private PathExpression argumentPathExpression = new PathExpression();
-        protected PathExpression ArgumentPathExpression { get { return argumentPathExpression; } }
+        private CodeTree argumentCodeTree = new CodeTree();
+        protected CodeTree ArgumentCodeTree { get { return argumentCodeTree; } }
 
         public ExpressionCollection Arguments
         {
@@ -100,11 +100,11 @@ namespace Markup.Programming
             var args = Arguments.Evaluate(engine);
             if (engine.HasBindingOrValue(ArgumentProperty, ArgumentPath))
             {
-                var parameter = engine.Evaluate(ArgumentProperty, ArgumentPath, ArgumentPathExpression);
+                var parameter = engine.Evaluate(ArgumentProperty, ArgumentPath, ArgumentCodeTree);
                 args = new object[] { engine.EvaluateObject(parameter) }.Concat(args).ToArray();
             }
-            CallHelper.Call(PathBase, PathExpression, StaticMethodName, MethodName, FunctionName, BuiltinFunction,
-                engine.EvaluateType(TypeProperty, TypePath, TypePathExpression), TypeArguments, args, engine);
+            CallHelper.Call(PathBase, CodeTree, StaticMethodName, MethodName, FunctionName, BuiltinFunction,
+                engine.EvaluateType(TypeProperty, TypePath, TypeCodeTree), TypeArguments, args, engine);
         }
     }
 }

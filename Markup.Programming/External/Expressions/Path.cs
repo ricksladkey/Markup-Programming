@@ -11,7 +11,7 @@ namespace Markup.Programming
         protected override object OnEvaluate(Engine engine)
         {
             if (Expr == null) engine.Throw("path expression not specified");
-            return engine.GetPath(Expr, PathExpression);
+            return engine.GetPath(Expr, CodeTree);
         }
     }
 }

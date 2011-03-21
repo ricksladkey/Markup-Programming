@@ -23,19 +23,19 @@ namespace Markup.Programming
 
         public string ConvertPath { get; set; }
 
-        private PathExpression convertPathExpression = new PathExpression();
-        protected PathExpression ConvertPathExpression { get { return convertPathExpression; } }
+        private CodeTree convertCodeTree = new CodeTree();
+        protected CodeTree ConvertCodeTree { get { return convertCodeTree; } }
 
         public string ConvertBackPath { get; set; }
 
-        private PathExpression convertBackPathExpression = new PathExpression();
-        protected PathExpression ConvertBackPathExpression { get { return convertBackPathExpression; } }
+        private CodeTree convertBackCodeTree = new CodeTree();
+        protected CodeTree ConvertBackCodeTree { get { return convertBackCodeTree; } }
 
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             TryToAttach();
             if (ConvertPath != null)
-                return Evaluate(ConvertPath, ConvertPathExpression, value, targetType, parameter, culture);
+                return Evaluate(ConvertPath, ConvertCodeTree, value, targetType, parameter, culture);
             return interop.Convert(value, targetType, parameter, culture);
         }
 
@@ -43,11 +43,11 @@ namespace Markup.Programming
         {
             TryToAttach();
             if (ConvertBackPath != null)
-                return Evaluate(ConvertBackPath, ConvertPathExpression, value, targetType, parameter, culture);
+                return Evaluate(ConvertBackPath, ConvertCodeTree, value, targetType, parameter, culture);
             return interop.ConvertBack(value, targetType, parameter, culture);
         }
 
-        public object Evaluate(string path, PathExpression pathExpression,
+        public object Evaluate(string path, CodeTree codeTree,
             object value, Type targetType, object parameter, CultureInfo culture)
         {
             var parameters = new NameDictionary
@@ -57,7 +57,7 @@ namespace Markup.Programming
                 { "@Parameter", parameter },
                 { "@Culture", culture },
             };
-            return new Engine().With(this, parameters, engine => engine.GetPath(path, pathExpression));
+            return new Engine().With(this, parameters, engine => engine.GetPath(path, codeTree));
         }
     }
 }

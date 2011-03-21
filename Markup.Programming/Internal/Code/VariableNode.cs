@@ -1,6 +1,6 @@
 ﻿namespace Markup.Programming.Core
 {
-    public class VariableNode : ExpressionNode
+    public class VariableNode : ExpressionWithNameNode
     {
         protected override object OnEvaluate(Engine engine, object value)
         {
