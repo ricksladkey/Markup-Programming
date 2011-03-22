@@ -16,7 +16,6 @@ namespace Markup.Programming.Core
         private Engine engine;
         private TokenQueue tokens;
         private Node root;
-        private Dictionary<string, Func<StatementNode>> keywordMap;
         private static Dictionary<string, object> constantMap = new Dictionary<string, object>
         {
             { "true", true },
@@ -64,7 +63,6 @@ namespace Markup.Programming.Core
         private static IDictionary<string, object> ConstantMap { get { return constantMap; } }
         private static IDictionary<string, Op> OperatorMap { get { return operatorMap; } }
         private static IDictionary<string, AssignmentOp> AssignmentOperatorMap { get { return assignmentOperatorMap; } }
-        private IDictionary<string, Func<StatementNode>> KeywordMap { get { return keywordMap; } }
         private bool IsCurrentCall { get { return IsCall && tokens != null && tokens.Count == 0 || PeekToken("("); } }
 
         public CodeType CodeType { get; private set; }
@@ -76,18 +74,6 @@ namespace Markup.Programming.Core
 
         public CodeTree()
         {
-            keywordMap = new Dictionary<string, Func<StatementNode>>
-            {
-                { "var", ParseVar },
-                { "if", ParseIf },
-                { "while", ParseWhile },
-                { "continue", ParseContinue },
-                { "break", ParseBreak },
-                { "for", ParseFor },
-                { "foreach", ParseForEach },
-                { "return", ParseReturn },
-                { "yield", ParseYield },
-            };
         }
 
         public string GetVariable(Engine engine)
@@ -116,7 +102,7 @@ namespace Markup.Programming.Core
         public void Execute(Engine engine)
         {
             engine.Trace(TraceFlags.Path, "Path: Execute {0}", Path);
-            var block = root as BlockNode;
+            var block = root as ScriptNode;
             block.Execute(engine);
         }
 
@@ -144,17 +130,25 @@ namespace Markup.Programming.Core
                 ParseToken(";");
                 return new EmptyNode();
             }
-            var node = null as StatementNode;
-            var token = tokens.Peek();
-            if (token != null && token[0] == '`' && keywordMap.ContainsKey(token.Substring(1)))
-                node = keywordMap[token.Substring(1)]();
-            else if (token == "{")
-                node = ParseBlock();
-            else
+            var token= PeekKeyword();
+            if (token == "var") return ParseVar();
+            if (token == "if") return ParseIf();
+            if (token == "while") return ParseWhile();
+            if (token == "continue") return ParseContinue();
+            if (token == "break") return ParseBreak();
+            if (token == "for") return ParseFor();
+            if (token == "foreach") return ParseForEach();
+            if (token == "return") return ParseReturn();
+            if (token == "yield") return ParseYield();
+            if (token == "{")
             {
-                node = ParseExpression();
-                ParseSemicolon();
+                ParseToken("{");
+                var block = ParseStatements();
+                ParseToken("}");
+                return block;
             }
+            var node = ParseExpression();
+            ParseSemicolon();
             return node;
         }
 
@@ -172,15 +166,7 @@ namespace Markup.Programming.Core
                 if (node == null) break;
                 nodes.Add(node);
             }
-            return new BlockNode { Nodes = nodes };
-        }
-
-        private StatementNode ParseBlock()
-        {
-            ParseToken("{");
-            var block = ParseStatements();
-            ParseToken("}");
-            return block;
+            return new ScriptNode { Nodes = nodes };
         }
 
         private StatementNode ParseVar()
@@ -398,9 +384,20 @@ namespace Markup.Programming.Core
             return new IteratorNode { Type = type, Body = body };
         }
 
+        private ExpressionNode ParseBlock()
+        {
+            ParseToken("@block");
+            ParseToken(":");
+            var body = ParseStatement();
+            return new BlockNode { Body = body };
+        }
+
         private ExpressionNode ParseIdentifierExpression(ExpressionNode node)
         {
-            if (tokens.Peek()[0] == '`')
+            var token = tokens.Peek();
+            if (token == "@iterator") return ParseIterator();
+            if (token == "@block") return ParseBlock();
+            if (token[0] == '`')
             {
                 var identifier = ParseIdentifier();
                 if (ConstantMap.ContainsKey(identifier)) return new ValueNode { Value = ConstantMap[identifier] };
@@ -411,8 +408,7 @@ namespace Markup.Programming.Core
                 }
                 return new PropertyNode { Context = node, PropertyName = identifier };
             }
-            if (PeekToken("@iterator")) return ParseIterator(); // generalize
-            var token = tokens.Dequeue();
+            tokens.Dequeue();
             if (IsCurrentCall)
             {
                 var args = PeekToken("(") ? ParseArguments() : null;
@@ -586,6 +582,11 @@ namespace Markup.Programming.Core
         {
             if (tokens.Count == 0 || tokens.Peek()[0] != '$') engine.Throw("expected variable");
             return tokens.Dequeue();
+        }
+
+        private string PeekKeyword()
+        {
+            return tokens.Peek() != null && tokens.Peek()[0] == '`' ? tokens.Peek().Substring(1) : tokens.Peek();
         }
 
         private bool PeekKeyword(string keyword)

@@ -117,6 +117,7 @@ namespace Markup.Programming.Tests.Tests
         [TestMethod]
         public void PathTestSandbox()
         {
+            BasicGetTest(42, "@block: { return 42; }");
         }
 
         [TestMethod]

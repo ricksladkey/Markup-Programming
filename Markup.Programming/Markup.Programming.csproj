@@ -112,10 +112,10 @@
     <Compile Include="External\Expressions\Script.cs" />
     <Compile Include="External\Objects\Pair.cs" />
     <Compile Include="External\Statements\Continue.cs" />
+    <Compile Include="Internal\Code\BlockNode.cs" />
     <Compile Include="Internal\Code\ContinueNode.cs" />
     <Compile Include="Internal\Code\EmptyNode.cs" />
     <Compile Include="Internal\Code\FramedExpressionNode.cs" />
-    <Compile Include="Internal\Code\IteratorBlock.cs" />
     <Compile Include="Internal\Code\IteratorNode.cs" />
     <Compile Include="Internal\Code\VarNode.cs" />
     <Compile Include="Internal\Code\ForNode.cs" />
@@ -240,7 +240,7 @@
     <Compile Include="External\Expressions\Set.cs" />
     <Compile Include="Internal\Language\Statement.cs" />
     <Compile Include="Internal\Collections\HandlerCollection.cs" />
-    <Compile Include="Internal\Code\BlockNode.cs" />
+    <Compile Include="Internal\Code\ScriptNode.cs" />
     <Compile Include="Internal\Code\CallNode.cs" />
     <Compile Include="Internal\Code\CollectionInitializerNode.cs" />
     <Compile Include="Internal\Code\ContextNode.cs" />

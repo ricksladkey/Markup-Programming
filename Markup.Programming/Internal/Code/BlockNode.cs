@@ -1,17 +1,12 @@
-﻿using System.Collections.Generic;
-
-namespace Markup.Programming.Core
+﻿namespace Markup.Programming.Core
 {
-    public class BlockNode : FramedStatementNode
+    public class BlockNode : FramedExpressionNode
     {
-        public IList<StatementNode> Nodes { get; set; }
-        protected override void OnExecuteFrame(Engine engine)
+        protected override object OnEvaluateFrame(Engine engine)
         {
-            foreach (var node in Nodes)
-            {
-                node.Execute(engine);
-                if (engine.ShouldInterrupt) break;
-            }
+            engine.SetReturnFrame();
+            Body.Execute(engine);
+            return engine.GetAndResetReturnValue();
         }
     }
 }
