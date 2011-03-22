@@ -17,6 +17,12 @@ namespace Markup.Programming.Core
         private TokenQueue tokens;
         private Node root;
         private Dictionary<string, Func<StatementNode>> keywordMap;
+        private static Dictionary<string, object> constantMap = new Dictionary<string, object>
+        {
+            { "true", true },
+            { "false", false },
+            { "null", null },
+        };
         private static Dictionary<string, Op> operatorMap = new Dictionary<string, Op>
         {
             { "+", Op.Plus },
@@ -49,6 +55,7 @@ namespace Markup.Programming.Core
         };
 
         private static string IdChars { get { return "_"; } }
+        private static IDictionary<string, object> ConstantMap { get { return constantMap; } }
         private static IDictionary<string, Op> OperatorMap { get { return operatorMap; } }
         private static IDictionary<string, AssignmentOp> AssignmentOperatorMap { get { return assignmentOperatorMap; } }
         private IDictionary<string, Func<StatementNode>> KeywordMap { get { return keywordMap; } }
@@ -315,8 +322,6 @@ namespace Markup.Programming.Core
                 }
                 else if (c == '"')
                     node = new ValueNode { Value = tokens.Dequeue().Substring(1) };
-                else if (token == "@iterator")
-                    node = ParseIterator();
                 else if ("`$@".Contains(c))
                     node = ParseIdentifierExpression(node);
                 else if (c == '[')
@@ -390,6 +395,7 @@ namespace Markup.Programming.Core
             if (tokens.Peek()[0] == '`')
             {
                 var identifier = ParseIdentifier();
+                if (ConstantMap.ContainsKey(identifier)) return new ValueNode { Value = ConstantMap[identifier] };
                 if (IsCurrentCall)
                 {
                     var args = PeekToken("(") ? ParseArguments() : null;
@@ -397,6 +403,7 @@ namespace Markup.Programming.Core
                 }
                 return new PropertyNode { Context = node, PropertyName = identifier };
             }
+            if (PeekToken("@iterator")) return ParseIterator(); // generalize
             var token = tokens.Dequeue();
             if (IsCurrentCall)
             {

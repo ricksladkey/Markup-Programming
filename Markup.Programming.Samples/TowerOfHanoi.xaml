@@ -53,7 +53,7 @@
 
                     <!-- CanExecute always says "OK" -->
                     <p:Function Func="CanExecute()">
-                        <p:Return Path="@true"/>
+                        <p:Return Path="true"/>
                     </p:Function>
                     
                     <p:Function Func="Execute(parameter)">

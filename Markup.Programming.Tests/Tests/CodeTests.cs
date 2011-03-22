@@ -80,18 +80,18 @@ namespace Markup.Programming.Tests.Tests
         public void BasicPathTests()
         {
             BasicGetTest("abc", "'abc'");
-            BasicGetTest(true, "@true");
+            BasicGetTest(true, "true");
             BasicGetTest(3, "1 + 2");
             BasicGetTest(0.25, "0.5/2");
             BasicGetTest(true, "1 == 1");
-            BasicGetTest(true, "!@false");
+            BasicGetTest(true, "!false");
             BasicGetTest("Left", "[Enum].GetValues([HorizontalAlignment])[0].ToString()");
             BasicGetTest(false, "@Convert('fALSE', [Boolean])");
             BasicGetTest(true, "@Convert('True', [Boolean])");
             BasicGetTest(6, "@Op('Plus', 1, 2, 3)");
             BasicGetTest(new ArrayList(), "@Op('New', [ArrayList])");
             BasicGetTest(new ArrayList(), "[ArrayList]()");
-            BasicGetTest(42, "@true ? 42 : 21");
+            BasicGetTest(42, "true ? 42 : 21");
             BasicGetTest(typeof(int), "[Int32]");
             BasicGetTest(typeof(List<>), "[List<>]");
             BasicGetTest(typeof(List<int>), "[List<Int32>]");
@@ -121,8 +121,8 @@ namespace Markup.Programming.Tests.Tests
         public void ScriptTests()
         {
             TestHelper.ScriptTest(21, "var $x = 1 + 2; return 42 / 2;");
-            TestHelper.ScriptTest(42, "var $x = @true; if ($x) return 42; return 21;");
-            TestHelper.ScriptTest(42, "var $x = @true; if (!$x) return 21; else return 42;");
+            TestHelper.ScriptTest(42, "var $x = true; if ($x) return 42; return 21;");
+            TestHelper.ScriptTest(42, "var $x = true; if (!$x) return 21; else return 42;");
             TestHelper.ScriptTest("b", "var $x = 2; if ($x == 1) return 'a'; else if ($x == 2) return 'b'; else return 'c';");
             TestHelper.ScriptTest(5, "var $i = 0; while ($i < 5) $i = $i + 1; return $i;");
             TestHelper.ScriptTest(0, "{ 1; 2; } return 0;");

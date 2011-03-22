@@ -12,12 +12,6 @@ namespace Markup.Programming.Core
     /// </summary>
     public class BuiltinImplementor
     {
-        public static IDictionary<string, object> ConstantParameters = new NameDictionary
-        {
-            { "@null", null },
-            { "@true", true },
-            { "@false", false },
-        };
         private Engine engine;
 
         public BuiltinImplementor(Engine engine)
@@ -43,7 +37,6 @@ namespace Markup.Programming.Core
             }
             if (name == Engine.SenderKey) { value = engine.Sender; return true; }
             if (name == Engine.EventArgsKey) { value = engine.EventArgs; return true; }
-            if (ConstantParameters.ContainsKey(name)) { value = ConstantParameters[name]; return true; }
             value = null;
             return false;
         }
