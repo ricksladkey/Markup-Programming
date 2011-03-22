@@ -19,7 +19,7 @@
                     <p:EventHandler Path="Loaded">
                         <p:CallHandler>
                             <p:CallHandler.Path>
-                                GotFocus.@Sender.Template.FindName('PART_EditableTextBox', @Sender).SelectAll()
+                                GotFocus.@Sender.Template.FindName("PART_EditableTextBox", @Sender).SelectAll()
                             </p:CallHandler.Path>
                         </p:CallHandler>
                     </p:EventHandler>
