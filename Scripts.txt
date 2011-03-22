@@ -1,0 +1,23 @@
+!! Scripts
+Markup programming has two ways of inputting as program: element syntax and script syntax.  Element syntax looks like traditional markup; script syntax looks like traditional code.
+
+!!! Script Syntax
+|| Script Statement || Meaning ||
+| {{// comment ;}} | C++ style comment |
+| {{;}} | empty statement |
+| {{expr;}} | expression statement |
+| {{var $variable = value;}} | define variable to value |
+| {{var $function($parameter, ...) stmt}} | define function |
+| {{if (expr) stmt}} | if statement |
+| {{if (expr) stmt1 else stmt2}} | if statement with else |
+| {{if (expr1) stmt1 else if (expr2) stmt2 else stmt3}} | compound if |
+| {{while (expr) stmt}} | while statement |
+| {{break;}} | breaks out of the nearest enclosing loop |
+| {{continue;}} | continues to the next iteration  of the nearest enclosing looop |
+| {{foreach (var $variable in expr) stmt}} | foreach statement |
+| {{for (initial; condition; next) statment}} | for statement |
+| {{return expr;}} | return statement |
+| {{yield expr;}} | yield statement |
+| {{ { stmt; stmt; ... } }} | brace block |
+
+

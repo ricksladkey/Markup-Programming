@@ -25,6 +25,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Markup.Programming.Samples.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Markup.Programming.Interactivity", "Markup.Programming.Interactivity\Markup.Programming.Interactivity.csproj", "{A0150B3B-AC19-4B5F-9ECF-77BE3A00D873}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documentation", "Documentation", "{7410656C-B06A-40CE-A854-99B908B37A14}"
+	ProjectSection(SolutionItems) = preProject
+		Paths.txt = Paths.txt
+		Scripts.txt = Scripts.txt
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
 		SccNumberOfProjects = 10
@@ -175,5 +181,8 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{7410656C-B06A-40CE-A854-99B908B37A14} = {DD8F78A0-1494-4274-AE6F-AC70AFC6795A}
 	EndGlobalSection
 EndGlobal

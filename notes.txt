@@ -1,5 +1,4 @@
-- Go back to Property.PropertyName and Parameter.ParmaeterName
-- add function definition to scripting
+- check that continue includes For.Next
 - System.Windows might or might not be loaded during unit tests: how to address?
 - allow context to be set from scripting
 - eliminate PropertyInitializerNode

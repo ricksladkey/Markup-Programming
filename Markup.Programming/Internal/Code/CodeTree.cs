@@ -659,7 +659,9 @@ namespace Markup.Programming.Core
                 string c2 = Path.Substring(i, Math.Min(2, Path.Length - i));
                 if (char.IsWhiteSpace(c)) ++i;
                 else if (c2 == "/*")
-                    i = EatComment(i);
+                    i = EatMultiLineComment(i);
+                else if (c2 == "//")
+                    i = EatSingleLineComment(i);
                 else if (OperatorMap.ContainsKey(c2) || AssignmentOperatorMap.ContainsKey(c2))
                 {
                     tokens.Enqueue(c2);
@@ -707,11 +709,17 @@ namespace Markup.Programming.Core
 
         }
 
-        private int EatComment(int i)
+        private int EatMultiLineComment(int i)
         {
             for (i += 2; i < Path.Length - 1 && Path.Substring(i, 2) != "*/"; i++)
-                if (Path.Substring(i, 2) == "/*") i = EatComment(i) - 1;
+                if (Path.Substring(i, 2) == "/*") i = EatMultiLineComment(i) - 1;
             return i + 2;
+        }
+
+        private int EatSingleLineComment(int i)
+        {
+            for (i += 2; i < Path.Length && Path[i] != ';'; i++) continue;
+            return Math.Min(Path.Length, i + 1);
         }
 
         private static bool IsInitialIdChar(char c) { return char.IsLetter(c) || IdChars.Contains(c); }

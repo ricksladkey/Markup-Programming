@@ -1,0 +1,88 @@
+!! Paths
+In many places in markup programming you can supply a value.  For example, the Return statement has a _Value_ property.  The _Value_ property is a dependency property and as such can you can give it a value yourself or you can bind it to another value using data binding.  You can also use an expression to supply a computed value using element syntax.  However XAML expressions in markup programming can be very verbose and so there is an alternative way for supplying a value call the path mechanism.  If _Path_ is specified, Return will return the value of that path expression, otherwise it will evaluate and return _Value_.  In case you are wondering, we can't simply use path expressions for Value because they might be confused with legitimate values.  As a result we have this duality for values: "native" bindable values and path expressions, each with their own property.
+
+Here is a return statement with the call expression "written out" (Value is implicit in this case):
+
+{code:html}
+<p:Return>
+    <p:Call TypeName="String" StaticMethodName="Format">
+        <p:Val Value="i = {0}"/>
+        <p:Get Var="i"/>
+    </p:Call>
+</p:Return>
+{code:html}
+and here is the same thing using the path mechanism:
+
+{code:html}
+<p:Return Path="[String].Format('i = {0}', $i)"/>
+{code:html}
+If you don't need to use element syntax to specify any of the arguments, then the path expression syntax is noticably shorter and more familiar to programmers but you can use whichever method you prefer.  In fact, if all that is preventing you from using the path mechanism is a binding for an interior quantity, then you can simply assign that quantity to a temporary variable with [Set] using a binding and then use the path mechanism using the variable that you set.
+
+!!! Context Inheritance
+The idea of context inheritance is simple and is borrowed from the DataContext tradition of XAML.  Every markup programming statement and expression has an inheritable _Context_ which defaults to the _DataContext_ of the _FrameworkElement_ that the outermost markup programming element is attached to.  At any point, a statement or expression can set its _Context_ property and this will change the _Context_ for itself and all of its contained statements and expressions unless further overriden.  Although markup programming is not a traditional object oriented programming language, by setting or accepting context once at the outermost level of a section of code, the context acts like a this pointer for all the path expressions in that section.
+
+!!! Context versus DataContext
+Markup programming uses the property name _Context_ instead of _DataContext_ because markup program elements are not _FrameworkElements_ and so do not have a real _DataContext_ and don't participate in its inheritance context mechanism. Furthermore, markup programming's _Context_ contains more than data and besides it is easier to say and write.
+
+!!! Simple Paths
+Like XAML paths in data bindings, simple paths in markup programming implicitly refer to the current _Context_.  If a single identifier is specified, it in general refers to a property by that name on the object instance that is the _Context_.  To speak more briefly we can say that a single identifier is a property relative to the default context.  This is in fact exactly how data binding works and this is why paths work the same way.  If you are ever confused about what a path means, it is probably because you are uncertain what _Context_ is.
+
+!!! Identifiers and Special Characters
+In order to acess variables paths use a dollar sign; in order to access constants paths use an at sign.  Why is this?  It is possible to "put all identifiers into the same namespace" the way that C# does but it creates enormous potential for ambiguity.  Since the central purpose of paths is to provide effortless accessors relative to the context we solve the ambiguity problem by putting things that are not properties into a separate namespace.  As a result, if you see an unadorned identifier in a path, it must be a property. 
+
+!!! Complex Paths
+The real power of the path mechanism comes into play when you can find a "home base" that allows you to access everything you need and make it your temporary context.  The you reach off to this side and that like branches on a tree to access all the data you need: not too long, not too short, just right.
+
+!!! Context in Action
+
+An example of using context is if you are associated with one control but you want to "work on" another control.
+
+{code:html}
+<p:Block Context="{Binding ElementName=OtherControl}">
+    <!-- work on other control -->
+    <p:Set Path="SelectedIndex" Value="0"/>
+</p:Block>
+{code:html}
+
+!!! Path Syntax
+|| Path Expression || Meaning ||
+| {{ @ }} | Context (current inherited value and need not be specified) |
+| {{ true, false, null }} | literal constants |
+| {{  12345 }} | integral value |
+| {{  123.456 }} | double value |
+| {{  'abcdef' }} | string value |
+| {{  "abcdef" }} | string value |
+| {{ /* ignored */ }} | comment |
+| {{  [Type] }} | type name looked up in common places, e.g. System, System.Windows |
+| {{  [Namespace.Type] }} | fully qualified type name |
+| {{  [Type](arg, ...) }} | constructor for type |
+| {{  [Type] { Property = value, ... } }} | object initializer for type |
+| {{  [Type] { value, ... } }} | collection initializer for type |
+| {{  [Type] { { key, value }, ... } }} | dictionary initializer for type |
+| {{  [Type] { Property = { value, ... }, ... } }} | collection initializer for property of type |
+| {{  [Type] { Property = { { key, value }, ... }, ... } }} | dictionary initializer for property of type |
+| {{  context.Property }} | property (in property context) |
+| {{  context.Method(arg, ...) }} | method (in any context) |
+| {{  context.Method }} | method needing arguments (in call context) |
+| {{  [Namspace.Type].Method }} | static method |
+| {{  $parameter }} | parameter (in property context) |
+| {{  $Function(arg, ...) }} | function (in any context) |
+| {{  $Function }} | function needing arguments (in call context) |
+| {{ @Function }} | builtin function needing arguments (in call context) |
+| {{ @Function(arg, ...) }} | builtin function (in any context) |
+| {{  context[index] }} | item (e.g. array, list, dictionary) |
+| {{  @[index] }} | item (if needed to disambiguate item syntax with type syntax) |
+| {{ lvalue = rvalue }} | assignment of rvalue to lvalue |
+| {{ ++lvalue, --lvalue }} | prefix increment or decrement |
+| {{ lvalue++, lvalue-- }} | postfix increment or decrement |
+| {{ lvalue operator rvalue }} | assignment operator: {{ += -= *- /= %= &= |= }} |
+| {{  operator operand }} | unary operation: ! |
+| {{  operand1 operator operand2 }} | binary operation: {{ + - * / == != < <= > >= }} in markup: {{ &lt; &lt;= &gt; &gt;= }} |
+| {{ operand1 , operand2 }} | comma operator |
+| {{ condition ? ifTrue : ifFalse }} | conditional operator |
+| {{  (Context.path) }} | grouping |
+| {{ @iterator: { stmt; ... } }} | iterator block aka yield block |
+| {{ @iterator[Type]: { stmt; ... } }} | iterator block with collection type specified |
+| {{ @block: { stmt; ... } }} | block expression aka return block |
+| {{  context.Property1[Property2[index1].Property3][index2+42] }} | expressions can be nested |
+| {{  [String].Format('Square root of 4 is {0}.', [Math].Sqrt(4)) }} | full method calls are valid values anywhere |

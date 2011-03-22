@@ -105,6 +105,7 @@ namespace Markup.Programming.Tests.Tests
             BasicGetTest(3, "1 + /* 37 * 99 */ 2");
             BasicGetTest(3, "1 + /* /* 37 * 99 */ xyzzy */ 2");
             BasicGetTest(2, "[List<int>] { 1, 2, 3 }[1]");
+            BasicGetTest(42, "@block: { return 42; }");
 
             BasicGetTest("Test1", "String1");
             BasicGetTest("Test2", "Object1.String1");
@@ -117,7 +118,7 @@ namespace Markup.Programming.Tests.Tests
         [TestMethod]
         public void PathTestSandbox()
         {
-            BasicGetTest(42, "@block: { return 42; }");
+            BasicGetTest(true, "// comment; true");
         }
 
         [TestMethod]
@@ -143,7 +144,7 @@ namespace Markup.Programming.Tests.Tests
         [TestMethod]
         public void ScriptTestSandbox()
         {
-            TestHelper.ScriptTest(3, "var $add($a, $b) { return $a + $b; }; return $add(1, 2);");
+            TestHelper.ScriptTest(3, "var $Add($a, $b) { return $a + $b; }; return $Add(1, 2);");
         }
     }
 }
