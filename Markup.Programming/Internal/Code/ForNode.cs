@@ -1,6 +1,6 @@
 ﻿namespace Markup.Programming.Core
 {
-    public class ForNode : FrameNode
+    public class ForNode : FramedStatementNode
     {
         public StatementNode Initial { get; set; }
         public ExpressionNode Condition { get; set; }
@@ -9,11 +9,12 @@
         {
             engine.SetBreakFrame();
             Initial.Execute(engine);
-            while (TypeHelper.ConvertToBool(Condition.Evaluate(engine)))
+            while (Condition != null ? TypeHelper.ConvertToBool(Condition.Evaluate(engine)) : true)
             {
                 Body.Execute(engine);
+                engine.ClearShouldContinue();
                 if (engine.ShouldInterrupt) break;
-                Next.Evaluate(engine);
+                if (Next != null) Next.Evaluate(engine);
             }
         }
     }

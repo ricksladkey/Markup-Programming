@@ -43,6 +43,7 @@ namespace Markup.Programming.Core
         private int id;
         private TraceFlags TraceFilter = Configuration.TraceDefaults;
         private bool shouldBreak;
+        private bool shouldContinue;
         private bool shouldReturn;
         private object returnValue;
         private List<StackFrame> stack = new List<StackFrame>();
@@ -81,7 +82,7 @@ namespace Markup.Programming.Core
 
         public object Sender { get; private set; }
         public object EventArgs { get; private set; }
-        public bool ShouldInterrupt { get { return shouldBreak || shouldReturn; } }
+        public bool ShouldInterrupt { get { return shouldContinue || shouldBreak || shouldReturn; } }
         public IEnumerable<StackFrame> Stack { get { return stack; } }
         public IEnumerable<StackFrame> StackBackwards
         {
@@ -177,6 +178,16 @@ namespace Markup.Programming.Core
         public void SetShouldBreak()
         {
             shouldBreak = true;
+        }
+
+        public void SetShouldContinue()
+        {
+            shouldContinue = true;
+        }
+
+        public void ClearShouldContinue()
+        {
+            shouldContinue = false;
         }
 
         public void SetReturnValue(object value)

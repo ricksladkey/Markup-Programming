@@ -136,7 +136,7 @@ namespace Markup.Programming.Core
 
         public static IList CreateCollection(IList<object> collection, Type type, Type typeArgument)
         {
-            if ((type == null || type.IsGenericType) && typeArgument == null)
+            if ((type == null || type.IsGenericTypeDefinition) && typeArgument == null)
                 typeArgument = DeduceType(collection);
 #if !SILVERLIGHT
             if (!Configuration.Silverlight)
@@ -146,7 +146,7 @@ namespace Markup.Programming.Core
             }
 #endif
             if (type == null) type = typeof(ObservableCollection<>);
-            var collectionType = type.IsGenericType ? type.MakeGenericType(typeArgument) : type;
+            var collectionType = type.IsGenericTypeDefinition ? type.MakeGenericType(typeArgument) : type;
             var newCollection = Activator.CreateInstance(collectionType) as IList;
             foreach (var item in collection) newCollection.Add(item);
             return newCollection;

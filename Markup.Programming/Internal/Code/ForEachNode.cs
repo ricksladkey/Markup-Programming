@@ -2,7 +2,7 @@
 
 namespace Markup.Programming.Core
 {
-    public class ForEachNode : FrameNode
+    public class ForEachNode : FramedStatementNode
     {
         public ExpressionNode Collection { get; set; }
         public string VariableName { get; set; }
@@ -13,6 +13,7 @@ namespace Markup.Programming.Core
             {
                 engine.DefineVariable(VariableName, item);
                 Body.Execute(engine);
+                engine.ClearShouldContinue();
                 if (engine.ShouldInterrupt) break;
             }
         }

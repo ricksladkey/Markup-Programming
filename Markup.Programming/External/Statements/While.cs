@@ -18,13 +18,14 @@ namespace Markup.Programming
             engine.SetBreakFrame();
             while (true)
             {
-                if (engine.ShouldInterrupt) break;
                 if (Value != null)
                 {
                     var value = (bool)engine.Evaluate(ValueProperty, Path, CodeTree, typeof(bool));
                     if (!value) break;
                 }
                 Body.Execute(engine);
+                engine.ClearShouldContinue();
+                if (engine.ShouldInterrupt) break;
             }
         }
    }

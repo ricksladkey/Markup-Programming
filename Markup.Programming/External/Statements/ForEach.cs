@@ -26,6 +26,8 @@ namespace Markup.Programming
             {
                 engine.DefineVariable(name, TypeHelper.Convert(item, type));
                 Body.Execute(engine);
+                engine.ClearShouldContinue();
+                if (engine.ShouldInterrupt) break;
             }
         }
     }

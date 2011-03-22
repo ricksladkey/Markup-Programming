@@ -2,7 +2,7 @@
 
 namespace Markup.Programming.Core
 {
-    public class BlockNode : FrameNode
+    public class BlockNode : FramedStatementNode
     {
         public IList<StatementNode> Nodes { get; set; }
         protected override void OnExecuteFrame(Engine engine)

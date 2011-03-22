@@ -1,9 +1,9 @@
+- allow context to be set from scripting
+- be careful about empty expressions defaulting to context
+- true, false, and null don't need to use @syntax
 - eliminate PropertyInitializerNode
 - consider how to call extension methods
-- add for
 - add block (aka inline function)
-- add iterator/yield
-- add continue to both element and script syntax
 - test designer errors, e.g. syntax error in script
 - clean up event/path interaction
 - add support for multiple indexers in path expression

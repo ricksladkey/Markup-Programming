@@ -68,10 +68,12 @@ namespace Markup.Programming.Core
                 { "var", ParseVar },
                 { "if", ParseIf },
                 { "while", ParseWhile },
+                { "continue", ParseContinue },
                 { "break", ParseBreak },
                 { "for", ParseFor },
                 { "foreach", ParseForEach },
                 { "return", ParseReturn },
+                { "yield", ParseYield },
             };
         }
 
@@ -124,6 +126,11 @@ namespace Markup.Programming.Core
         private StatementNode ParseStatement()
         {
             if (tokens.Count == 0 || PeekToken("}")) return null;
+            if (PeekToken(";"))
+            {
+                ParseToken(";");
+                return new EmptyNode();
+            }
             var node = null as StatementNode;
             var token = tokens.Peek();
             if (token != null && token[0] == '`' && keywordMap.ContainsKey(token.Substring(1)))
@@ -133,9 +140,14 @@ namespace Markup.Programming.Core
             else
             {
                 node = ParseExpression();
-                ParseToken(";");
+                ParseSemicolon();
             }
             return node;
+        }
+
+        private void ParseSemicolon()
+        {
+            if (tokens.Count > 0) ParseToken(";");
         }
 
         private StatementNode ParseStatements()
@@ -164,7 +176,7 @@ namespace Markup.Programming.Core
             var variable = ParseVariable();
             ParseToken("=");
             var expression = ParseExpression();
-            ParseToken(";");
+            ParseSemicolon();
             return new VarNode { VariableName = variable, Value = expression };
         }
 
@@ -206,21 +218,28 @@ namespace Markup.Programming.Core
             return new WhileNode { Condition = expression, Body = statement };
         }
 
+        private StatementNode ParseContinue()
+        {
+            ParseKeyword("continue");
+            ParseSemicolon();
+            return new ContinueNode();
+        }
+
         private StatementNode ParseBreak()
         {
             ParseKeyword("break");
-            ParseToken(";");
+            ParseSemicolon();
             return new BreakNode();
         }
-
+         
         private StatementNode ParseFor()
         {
             ParseKeyword("for");
             ParseToken("(");
             var initial = ParseStatement();
-            var condition = ParseExpression();
+            var condition = !PeekToken(";") ? ParseExpression() : null;
             ParseToken(";");
-            var next = ParseExpression();
+            var next = !PeekToken(";") ? ParseExpression() : null;
             ParseToken(")");
             var body = ParseStatement();
             return new ForNode { Initial = initial, Condition = condition, Next = next, Body = body };
@@ -243,8 +262,16 @@ namespace Markup.Programming.Core
         {
             ParseKeyword("return");
             var value = ParseExpression();
-            ParseToken(";");
+            ParseSemicolon();
             return new ReturnNode { Value = value };
+        }
+
+        private StatementNode ParseYield()
+        {
+            ParseKeyword("yield");
+            var value = ParseExpression();
+            ParseSemicolon();
+            return new YieldNode { Value = value };
         }
 
         private ExpressionNode ParseExpression() { return ParseExpression(false); }
@@ -288,6 +315,8 @@ namespace Markup.Programming.Core
                 }
                 else if (c == '"')
                     node = new ValueNode { Value = tokens.Dequeue().Substring(1) };
+                else if (token == "@iterator")
+                    node = ParseIterator();
                 else if ("`$@".Contains(c))
                     node = ParseIdentifierExpression(node);
                 else if (c == '[')
@@ -347,32 +376,34 @@ namespace Markup.Programming.Core
             return new CommaNode { Operand1 = node, Operand2= value };
         }
 
+        private ExpressionNode ParseIterator()
+        {
+            ParseToken("@iterator");
+            var type = !PeekToken(":") ? ParseTypeExpression() : null;
+            ParseToken(":");
+            var body = ParseStatement();
+            return new IteratorNode { Type = type, Body = body };
+        }
+
         private ExpressionNode ParseIdentifierExpression(ExpressionNode node)
         {
-            var c = tokens.Peek()[0];
-            if (c == '`')
+            if (tokens.Peek()[0] == '`')
             {
                 var identifier = ParseIdentifier();
                 if (IsCurrentCall)
                 {
                     var args = PeekToken("(") ? ParseArguments() : null;
-                    node = new MethodNode { Callee = node, MethodName = identifier, Arguments = args };
+                    return new MethodNode { Callee = node, MethodName = identifier, Arguments = args };
                 }
-                else
-                    node = new PropertyNode { Context = node, PropertyName = identifier };
+                return new PropertyNode { Context = node, PropertyName = identifier };
             }
-            else if (c == '$' || c == '@')
+            var token = tokens.Dequeue();
+            if (IsCurrentCall)
             {
-                var token = tokens.Dequeue();
-                if (IsCurrentCall)
-                {
-                    var args = PeekToken("(") ? ParseArguments() : null;
-                    node = new FunctionNode { FunctionName = token, Arguments = args };
-                }
-                else
-                    node = new VariableNode { VariableName = token };
+                var args = PeekToken("(") ? ParseArguments() : null;
+                return new FunctionNode { FunctionName = token, Arguments = args };
             }
-            return node;
+            return new VariableNode { VariableName = token };
         }
 
         private ExpressionNode ParseVariableExpression()

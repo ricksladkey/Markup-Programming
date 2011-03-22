@@ -5,6 +5,7 @@ using System.Windows;
 using Markup.Programming.Core;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Collections;
+using System.Collections.ObjectModel;
 
 namespace Markup.Programming.Tests.Tests
 {
@@ -130,6 +131,10 @@ namespace Markup.Programming.Tests.Tests
             TestHelper.ScriptTest(2, "var $total = 0; $total += 2; return $total;");
             TestHelper.ScriptTest(3, "var $i = 2; return $i + 1;");
             TestHelper.ScriptTest(6, "var $total = 0; for (var $i = 1; $i <= 3; $i++) $total += $i; return $total;");
+            TestHelper.ScriptTest(new ObservableCollection<int> { 1, 2, 3 }, "return @iterator: { yield 1; yield 2; yield 3; }");
+            TestHelper.ScriptTest(new List<int> { 1, 2, 3 }, "return @iterator[List<>]: { yield 1; yield 2; yield 3; }");
+            TestHelper.ScriptTest(new List<int> { 1, 2, 3 }, "return @iterator[List<int>]: { yield 1; yield 2; yield 3; }");
+            TestHelper.ScriptTest(null, "for (;;) break;");
         }
 
         [TestMethod]

@@ -111,14 +111,21 @@
   <ItemGroup>
     <Compile Include="External\Expressions\Script.cs" />
     <Compile Include="External\Objects\Pair.cs" />
+    <Compile Include="External\Statements\Continue.cs" />
+    <Compile Include="Internal\Code\ContinueNode.cs" />
+    <Compile Include="Internal\Code\EmptyNode.cs" />
+    <Compile Include="Internal\Code\FramedExpressionNode.cs" />
+    <Compile Include="Internal\Code\IteratorBlock.cs" />
+    <Compile Include="Internal\Code\IteratorNode.cs" />
     <Compile Include="Internal\Code\VarNode.cs" />
     <Compile Include="Internal\Code\ForNode.cs" />
-    <Compile Include="Internal\Code\FrameNode.cs" />
+    <Compile Include="Internal\Code\FramedStatementNode.cs" />
     <Compile Include="Internal\Code\BreakNode.cs" />
     <Compile Include="Internal\Code\ForEachNode.cs" />
     <Compile Include="Internal\Code\IncrementNode.cs" />
     <Compile Include="Internal\Code\Node.cs" />
     <Compile Include="Internal\Code\WhileNode.cs" />
+    <Compile Include="Internal\Code\YieldNode.cs" />
     <Compile Include="Internal\Components\InterfaceComponent.cs" />
     <Compile Include="Internal\Components\LazyResourceComponent.cs" />
     <Compile Include="Internal\Code\CodeType.cs" />

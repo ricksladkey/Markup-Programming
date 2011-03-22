@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Markup.Programming.Core
 {
-    public abstract class FrameNode : StatementNode
+    public abstract class FramedStatementNode : StatementNode
     {
         public StatementNode Body { get; set; }
         protected override void OnExecute(Engine engine)
@@ -13,6 +13,5 @@ namespace Markup.Programming.Core
             engine.With(this, e => OnExecuteFrame(engine));
         }
         protected abstract void OnExecuteFrame(Engine engine);
-
     }
 }

@@ -101,7 +101,12 @@ namespace Markup.Programming
             if (name == null)
             {
                 engine.SetBreakFrame();
-                while (!engine.ShouldInterrupt) Body.Execute(engine);
+                while (true)
+                {
+                    Body.Execute(engine);
+                    engine.ClearShouldContinue();
+                    if (engine.ShouldInterrupt) break;
+                }
                 return;
             }
 
@@ -110,7 +115,6 @@ namespace Markup.Programming
             engine.SetBreakFrame();
             while (true)
             {
-                if (engine.ShouldInterrupt) break;
                 if (While != null)
                 {
                     if (!(bool)engine.Evaluate(WhileProperty, WhilePath, WhileCodeTree, typeof(bool))) break;
@@ -121,6 +125,8 @@ namespace Markup.Programming
                     if (!(bool)engine.Evaluate(Op.LessThan, GetLoopValue(name, type, engine), limit)) break;
                 }
                 Body.Execute(engine);
+                engine.ClearShouldContinue();
+                if (engine.ShouldInterrupt) break;
                 if (Next.Count != 0)
                     Next.Execute(engine);
                 else if (Increment != null)
