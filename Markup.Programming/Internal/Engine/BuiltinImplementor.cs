@@ -49,7 +49,7 @@ namespace Markup.Programming.Core
 
         public bool FunctionIsDefined(string name)
         {
-            var value = null as Function;
+            var value = null as IFunction;
             return engine.TryGetFunction(name, out value);
         }
 

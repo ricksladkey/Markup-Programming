@@ -18,7 +18,7 @@ namespace Markup.Programming
     /// produces a return value but to return null simply fall off
     /// the end of the function.
     /// </summary>
-    public class Function : StatementBlock
+    public class Function : StatementBlock, IFunction
     {
         public Function()
         {
@@ -57,6 +57,11 @@ namespace Markup.Programming
             var fields = parameter.Split(' ');
             if (fields.Length != 2 || fields[0] != "params") engine.Throw("invalid params: " + parameter);
             return new Parameter { Param = fields[1], Params = true };
+        }
+
+        public void ExecuteBody(Engine engine)
+        {
+            Body.Execute(engine);
         }
     }
 }

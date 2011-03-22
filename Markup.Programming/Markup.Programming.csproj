@@ -116,6 +116,7 @@
     <Compile Include="Internal\Code\ContinueNode.cs" />
     <Compile Include="Internal\Code\EmptyNode.cs" />
     <Compile Include="Internal\Code\FramedExpressionNode.cs" />
+    <Compile Include="Internal\Code\FuncNode.cs" />
     <Compile Include="Internal\Code\IteratorNode.cs" />
     <Compile Include="Internal\Code\VarNode.cs" />
     <Compile Include="Internal\Code\ForNode.cs" />
@@ -129,6 +130,7 @@
     <Compile Include="Internal\Components\InterfaceComponent.cs" />
     <Compile Include="Internal\Components\LazyResourceComponent.cs" />
     <Compile Include="Internal\Code\CodeType.cs" />
+    <Compile Include="Internal\Engine\IFunction.cs" />
     <Compile Include="Internal\Interop\CommandInterop.cs" />
     <Compile Include="Internal\Engine\IInteropHost.cs" />
     <Compile Include="Internal\Interop\ConverterInterop.cs" />

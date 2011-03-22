@@ -143,6 +143,7 @@ namespace Markup.Programming.Tests.Tests
         [TestMethod]
         public void ScriptTestSandbox()
         {
+            TestHelper.ScriptTest(3, "var $add($a, $b) { return $a + $b; }; return $add(1, 2);");
         }
     }
 }

@@ -172,11 +172,30 @@ namespace Markup.Programming.Core
         private StatementNode ParseVar()
         {
             ParseKeyword("var");
-            var variable = ParseVariable();
+            var name = ParseVariable();
+            if (PeekToken("("))
+            {
+                return ParseFunction(name);
+            }
             ParseToken("=");
             var expression = ParseExpression();
             ParseSemicolon();
-            return new VarNode { VariableName = variable, Value = expression };
+            return new VarNode { VariableName = name, Value = expression };
+        }
+
+        private StatementNode ParseFunction(string name)
+        {
+            ParseToken("(");
+            var parameters = new ParameterCollection();
+            parameters.Add(new Parameter { Param = ParseVariable() });
+            while (!PeekToken(")"))
+            {
+                ParseToken(",");
+                parameters.Add(new Parameter { Param = ParseVariable() });
+            }
+            ParseToken(")");
+            var body = ParseStatement();
+            return new FuncNode { FunctionName = name, Parameters = parameters, Body = body };
         }
 
         private StatementNode ParseIf()

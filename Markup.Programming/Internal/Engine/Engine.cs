@@ -48,7 +48,7 @@ namespace Markup.Programming.Core
         private object returnValue;
         private int scriptDepth;
         private List<StackFrame> stack = new List<StackFrame>();
-        private IDictionary<string, Function> functions;
+        private IDictionary<string, IFunction> functions;
         public StackFrame CurrentFrame { get { return stack.Count >= 1 ? stack[stack.Count - 1] : null; } }
         private StackFrame ParentFrame { get { return stack.Count >= 2 ? stack[stack.Count - 2] : null; } }
         private string FrameInfo { get { return string.Format("{0}/{1}", id, stack.Count); } }
@@ -316,15 +316,15 @@ namespace Markup.Programming.Core
             Throw("variable not found: " + name);
         }
 
-        public void DefineFunction(string name, Function value)
+        public void DefineFunction(string name, IFunction value)
         {
-            if (functions == null) functions = new Dictionary<string, Function>();
+            if (functions == null) functions = new Dictionary<string, IFunction>();
             if (functions.ContainsKey(name) && functions[name] != value)
                 Throw("function redefinition: " + name);
             functions[name] = value;
         }
 
-        public bool TryGetFunction(string name, out Function value)
+        public bool TryGetFunction(string name, out IFunction value)
         {
             if (functions != null && functions.ContainsKey(name))
             {
@@ -335,11 +335,11 @@ namespace Markup.Programming.Core
             return false;
         }
 
-        public Function GetFunction(string name)
+        public IFunction GetFunction(string name)
         {
-            var value = null as Function;
+            var value = null as IFunction;
             if (TryGetFunction(name, out value)) return value;
-            return Throw("function not found: " + name) as Function;
+            return Throw("function not found: " + name) as IFunction;
         }
 
         public Type GetType(string name)
@@ -542,7 +542,7 @@ namespace Markup.Programming.Core
                 DefineParameters(function.Parameters, args);
             SetScopeFrame();
             SetReturnFrame();
-            function.Body.Execute(this);
+            function.ExecuteBody(this);
             return GetAndResetReturnValue();
         }
 
@@ -554,7 +554,7 @@ namespace Markup.Programming.Core
 
         private void DefineParameter(Parameter parameter, object arg)
         {
-            DefineVariable("$" + parameter.Param, arg);
+            DefineVariable(parameter.Param, arg);
         }
 
         public object CallBuiltinFunction(BuiltinFunction builtinFunction, IEnumerable<object> args)
