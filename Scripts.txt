@@ -1,9 +1,10 @@
 !! Scripts
-Markup programming has two ways of inputting as program: element syntax and script syntax.  Element syntax looks like traditional markup; script syntax looks like traditional code.
+Markup programming has two ways of supplying code: element syntax and script syntax.  Element syntax looks like traditional markup; script syntax looks like traditional code.
 
 !!! Script Syntax
 || Script Statement || Meaning ||
-| {{// comment ;}} | C++ style comment |
+| {{/* ignored */}} | C style comment |
+| {{// ignored ;}} | C++ style comment |
 | {{;}} | empty statement |
 | {{expr;}} | expression statement |
 | {{var $variable = value;}} | define variable to value |
@@ -19,5 +20,3 @@ Markup programming has two ways of inputting as program: element syntax and scri
 | {{return expr;}} | return statement |
 | {{yield expr;}} | yield statement |
 | {{ { stmt; stmt; ... } }} | brace block |
-
-

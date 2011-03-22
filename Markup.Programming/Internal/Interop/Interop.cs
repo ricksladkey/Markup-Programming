@@ -6,7 +6,7 @@
 
         protected object Callback(string method, params object[] args)
         {
-            return Parent.Callback(this, "$" + method, args, new Engine());
+            return Parent.Callback(this, method, args, new Engine());
         }
     }
 }

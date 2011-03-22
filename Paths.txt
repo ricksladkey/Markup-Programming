@@ -46,43 +46,44 @@ An example of using context is if you are associated with one control but you wa
 
 !!! Path Syntax
 || Path Expression || Meaning ||
-| {{ @ }} | Context (current inherited value and need not be specified) |
-| {{ true, false, null }} | literal constants |
-| {{  12345 }} | integral value |
-| {{  123.456 }} | double value |
-| {{  'abcdef' }} | string value |
-| {{  "abcdef" }} | string value |
-| {{ /* ignored */ }} | comment |
-| {{  [Type] }} | type name looked up in common places, e.g. System, System.Windows |
-| {{  [Namespace.Type] }} | fully qualified type name |
-| {{  [Type](arg, ...) }} | constructor for type |
-| {{  [Type] { Property = value, ... } }} | object initializer for type |
-| {{  [Type] { value, ... } }} | collection initializer for type |
-| {{  [Type] { { key, value }, ... } }} | dictionary initializer for type |
-| {{  [Type] { Property = { value, ... }, ... } }} | collection initializer for property of type |
-| {{  [Type] { Property = { { key, value }, ... }, ... } }} | dictionary initializer for property of type |
-| {{  context.Property }} | property (in property context) |
-| {{  context.Method(arg, ...) }} | method (in any context) |
-| {{  context.Method }} | method needing arguments (in call context) |
-| {{  [Namspace.Type].Method }} | static method |
-| {{  $parameter }} | parameter (in property context) |
-| {{  $Function(arg, ...) }} | function (in any context) |
-| {{  $Function }} | function needing arguments (in call context) |
-| {{ @Function }} | builtin function needing arguments (in call context) |
-| {{ @Function(arg, ...) }} | builtin function (in any context) |
-| {{  context[index] }} | item (e.g. array, list, dictionary) |
-| {{  @[index] }} | item (if needed to disambiguate item syntax with type syntax) |
-| {{ lvalue = rvalue }} | assignment of rvalue to lvalue |
-| {{ ++lvalue, --lvalue }} | prefix increment or decrement |
-| {{ lvalue++, lvalue-- }} | postfix increment or decrement |
-| {{ lvalue operator rvalue }} | assignment operator: {{ += -= *- /= %= &= |= }} |
-| {{  operator operand }} | unary operation: ! |
-| {{  operand1 operator operand2 }} | binary operation: {{ + - * / == != < <= > >= }} in markup: {{ &lt; &lt;= &gt; &gt;= }} |
-| {{ operand1 , operand2 }} | comma operator |
-| {{ condition ? ifTrue : ifFalse }} | conditional operator |
-| {{  (Context.path) }} | grouping |
-| {{ @iterator: { stmt; ... } }} | iterator block aka yield block |
-| {{ @iterator[Type]: { stmt; ... } }} | iterator block with collection type specified |
-| {{ @block: { stmt; ... } }} | block expression aka return block |
-| {{  context.Property1[Property2[index1].Property3][index2+42] }} | expressions can be nested |
-| {{  [String].Format('Square root of 4 is {0}.', [Math].Sqrt(4)) }} | full method calls are valid values anywhere |
+| {{/* ignored */}} | C style comment |
+| {{// ignored ;}} | C++ style comment |
+| {{@}} | Context (current inherited value and need not be specified) |
+| {{true, false, null}} | literal constants |
+| {{12345}} | integral value |
+| {{123.456}} | double value |
+| {{'abcdef'}} | string value |
+| {{"abcdef"}} | string value |
+| {{[Type]}} | type name looked up in common places, e.g. System, System.Windows |
+| {{[Namespace.Type]}} | fully qualified type name |
+| {{[Type](arg, ...)}} | constructor for type |
+| {{[Type] { Property = value, ...}}} | object initializer for type |
+| {{[Type] { value, ...}}} | collection initializer for type |
+| {{[Type] { { key, value }, ...}}} | dictionary initializer for type |
+| {{[Type] { Property = { value, ... }, ...}}} | collection initializer for property of type |
+| {{[Type] { Property = { { key, value }, ... }, ...}}} | dictionary initializer for property of type |
+| {{context.Property}} | property (in property context) |
+| {{context.Method(arg, ...)}} | method (in any context) |
+| {{context.Method}} | method needing arguments (in call context) |
+| {{[Namspace.Type].Method}} | static method |
+| {{$parameter}} | parameter (in property context) |
+| {{$Function(arg, ...)}} | function (in any context) |
+| {{$Function}} | function needing arguments (in call context) |
+| {{@Function}} | builtin function needing arguments (in call context) |
+| {{@Function(arg, ...)}} | builtin function (in any context) |
+| {{context[index]}} | item (e.g. array, list, dictionary) |
+| {{@[index]}} | item (if needed to disambiguate item syntax with type syntax) |
+| {{lvalue = rvalue}} | assignment of rvalue to lvalue |
+| {{++lvalue, --lvalue}} | prefix increment or decrement |
+| {{lvalue++, lvalue--}} | postfix increment or decrement |
+| {{lvalue operator rvalue}} | assignment operator: {{+= -= *- /= %= &= |=}} |
+| {{operator operand}} | unary operation: ! |
+| {{operand1 operator operand2}} | binary operation: {{+ - * / == != < <= > >=}} in markup: {{&lt; &lt;= &gt; &gt;=}} |
+| {{operand1 , operand2}} | comma operator |
+| {{condition ? ifTrue : ifFalse}} | conditional operator |
+| {{(Context.path)}} | grouping |
+| {{@iterator: { stmt; ...}}} | iterator block aka yield block |
+| {{@iterator[Type]: { stmt; ...}}} | iterator block with collection type specified |
+| {{@block: { stmt; ...}}} | block expression aka return block |
+| {{context.Property1[Property2[index1].Property3][index2+42]}} | expressions can be nested |
+| {{[String].Format('Square root of 4 is {0}.', [Math].Sqrt(4))}} | full method calls are valid values anywhere |
