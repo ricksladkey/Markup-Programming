@@ -30,31 +30,31 @@
                 <p:Function FunctionName="ValueSamples">
 
                     <!-- sample values using ordinary XAML syntax -->
-                    <p:Eval Value="An ordinary string"/>
-                    <p:Eval>An ordinary string</p:Eval>
-                    <p:Eval Value="{StaticResource BlueBrush}"/>
-                    <p:Eval Value="{Binding ElementName=Button}"/>
-                    <p:Eval Value="{Binding FirstName}"/>
+                    <p:Expr Value="An ordinary string"/>
+                    <p:Expr>An ordinary string</p:Expr>
+                    <p:Expr Value="{StaticResource BlueBrush}"/>
+                    <p:Expr Value="{Binding ElementName=Button}"/>
+                    <p:Expr Value="{Binding FirstName}"/>
                     
                     <!-- use parameter value indirection -->
                     <p:Get Path="$i"/>
                     <p:Path>$i</p:Path>
 
                     <!-- explicit type conversion -->
-                    <p:Eval Value="42" TypePath="[Int32]"/>
+                    <p:Expr Value="42" TypePath="[Int32]"/>
                     
                     <!-- syntax without conversion -->
-                    <p:Eval>
+                    <p:Expr>
                         <sys:Int32>42</sys:Int32>
-                    </p:Eval>
+                    </p:Expr>
                     
                     <!-- supply types as values -->
                     <p:Path>[Int32]</p:Path>
-                    <p:Eval Path="[Int32]"/>
-                    <p:Eval Value="{x:Type sys:Int32}"/>
-                    <p:Eval>
+                    <p:Expr Path="[Int32]"/>
+                    <p:Expr Value="{x:Type sys:Int32}"/>
+                    <p:Expr>
                         <x:Type TypeName="sys:Int32"/>
-                    </p:Eval>
+                    </p:Expr>
 
                     <!-- use get accessors -->
                     <p:Get Var="$i"/>
@@ -80,9 +80,9 @@
                     </p:GetItem>
 
                     <!-- all accessors can use context and context is inherited -->
-                    <p:Eval Context="{StaticResource BlueBrush}">
+                    <p:Expr Context="{StaticResource BlueBrush}">
                         <p:Get Path="Color"/>
-                    </p:Eval>
+                    </p:Expr>
 
                     <!-- use operators with optional conversions -->
                     <p:Operator Value1="abc" Op="Plus" Value2="def"/>
@@ -95,9 +95,9 @@
                         
                     <!-- use operators in params mode -->
                     <p:Operator Op="Plus">
-                        <p:Eval TypePath="[Int32]" Value="1"/>
-                        <p:Eval TypePath="[Int32]" Value="2"/>
-                        <p:Eval TypePath="[Int32]" Value="3"/>
+                        <p:Expr TypePath="[Int32]" Value="1"/>
+                        <p:Expr TypePath="[Int32]" Value="2"/>
+                        <p:Expr TypePath="[Int32]" Value="3"/>
                     </p:Operator>
                     
                     <!-- use short-circuit operators to avoid crashes -->
@@ -125,16 +125,16 @@
                         <p:Property PropertyName="Opacity">
                             <p:Operator Op="Divide">
                                 <p:Get Context="{Binding ElementName=Button}" PropertyName="Opacity"/>
-                                <p:Eval Value="2"/>
+                                <p:Expr Value="2"/>
                             </p:Operator>
                         </p:Property>
                     </p:Object>
 
                     <!-- create a smart generic observable collection -->
                     <p:Collection>
-                        <p:Eval Value="abc"/>
-                        <p:Eval Value="def"/>
-                        <p:Eval Value="ghi"/>
+                        <p:Expr Value="abc"/>
+                        <p:Expr Value="def"/>
+                        <p:Expr Value="ghi"/>
                     </p:Collection>
 
                     <!-- filter collections using iterators -->

@@ -3,15 +3,15 @@ using Markup.Programming.Core;
 
 namespace Markup.Programming
 {
-    [ContentProperty("Expr")]
+    [ContentProperty("Expression")]
     public class Path : ExpressionBase
     {
-        public string Expr { get; set; }
+        public string Expression { get; set; }
 
         protected override object OnEvaluate(Engine engine)
         {
-            if (Expr == null) engine.Throw("path expression not specified");
-            return engine.GetPath(Expr, CodeTree);
+            if (Expression == null) engine.Throw("path expression not specified");
+            return engine.GetPath(Expression, CodeTree);
         }
     }
 }

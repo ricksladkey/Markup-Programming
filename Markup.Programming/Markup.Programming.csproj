@@ -267,7 +267,7 @@
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="External\Expressions\Eval.cs" />
+    <Compile Include="External\Expressions\Expr.cs" />
     <Compile Include="External\Handlers\ChangedHandler.cs" />
     <Compile Include="External\Statements\While.cs" />
     <AppDesigner Include="Properties\" />

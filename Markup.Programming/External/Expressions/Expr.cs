@@ -9,11 +9,11 @@ using Markup.Programming.Core;
 namespace Markup.Programming
 {
     /// <summary>
-    /// The Eval expression simply returns Value or Path, optionally
+    /// The Expr expression simply returns Value or Path, optionally
     /// converted to Type.
     /// </summary>
     [ContentProperty("Value")]
-    public class Eval : TypedExpession
+    public class Expr : TypedExpession
     {
         public object Value
         {
@@ -22,7 +22,7 @@ namespace Markup.Programming
         }
 
         public static readonly DependencyProperty ValueProperty =
-            DependencyProperty.Register("Value", typeof(object), typeof(Eval), null);
+            DependencyProperty.Register("Value", typeof(object), typeof(Expr), null);
 
         public bool SuppressAttach { get; set; }
 

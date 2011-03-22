@@ -1,3 +1,4 @@
+- rename Eval to Expr
 - add switch/case to scripting
 - allow context to be set from scripting
 - eliminate PropertyInitializerNode
