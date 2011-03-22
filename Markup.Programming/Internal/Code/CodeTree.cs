@@ -238,7 +238,7 @@ namespace Markup.Programming.Core
             var initial = ParseStatement();
             var condition = !PeekToken(";") ? ParseExpression() : null;
             ParseToken(";");
-            var next = !PeekToken(";") ? ParseExpression() : null;
+            var next = !PeekToken(")") ? ParseExpression() : null;
             ParseToken(")");
             var body = ParseStatement();
             return new ForNode { Initial = initial, Condition = condition, Next = next, Body = body };
@@ -277,7 +277,14 @@ namespace Markup.Programming.Core
 
         private ExpressionNode ParseExpression(bool noComma)
         {
-            if (tokens.Count == 0) return new ValueNode { Value = null };
+            int start = tokens.Count;
+            var node = ParseExpressionInternal(noComma);
+            if (tokens.Count == start) engine.Throw("empty expression");
+            return node;
+        }
+
+        private ExpressionNode ParseExpressionInternal(bool noComma)
+        {
             var node = new ContextNode() as ExpressionNode;
             var nodeNext = true;
             for (var token = tokens.Peek(); token != null; token = tokens.Peek())

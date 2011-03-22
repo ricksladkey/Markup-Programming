@@ -1,7 +1,5 @@
 - System.Windows might or might not be loaded during unit tests: how to address?
 - allow context to be set from scripting
-- be careful about empty expressions defaulting to context
-- true, false, and null don't need to use @syntax
 - eliminate PropertyInitializerNode
 - consider how to call extension methods
 - add block (aka inline function)
