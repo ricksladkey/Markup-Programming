@@ -6,7 +6,7 @@
         public ExpressionNode Value { get; set; }
         protected override void OnExecute(Engine engine)
         {
-            engine.DefineVariable(VariableName, Value.Evaluate(engine));
+            engine.DefineScriptVariable(VariableName, Value.Evaluate(engine));
         }
     }
 }

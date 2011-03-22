@@ -46,6 +46,7 @@ namespace Markup.Programming.Core
         private bool shouldContinue;
         private bool shouldReturn;
         private object returnValue;
+        private int scriptDepth;
         private List<StackFrame> stack = new List<StackFrame>();
         private IDictionary<string, Function> functions;
         public StackFrame CurrentFrame { get { return stack.Count >= 1 ? stack[stack.Count - 1] : null; } }
@@ -129,9 +130,11 @@ namespace Markup.Programming.Core
 
         public void With(Node caller, Action<Engine> action)
         {
+            ++scriptDepth;
             PushFrame(CurrentFrame.Caller);
             action(this);
             PopFrame();
+            --scriptDepth;
         }
 
         public TResult With<TResult>(IComponent caller, Func<Engine, TResult> func)
@@ -153,9 +156,11 @@ namespace Markup.Programming.Core
 
         public TResult With<TResult>(Node node, Func<Engine, TResult> func)
         {
+            ++scriptDepth;
             PushFrame(CurrentFrame.Caller);
             var result = func(this);
             PopFrame();
+            --scriptDepth;
             return result;
         }
 
@@ -233,7 +238,6 @@ namespace Markup.Programming.Core
 
         public void DefineVariable(string name, object value)
         {
-            Trace(TraceFlags.Variable, "Define: {0} = {1}", name, value);
             DefineVariable(name, value, false, false);
         }
 
@@ -241,6 +245,12 @@ namespace Markup.Programming.Core
         {
             DefineVariable(name, value, true, false);
             return value;
+        }
+
+        public void DefineScriptVariable(string name, object value)
+        {
+            Trace(TraceFlags.Variable, "Define: {0} = {1}", name, value);
+            DefineVariable(name, value, scriptDepth == 0, false);
         }
 
         private void DefineVariable(string name, object value, bool parentFrame, bool noError)
