@@ -53,7 +53,8 @@ namespace Markup.Programming
             Body.Execute(engine);
             var type = engine.EvaluateType(TypeProperty, TypePath, TypeCodeTree);
             var typeArgument = engine.EvaluateType(TypeArgumentProperty, TypeArgumentPath, TypeArgumentCodeTree);
-            return TypeHelper.CreateCollection(engine.GetYieldedValues(), type, typeArgument);
+            var collection = TypeHelper.CreateCollection(engine.GetYieldedValues(), type, typeArgument);
+            return collection;
         }
     }
 }

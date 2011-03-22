@@ -113,6 +113,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="LogoSample.xaml.cs">
+      <DependentUpon>LogoSample.xaml</DependentUpon>
+    </Compile>
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
     </Compile>
@@ -133,6 +136,10 @@
     <Compile Include="TableOfSquares.xaml.cs">
       <DependentUpon>TableOfSquares.xaml</DependentUpon>
     </Compile>
+    <Page Include="LogoSample.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

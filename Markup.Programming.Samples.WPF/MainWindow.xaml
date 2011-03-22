@@ -11,6 +11,7 @@
             <samples:TableOfSquares/>
             <samples:SelectOnFocusComboBox/>
             <samples:StyleSample/>
+            <samples:LogoSample/>
             <om2b:View/>
         </p:ResourceCollection>
         <p:ResourceObject x:Key="ViewModel">

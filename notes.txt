@@ -1,6 +1,4 @@
-- Rename Function.Func to Function.Prototype
-- check that continue includes For.Next
-- System.Windows might or might not be loaded during unit tests: how to address?
+- add switch/case to scripting
 - allow context to be set from scripting
 - eliminate PropertyInitializerNode
 - consider how to call extension methods

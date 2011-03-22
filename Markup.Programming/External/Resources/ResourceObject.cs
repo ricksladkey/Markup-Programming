@@ -150,7 +150,7 @@ namespace Markup.Programming
         protected override void OnInitialize(Engine engine)
         {
             var pairs = Properties.Select(property =>
-                new NameValuePair(property.Prop, property.Evaluate(engine))).ToArray();
+                new NameValuePair(property.PropertyName, property.Evaluate(engine))).ToArray();
             Type dynamicType = null;
             value = DynamicHelper.CreateObject(ref dynamicType, pairs);
         }
