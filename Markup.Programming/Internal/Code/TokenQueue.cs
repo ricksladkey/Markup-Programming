@@ -10,7 +10,7 @@ namespace Markup.Programming.Core
         private int current = 0;
         public void Enqueue(string item) { list.Add(item); }
         public string Dequeue() { return list[current++]; }
-        public void Undequeue() { --current; }
+        public void Undequeue(string item) { list[--current] = item; }
         public string Peek() { return current < list.Count ? list[current] : null; }
         public int Count { get { return list.Count - current; } }
         public IEnumerator<string> GetEnumerator() { return list.Skip(current).GetEnumerator(); }

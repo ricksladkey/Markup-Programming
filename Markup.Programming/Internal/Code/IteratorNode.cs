@@ -4,7 +4,6 @@ namespace Markup.Programming.Core
     public class IteratorNode : FramedExpressionNode
     {
         public ExpressionNode Type { get; set; }
-        public StatementNode Body { get; set; }
         protected override object  OnEvaluateFrame(Engine engine)
         {
             engine.SetYieldFrame();

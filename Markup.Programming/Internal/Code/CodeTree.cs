@@ -29,11 +29,16 @@ namespace Markup.Programming.Core
             { "-", Op.Minus },
             { "*", Op.Times },
             { "/", Op.Divide },
+            { "%", Op.Mod },
             { "&&", Op.AndAnd },
             { "||", Op.OrOr },
-            { "&", Op.And },
-            { "|", Op.Or },
             { "!", Op.Not },
+            { "&", Op.BitwiseAnd },
+            { "|", Op.BitwiseOr },
+            { "^", Op.BitwiseXor },
+            { "~", Op.BitwiseNot },
+            { "<<", Op.LeftShift },
+            { ">>", Op.RightShift },
             { "==", Op.Equals },
             { "!=", Op.NotEquals },
             { "<", Op.LessThan },
@@ -47,6 +52,7 @@ namespace Markup.Programming.Core
             { "+=", AssignmentOp.PlusEquals },
             { "-=", AssignmentOp.MinusEquals },
             { "*=", AssignmentOp.TimesEquals },
+            { "%=", AssignmentOp.ModEquals },
             { "/=", AssignmentOp.DivideEquals },
             { "&=", AssignmentOp.AndEquals },
             { "|=", AssignmentOp.OrEquals },
@@ -345,9 +351,11 @@ namespace Markup.Programming.Core
             var token = tokens.Dequeue();
             var op = OperatorMap[token];
             var unary = op.GetArity() == 1;
+            var expression = ParseExpression();
+            if (op == Op.Minus && nodeNext) return new OpNode { Op = Op.Negate, Operands = { expression } };
             if (nodeNext != unary) engine.Throw("unexpected operator" + op);
-            if (unary) return new OpNode { Op = op, Operands = { ParseExpression() } };
-            return new OpNode { Op = op, Operands = { node, ParseExpression() } };
+            if (unary) return new OpNode { Op = op, Operands = { expression } };
+            return new OpNode { Op = op, Operands = { node, expression } };
         }
 
         private ExpressionNode ParseAssignmentOperator(ExpressionNode node, bool nodeNext)
@@ -458,9 +466,9 @@ namespace Markup.Programming.Core
             while (true)
             {
                 if (PeekToken("{")) return ParseDictionaryInitializer(node, node);
-                tokens.Dequeue();
+                var token = tokens.Dequeue();
                 var isCollection = tokens.Peek() != "=";
-                tokens.Undequeue();
+                tokens.Undequeue(token);
                 if (isCollection) return ParseCollectionInitializer(node, node);
                 var property = ParseIdentifier();
                 ParseToken("=");
@@ -475,7 +483,7 @@ namespace Markup.Programming.Core
                 }
                 else
                     node = new PropertyInitializerNode { Context = node, PropertyName = property, Value = ParseExpression(true) };
-                var token = tokens.Dequeue();
+                token = tokens.Dequeue();
                 if (token == "}") break;
                 if (token != ",") engine.Throw("unexpected token: " + token);
             }
@@ -507,7 +515,7 @@ namespace Markup.Programming.Core
 
         private TypeNode ParseType()
         {
-            if (PeekToken(",") || PeekToken(">")) return null;
+            if (PeekToken(",") || PeekTokenStartsWith(">")) return null;
             var typeName = ParseIdentifier();
             while (PeekToken("."))
             {
@@ -523,7 +531,11 @@ namespace Markup.Programming.Core
                 {
                     typeArgs.Add(ParseType());
                     var token = tokens.Dequeue();
-                    if (token == ">") break;
+                    if (token.StartsWith(">"))
+                    {
+                        if (token == ">>") tokens.Undequeue(">");
+                        break;
+                    }
                     if (token != ",") engine.Throw("unexpected token: " + token);
                 }
                 typeName += "`" + typeArgs.Count;
@@ -551,6 +563,11 @@ namespace Markup.Programming.Core
         private bool PeekToken(string token)
         {
             return tokens.Peek() == token;
+        }
+
+        private bool PeekTokenStartsWith(string token)
+        {
+            return tokens.Peek() != null && tokens.Peek().StartsWith(token);
         }
 
         private string ParseToken(string token)

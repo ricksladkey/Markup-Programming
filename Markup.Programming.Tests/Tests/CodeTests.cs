@@ -83,8 +83,10 @@ namespace Markup.Programming.Tests.Tests
             BasicGetTest(true, "true");
             BasicGetTest(3, "1 + 2");
             BasicGetTest(0.25, "0.5/2");
+            BasicGetTest(-3, "-3");
             BasicGetTest(true, "1 == 1");
             BasicGetTest(true, "!false");
+            BasicGetTest(typeof(HorizontalAlignment), "[HorizontalAlignment]");
             BasicGetTest("Left", "[Enum].GetValues([HorizontalAlignment])[0].ToString()");
             BasicGetTest(false, "@Convert('fALSE', [Boolean])");
             BasicGetTest(true, "@Convert('True', [Boolean])");
