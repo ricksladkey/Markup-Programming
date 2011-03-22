@@ -57,7 +57,7 @@ namespace Markup.Programming
             var type = engine.EvaluateType(TypeProperty, Path, CodeTree);
             if (type == null)
             {
-                var pairs = Properties.Select(property => new NameValuePair(property.Prop, property.Evaluate(engine)));
+                var pairs = Properties.Select(property => new NameValuePair(property.PropertyName, property.Evaluate(engine)));
                 return DynamicHelper.CreateObject(ref dynamicType, pairs.ToArray());
             }
 
@@ -65,19 +65,19 @@ namespace Markup.Programming
             foreach (var property in Properties)
             {
                 var value = property.Evaluate(engine);
-                var propertyType = PathHelper.GetPropertyType(engine, target, property.Prop);
+                var propertyType = PathHelper.GetPropertyType(engine, target, property.PropertyName);
                 if (typeof(IList).IsAssignableFrom(propertyType) && property.Value is Collection)
                 {
-                    var collection = PathHelper.GetProperty(engine, target, property.Prop) as IList;
+                    var collection = PathHelper.GetProperty(engine, target, property.PropertyName) as IList;
                     foreach (var item in value as IEnumerable) collection.Add(item);
                 }
                 else if (typeof(IDictionary).IsAssignableFrom(propertyType) && property.Value is Collection)
                 {
-                    var dictionary = PathHelper.GetProperty(engine, target, property.Prop) as IDictionary;
+                    var dictionary = PathHelper.GetProperty(engine, target, property.PropertyName) as IDictionary;
                     foreach (DictionaryEntry entry in value as IEnumerable) dictionary.Add(entry.Key, entry.Value);
                 }
                 else
-                    PathHelper.SetProperty(engine, target, property.Prop, value);
+                    PathHelper.SetProperty(engine, target, property.PropertyName, value);
             }
             return target;
         }

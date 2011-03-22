@@ -17,8 +17,8 @@ namespace Markup.Programming.Tests
             {
                 Properties =
                 {
-                    new Property { Prop = "String1", Value = "Test" },
-                    new Property { Prop = "String2", Value = null },
+                    new Property { PropertyName = "String1", Value = "Test" },
+                    new Property { PropertyName = "String2", Value = null },
                 }
             }.Value as IDynamicObject;
             var window = new Window { DataContext = viewModel };
@@ -76,9 +76,9 @@ namespace Markup.Programming.Tests
             {
                 Properties =
                     {
-                        new Property { Prop = "String1", Value = "Test" },
-                        new Property { Prop = "String2", Value = null },
-                        new Property { Prop = "String3", Value = null },
+                        new Property { PropertyName = "String1", Value = "Test" },
+                        new Property { PropertyName = "String2", Value = null },
+                        new Property { PropertyName = "String3", Value = null },
                     }
             }.Value as IDynamicObject;
             Assert.AreEqual("Test", viewModel["String1"]);
@@ -105,9 +105,9 @@ namespace Markup.Programming.Tests
             {
                 Properties =
                     {
-                        new Property { Prop = "String1", Value = "Test" },
-                        new Property { Prop = "String2", Value = null },
-                        new Property { Prop = "String3", Value = null },
+                        new Property { PropertyName = "String1", Value = "Test" },
+                        new Property { PropertyName = "String2", Value = null },
+                        new Property { PropertyName = "String3", Value = null },
                     }
             }.Value as IDynamicObject;
             Assert.AreEqual("Test", viewModel["String1"]);
@@ -117,8 +117,8 @@ namespace Markup.Programming.Tests
             {
                 Properties =
                     {
-                        new Property { Prop = "Collection" },
-                        new Property { Prop = "Item1" },
+                        new Property { PropertyName = "Collection" },
+                        new Property { PropertyName = "Item1" },
                     }
             };
             var window = new Window { DataContext = viewModel };

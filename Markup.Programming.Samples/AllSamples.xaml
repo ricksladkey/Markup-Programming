@@ -22,13 +22,13 @@
             <samples:CrashSample/>
         </p:ResourceCollection>
         <p:ResourceObject x:Key="ViewModel">
-            <p:Property Prop="Samples">
+            <p:Property PropertyName="Samples">
                 <p:Iterator>
                     <p:ForEach Var="$userControl" Value="{StaticResource UserControls}">
                         <p:Yield>
                             <p:Object>
-                                <p:Property Prop="Name" Path="$userControl.ToString()"/>
-                                <p:Property Prop="Control" Path="$userControl"/>
+                                <p:Property PropertyName="Name" Path="$userControl.ToString()"/>
+                                <p:Property PropertyName="Control" Path="$userControl"/>
                             </p:Object>
                         </p:Yield>
                     </p:ForEach>

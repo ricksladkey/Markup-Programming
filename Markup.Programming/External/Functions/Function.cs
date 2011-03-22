@@ -53,10 +53,10 @@ namespace Markup.Programming
 
         private Parameter ParseParameter(Engine engine, string parameter)
         {
-            if (!parameter.Contains(' ')) return new Parameter { Param = parameter};
+            if (!parameter.Contains(' ')) return new Parameter { ParameterName = parameter};
             var fields = parameter.Split(' ');
             if (fields.Length != 2 || fields[0] != "params") engine.Throw("invalid params: " + parameter);
-            return new Parameter { Param = fields[1], Params = true };
+            return new Parameter { ParameterName = fields[1], Params = true };
         }
 
         public void ExecuteBody(Engine engine)

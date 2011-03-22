@@ -27,7 +27,7 @@
         <!-- after they have moved it off of one of the main posts -->
         <!-- our disks are represented by small integers: 1, 2, 3, etc. -->
         <p:ResourceObject x:Key="ViewModel">
-            <p:Property Prop="Posts">
+            <p:Property PropertyName="Posts">
                 <p:Collection>
                     <p:Iterator>
                         <p:For Var="$i" Value="0" UpperLimit="4" Increment="1">
@@ -38,11 +38,11 @@
                     <p:Collection/>
                 </p:Collection>
             </p:Property>
-            <p:Property Prop="HoldingPost">
+            <p:Property PropertyName="HoldingPost">
                 <p:Collection/>
             </p:Property>
-            <p:Property Prop="SelectedPost"/>
-            <p:Property Prop="SelectCommand">
+            <p:Property PropertyName="SelectedPost"/>
+            <p:Property PropertyName="SelectCommand">
 
                 <!-- create a command that only processes data, i.e. operates on the view model -->
                 <!-- the command, like many commands, takes an argument, the selected post -->

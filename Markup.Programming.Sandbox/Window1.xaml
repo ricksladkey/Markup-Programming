@@ -13,18 +13,18 @@
                     <p:Attached.Operations>
                         <p:CallHandler Context="{Binding ElementName=ContentHost}" Path="Click.Children.Add">
                             <p:Object Path="[Grid]">
-                                <p:Property Prop="Resources">
+                                <p:Property PropertyName="Resources">
                                     <p:Collection>
                                         <p:Pair Key="RedBrush">
                                             <SolidColorBrush Color="Red"/>
                                         </p:Pair>
                                     </p:Collection>
                                 </p:Property>
-                                <p:Property Prop="Children">
+                                <p:Property PropertyName="Children">
                                     <p:Collection>
                                         <p:Object Path="[Button]">
-                                            <p:Property Prop="Content" Value="Click Me!"/>
-                                            <p:Property Prop="Opacity" Path="0.5"/>
+                                            <p:Property PropertyName="Content" Value="Click Me!"/>
+                                            <p:Property PropertyName="Opacity" Path="0.5"/>
                                         </p:Object>
                                     </p:Collection>
                                 </p:Property>

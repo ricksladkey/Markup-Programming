@@ -15,7 +15,7 @@ namespace Markup.Programming
     [ContentProperty("Value")]
     public class Property : ResourceComponent, IHiddenExpression
     {
-        public string Prop { get; set; }
+        public string PropertyName { get; set; }
 
         public object Type
         {

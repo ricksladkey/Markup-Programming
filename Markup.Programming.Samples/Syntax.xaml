@@ -108,21 +108,21 @@
 
                     <!-- create a dynamic object -->
                     <p:Object>
-                        <p:Property Prop="FirstName" Value="Bill"/>
-                        <p:Property Prop="LastName" Value="Smith"/>
+                        <p:Property PropertyName="FirstName" Value="Bill"/>
+                        <p:Property PropertyName="LastName" Value="Smith"/>
                     </p:Object>
                     
                     <!-- create a traditional object -->
                     <p:Object Path="[Button]">
-                        <p:Property Prop="Content" Value="Click Me!"/>
-                        <p:Property Prop="Opacity" Value="0.5"/>
+                        <p:Property PropertyName="Content" Value="Click Me!"/>
+                        <p:Property PropertyName="Opacity" Value="0.5"/>
                     </p:Object>
 
                     <!-- don't be seduced into thinking this is static -->
                     <!-- it is a brand new object with new computed values -->
                     <p:Object Path="[Button]">
-                        <p:Property Prop="Content" Value="{Binding Firstname}"/>
-                        <p:Property Prop="Opacity">
+                        <p:Property PropertyName="Content" Value="{Binding Firstname}"/>
+                        <p:Property PropertyName="Opacity">
                             <p:Operator Op="Divide">
                                 <p:Get Context="{Binding ElementName=Button}" PropertyName="Opacity"/>
                                 <p:Eval Value="2"/>

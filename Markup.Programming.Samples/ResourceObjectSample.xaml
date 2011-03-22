@@ -7,8 +7,8 @@
     <Grid x:Name="LayoutRoot" Background="White">
         <Grid.Resources>
             <p:ResourceObject x:Key="SampleData">
-                <p:Property Prop="FirstName" Value="Bill"/>
-                <p:Property Prop="LastName" Value="Smith"/>
+                <p:Property PropertyName="FirstName" Value="Bill"/>
+                <p:Property PropertyName="LastName" Value="Smith"/>
             </p:ResourceObject>
         </Grid.Resources>
         <Grid.DataContext>

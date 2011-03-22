@@ -114,14 +114,14 @@ namespace Markup.Programming
                 var type = property.GetType(engine);
                 var value = property.Evaluate(engine);
                 value = TypeHelper.Convert(value, type);
-                propertyStore.Add(property.Prop, value);
+                propertyStore.Add(property.PropertyName, value);
             }
             dynamicProperties = Properties.Select(property => GetPair(engine, property)).ToArray();
         }
 
         private NameTypePair GetPair(Engine engine, Property property)
         {
-            var name = property.Prop;
+            var name = property.PropertyName;
             var type = property.GetType(engine) ?? typeof(object);
             return new NameTypePair(name, type);
         }

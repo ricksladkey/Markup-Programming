@@ -187,11 +187,11 @@ namespace Markup.Programming.Core
         {
             ParseToken("(");
             var parameters = new ParameterCollection();
-            parameters.Add(new Parameter { Param = ParseVariable() });
+            parameters.Add(new Parameter { ParameterName = ParseVariable() });
             while (!PeekToken(")"))
             {
                 ParseToken(",");
-                parameters.Add(new Parameter { Param = ParseVariable() });
+                parameters.Add(new Parameter { ParameterName = ParseVariable() });
             }
             ParseToken(")");
             var body = ParseStatement();

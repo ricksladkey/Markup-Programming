@@ -554,7 +554,7 @@ namespace Markup.Programming.Core
 
         private void DefineParameter(Parameter parameter, object arg)
         {
-            DefineVariable(parameter.Param, arg);
+            DefineVariable(parameter.ParameterName, arg);
         }
 
         public object CallBuiltinFunction(BuiltinFunction builtinFunction, IEnumerable<object> args)

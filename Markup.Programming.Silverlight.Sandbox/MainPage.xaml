@@ -6,7 +6,7 @@
     <Grid>
         <Grid.Resources>
             <p:ResourceObject x:Key="SampleData">
-                <p:Property Prop="Data">
+                <p:Property PropertyName="Data">
                     This is some data
                 </p:Property>
             </p:ResourceObject>

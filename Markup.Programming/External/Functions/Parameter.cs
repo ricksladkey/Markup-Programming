@@ -11,6 +11,6 @@ namespace Markup.Programming
     public class Parameter
     {
         public bool Params { get; set; }
-        public string Param { get; set; }
+        public string ParameterName { get; set; }
     }
 }
