@@ -256,7 +256,7 @@ namespace Markup.Programming.Core
             return closure;
         }
 
-        public bool TryLookupVariable(string name, out object value)
+        public bool TryGetVariable(string name, out object value)
         {
             foreach (var frame in StackBackwards)
             {
@@ -267,18 +267,32 @@ namespace Markup.Programming.Core
                 }
                 if (frame.ScopeFrame) break;
             }
-            return BuiltinImplementor.TryLookupVariable(name, out value);
+            return BuiltinImplementor.TryGetVariable(name, out value);
         }
 
-        public object LookupVariable(string name)
+        public object GetVariable(string name)
         {
             var value = null as object;
-            if (TryLookupVariable(name, out value))
+            if (TryGetVariable(name, out value))
             {
-                Trace(TraceFlags.Variable, "Lookup: {0} = {1}", name, value);
+                Trace(TraceFlags.Variable, "Get: {0} = {1}", name, value);
                 return value;
             }
             return Throw("variable not found: " + name);
+        }
+
+        public void SetVariable(string name, object value)
+        {
+            foreach (var frame in StackBackwards)
+            {
+                if (frame.Variables != null && frame.Variables.ContainsKey(name))
+                {
+                    frame.Variables[name] = value;
+                    return;
+                }
+                if (frame.ScopeFrame) break;
+            }
+            Throw("variable not found: " + name);
         }
 
         public void DefineFunction(string name, Function value)
@@ -289,7 +303,7 @@ namespace Markup.Programming.Core
             functions[name] = value;
         }
 
-        public bool TryLookupFunction(string name, out Function value)
+        public bool TryGetFunction(string name, out Function value)
         {
             if (functions != null && functions.ContainsKey(name))
             {
@@ -300,14 +314,14 @@ namespace Markup.Programming.Core
             return false;
         }
 
-        public Function LookupFunction(string name)
+        public Function GetFunction(string name)
         {
             var value = null as Function;
-            if (TryLookupFunction(name, out value)) return value;
+            if (TryGetFunction(name, out value)) return value;
             return Throw("function not found: " + name) as Function;
         }
 
-        public Type LookupType(string name)
+        public Type GetType(string name)
         {
             var result = name.Split(',').Length > 2 ? TypeHelper.ConvertToType(name) : TypeHelper.ResolvePartialType(name);
             if (result == null) Throw("unable to resolve type: " + name);
@@ -319,7 +333,7 @@ namespace Markup.Programming.Core
             get
             {
                 var value = null as object;
-                if (TryLookupVariable(ContextKey, out value)) return value;
+                if (TryGetVariable(ContextKey, out value)) return value;
                 return null;
             }
         }
@@ -373,7 +387,7 @@ namespace Markup.Programming.Core
         public object SetPath(string path, CodeTree codeTree, object value)
         {
             if (codeTree == null) codeTree = new CodeTree();
-            return codeTree.Compile(this, CodeType.SetExpression, path).Evaluate(this, value);
+            return codeTree.Compile(this, CodeType.SetExpression, path).Set(this, value);
         }
 
         public object CallPath(string path, CodeTree codeTree, IEnumerable<object> args)
@@ -496,7 +510,7 @@ namespace Markup.Programming.Core
                 if (!Enum.TryParse<BuiltinFunction>(name.Substring(1), out builtinFunction)) Throw("invalid builtin function: " + name);
                 return CallBuiltinFunction(builtinFunction, args);
             }
-            var function = LookupFunction(name);
+            var function = GetFunction(name);
             if (function.HasParamsParameter)
             {
                 var m = function.Parameters.Count - 1;

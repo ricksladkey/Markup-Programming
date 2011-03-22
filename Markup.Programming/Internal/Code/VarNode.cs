@@ -1,11 +1,12 @@
 ﻿namespace Markup.Programming.Core
 {
-    public class ReturnNode : StatementNode
+    public class VarNode : StatementNode
     {
+        public string VariableName { get; set; }
         public ExpressionNode Value { get; set; }
         protected override void OnExecute(Engine engine)
         {
-            engine.SetReturnValue(Value.Evaluate(engine));
+            engine.DefineVariable(VariableName, Value.Evaluate(engine));
         }
     }
 }

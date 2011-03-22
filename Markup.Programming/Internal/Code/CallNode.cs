@@ -6,13 +6,13 @@ namespace Markup.Programming.Core
     public abstract class CallNode : ExpressionNode
     {
         public IList<ExpressionNode> Arguments { get; set; }
-        protected override object OnEvaluate(Engine engine, object value)
+        protected override object OnEvaluate(Engine engine)
         {
             return Call(engine, GetArguments(engine, null));
         }
         protected IEnumerable<object> GetArguments(Engine engine, IEnumerable<object> args)
         {
-            if (Arguments != null) return Arguments.Select(argument => argument.Evaluate(engine, UnsetValue.Value)).ToArray();
+            if (Arguments != null) return Arguments.Select(argument => argument.Evaluate(engine)).ToArray();
             if (args == null) engine.Throw("missing arguments");
             return args;
         }

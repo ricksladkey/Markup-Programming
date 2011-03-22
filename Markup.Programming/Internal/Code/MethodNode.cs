@@ -8,7 +8,7 @@ namespace Markup.Programming.Core
         public string MethodName { get; set; }
         public override object OnCall(Engine engine, IEnumerable<object> args)
         {
-            var context = Callee.Evaluate(engine, UnsetValue.Value);
+            var context = Callee.Evaluate(engine);
             return CallHelper.CallMethod(MethodName, false, context.GetType(), context, GetArguments(engine, args), null, engine);
         }
     }

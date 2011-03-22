@@ -22,15 +22,15 @@ namespace Markup.Programming.Core
     {
         private List<KeyValuePair<TKey, TValue>> pairs = new List<KeyValuePair<TKey, TValue>>();
 
-        private int TryLookup(TKey key)
+        private int TryGet(TKey key)
         {
             for (int i = 0; i < pairs.Count; i++) if (pairs[i].Key.Equals(key)) return i;
             return -1;
         }
 
-        private int Lookup(TKey key)
+        private int Get(TKey key)
         {
-            var index = TryLookup(key);
+            var index = TryGet(key);
             if (index == -1)
             {
                 index = pairs.Count;
@@ -54,7 +54,7 @@ namespace Markup.Programming.Core
 
         public bool ContainsKey(TKey key)
         {
-            return TryLookup(key) != -1;
+            return TryGet(key) != -1;
         }
 
         public ICollection<TKey> Keys
@@ -64,7 +64,7 @@ namespace Markup.Programming.Core
 
         public bool Remove(TKey key)
         {
-            var index = TryLookup(key);
+            var index = TryGet(key);
             if (index == -1) return false;
             pairs.RemoveAt(index);
             return true;
@@ -73,7 +73,7 @@ namespace Markup.Programming.Core
         public bool TryGetValue(TKey key, out TValue value)
         {
             value = default(TValue);
-            var index = TryLookup(key);
+            var index = TryGet(key);
             if (index == -1) return false;
             value = pairs[index].Value;
             return true;
@@ -86,8 +86,8 @@ namespace Markup.Programming.Core
 
         public TValue this[TKey key]
         {
-            get { ValidateKey(key); return pairs[Lookup(key)].Value; }
-            set { pairs[Lookup(key)] = new KeyValuePair<TKey, TValue>(key, value); }
+            get { ValidateKey(key); return pairs[Get(key)].Value; }
+            set { pairs[Get(key)] = new KeyValuePair<TKey, TValue>(key, value); }
         }
 
         #endregion
@@ -107,7 +107,7 @@ namespace Markup.Programming.Core
         public bool Contains(KeyValuePair<TKey, TValue> item)
         {
             if (!ContainsKey(item.Key)) return false;
-            return pairs[Lookup(item.Key)].Value.Equals(item.Value);
+            return pairs[Get(item.Key)].Value.Equals(item.Value);
         }
 
         public void CopyTo(KeyValuePair<TKey, TValue>[] array, int arrayIndex)

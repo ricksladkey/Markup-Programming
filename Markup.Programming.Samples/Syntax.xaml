@@ -67,7 +67,7 @@
                     <p:Set Var="$s" Value="New Value"/>
                     <p:Set Target="{Binding FirstName, Mode=TwoWay}" Value="Bill"/>
                     <p:Set Target="{Binding}" PropertyName="FirstName" Value="Bill"/>
-                    <p:Set Path="$c" PropertyName="Count" Value="10"/>
+                    <p:Set Var="$c" PropertyName="Count" Value="10"/>
                     <p:Set Op="Increment" Path="$c" PropertyName="Total"/>
 
                     <!-- use item accessor for arrays, collections and dictionaries -->

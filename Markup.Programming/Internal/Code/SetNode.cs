@@ -4,9 +4,9 @@
     {
         public ExpressionNode LValue { get; set; }
         public ExpressionNode RValue { get; set; }
-        protected override object OnEvaluate(Engine engine, object value)
+        protected override object OnEvaluate(Engine engine)
         {
-            return LValue.Evaluate(engine, RValue.Evaluate(engine, value));
+            return LValue.Set(engine, RValue.Evaluate(engine));
         }
     }
 }

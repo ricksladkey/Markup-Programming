@@ -1,3 +1,4 @@
+- eliminate PropertyInitializerNode
 - consider how to call extension methods
 - add for
 - add block (aka inline function)

@@ -4,10 +4,13 @@
     {
         public ExpressionNode Context { get; set; }
         public ExpressionNode Index { get; set; }
-        protected override object OnEvaluate(Engine engine, object value)
+        protected override object OnEvaluate(Engine engine)
         {
-            if (!IsSet) return PathHelper.GetItem(engine, Context.Evaluate(engine, value), Index.Evaluate(engine, value));
-            return PathHelper.SetItem(engine, Context.Evaluate(engine, value), Index.Evaluate(engine, value), value);
+            return PathHelper.GetItem(engine, Context.Evaluate(engine), Index.Evaluate(engine));
+        }
+        protected override void OnSet(Engine engine, object value)
+        {
+            PathHelper.SetItem(engine, Context.Evaluate(engine), Index.Evaluate(engine), value);
         }
     }
 }

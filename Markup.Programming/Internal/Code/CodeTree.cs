@@ -35,11 +35,23 @@ namespace Markup.Programming.Core
             { ">", Op.GreaterThan },
             { ">=", Op.GreaterThanOrEqual },
         };
+        private static Dictionary<string, AssignmentOp> assignmentOperatorMap = new Dictionary<string, AssignmentOp>
+        {
+            { "=", AssignmentOp.Assign },
+            { "+=", AssignmentOp.PlusEquals },
+            { "-=", AssignmentOp.MinusEquals },
+            { "*=", AssignmentOp.TimesEquals },
+            { "/=", AssignmentOp.DivideEquals },
+            { "&=", AssignmentOp.AndEquals },
+            { "|=", AssignmentOp.OrEquals },
+            { "++", AssignmentOp.Increment },
+            { "--", AssignmentOp.Increment },
+        };
 
         private static string IdChars { get { return "_"; } }
         private static IDictionary<string, Op> OperatorMap { get { return operatorMap; } }
+        private static IDictionary<string, AssignmentOp> AssignmentOperatorMap { get { return assignmentOperatorMap; } }
         private IDictionary<string, Func<StatementNode>> KeywordMap { get { return keywordMap; } }
-        private bool IsCurrentSet { get { return IsSet && tokens != null && tokens.Count == 0; } }
         private bool IsCurrentCall { get { return IsCall && tokens != null && tokens.Count == 0 || PeekToken("("); } }
 
         public CodeType CodeType { get; private set; }
@@ -57,6 +69,7 @@ namespace Markup.Programming.Core
                 { "if", ParseIf },
                 { "while", ParseWhile },
                 { "break", ParseBreak },
+                { "for", ParseFor },
                 { "foreach", ParseForEach },
                 { "return", ParseReturn },
             };
@@ -73,10 +86,10 @@ namespace Markup.Programming.Core
             engine.Trace(TraceFlags.Path, "Path: Get {0}", Path);
             return (root as ExpressionNode).Evaluate(engine);
         }
-        public object Evaluate(Engine engine, object value)
+        public object Set(Engine engine, object value)
         {
             engine.Trace(TraceFlags.Path, "Path: Set {0} = {1}", Path, value);
-            return (root as ExpressionNode).Evaluate(engine, value);
+            return (root as ExpressionNode).Set(engine, value);
         }
         public object Call(Engine engine, IEnumerable<object> args)
         {
@@ -152,7 +165,7 @@ namespace Markup.Programming.Core
             ParseToken("=");
             var expression = ParseExpression();
             ParseToken(";");
-            return new SetNode { LValue = new VariableNode { IsSet = true, VariableName = variable }, RValue = expression };
+            return new VarNode { VariableName = variable, Value = expression };
         }
 
         private StatementNode ParseIf()
@@ -200,11 +213,24 @@ namespace Markup.Programming.Core
             return new BreakNode();
         }
 
+        private StatementNode ParseFor()
+        {
+            ParseKeyword("for");
+            ParseToken("(");
+            var initial = ParseStatement();
+            var condition = ParseExpression();
+            ParseToken(";");
+            var next = ParseExpression();
+            ParseToken(")");
+            var body = ParseStatement();
+            return new ForNode { Initial = initial, Condition = condition, Next = next, Body = body };
+        }
+
         private StatementNode ParseForEach()
         {
             ParseKeyword("foreach");
             ParseToken("(");
-            if (PeekKeyword("var")) ParseKeyword("var");
+            ParseKeyword("var");
             var name = ParseVariable();
             ParseKeyword("in");
             var expression = ParseExpression();
@@ -236,15 +262,13 @@ namespace Markup.Programming.Core
                     nodeNext = true;
                     continue;
                 }
-                if ("=.?,".Contains(token[0]) && nodeNext) engine.Throw("unexpected operator: " + token);
-                if (token == "=")
+                if (AssignmentOperatorMap.ContainsKey(token))
                 {
-                    node.IsSet = true;
-                    tokens.Dequeue();
-                    var rvalue = ParseExpression();
-                    node = new SetNode { LValue = node, RValue = rvalue };
+                    node = ParseAssignmentOperator(node, nodeNext);
+                    nodeNext = true;
                     continue;
                 }
+                if ("=.?,".Contains(token[0]) && nodeNext) engine.Throw("unexpected operator: " + token);
                 if (token == ".")
                 {
                     nodeNext = true;
@@ -292,6 +316,21 @@ namespace Markup.Programming.Core
             return new OpNode { Op = op, Operands = { node, ParseExpression() } };
         }
 
+        private ExpressionNode ParseAssignmentOperator(ExpressionNode node, bool nodeNext)
+        {
+            var token = tokens.Dequeue();
+            var op = AssignmentOperatorMap[token];
+            if (op == AssignmentOp.Increment || op == AssignmentOp.Decrement)
+            {
+                var increment = op == AssignmentOp.Increment ? 1 : 0;
+                return new IncrementNode { LValue = node, PostFix = nodeNext, Increment = increment };
+            }
+            if (nodeNext) engine.Throw("unexpected operator" + op);
+            var expression = ParseExpression();
+            if (op == AssignmentOp.Assign) return new SetNode { LValue = node, RValue = expression };
+            return new SetNode { LValue = node, RValue = new OpNode { Op = (Op)op, Operands = { node, expression } } };
+        }
+
         private ExpressionNode ParseConditional(ExpressionNode node)
         {
             tokens.Dequeue();
@@ -320,7 +359,7 @@ namespace Markup.Programming.Core
                     node = new MethodNode { Callee = node, MethodName = identifier, Arguments = args };
                 }
                 else
-                    node = new PropertyNode { IsSet = IsCurrentSet, Context = node, PropertyName = identifier };
+                    node = new PropertyNode { Context = node, PropertyName = identifier };
             }
             else if (c == '$' || c == '@')
             {
@@ -331,7 +370,7 @@ namespace Markup.Programming.Core
                     node = new FunctionNode { FunctionName = token, Arguments = args };
                 }
                 else
-                    node = new VariableNode { IsSet = IsCurrentSet, VariableName = token };
+                    node = new VariableNode { VariableName = token };
             }
             return node;
         }
@@ -348,7 +387,7 @@ namespace Markup.Programming.Core
                 tokens.Dequeue();
                 var index = ParseExpression(true);
                 ParseToken("]");
-                node = new ItemNode { IsSet = IsCurrentSet, Context = node, Index = index };
+                node = new ItemNode { Context = node, Index = index };
             }
             return node;
         }
@@ -535,12 +574,13 @@ namespace Markup.Programming.Core
             for (int i = 0; i < Path.Length; )
             {
                 char c = Path[i];
+                string c2 = Path.Substring(i, Math.Min(2, Path.Length - i));
                 if (char.IsWhiteSpace(c)) ++i;
-                else if (i < Path.Length - 1 && Path.Substring(i, 2) == "/*")
+                else if (c2 == "/*")
                     i = EatComment(i);
-                else if (i < Path.Length - 1 && OperatorMap.ContainsKey(Path.Substring(i, 2)))
+                else if (OperatorMap.ContainsKey(c2) || AssignmentOperatorMap.ContainsKey(c2))
                 {
-                    tokens.Enqueue(Path.Substring(i, 2));
+                    tokens.Enqueue(c2);
                     i += 2;
                 }
                 else if (OperatorMap.ContainsKey(c.ToString()) || "=.[](){},?:;".Contains(c))

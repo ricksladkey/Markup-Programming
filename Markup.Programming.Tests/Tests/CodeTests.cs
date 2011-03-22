@@ -32,13 +32,13 @@ namespace Markup.Programming.Tests.Tests
             private object GetPath(IDictionary<string, object> variables, string path, Engine engine)
             {
                 var result = engine.GetPath(path, null);
-                foreach (var name in variables.Keys) variables[name] = engine.LookupVariable(name);
+                foreach (var name in variables.Keys) variables[name] = engine.GetVariable(name);
                 return result;
             }
             private object SetPath(IDictionary<string, object> variables, string path, object value, Engine engine)
             {
                 var result = engine.SetPath(path, null, value);
-                foreach (var name in variables.Keys) variables[name] = engine.LookupVariable(name);
+                foreach (var name in variables.Keys) variables[name] = engine.GetVariable(name);
                 return result;
             }
         }
@@ -99,7 +99,6 @@ namespace Markup.Programming.Tests.Tests
             BasicGetTest(new Point { X = 1, Y = 2 }, "[Point] { X = 1,  Y =  2 }");
             BasicGetTest(new List<int> { 1, 2, 3 }, "[List<int>] { 1, 2, 3 }");
             BasicGetTest(3, "1, 3");
-            BasicGetTest(42, "($theAnswer = 42), $theAnswer");
             BasicGetTest(3, "1 + /* 37 * 99 */ 2");
             BasicGetTest(3, "1 + /* /* 37 * 99 */ xyzzy */ 2");
             BasicGetTest(2, "[List<int>] { 1, 2, 3 }[1]");
@@ -120,20 +119,22 @@ namespace Markup.Programming.Tests.Tests
         [TestMethod]
         public void ScriptTests()
         {
-            TestHelper.ScriptTest(21, "$x = 1 + 2; return 42 / 2;");
-            TestHelper.ScriptTest(42, "$x = @true; if ($x) return 42; return 21;");
-            TestHelper.ScriptTest(42, "$x = @true; if (!$x) return 21; else return 42;");
-            TestHelper.ScriptTest("b", "$x = 2; if ($x == 1) return 'a'; else if ($x == 2) return 'b'; else return 'c';");
-            TestHelper.ScriptTest(5, "$i = 0; while ($i < 5) $i = $i + 1; return $i;");
+            TestHelper.ScriptTest(21, "var $x = 1 + 2; return 42 / 2;");
+            TestHelper.ScriptTest(42, "var $x = @true; if ($x) return 42; return 21;");
+            TestHelper.ScriptTest(42, "var $x = @true; if (!$x) return 21; else return 42;");
+            TestHelper.ScriptTest("b", "var $x = 2; if ($x == 1) return 'a'; else if ($x == 2) return 'b'; else return 'c';");
+            TestHelper.ScriptTest(5, "var $i = 0; while ($i < 5) $i = $i + 1; return $i;");
             TestHelper.ScriptTest(0, "{ 1; 2; } return 0;");
-            TestHelper.ScriptTest(5, "$i = 0; while ($i < 10) { $i = $i + 1; if ($i == 5) break; } return $i;");
-            TestHelper.ScriptTest(6, "$x = 0; foreach (var $item in [List<int>] { 1, 2, 3 }) $x = $x + $item; return $x;");
+            TestHelper.ScriptTest(5, "var $i = 0; while ($i < 10) { $i = $i + 1; if ($i == 5) break; } return $i;");
+            TestHelper.ScriptTest(6, "var $x = 0; foreach (var $item in [List<int>] { 1, 2, 3 }) $x = $x + $item; return $x;");
+            TestHelper.ScriptTest(2, "var $total = 0; $total += 2; return $total;");
+            TestHelper.ScriptTest(3, "var $i = 2; return $i + 1;");
+            TestHelper.ScriptTest(6, "var $total = 0; for (var $i = 1; $i <= 3; $i++) $total += $i; return $total;");
         }
 
         [TestMethod]
         public void ScriptTestSandbox()
         {
-            TestHelper.ScriptTest(3, "var $i = 2; return $i + 1;");
         }
     }
 }

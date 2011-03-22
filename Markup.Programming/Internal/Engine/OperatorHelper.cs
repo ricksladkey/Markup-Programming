@@ -301,9 +301,9 @@ namespace Markup.Programming.Core
         public static bool Equals(double lhs, double rhs) { return lhs == rhs; }
         public static bool NotEquals(double lhs, double rhs) { return lhs != rhs; }
         public static bool LessThan(double lhs, double rhs) { return lhs < rhs; }
-        public static bool LessThanOrEquals(double lhs, double rhs) { return lhs <= rhs; }
+        public static bool LessThanOrEqual(double lhs, double rhs) { return lhs <= rhs; }
         public static bool GreaterThan(double lhs, double rhs) { return lhs > rhs; }
-        public static bool GreaterThanOrEquals(double lhs, double rhs) { return lhs >= rhs; }
+        public static bool GreaterThanOrEqual(double lhs, double rhs) { return lhs >= rhs; }
 
         public static float Plus(float lhs, float rhs) { return lhs + rhs; }
         public static float Minus(float lhs, float rhs) { return lhs - rhs; }
@@ -314,9 +314,9 @@ namespace Markup.Programming.Core
         public static bool Equals(float lhs, float rhs) { return lhs == rhs; }
         public static bool NotEquals(float lhs, float rhs) { return lhs != rhs; }
         public static bool LessThan(float lhs, float rhs) { return lhs < rhs; }
-        public static bool LessThanOrEquals(float lhs, float rhs) { return lhs <= rhs; }
+        public static bool LessThanOrEqual(float lhs, float rhs) { return lhs <= rhs; }
         public static bool GreaterThan(float lhs, float rhs) { return lhs > rhs; }
-        public static bool GreaterThanOrEquals(float lhs, float rhs) { return lhs >= rhs; }
+        public static bool GreaterThanOrEqual(float lhs, float rhs) { return lhs >= rhs; }
 
         public static long Plus(long lhs, long rhs) { return lhs + rhs; }
         public static long Minus(long lhs, long rhs) { return lhs - rhs; }
@@ -333,9 +333,9 @@ namespace Markup.Programming.Core
         public static bool Equals(long lhs, long rhs) { return lhs == rhs; }
         public static bool NotEquals(long lhs, long rhs) { return lhs != rhs; }
         public static bool LessThan(long lhs, long rhs) { return lhs < rhs; }
-        public static bool LessThanOrEquals(long lhs, long rhs) { return lhs <= rhs; }
+        public static bool LessThanOrEqual(long lhs, long rhs) { return lhs <= rhs; }
         public static bool GreaterThan(float lhs, long rhs) { return lhs > rhs; }
-        public static bool GreaterThanOrEquals(long lhs, long rhs) { return lhs >= rhs; }
+        public static bool GreaterThanOrEqual(long lhs, long rhs) { return lhs >= rhs; }
 
         public static int Plus(int lhs, int rhs) { return lhs + rhs; }
         public static int Minus(int lhs, int rhs) { return lhs - rhs; }
@@ -352,9 +352,9 @@ namespace Markup.Programming.Core
         public static bool Equals(int lhs, int rhs) { return lhs == rhs; }
         public static bool NotEquals(int lhs, int rhs) { return lhs != rhs; }
         public static bool LessThan(int lhs, int rhs) { return lhs < rhs; }
-        public static bool LessThanOrEquals(int lhs, int rhs) { return lhs <= rhs; }
+        public static bool LessThanOrEqual(int lhs, int rhs) { return lhs <= rhs; }
         public static bool GreaterThan(int lhs, int rhs) { return lhs > rhs; }
-        public static bool GreaterThanOrEquals(int lhs, int rhs) { return lhs >= rhs; }
+        public static bool GreaterThanOrEqual(int lhs, int rhs) { return lhs >= rhs; }
 
         public static short Plus(short lhs, short rhs) { return (short)(lhs + rhs); }
         public static short Minus(short lhs, short rhs) { return (short)(lhs - rhs); }
@@ -371,9 +371,9 @@ namespace Markup.Programming.Core
         public static bool Equals(short lhs, short rhs) { return lhs == rhs; }
         public static bool NotEquals(short lhs, short rhs) { return lhs != rhs; }
         public static bool LessThan(short lhs, short rhs) { return lhs < rhs; }
-        public static bool LessThanOrEquals(short lhs, short rhs) { return lhs <= rhs; }
+        public static bool LessThanOrEqual(short lhs, short rhs) { return lhs <= rhs; }
         public static bool GreaterThan(short lhs, short rhs) { return lhs > rhs; }
-        public static bool GreaterThanOrEquals(short lhs, short rhs) { return lhs >= rhs; }
+        public static bool GreaterThanOrEqual(short lhs, short rhs) { return lhs >= rhs; }
 
         public static bool And(bool lhs, bool rhs) { return lhs & rhs; }
         public static bool Or(bool lhs, bool rhs) { return lhs | rhs; }

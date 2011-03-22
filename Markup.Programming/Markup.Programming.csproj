@@ -111,9 +111,12 @@
   <ItemGroup>
     <Compile Include="External\Expressions\Script.cs" />
     <Compile Include="External\Objects\Pair.cs" />
+    <Compile Include="Internal\Code\VarNode.cs" />
+    <Compile Include="Internal\Code\ForNode.cs" />
     <Compile Include="Internal\Code\FrameNode.cs" />
     <Compile Include="Internal\Code\BreakNode.cs" />
     <Compile Include="Internal\Code\ForEachNode.cs" />
+    <Compile Include="Internal\Code\IncrementNode.cs" />
     <Compile Include="Internal\Code\Node.cs" />
     <Compile Include="Internal\Code\WhileNode.cs" />
     <Compile Include="Internal\Components\InterfaceComponent.cs" />

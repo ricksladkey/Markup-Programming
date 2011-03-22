@@ -8,15 +8,15 @@ namespace Markup.Programming.Core
         public ExpressionNode Context { get; set; }
         public ExpressionNode Dictionary { get; set; }
         public IList<ExpressionNode> Items { get; set; }
-        protected override object OnEvaluate(Engine engine, object value)
+        protected override object OnEvaluate(Engine engine)
         {
-            var dictionary = Dictionary.Evaluate(engine, value) as IDictionary;
+            var dictionary = Dictionary.Evaluate(engine) as IDictionary;
             foreach (var item in Items)
             {
-                var entry = (DictionaryEntry)item.Evaluate(engine, value);
+                var entry = (DictionaryEntry)item.Evaluate(engine);
                 dictionary.Add(entry.Key, entry.Value);
             }
-            return Context == Dictionary ? dictionary : Context.Evaluate(engine, value);
+            return Context == Dictionary ? dictionary : Context.Evaluate(engine);
         }
     }
 }

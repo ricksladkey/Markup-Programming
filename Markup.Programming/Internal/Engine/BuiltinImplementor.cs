@@ -25,7 +25,7 @@ namespace Markup.Programming.Core
             this.engine = engine;
         }
 
-        public bool TryLookupVariable(string name, out object value)
+        public bool TryGetVariable(string name, out object value)
         {
             if (name == Engine.ContextKey)
             {
@@ -51,13 +51,13 @@ namespace Markup.Programming.Core
         public bool ParameterIsDefined(string name)
         {
             var value = null as object;
-            return engine.TryLookupVariable(name, out value);
+            return engine.TryGetVariable(name, out value);
         }
 
         public bool FunctionIsDefined(string name)
         {
             var value = null as Function;
-            return engine.TryLookupFunction(name, out value);
+            return engine.TryGetFunction(name, out value);
         }
 
         public object Evaluate(IExpression expression)

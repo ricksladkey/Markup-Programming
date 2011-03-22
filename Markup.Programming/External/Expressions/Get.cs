@@ -51,7 +51,7 @@ namespace Markup.Programming
 
         protected override object OnEvaluate(Engine engine)
         {
-            if (Var != null) return engine.LookupVariable(engine.GetVariable(Var, VarCodeTree));
+            if (Var != null) return engine.GetVariable(engine.GetVariable(Var, VarCodeTree));
             var context = engine.GetContext(Path, CodeTree);
             var type = engine.EvaluateType(TypeProperty, TypePath, TypeCodeTree);
             if (PropertyName != null)

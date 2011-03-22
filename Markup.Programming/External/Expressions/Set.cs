@@ -83,7 +83,7 @@ namespace Markup.Programming
                 var variable = engine.GetVariable(Var, VarCodeTree);
                 if (Op != AssignmentOp.Assign)
                 {
-                    var oldValue = engine.LookupVariable(variable);
+                    var oldValue = engine.GetVariable(variable);
                     value = engine.Evaluate(Op, oldValue, value);
                 }
                 engine.DefineVariableInParentScope(variable, value);

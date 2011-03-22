@@ -138,7 +138,7 @@ namespace Markup.Programming
 
         private object GetLoopValue(string name, Type type, Engine engine)
         {
-            return TypeHelper.Convert(engine.LookupVariable(name), type);
+            return TypeHelper.Convert(engine.GetVariable(name), type);
         }
     }
 }
