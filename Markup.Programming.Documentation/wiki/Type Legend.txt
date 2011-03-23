@@ -1,0 +1,4 @@
+!!! Type Legend
+
+* ^^expr*^^: value may be an [expression|Expressions]
+* ^^path^^: the value is a [path expression|PathExpressions]

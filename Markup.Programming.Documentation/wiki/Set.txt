@@ -1,0 +1,33 @@
+!!! Set
+
+The Set element is most often used to:
+* set a path expression that is assignable, for example a property path, a variable, or any item accessor
+* set a target where the target is a two-way data binding
+* set unusual members such as fields or attached dependency properties
+
+|| Property ^^[legend|Property Legend]^^ || Type ^^[legend|Type Legend]^^ || Description ||
+| *{{Context}}* ^^dp^^ ^^cp^^ | {{object}} ^^expr*^^ | base context |
+| {{ContextPath}} | {{string}} ^^path^^ | a path to use for the value of {{Context}} |
+| {{Path}} | {{string}} ^^path^^ |  the path  to set or set from |
+| {{Type}} ^^dp^^ | {{object}} ^^expr*^^ | type for static property or field |
+| {{TypePath}} | {{string}} ^^path^^ | path to use instead of {{Type}} |
+| {{Target}} ^^dp^^ |  {{object}} ^^expr*^^ |  the target to set |
+| {{Var}} | {{string}} | the variable to set |
+| {{PropertyName}} |  {{string}} |  the property to set |
+| {{StaticPropertyName}} | {{string}} | the static property to set |
+| {{FieldName}} |  {{string}} |  the field to set |
+| {{StaticFieldName}} | {{string}} | the static field to set |
+| {{DependencyProperty}} |  {{DependencyProperty}} |  the property to set |
+| *{{Value}}* ^^dp^^ ^^cp^^ | {{object}}^^expr*^^ | the value to set |
+| {{ValuePath}} | {{string}} | path to use instead of {{Value}} |
+| {{Op}} | {{AssignmentOp}} | the type of assignment, defaults to {{Assign}} |
+|| Return Value | object | the result of the set |
+!!!! Description
+Set sets {{PropertyName}}, {{StaticPropertyName}}, {{FieldName}}, {{StaticFieldName}}, or {{DependencyProperty}}, relative to {{Context}}, or {{Path}} relative to {{Context}}, or variable {{Var}}, or target value {{Target}}.  {{DependencyProperty}} must specify both the class and the property because there are no type hints and attached properties are permitted.
+
+PropertyName can specify any of:
+* CLR properties
+* TypeDescriptor properties
+* {{System.Dynamic.DynamicObject}} properties
+
+When properties are referred to in path expressions, they are defined to be implemented using Set.PropertyName.

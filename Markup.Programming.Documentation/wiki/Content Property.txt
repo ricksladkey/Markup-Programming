@@ -1,0 +1,17 @@
+!!!! Content Property
+
+Most markup programming elements have a property marked with the {{ContentProperty}} attribute.  This property is the property that you can supply as the default content of the element when it is not a defined using a self-closing tag.  For example, the [Return] statement has a Value property that is its content property.  As a result, the following three statements are all syntactically legal and identical:
+
+{code:html}
+<p:Return Value="True"/>
+                    
+<p:Return>
+    <p:Return.Value>
+        True
+    </p:Return.Value>
+</p:Return>
+                    
+<p:Return>
+    True
+</p:Return>
+{code:html}

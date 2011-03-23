@@ -1,0 +1,32 @@
+!!! Get
+
+The Get element is most often used to:
+* get a path expression that conceptually produces a value without side effects, e.g. a pure property path
+* get a source where the source is a data binding
+* get unusual members such as fields or attached dependency properties
+
+|| Property ^^[legend|Property Legend]^^ || Type ^^[legend|Type Legend]^^ || Description ||
+| *{{Context}}* ^^dp^^ ^^cp^^ | {{object}} ^^expr*^^ | base context |
+| {{ContextPath}} | {{string}} ^^path^^ | a path to use for the value of {{Context}} |
+| {{Path}} | {{string}} ^^path^^ |  the path  to get or get from |
+| {{Type}} ^^dp^^ | {{object}} ^^expr*^^ | type for static property or field |
+| {{TypePath}} | {{string}} ^^path^^ | path to use instead of {{Type}} |
+| {{Source}} ^^dp^^ |  {{object}} ^^expr*^^ |  the source to get |
+| {{Var}} | {{string}} | the variable to get |
+| {{PropertyName}} |  {{string}} |  the property to get |
+| {{StaticPropertyName}} | {{string}} | the static property to get |
+| {{FieldName}} |  {{string}} |  the field to get |
+| {{StaticFieldName}} | {{string}} | the static field to get |
+| {{DependencyProperty}} |  {{DependencyProperty}} |  the property to get |
+|| Return Value | object | the result of the get |
+!!!! Description
+Get gets {{PropertyName}}, {{StaticPropertyName}}, {{FieldName}}, {{StaticFieldName}}, or {{DependencyProperty}}, relative to {{Context}}, or {{Path}} relative to {{Context}}, or variable {{Var}}, or source value {{Source}}.  {{DependencyProperty}} must specify both the class and the property because there are no type hints and attached properties are permitted.
+
+PropertyName can specify any of:
+* CLR properties
+* TypeDescriptor properties
+* {{System.Dynamic.DynamicObject}} properties
+
+When properties are referred to in path expressions, they are defined to be implemented using Get.PropertyName.
+
+In the case of Get with a pure path, Eval will produce the same result as Get.  The choice is a matter of style.

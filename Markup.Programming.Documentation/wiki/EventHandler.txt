@@ -1,0 +1,10 @@
+!!! EventHandler
+|| Property ^^[legend|Property Legend]^^ || Type ^^[legend|Type Legend]^^ || Description ||
+| {{Context}} ^^dp^^ | {{object}} ^^expr*^^ | base context |
+| {{ContextPath}} | {{string}} ^^path^^ | a path to use for the value of {{Context}} |
+| {{Path}} | {{string}} ^^path^^ |  the path  to the event |
+| {{EventName}} | {{string}}  |  the name of the event |
+| {{SetHandled}} | {{bool}} | whether to set routed events as handled |
+| *{{Body}}* ^^dp^^ ^^cp^^ | {{StatementCollection}} | the body of the handler |
+!!! Description
+EventHandler registers for the event specified by {{Path}} or {{EventName}} and executes {{Body}} when the event is raised with the builtin variables {{@Sender}} and {{@EventArgs}} set to the traditional event handler parameters.  If {{SetHandled}} is true and the event arguments are {{RoutedEventArgs}}, EventHandler will set {{@EventArgs.Handled}} to true.

@@ -1,0 +1,4 @@
+!!! Property Legend
+
+* ^^dp^^: [Dependency Property]
+* ^^cp*^^ [Content Property]

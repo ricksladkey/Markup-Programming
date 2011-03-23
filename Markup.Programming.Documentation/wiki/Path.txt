@@ -1,0 +1,13 @@
+!!! Path
+
+|| Property ^^[legend|Property Legend]^^ || Type ^^[legend|Type Legend]^^ || Description ||
+| {{Context}} ^^dp^^ | {{object}} ^^expr*^^ | base context |
+| {{ContextPath}} | {{string}} ^^path^^ | a path to use for the value of {{Context}} |
+| *{{Expr}}* ^^cp^^ | {{string}} ^^path^^ |  the expression to evaluate |
+|| Return Value | object | the value of the expression |
+!!!! Description
+Evaluates the specified path expression {{Expr}}.  Since {{Expr}} is the content property this component allows the path to be specified as the inner text using the following syntax:
+{code:html}
+<p:Path>path-expression</p:Path>
+{code:html}
+Note: do not surround the text with quotes when using this syntax.  As a result, you may also use double-quotes for strings more easily.

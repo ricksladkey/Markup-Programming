@@ -1,0 +1,21 @@
+!!! Call
+
+The Call element is most commonly used the call into the CLR, the user's application or support libraries.  Most calls can be made using the path syntax and Call can be used with the method call fully specified within the path supplied to call for clarity.  But Call also supports unusual situations, call particular method overloads, calling through particular interfaces, and providing the call arguments using element syntax.
+
+|| Property ^^[legend|Property Legend]^^ || Type ^^[legend|Type Legend]^^ || Description ||
+| {{Context}} ^^dp^^ | {{object}} ^^expr*^^ | base context |
+| {{ContextPath}} | {{string}} ^^path^^ | path to use instead of {{Context}} |
+| {{Path}} | {{string}} ^^path^^ |  the path  to call |
+| {{Type}} ^^dp^^ | {{object}} ^^expr*^^ | static method type or class/interface for instance method |
+| {{TypePath}} | {{string}} ^^path^^ | path to use instead of {{Type}} |
+| {{Argument}} ^^dp^^ | {{object}} ^^expr*^^ | first argument for one parameter methods |
+| {{ArgumentPath}} | {{string}} ^^path^^ | path to use instead of {{Argument}} |
+| *{{Arguments}}* ^^dp^^ ^^cp^^  | {{ExpressionCollection}} | call arguments |
+| {{MethodName}} |  {{string}} |  the instance method to call |
+| {{StaticMethodName}} | {{string}} | the static method to call |
+| {{FunctionName}} | {{string}} | the function to call |
+| {{BuiltinFunction}} | {{BuiltinFunction}} | the builtin function to call |
+| {{TypeArguments}} ^^dp^^ | {{ExpressionCollection}} | the optional types to select which overload to call |
+|| Return Value | object | the result of the call |
+!!!! Description
+Calls the specifed {{Path}}, {{MethodName}}, {{StaticMethodName}}, {{FunctionName}}, or {{BuiltinFunction}} with the the arguments specified in the {{Path}} or {{Argument}} or {{Arguments}}.  If the {{Path}} contains a method call but it is incomplete, that is it does not contain arguments, then the arguments supplied to Call itself with be used in the call.

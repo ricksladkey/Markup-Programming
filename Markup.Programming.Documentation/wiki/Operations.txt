@@ -1,0 +1,28 @@
+!! Operations
+
+An operation is a central concept in markup programming.  Operation is a neutral word: it can mean command or task or job or function or behavior or action.  It just mean *do* something actively.  It is imperative, not declarative.  Show the new dialog.  Commit the changes.  Resign the game.  But in markup programming operations are more of concept because there is no Operation class and yet this by desgin.  An operation is a concept that we are not trying to nail down.  Instead we handlers and expressions and statements that together permit us to put together what makes sense to us to be operations.  But the word Operation does have one important critical use for its conceptual value and that is the purpose of this article.
+
+!!! Operations
+An operation is an *active* component containing zero or more *passive* components.  An active component decides to do what what it does when *it* wants to; a passive component does what it does when it is *told* to do so.  This is all rather abstract so let's take a concrete example.  An EventHandler element is an active component because it actively subscribes to the specified event.  Then, when the event is raised, the EventHandler executes its body which consists of statements which are passive components.  If the body consists of a Call statement, then when the event is raised, the Call statement is executed.  Together, the EventHandler and the Call form an *operation* which we attach to the associated object.   Here are the relationships in this example:
+
+|| Component Type || Class Name || Base Type ||
+| Active | {{EventHandler}} | Handler |
+| Passive | {{Call}} | Statement |
+
+The first important point is that the outermost element in an Attached.Operations collection must be an active component and in particular a Handler such as an EventHandler.  You cannot put anything else anyway because the collection won't allow it.  The second important point is that even though we are literally adding a Handler to an OperationsCollection, conceptually we are adding the whole thing and *conceptually the whole thing is an operation*.  To summarize, operations are handlers typically further composed of statements.
+
+!!! Active Components are also Passive
+One last point to consider is that active component like an event handler which registers its event handler when it "springs to life" can also be used in a passive component context.  For example if you use an EventHandler within an EventHandler, then inner EventHandler will still register for its event, but it won't do it when it "springs to life" but will wait patiently for the outer EventHander to execute it like any other passive component.  In other word, an active component used in a passive component context continues to do what it would have done actively but passively instead.  With this in mind, its usually the right thing to register only once so putting a passive EventHandler inside a loop is probably not going to do what you think it is going to do.
+
+!!! Attaching Operations
+In markup programming attached operations are active XAML objects that are associated with other traditional XAML objects.  The simplest example is an ordinary XAML element like a button and an operation like a click handler.  Operations don't need to be related to events but operations do need to be associated with an object.  The syntax for attached operations uses ordinary XAML syntax for an attached dependency property:
+
+{code:html}
+<Element>
+    <p:Attached.Operations>
+        <!-- attached operations go here -->
+    </p:Attached.Operations>
+</Element>
+{code:html}
+
+Any number of attached operations can be attached because the operations property is a collection.

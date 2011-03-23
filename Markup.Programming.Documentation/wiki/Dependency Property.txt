@@ -1,0 +1,3 @@
+!!!! Dependency Property
+
+A markup programming object property that is a dependency property can be set using normal XAML dependency object syntax including static resources, data binding syntax relative to its associated object, and element name binding or multibindings.

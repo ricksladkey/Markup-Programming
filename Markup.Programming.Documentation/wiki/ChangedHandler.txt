@@ -1,0 +1,8 @@
+!!! ChangedHandler
+|| Property ^^[legend|Property Legend]^^ || Type ^^[legend|Type Legend]^^ || Description ||
+| {{Context}} ^^dp^^ | {{object}} ^^expr*^^ | base context |
+| {{ContextPath}} | {{string}} ^^path^^ | a path to use for the value of {{Context}} |
+| {{Value}} ^^dp^^ | {{object}} | the value the observe (must have a binding) |
+| *{{Body}}* ^^dp^^ ^^cp^^ | {{StatementCollection}} | the body of the handler |
+!!! Description
+The ChangedHandler uses the data binding system to receive dependency property changed notifications for the data binding on the Value property and when those events are raised it executes its Body.  If Value is not null it also executes its Body upon initial registration.  When the body executes the builtin variables @Sender will be set to the sender and the @EventArgs will be set to a structure with three properties: Property (referring to the dependency property Value above), OldValue and NewValue.
