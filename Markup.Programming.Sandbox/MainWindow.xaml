@@ -3,61 +3,31 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:p="http://markupprogramming.codeplex.com/markup/programming"
     Height="300" Width="300">
-    <Canvas x:Name="LayoutRoot">
-        <Canvas.Resources>
-            <p:ResourceCollection x:Key="Brushes">
-                <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
-                    <GradientStop Color="Red" Offset="0"/>
-                    <GradientStop Color="Yellow" Offset="0.5"/>
-                    <GradientStop Color="Blue" Offset="1"/>
-                </LinearGradientBrush>
-                <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
-                    <GradientStop Color="Blue" Offset="0"/>
-                    <GradientStop Color="Green" Offset="0.5"/>
-                    <GradientStop Color="Red" Offset="1"/>
-                </LinearGradientBrush>
-                <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
-                    <GradientStop Color="Red" Offset="0"/>
-                    <GradientStop Color="Yellow" Offset="0.5"/>
-                    <GradientStop Color="Blue" Offset="1"/>
-                </LinearGradientBrush>
-                <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
-                    <GradientStop Color="Blue" Offset="0"/>
-                    <GradientStop Color="Green" Offset="0.5"/>
-                    <GradientStop Color="Red" Offset="1"/>
-                </LinearGradientBrush>
-            </p:ResourceCollection>
+    <Grid Name="LayoutRoot">
+        <Grid.Resources>
             <p:ResourceObject x:Key="ViewModel">
-                <p:Property PropertyName="LogoData">
-                    <p:With Var="$angle" Path="-90.0">
-                        <p:Iterator>
-                            <p:ForEach Var="$brush" Value="{StaticResource Brushes}">
-                                <p:Yield>
-                                    <p:Object>
-                                        <p:Property PropertyName="Angle" Path="$angle += 90"/>
-                                        <p:Property PropertyName="Brush" Path="$brush"/>
-                                    </p:Object>
-                                </p:Yield>
-                            </p:ForEach>
-                        </p:Iterator>
-                    </p:With>
+                <p:Property PropertyName="ControlPoints">
+                    <p:Collection>
+                        <p:Path>[] { X = 50., Y = 50. }</p:Path>
+                        <p:Path>[] { X = 100., Y = 100. }</p:Path>
+                        <p:Path>[] { X = 50., Y = 150. }</p:Path>
+                    </p:Collection>
+                </p:Property>
+                <p:Property PropertyName="Segments">
+                    <p:Collection>
+                        <p:Path>[] { Start = @this.ControlPoints[0], End = @this.ControlPoints[1] }</p:Path>
+                        <p:Path>[] { Start = @this.ControlPoints[1], End = @this.ControlPoints[2] }</p:Path>
+                    </p:Collection>
                 </p:Property>
             </p:ResourceObject>
-        </Canvas.Resources>
-        <ItemsControl ItemsSource="{Binding Value.LogoData, Source={StaticResource ViewModel}}">
-            <ItemsControl.OpacityMask>
-                <RadialGradientBrush>
-                    <GradientStop Color="Transparent" Offset="0.95"/>
-                    <GradientStop Color="White" Offset="0.949"/>
-                    <GradientStop Color="White" Offset="0.501"/>
-                    <GradientStop Color="Transparent" Offset="0.5"/>
-                </RadialGradientBrush>
-            </ItemsControl.OpacityMask>
-            <ItemsControl.Template>
-                <ControlTemplate TargetType="ItemsControl">
-                    <ItemsPresenter/>
-                </ControlTemplate>
-            </ItemsControl.Template>
+        </Grid.Resources>
+        <Grid.DataContext>
+            <Binding Path="Value" Source="{StaticResource ViewModel}"/>
+        </Grid.DataContext>
+        <Grid.Background>
+            <SolidColorBrush Color="AliceBlue"/>
+        </Grid.Background>
+        <ItemsControl ItemsSource="{Binding Segments}">
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
                     <Canvas/>
@@ -65,36 +35,53 @@
             </ItemsControl.ItemsPanel>
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
-                    <Canvas Width="1" Height="1">
-                        <Canvas.RenderTransform>
-                            <RotateTransform Angle="{Binding Angle}" CenterX="49" CenterY="49"/>
-                        </Canvas.RenderTransform>
-                        <Viewport3D Width="100" Height="100">
-                            <ModelVisual3D>
-                                <ModelVisual3D.Content>
-                                    <Model3DGroup>
-                                        <GeometryModel3D>
-                                            <GeometryModel3D.Geometry>
-                                                <MeshGeometry3D Positions="0 0 0, 0 1 0, 1 0 0, 1 1 0" TextureCoordinates="0 1, 0 0, 1 1, 1 0" TriangleIndices="0 2 1, 2 3 1"/>
-                                            </GeometryModel3D.Geometry>
-                                            <GeometryModel3D.Material>
-                                                <DiffuseMaterial Brush="{Binding Brush}"/>
-                                            </GeometryModel3D.Material>
-                                            <GeometryModel3D.Transform>
-                                                <MatrixTransform3D Matrix="0.002,0,0,0,-0.499,-0.498,0,-0.998,0,0,1,0,0.499,0.5,0,1"/>
-                                            </GeometryModel3D.Transform>
-                                        </GeometryModel3D>
-                                        <AmbientLight Color="White" />
-                                    </Model3DGroup>
-                                </ModelVisual3D.Content>
-                            </ModelVisual3D>
-                            <Viewport3D.Camera>
-                                <OrthographicCamera Position="0.5 0.5 1" LookDirection="0 0 -1" UpDirection="0 1 0" Width="1"/>
-                            </Viewport3D.Camera>
-                        </Viewport3D>
-                    </Canvas>
+                    <Line X1="{Binding Start.X}" Y1="{Binding Start.Y}"
+                          X2="{Binding End.X}" Y2="{Binding End.Y}"
+                          Stroke="Black" StrokeThickness="2"/>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
         </ItemsControl>
-    </Canvas>
+        <ListBox ItemsSource="{Binding ControlPoints}">
+            <ListBox.Template>
+                <ControlTemplate TargetType="ListBox">
+                    <ItemsPresenter/>
+                </ControlTemplate>
+            </ListBox.Template>
+            <ListBox.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <Canvas/>
+                </ItemsPanelTemplate>
+            </ListBox.ItemsPanel>
+            <ListBox.ItemContainerStyle>
+                <Style TargetType="ListBoxItem">
+                    <Setter Property="Focusable" Value="False"/>
+                    <Setter Property="Canvas.Left" Value="{Binding X}"/>
+                    <Setter Property="Canvas.Top" Value="{Binding Y}"/>
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="ListBoxItem">
+                                <ContentPresenter/>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </ListBox.ItemContainerStyle>
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <Ellipse Margin="-10,-10,0,0" Width="20" Height="20"
+                             Stroke="DarkBlue" Fill="Transparent">
+                        <p:Attached.Operations>
+                            <p:CallHandler Path="MouseLeftButtonDown.@AssociatedObject.CaptureMouse()"/>
+                            <p:CallHandler Path="MouseLeftButtonUp.@AssociatedObject.ReleaseMouseCapture()"/>
+                            <p:ScriptHandler Path="MouseMove">
+                                if (@EventArgs.LeftButton != [MouseButtonState].Pressed) return;
+                                var $mouse = @EventArgs.GetPosition(@FindElement("LayoutRoot"));
+                                X = $mouse.X; Y = $mouse.Y;
+                            </p:ScriptHandler>
+                        </p:Attached.Operations>
+                    </Ellipse>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+    </Grid>
 </UserControl>

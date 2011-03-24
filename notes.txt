@@ -1,7 +1,6 @@
-- support persistent storage for handlers
-- support shared storage for operations in the same operations collection
+- support persistent storage for handlers, support shared storage for operations in the same operations collection
 - types and enums that can be resolved at compile time should be
-- add @this to Silverlight and document it for both
+- add relativeTo parameter to @FindElement, document @this and @FindElement
 - show call-stack within code tree
 - add switch/case to scripting
 - allow context to be set from scripting

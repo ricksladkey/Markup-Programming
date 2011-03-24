@@ -161,10 +161,17 @@ namespace Markup.Programming
 
         protected override void OnInitialize(Engine engine)
         {
-            var pairs = Properties.Select(property =>
-                new NameValuePair(property.PropertyName, property.Evaluate(engine))).ToArray();
+            // Phase I: initialize properties themselves.
+            var pairs = Properties.Select(property => new NameValuePair(property.PropertyName, null)).ToArray();
             Type dynamicType = null;
             value = DynamicHelper.CreateObject(ref dynamicType, pairs);
+            engine.With(this, new NameDictionary { { "@this", value } }, e => SetValues(engine));
+        }
+
+        private void SetValues(Engine engine)
+        {
+            // Phase II: initialize property values.
+            foreach (var property in Properties) this[property.PropertyName] = property.Evaluate(engine);
         }
 
         public IEnumerable<NameTypePair> DynamicProperties
