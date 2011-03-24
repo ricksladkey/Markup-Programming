@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Windows;
+using System.Windows.Media;
 
 namespace Markup.Programming.Core
 {
@@ -71,6 +72,21 @@ namespace Markup.Programming.Core
         public object Op(Op op, params object[] operands)
         {
             return engine.Evaluate(op, operands);
+        }
+
+        public object FindElement(string elementName)
+        {
+            var context = engine.CurrentFrame.Caller.AssociatedObject;
+            while (context != null)
+            {
+                System.Diagnostics.Debug.WriteLine("context = {0}", context);
+                if (!(context is FrameworkElement)) return null;
+                var frameworkElement = context as FrameworkElement;
+                var element = frameworkElement.FindName(elementName);
+                if (element != null) return element;
+                context = VisualTreeHelper.GetParent(frameworkElement);
+            }
+            return null;
         }
     }
 }

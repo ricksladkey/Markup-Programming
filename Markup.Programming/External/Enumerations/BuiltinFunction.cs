@@ -17,5 +17,6 @@ namespace Markup.Programming
         GetResourceObject,
         Convert,
         Op,
+        FindElement,
     }
 }

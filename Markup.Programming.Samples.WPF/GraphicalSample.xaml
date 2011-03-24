@@ -76,14 +76,11 @@
                         <p:Attached.Operations>
                             <p:CallHandler Path="MouseLeftButtonDown.@AssociatedObject.CaptureMouse()"/>
                             <p:CallHandler Path="MouseLeftButtonUp.@AssociatedObject.ReleaseMouseCapture()"/>
-                            <p:EventHandler Path="MouseMove">
-                                <p:Set Var="$root" Value="{Binding ElementName=LayoutRoot}"/>
-                                <p:Script>
-                                    if (@EventArgs.LeftButton != [MouseButtonState].Pressed) return;
-                                    var $mouse = @EventArgs.GetPosition($root);
-                                    X = $mouse.X; Y = $mouse.Y;
-                                </p:Script>
-                            </p:EventHandler>
+                            <p:ScriptHandler Path="MouseMove">
+                                if (@EventArgs.LeftButton != [MouseButtonState].Pressed) return;
+                                var $mouse = @EventArgs.GetPosition(@FindElement("LayoutRoot"));
+                                X = $mouse.X; Y = $mouse.Y;
+                            </p:ScriptHandler>
                         </p:Attached.Operations>
                     </Ellipse>
                 </DataTemplate>
