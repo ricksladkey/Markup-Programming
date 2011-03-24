@@ -16,8 +16,8 @@
                 </p:Property>
                 <p:Property PropertyName="Segments">
                     <p:Collection>
-                        <p:Path>[] { Start = [] { X = 50., Y = 50. }, End = [] { X = 100., Y = 100. } }</p:Path>
-                        <p:Path>[] { Start = [] { X = 100., Y = 100. }, End = [] { X = 50., Y = 150. } }</p:Path>
+                        <p:Path>[] { Start = @this.ControlPoints[0], End = @this.ControlPoints[1] }</p:Path>
+                        <p:Path>[] { Start = @this.ControlPoints[1], End = @this.ControlPoints[2] }</p:Path>
                     </p:Collection>
                 </p:Property>
             </p:ResourceObject>
@@ -52,6 +52,19 @@
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
                     <Ellipse Margin="-10,-10,0,0" Width="20" Height="20" Stroke="DarkBlue" Fill="Transparent">
+                        <p:Attached.Operations>
+                            <p:ScriptHandler Path="MouseLeftButtonDown">
+                                @AssociatedObject.CaptureMouse();
+                            </p:ScriptHandler>
+                            <p:ScriptHandler Path="MouseMove">
+                                if (@EventArgs.LeftButton != [MouseButtonState].Pressed) return;
+                                var $mouse = @EventArgs.GetPosition(@AssociatedObject.Parent);
+                                X = $mouse.X; Y = $mouse.Y;
+                            </p:ScriptHandler>
+                            <p:ScriptHandler Path="MouseLeftButtonUp">
+                                @AssociatedObject.ReleaseMouseCapture();
+                            </p:ScriptHandler>
+                        </p:Attached.Operations>
                     </Ellipse>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>

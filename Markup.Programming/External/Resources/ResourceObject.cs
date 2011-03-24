@@ -109,14 +109,14 @@ namespace Markup.Programming
 
         protected override void OnInitialize(Engine engine)
         {
+            // Phase I: initialize properties themselves.
             foreach (var property in Properties)
             {
                 var type = property.GetType(engine);
-                var value = property.Evaluate(engine);
-                value = TypeHelper.Convert(value, type);
-                propertyStore.Add(property.PropertyName, value);
+                propertyStore.Add(property.PropertyName, null);
             }
             dynamicProperties = Properties.Select(property => GetPair(engine, property)).ToArray();
+            engine.With(this, new NameDictionary { { "@this", this } }, e => SetValues(engine));
         }
 
         private NameTypePair GetPair(Engine engine, Property property)
@@ -124,6 +124,18 @@ namespace Markup.Programming
             var name = property.PropertyName;
             var type = property.GetType(engine) ?? typeof(object);
             return new NameTypePair(name, type);
+        }
+
+        private void SetValues(Engine engine)
+        {
+            // Phase II: initialize property values.
+            foreach (var property in Properties)
+            {
+                var type = property.GetType(engine);
+                var value = property.Evaluate(engine);
+                value = TypeHelper.Convert(value, type);
+                this[property.PropertyName] = value;
+            }
         }
     }
 

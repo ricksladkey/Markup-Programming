@@ -279,7 +279,7 @@ namespace Markup.Programming.Core
         private StatementNode ParseReturn()
         {
             ParseKeyword("return");
-            var value = ParseExpression();
+            var value = !PeekToken(";") ? ParseExpression() : null;
             ParseSemicolon();
             return new ReturnNode { Value = value };
         }
@@ -468,9 +468,13 @@ namespace Markup.Programming.Core
             if (PeekToken("."))
             {
                 ParseToken(".");
-                var methodName = ParseIdentifier();
-                var args = PeekToken("(") ? ParseArguments() : null;
-                return new StaticMethodNode { Type = typeNode, MethodName = methodName, Arguments = args };
+                var identifier = ParseIdentifier();
+                if (IsCurrentCall)
+                {
+                    var args = PeekToken("(") ? ParseArguments() : null;
+                    return new StaticMethodNode { Type = typeNode, MethodName = identifier, Arguments = args };
+                }
+                return new StaticPropertyNode { Type = typeNode, PropertyName = identifier };
             }
             if (PeekToken("("))
                 return new OpNode { Op = Op.New, Operands = new ExpressionNode[] { typeNode }.Concat(ParseArguments()).ToList() };

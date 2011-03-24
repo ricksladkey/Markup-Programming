@@ -52,9 +52,20 @@ namespace Markup.Programming.Core
             return value;
         }
 
+        private enum EmptyEnum
+        {
+        };
+
         public static object GetStaticProperty(Engine engine, Type type, string propertyName)
         {
-            engine.Throw("type cannot be null");
+            if (type == null) engine.Throw("type cannot be null");
+            if (type.IsEnum)
+            {
+                var names = Enum.GetNames(type);
+                var values = Enum.GetValues(type);
+                for (int i = 0; i < names.Length; i++) if (names[i] == propertyName) return values.GetValue(i);
+                engine.Throw("enum value not found");
+            }
             var propInfo = type.GetProperty(propertyName, BindingFlags.Static | BindingFlags.Public | BindingFlags.FlattenHierarchy);
             var value = propInfo.GetValue(null, null);
             return value;
@@ -166,7 +177,7 @@ namespace Markup.Programming.Core
 
         public static void SetStaticProperty(Engine engine, Type type, string propertyName, object value)
         {
-            engine.Throw("type cannot be null");
+            if (type == null) engine.Throw("type cannot be null");
             var propertyInfo = type.GetProperty(propertyName, BindingFlags.Static | BindingFlags.Public | BindingFlags.FlattenHierarchy);
             if (propertyInfo != null)
             {

@@ -6,6 +6,7 @@ using Markup.Programming.Core;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Collections;
 using System.Collections.ObjectModel;
+using System.Windows.Input;
 
 namespace Markup.Programming.Tests.Tests
 {
@@ -107,6 +108,8 @@ namespace Markup.Programming.Tests.Tests
             BasicGetTest(2, "[List<int>] { 1, 2, 3 }[1]");
             BasicGetTest(42, "@block: { return 42; }");
             BasicGetTest(true, "// comment; true");
+            var foo = typeof(MouseButtonState);
+            BasicGetTest(true, "[MouseButtonState].Pressed != [MouseButtonState].Released");
 
             BasicGetTest("Test1", "String1");
             BasicGetTest("Test2", "Object1.String1");
@@ -140,12 +143,12 @@ namespace Markup.Programming.Tests.Tests
             TestHelper.ScriptTest(new List<int> { 1, 2, 3 }, "return @iterator[List<int>]: { yield 1; yield 2; yield 3; }");
             TestHelper.ScriptTest(null, "for (;;) break;");
             TestHelper.ScriptTest(3, "var $Add($a, $b) { return $a + $b; }; return $Add(1, 2);");
+            TestHelper.ScriptTest(3, "var $point = [] { X = 1, Y = 2 }; return $point.X + $point.Y;");
         }
 
         [TestMethod]
         public void ScriptTestSandbox()
         {
-            TestHelper.ScriptTest(3, "var $point = [] { X = 1, Y = 2 }; return $point.X + $point.Y;");
         }
     }
 }

@@ -111,6 +111,7 @@
   <ItemGroup>
     <Compile Include="External\Expressions\Script.cs" />
     <Compile Include="External\Expressions\With.cs" />
+    <Compile Include="External\Handlers\ScriptHandler.cs" />
     <Compile Include="External\Objects\Pair.cs" />
     <Compile Include="External\Statements\Continue.cs" />
     <Compile Include="Internal\Code\BlockNode.cs" />
@@ -121,6 +122,7 @@
     <Compile Include="Internal\Code\FramedExpressionNode.cs" />
     <Compile Include="Internal\Code\FuncNode.cs" />
     <Compile Include="Internal\Code\IteratorNode.cs" />
+    <Compile Include="Internal\Code\StaticPropertyNode.cs" />
     <Compile Include="Internal\Code\VarNode.cs" />
     <Compile Include="Internal\Code\ForNode.cs" />
     <Compile Include="Internal\Code\FramedStatementNode.cs" />

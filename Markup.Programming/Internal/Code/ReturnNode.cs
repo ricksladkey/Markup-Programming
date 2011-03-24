@@ -5,7 +5,7 @@
         public ExpressionNode Value { get; set; }
         protected override void OnExecute(Engine engine)
         {
-            engine.SetReturnValue(Value.Evaluate(engine));
+            engine.SetReturnValue(Value != null ? Value.Evaluate(engine) : null);
         }
     }
 }

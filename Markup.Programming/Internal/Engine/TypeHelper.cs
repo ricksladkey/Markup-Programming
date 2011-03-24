@@ -205,6 +205,7 @@ namespace Markup.Programming.Core
         {
             "System",
             "System.Windows",
+            "System.Windows.Input",
             "System.Windows.Controls",
             "System.Collections.Generic",
             "System.Collections",

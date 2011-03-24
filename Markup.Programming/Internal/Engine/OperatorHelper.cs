@@ -117,7 +117,7 @@ namespace Markup.Programming.Core
                     return Compare(engine, operands[0], operands[1]);
                 case Op.Equals:
                 case Op.NotEquals:
-                    if ((operands[0] == null || operands[0] is string) && (operands[1] == null || operands[1] is string))
+                    if (operands[0] == null || operands[1] == null)
                         return Equate(engine, operands[0], operands[1]) == (op == Op.Equals);
                     break;
                 default:
@@ -265,8 +265,11 @@ namespace Markup.Programming.Core
             }
 
             // Special case for equals.
-            if (op == Op.Equals && TypeHelper.IsClassObject(lhs))
-                return lhs.Equals(rhs);
+            if (op == Op.Equals || op == Op.NotEquals)
+            {
+                if (TypeHelper.IsClassObject(lhs) || type.IsEnum)
+                    return lhs.Equals(rhs) == (op == Op.Equals);
+            }
 
             return engine.Throw("no such operator: {0}({1}, {2})", op, type, type);
         }
