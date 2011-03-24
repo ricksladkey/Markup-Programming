@@ -9,15 +9,15 @@
             <p:ResourceObject x:Key="ViewModel">
                 <p:Property PropertyName="ControlPoints">
                     <p:Collection>
-                        <p:Path>[] { X = 50, Y = 50 }</p:Path>
-                        <p:Path>[] { X = 100, Y = 100 }</p:Path>
-                        <p:Path>[] { X = 50, Y = 150 }</p:Path>
+                        <p:Path>[] { X = 50., Y = 50. }</p:Path>
+                        <p:Path>[] { X = 100., Y = 100. }</p:Path>
+                        <p:Path>[] { X = 50., Y = 150. }</p:Path>
                     </p:Collection>
                 </p:Property>
                 <p:Property PropertyName="Segments">
                     <p:Collection>
-                        <p:Path>[] { Start = { X = 50, Y = 50 }, End = [] { X = 100, Y = 100 } }</p:Path>
-                        <p:Path>[] { Start = { X = 100, Y = 100 }, End = [] { X = 50, Y = 150 } }</p:Path>
+                        <p:Path>[] { Start = [] { X = 50., Y = 50. }, End = [] { X = 100., Y = 100. } }</p:Path>
+                        <p:Path>[] { Start = [] { X = 100., Y = 100. }, End = [] { X = 50., Y = 150. } }</p:Path>
                     </p:Collection>
                 </p:Property>
             </p:ResourceObject>
