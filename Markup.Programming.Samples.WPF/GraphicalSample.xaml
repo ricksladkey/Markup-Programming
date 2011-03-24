@@ -74,9 +74,8 @@
                     <Ellipse Margin="-10,-10,0,0" Width="20" Height="20"
                              Stroke="DarkBlue" Fill="Transparent">
                         <p:Attached.Operations>
-                            <p:ScriptHandler Path="MouseLeftButtonDown">
-                                @AssociatedObject.CaptureMouse();
-                            </p:ScriptHandler>
+                            <p:CallHandler Path="MouseLeftButtonDown.@AssociatedObject.CaptureMouse()"/>
+                            <p:CallHandler Path="MouseLeftButtonUp.@AssociatedObject.ReleaseMouseCapture()"/>
                             <p:EventHandler Path="MouseMove">
                                 <p:Set Var="$root" Value="{Binding ElementName=LayoutRoot}"/>
                                 <p:Script>
@@ -85,9 +84,6 @@
                                     X = $mouse.X; Y = $mouse.Y;
                                 </p:Script>
                             </p:EventHandler>
-                            <p:ScriptHandler Path="MouseLeftButtonUp">
-                                @AssociatedObject.ReleaseMouseCapture();
-                            </p:ScriptHandler>
                         </p:Attached.Operations>
                     </Ellipse>
                 </DataTemplate>

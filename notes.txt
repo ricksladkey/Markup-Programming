@@ -1,3 +1,5 @@
+- add name-scope resolver or layout root
+- types and enums that can be resolved at compile time should be
 - add @this to Silverlight and document it for both
 - show call-stack within code tree
 - add switch/case to scripting
