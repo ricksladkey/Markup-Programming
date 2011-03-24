@@ -3,8 +3,8 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:p="http://markupprogramming.codeplex.com/markup/programming"
-    Height="300" Width="300">
-    <Grid>
+    Height="300" Width="300" Background="AliceBlue">
+    <Grid Name="LayoutRoot">
         <Grid.Resources>
             <p:ResourceObject x:Key="ViewModel">
                 <p:Property PropertyName="ControlPoints">
@@ -25,6 +25,24 @@
         <Grid.DataContext>
             <Binding Path="Value" Source="{StaticResource ViewModel}"/>
         </Grid.DataContext>
+        <Grid.Background>
+            <DrawingBrush x:Name="GridBrush" Viewport="0,0,10,10" ViewportUnits="Absolute" TileMode="Tile">
+                <DrawingBrush.Drawing>
+                    <DrawingGroup>
+                        <GeometryDrawing Brush="#CCCCFF">
+                            <GeometryDrawing.Geometry>
+                                <RectangleGeometry Rect="0,0 10,1"/>
+                            </GeometryDrawing.Geometry>
+                        </GeometryDrawing>
+                        <GeometryDrawing Brush="#CCCCFF">
+                            <GeometryDrawing.Geometry>
+                                <RectangleGeometry Rect="0,0 1,10"/>
+                            </GeometryDrawing.Geometry>
+                        </GeometryDrawing>
+                    </DrawingGroup>
+                </DrawingBrush.Drawing>
+            </DrawingBrush>
+        </Grid.Background>
         <ItemsControl ItemsSource="{Binding Segments}">
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
@@ -33,7 +51,9 @@
             </ItemsControl.ItemsPanel>
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
-                    <Line X1="{Binding Start.X}" Y1="{Binding Start.Y}" X2="{Binding End.X}" Y2="{Binding End.Y}" Stroke="Black" StrokeThickness="2"/>
+                    <Line X1="{Binding Start.X}" Y1="{Binding Start.Y}"
+                          X2="{Binding End.X}" Y2="{Binding End.Y}"
+                          Stroke="Black" StrokeThickness="2"/>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
         </ItemsControl>
@@ -51,16 +71,20 @@
             </ItemsControl.ItemContainerStyle>
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
-                    <Ellipse Margin="-10,-10,0,0" Width="20" Height="20" Stroke="DarkBlue" Fill="Transparent">
+                    <Ellipse Margin="-10,-10,0,0" Width="20" Height="20"
+                             Stroke="DarkBlue" Fill="Transparent">
                         <p:Attached.Operations>
                             <p:ScriptHandler Path="MouseLeftButtonDown">
                                 @AssociatedObject.CaptureMouse();
                             </p:ScriptHandler>
-                            <p:ScriptHandler Path="MouseMove">
-                                if (@EventArgs.LeftButton != [MouseButtonState].Pressed) return;
-                                var $mouse = @EventArgs.GetPosition(@AssociatedObject.Parent);
-                                X = $mouse.X; Y = $mouse.Y;
-                            </p:ScriptHandler>
+                            <p:EventHandler Path="MouseMove">
+                                <p:Set Var="$root" Value="{Binding ElementName=LayoutRoot}"/>
+                                <p:Script>
+                                    if (@EventArgs.LeftButton != [MouseButtonState].Pressed) return;
+                                    var $mouse = @EventArgs.GetPosition($root);
+                                    X = $mouse.X; Y = $mouse.Y;
+                                </p:Script>
+                            </p:EventHandler>
                             <p:ScriptHandler Path="MouseLeftButtonUp">
                                 @AssociatedObject.ReleaseMouseCapture();
                             </p:ScriptHandler>
