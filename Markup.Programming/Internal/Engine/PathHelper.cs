@@ -52,23 +52,26 @@ namespace Markup.Programming.Core
             return value;
         }
 
-        private enum EmptyEnum
-        {
-        };
-
         public static object GetStaticProperty(Engine engine, Type type, string propertyName)
         {
             if (type == null) engine.Throw("type cannot be null");
-            if (type.IsEnum)
-            {
-                var names = Enum.GetNames(type);
-                var values = Enum.GetValues(type);
-                for (int i = 0; i < names.Length; i++) if (names[i] == propertyName) return values.GetValue(i);
-                engine.Throw("enum value not found");
-            }
+            if (type.IsEnum) return GetEnumValue(engine, type, propertyName);
             var propInfo = type.GetProperty(propertyName, BindingFlags.Static | BindingFlags.Public | BindingFlags.FlattenHierarchy);
             var value = propInfo.GetValue(null, null);
             return value;
+        }
+
+        public static object GetEnumValue(Engine engine, Type type, string enumName)
+        {
+            if (!type.IsEnum) engine.Throw("not an enum");
+            try
+            {
+                return Enum.Parse(type, enumName, false);
+            }
+            catch
+            {
+            }
+            return engine.Throw("enum value not found: " + enumName);
         }
 
         public static Type GetPropertyType(Engine engine, object context, string propertyName)
@@ -88,6 +91,15 @@ namespace Markup.Programming.Core
                 var value = GetProperty(engine, context, propertyName);
                 return value != null ? value.GetType() : typeof(object);
             }
+
+#if SILVERLIGHT
+            if (context is IDynamicObject)
+            {
+                var dynamicObject = context as IDynamicObject;
+                foreach (var property in dynamicObject.DynamicProperties)
+                    if (property.Name == propertyName) return property.Type;
+            }
+#endif
 
             return engine.Throw("no such property: " + propertyName) as Type;
         }
@@ -111,6 +123,15 @@ namespace Markup.Programming.Core
 
             if (context is System.Dynamic.DynamicObject)
                 if ((context as System.Dynamic.DynamicObject).TryGetMember(new BasicGetMemberBinder(propertyName), out value)) return value;
+
+#if SILVERLIGHT
+            if (context is IDynamicObject)
+            {
+                var dynamicObject = context as IDynamicObject;
+                foreach (var property in dynamicObject.DynamicProperties)
+                    if (property.Name == propertyName) return dynamicObject[propertyName];
+            }
+#endif
 
             return engine.Throw("no such property: " + propertyName);
         }
@@ -171,6 +192,19 @@ namespace Markup.Programming.Core
                 if ((context as System.Dynamic.DynamicObject).TrySetMember(new BasicSetMemberBinder(propertyName), value))
                     return value;
             }
+
+#if SILVERLIGHT
+            if (context is IDynamicObject)
+            {
+                var dynamicObject = context as IDynamicObject;
+                foreach (var property in dynamicObject.DynamicProperties)
+                    if (property.Name == propertyName)
+                    {
+                        dynamicObject[propertyName] = value;
+                        return value;
+                    }
+            }
+#endif
 
             return engine.Throw("no such property: " + propertyName);
         }

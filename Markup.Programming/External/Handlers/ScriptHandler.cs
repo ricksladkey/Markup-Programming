@@ -15,7 +15,7 @@ namespace Markup.Programming
         protected override void OnEventHandler(Engine engine)
         {
             engine.SetReturnFrame();
-            if (Body == null) return;
+            if (Script == null) return;
             engine.ExecuteScript(Script, CodeTree);
             engine.GetAndResetReturnValue();
         }
