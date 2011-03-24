@@ -8,6 +8,7 @@
     Width="500" Height="500">
     <Window.Resources>
         <p:ResourceCollection x:Key="Windows">
+            <samples:GraphicalSample/>
             <samples:TableOfSquares/>
             <samples:SelectOnFocusComboBox/>
             <samples:StyleSample/>

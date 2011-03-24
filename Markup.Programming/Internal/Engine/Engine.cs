@@ -436,7 +436,8 @@ namespace Markup.Programming.Core
 
         public object Throw(string message, params object[] args)
         {
-            return ThrowHelper.Throw(new InvalidOperationException(string.Format(message, args)), this);
+            var formattedMessage = args.Length == 0 ? message : string.Format(message, args);
+            return ThrowHelper.Throw(new InvalidOperationException(formattedMessage), this);
         }
 
         public object Evaluate(Op op, params object[] values)

@@ -113,6 +113,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="GraphicalSample.xaml.cs">
+      <DependentUpon>GraphicalSample.xaml</DependentUpon>
+    </Compile>
     <Compile Include="LogoSample.xaml.cs">
       <DependentUpon>LogoSample.xaml</DependentUpon>
     </Compile>
@@ -136,6 +139,10 @@
     <Compile Include="TableOfSquares.xaml.cs">
       <DependentUpon>TableOfSquares.xaml</DependentUpon>
     </Compile>
+    <Page Include="GraphicalSample.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="LogoSample.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

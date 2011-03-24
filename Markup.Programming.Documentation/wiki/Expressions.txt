@@ -1,0 +1,18 @@
+﻿!! Expressions
+Expressions are statements that produce a value.  Expressions can be used anywhere markup programming expects an item of type object and must be used anywhere an _ExpressionCollection_ is expected.  For example, [GetItem], which is itself an expression, takes an _Index_ property which is of type object and so you can supply an expression instead.  Likewise, [Call], which is also an expression, has an _Arguments_ property which is an _ExpressionCollection_ so all of the elements of _Arguments_ must be expressions.  This restriction is necessary in order to fully support data binding.  If you need to supply a simple value, you can wrap it with Expr.
+
+* [Block]
+* [Call]
+* [Collection]
+* [Expr]
+* [Get]
+* [GetItem]
+* [Iterator]
+* [New]
+* [Object]
+* [Operator]
+* [Path]
+* [Script]
+* [Set]
+* [SetItem]
+* [With]
