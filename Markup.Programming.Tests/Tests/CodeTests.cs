@@ -25,11 +25,11 @@ namespace Markup.Programming.Tests.Tests
             public DependencyObject AssociatedObject { get { return null; } }
             public object Evaluate(IDictionary<string, object> variables, string path)
             {
-                return new Engine().With(this, variables, engine => GetPath(variables, path, engine));
+                return new Engine().EvaluateFrame(this, variables, engine => GetPath(variables, path, engine));
             }
             public object Evaluate(IDictionary<string, object> variables, string path, object value)
             {
-                return new Engine().With(this, variables, engine => SetPath(variables, path, value, engine));
+                return new Engine().EvaluateFrame(this, variables, engine => SetPath(variables, path, value, engine));
             }
             private object GetPath(IDictionary<string, object> variables, string path, Engine engine)
             {
@@ -113,7 +113,7 @@ namespace Markup.Programming.Tests.Tests
 
             BasicGetTest("Test1", "String1");
             BasicGetTest("Test2", "Object1.String1");
-            BasicGetTest(true, "@ParameterIsDefined('$variable1')");
+            BasicGetTest(true, "@VariableIsDefined('$variable1')");
             BasicGetTest("Value1", "$variable1");
             BasicGetTest(256.0, "[System.Math].Pow(2, 8)");
             BasicSetTest((vm, p) => Assert.AreEqual(p["$variable1"], 42), "$variable1", 42);

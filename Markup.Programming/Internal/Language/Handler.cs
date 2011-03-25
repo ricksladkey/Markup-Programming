@@ -7,7 +7,9 @@ namespace Markup.Programming.Core
 {
     public abstract class Handler : PrimitiveActiveComponent
     {
-        internal bool TopLevelOperation { get; set; }
+        public static string AttachedKey = "@Attached";
+
+        internal IDictionary<string, object> State { get; set; }
 
         public string Path { get; set; }
 
@@ -32,26 +34,24 @@ namespace Markup.Programming.Core
         public static readonly DependencyProperty SetHandledProperty =
             DependencyProperty.Register("SetHandled", typeof(bool), typeof(Handler), null);
 
-        private IDictionary<string, object> closure = new Dictionary<string, object>();
-
         protected override void OnAttached()
         {
             base.OnAttached();
             Attach(ContextProperty);
-            if (TopLevelOperation) Process(new Engine());
+            if (State != null) new Engine().EvaluateFrame(this, State, OnProcess);
+            var state = State;
         }
 
         protected override object OnProcess(Engine engine)
         {
-            SetContext(engine);
-            OnActiveExecute(engine);
-            closure = engine.GetClosure();
+            OnExecute(engine);
             return null;
         }
 
         protected override void OnExecute(Engine engine)
         {
-            engine.Throw("active operation executed as statement");
+            SetContext(engine);
+            OnActiveExecute(engine);
         }
 
         protected abstract void OnActiveExecute(Engine engine);
@@ -67,7 +67,12 @@ namespace Markup.Programming.Core
         protected void RegisterHandler(Engine engine, string alternateEventName)
         {
             var context = AssociatedObject;
-            registeredEventName = EventName ?? alternateEventName;
+            registeredEventName = EventName ?? alternateEventName ?? AttachedKey;
+            if (registeredEventName == AttachedKey)
+            {
+                EventHandler(this, null);
+                return;
+            }
             var eventInfo = context.GetType().GetEvent(registeredEventName);
             if (eventInfo == null) engine.Throw("no such event: " + registeredEventName);
             eventInfo.AddEventHandler(context,
@@ -76,7 +81,11 @@ namespace Markup.Programming.Core
 
         public void EventHandler(object sender, object args)
         {
-            new Engine(sender, args).With(this, closure, engine => EventHandler(engine));
+            new Engine(sender, args).ExecuteFrame(this, State, EventHandler);
+            if (State != null)
+            {
+                var state = State;
+            }
         }
 
         private void EventHandler(Engine engine)
@@ -99,7 +108,7 @@ namespace Markup.Programming.Core
         protected override void ExecuteBody(Engine engine)
         {
             SetContext(engine);
-            base.ExecuteBody(engine);
+            foreach (var statement in Body) statement.Execute(engine, State);
         }
     }
 }

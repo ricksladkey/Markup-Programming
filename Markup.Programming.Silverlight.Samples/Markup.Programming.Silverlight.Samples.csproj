@@ -145,6 +145,10 @@
       <Link>SelectOnFocus.xaml.cs</Link>
       <DependentUpon>SelectOnFocus.xaml</DependentUpon>
     </Compile>
+    <Compile Include="..\Markup.Programming.Samples\StateSample.xaml.cs">
+      <Link>StateSample.xaml.cs</Link>
+      <DependentUpon>StateSample.xaml</DependentUpon>
+    </Compile>
     <Compile Include="..\Markup.Programming.Samples\TowerOfHanoi.xaml.cs">
       <Link>TowerOfHanoi.xaml.cs</Link>
       <DependentUpon>TowerOfHanoi.xaml</DependentUpon>
@@ -207,6 +211,11 @@
     </Page>
     <Page Include="..\Markup.Programming.Samples\SelectOnFocus.xaml">
       <Link>SelectOnFocus.xaml</Link>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="..\Markup.Programming.Samples\StateSample.xaml">
+      <Link>StateSample.xaml</Link>
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

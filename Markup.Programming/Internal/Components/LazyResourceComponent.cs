@@ -8,7 +8,7 @@
         {
             if (IsInitialized) return;
             IsInitialized = true;
-            new Engine().With(this, engine => OnInitialize(engine));
+            new Engine().ExecuteFrame(this, OnInitialize);
         }
 
         protected abstract void OnInitialize(Engine engine);

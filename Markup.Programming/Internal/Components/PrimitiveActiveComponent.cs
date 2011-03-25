@@ -71,7 +71,7 @@ namespace Markup.Programming.Core
 
         public object Process(Engine engine)
         {
-            return engine.With(this, e => OnProcess(engine));
+            return engine.With(this, OnProcess);
         }
 
         protected abstract object OnProcess(Engine engine);

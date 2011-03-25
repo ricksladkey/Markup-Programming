@@ -177,8 +177,12 @@ namespace Markup.Programming.Core
             {
                 return ParseFunction(name);
             }
-            ParseToken("=");
-            var expression = ParseExpression();
+            var expression = null as ExpressionNode;
+            if (!PeekToken(";"))
+            {
+                ParseToken("=");
+                expression = ParseExpression();
+            }
             ParseSemicolon();
             return new VarNode { VariableName = name, Value = expression };
         }

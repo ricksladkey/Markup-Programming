@@ -43,7 +43,7 @@ namespace Markup.Programming
         private IList GetItems()
         {
             if (value == null) return Items;
-            return new Engine().With(this, engine => EvaluateItems(engine, value));
+            return new Engine().EvaluateFrame(this, engine => EvaluateItems(engine, value));
         }
 
         private IList EvaluateItems(Engine engine, object value)

@@ -33,7 +33,7 @@ namespace Markup.Programming
 
         public object Callback(object child, string function, object[] args, Engine engine)
         {
-            return engine.With(this, e => CallFunction(child, function, args, engine));
+            return engine.EvaluateFrame(this, e => CallFunction(child, function, args, engine));
         }
 
         private object CallFunction(object child, string function, object[] args, Engine engine)

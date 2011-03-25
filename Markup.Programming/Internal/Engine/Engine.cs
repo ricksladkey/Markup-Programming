@@ -95,9 +95,9 @@ namespace Markup.Programming.Core
             return "p:" + component.GetType().Name;
         }
 
-        private void PushFrame(IComponent caller)
+        private void PushFrame(IComponent caller, Node node)
         {
-            stack.Add(new StackFrame(this, caller));
+            stack.Add(new StackFrame(this, caller, node));
             TraceStack("PushFrame: {0}", caller.GetType().Name);
         }
 
@@ -113,51 +113,51 @@ namespace Markup.Programming.Core
             stack.RemoveAt(stack.Count - 1);
         }
 
-        public void With(IComponent caller, Action<Engine> action)
+        public void ExecuteFrame(IComponent caller, IDictionary<string, object> variables, Action<Engine> action)
         {
-            PushFrame(caller);
+            PushFrame(caller, null);
+            CurrentFrame.Variables = variables;
             action(this);
             PopFrame();
         }
 
-        public void With(IComponent caller, IDictionary<string, object> variables, Action<Engine> action)
+        public void ExecuteFrame(IComponent caller, Action<Engine> action)
         {
-            PushFrame(caller);
-            foreach (var pair in variables) DefineVariable(pair.Key, pair.Value, false, true);
+            PushFrame(caller, null);
             action(this);
             PopFrame();
         }
 
-        public void With(Node caller, Action<Engine> action)
+        public void ExecuteFrame(Node node, Action<Engine> action)
         {
             ++scriptDepth;
-            PushFrame(CurrentFrame.Caller);
+            PushFrame(CurrentFrame.Caller, node);
             action(this);
             PopFrame();
             --scriptDepth;
         }
 
-        public TResult With<TResult>(IComponent caller, Func<Engine, TResult> func)
+        public TResult EvaluateFrame<TResult>(IComponent caller, IDictionary<string, object> variables, Func<Engine, TResult> func)
         {
-            PushFrame(caller);
+            PushFrame(caller, null);
+            CurrentFrame.Variables = variables;
             var result = func(this);
             PopFrame();
             return result;
         }
 
-        public TResult With<TResult>(IComponent caller, IDictionary<string, object> variables, Func<Engine, TResult> func)
+        public TResult EvaluateFrame<TResult>(IComponent caller, Func<Engine, TResult> func)
         {
-            PushFrame(caller);
-            foreach (var pair in variables) DefineVariable(pair.Key, pair.Value, false, true);
+            PushFrame(caller, null);
             var result = func(this);
             PopFrame();
             return result;
         }
 
-        public TResult With<TResult>(Node node, Func<Engine, TResult> func)
+        public TResult EvaluateFrame<TResult>(Node node, Func<Engine, TResult> func)
         {
             ++scriptDepth;
-            PushFrame(CurrentFrame.Caller);
+            PushFrame(CurrentFrame.Caller, node);
             var result = func(this);
             PopFrame();
             --scriptDepth;
@@ -236,31 +236,40 @@ namespace Markup.Programming.Core
             return CurrentFrame.YieldedValues;
         }
 
+        public void DeclareVariable(string name)
+        {
+            DefineVariable(name, null, true, false, false);
+        }
+
         public void DefineVariable(string name, object value)
         {
-            DefineVariable(name, value, false, false);
+            DefineVariable(name, value, false, false, false);
         }
 
         public object DefineVariableInParentScope(string name, object value)
         {
-            DefineVariable(name, value, true, false);
+            DefineVariable(name, value, false, true, false);
             return value;
+        }
+
+        public void DeclareScriptVariable(string name)
+        {
+            DefineVariable(name, null, true, scriptDepth <= 1, false);
         }
 
         public void DefineScriptVariable(string name, object value)
         {
-            Trace(TraceFlags.Variable, "Define: {0} = {1}", name, value);
-            DefineVariable(name, value, scriptDepth == 0, false);
+            DefineVariable(name, value, false, scriptDepth <= 1, false);
         }
 
-        private void DefineVariable(string name, object value, bool parentFrame, bool noError)
+        private void DefineVariable(string name, object value, bool declare, bool parentFrame, bool noError)
         {
             if (!noError && !CodeTree.IsValidVariable(name)) Throw("invalid variable: " + name);
             Trace(TraceFlags.Variable, "DefineVariable: {0} = {1}", name, value);
             var frame = parentFrame ? (ParentFrame ?? CurrentFrame) : CurrentFrame;
             if (frame == null) Throw("no frame for variable: " + name);
             if (frame.Variables == null) frame.Variables = new NameDictionary();
-            frame.Variables[name] = value;
+            if (!declare || !frame.Variables.ContainsKey(name)) frame.Variables[name] = value;
         }
 
         public IDictionary<string, object> GetClosure()
@@ -372,8 +381,7 @@ namespace Markup.Programming.Core
 
         public void SetContext(object context)
         {
-            Trace(TraceFlags.Variable, "Setting context = {0}", context);
-            DefineVariable(Engine.ContextKey, context, false, true);
+            DefineVariable(Engine.ContextKey, context, false, false, true);
         }
 
         public bool HasBindingOrValue(DependencyProperty property)
@@ -512,15 +520,6 @@ namespace Markup.Programming.Core
         {
             var parent = CurrentFrame.Caller as DependencyObject;
             return parent.GetValue(property);
-        }
-
-        public void Execute(IEnumerable<IStatement> statements)
-        {
-            foreach (var statement in statements)
-            {
-                statement.Execute(this);
-                if (ShouldInterrupt) break;
-            }
         }
 
         public object CallFunction(string name, IEnumerable<object> args)

@@ -1,4 +1,6 @@
-﻿using System.Windows;
+﻿using System;
+using System.Collections.Generic;
+using System.Windows;
 
 namespace Markup.Programming.Core
 {
@@ -38,12 +40,18 @@ namespace Markup.Programming.Core
 
         public void Execute(Engine engine)
         {
-            Process(engine);
+            // Inline Process(engine);
+            engine.EvaluateFrame(this, OnProcess);
+        }
+
+        public void Execute(Engine engine, IDictionary<string, object> state)
+        {
+            engine.EvaluateFrame(this, state, OnProcess);
         }
 
         public object Process(Engine engine)
         {
-            return engine.With(this, e => OnProcess(engine));
+            return engine.EvaluateFrame(this, OnProcess);
         }
 
         protected abstract object OnProcess(Engine engine);

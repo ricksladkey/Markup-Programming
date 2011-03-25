@@ -42,7 +42,7 @@ namespace Markup.Programming.Core
             return false;
         }
 
-        public bool ParameterIsDefined(string name)
+        public bool VariableIsDefined(string name)
         {
             var value = null as object;
             return engine.TryGetVariable(name, out value);

@@ -17,7 +17,7 @@ namespace Markup.Programming.Core
 #endif
     public class StackFrame
     {
-        public StackFrame(Engine engine, IComponent caller) { Engine = engine; Caller = caller; }
+        public StackFrame(Engine engine, IComponent caller, Node node) { Engine = engine; Caller = caller; Node = node; }
 
         [Flags]
         public enum FrameFlags
@@ -30,6 +30,7 @@ namespace Markup.Programming.Core
 
         public Engine Engine { get; private set; }
         public IComponent Caller { get; private set; }
+        public Node Node { get; private set; }
         public string CallerName { get { return Engine.GetName(Caller); } }
         public FrameFlags Flags { get; set; }
         public IDictionary<string, object> Variables { get; set; }

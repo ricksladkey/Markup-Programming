@@ -23,7 +23,8 @@ namespace Markup.Programming.Core
 
         public object Evaluate(Engine engine)
         {
-            return Process(engine);
+            // Inline Process(engine);
+            return engine.EvaluateFrame(this, OnProcess);
         }
 
         protected override object OnProcess(Engine engine)

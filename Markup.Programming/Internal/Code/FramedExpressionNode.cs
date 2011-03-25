@@ -5,7 +5,7 @@
         public StatementNode Body { get; set; }
         protected override object OnEvaluate(Engine engine)
         {
-            return engine.With(this, e => OnEvaluateFrame(engine));
+            return engine.EvaluateFrame(this, OnEvaluateFrame);
         }
         protected abstract object OnEvaluateFrame(Engine engine);
     }

@@ -1,19 +1,23 @@
 ﻿<UserControl
+    x:Class="Markup.Programming.Samples.StateSample"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:p="http://markupprogramming.codeplex.com/markup/programming"
     Height="300" Width="300">
     <Grid>
         <StackPanel>
-            <TextBlock Margin="4" TextWrapping="Wrap" Background="AntiqueWhite">
+            <Grid Background="AntiqueWhite">
+                <TextBlock Margin="4" TextWrapping="Wrap">
                 This sample demonstrates that each collection of attached
                 operations shares a dictionary of state variables that persist
                 between handler executions.  You can initialize variables when
                 you are attached to the associated object, manipulate them in
                 one or more handlers and report them in another.  If you don't
                 want this behavior just create a new scope, e.g. with p:Block.
-            </TextBlock>
-            <Rectangle Fill="Red">
+                </TextBlock>
+            </Grid>
+            <TextBlock FontSize="20" FontWeight="Bold" TextWrapping="Wrap" Foreground="Beige">
+                Left click a few times, then right click.
                 <p:Attached.Operations>
                     <p:ScriptHandler>
                         var $clicks = 0;
@@ -25,7 +29,7 @@
                         [MessageBox].Show([String].Format("Total clicks: {0}", $clicks));
                     </p:ScriptHandler>
                 </p:Attached.Operations>
-            </Rectangle>
+            </TextBlock>
         </StackPanel>
     </Grid>
 </UserControl>

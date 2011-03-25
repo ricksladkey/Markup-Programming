@@ -19,6 +19,7 @@
             <samples:DynamicButton/>
             <samples:PasswordSample/>
             <samples:ResourceObjectSample/>
+            <samples:StateSample/>
             <samples:CrashSample/>
         </p:ResourceCollection>
         <p:ResourceObject x:Key="ViewModel">

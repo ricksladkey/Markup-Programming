@@ -56,12 +56,12 @@ namespace Markup.Programming
 
         public Type GetType(Engine engine)
         {
-            return engine.With(this, e => engine.EvaluateType(TypeProperty, TypePath, TypeCodeTree));
+            return engine.EvaluateFrame(this, e => engine.EvaluateType(TypeProperty, TypePath, TypeCodeTree));
         }
 
         public object Evaluate(Engine engine)
         {
-            return engine.With(this, e => engine.Evaluate(ValueProperty, Path, CodeTree));
+            return engine.EvaluateFrame(this, e => engine.Evaluate(ValueProperty, Path, CodeTree));
         }
     }
 }

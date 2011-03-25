@@ -11,7 +11,7 @@ namespace Markup.Programming
     /// </summary>
     public enum BuiltinFunction
     {
-        ParameterIsDefined = 1,
+        VariableIsDefined = 1,
         FunctionIsDefined,
         Evaluate,
         GetResourceObject,

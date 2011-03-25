@@ -15,7 +15,7 @@ namespace Markup.Programming
 
         public object Evaluate(Engine engine)
         {
-            return engine.With(this, e => EvaluateValue(engine));
+            return engine.EvaluateFrame(this, EvaluateValue);
         }
 
         private object EvaluateValue(Engine engine)

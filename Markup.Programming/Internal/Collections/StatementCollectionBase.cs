@@ -18,24 +18,20 @@ namespace Markup.Programming.Core
     {
         public void Execute(Engine engine)
         {
-            // Let the compiler choose whichever is more efficient.
-            Execute(this, engine);
+            foreach (var statement in this)
+            {
+                statement.Execute(engine);
+                if (engine.ShouldInterrupt) break;
+            }
         }
 
         public void ExecuteSkipOne(Engine engine)
         {
-            // Let the compiler choose whichever is more efficient.
-            Execute(this.Skip(1), engine);
-        }
-
-        private static void Execute(IEnumerable<IStatement> statements, Engine engine)
-        {
-            engine.Execute(statements);
-        }
-
-        private static void Execute(IEnumerable<T> statements, Engine engine)
-        {
-            engine.Execute(statements.Select(statement => statement as IStatement));
+            foreach (var statement in this.Skip(1))
+            {
+                statement.Execute(engine);
+                if (engine.ShouldInterrupt) break;
+            }
         }
     }
 }

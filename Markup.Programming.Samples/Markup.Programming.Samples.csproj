@@ -159,6 +159,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="StateSample.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Syntax.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -199,6 +203,9 @@
     <AppDesigner Include="Properties\" />
     <Compile Include="SelectOnFocus.xaml.cs">
       <DependentUpon>SelectOnFocus.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="StateSample.xaml.cs">
+      <DependentUpon>StateSample.xaml</DependentUpon>
     </Compile>
     <Compile Include="Syntax.xaml.cs">
       <DependentUpon>Syntax.xaml</DependentUpon>
