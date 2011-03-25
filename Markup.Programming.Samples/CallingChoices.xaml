@@ -10,10 +10,11 @@
     Height="300" Width="300">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="75"/>
-            <RowDefinition Height="75"/>
-            <RowDefinition Height="75"/>
-            <RowDefinition Height="75"/>
+            <RowDefinition Height="60"/>
+            <RowDefinition Height="60"/>
+            <RowDefinition Height="60"/>
+            <RowDefinition Height="60"/>
+            <RowDefinition Height="60"/>
         </Grid.RowDefinitions>
         <Rectangle Fill="Red" Grid.Row="0">
 
@@ -53,7 +54,7 @@
         </Rectangle>
         <Rectangle Fill="Green" Grid.Row="3">
 
-            <!-- Shortest form, no binding but unlimited arguments, associated object, -->
+            <!-- Shorter form still, no binding but unlimited arguments, associated object, -->
             <!-- properties, context, lots of options -->
 
             <p:Attached.Operations>
@@ -61,5 +62,11 @@
             </p:Attached.Operations>
 
         </Rectangle>
+
+        <!-- Shortest form, same options as before but limited to one event -->
+        
+        <Rectangle Fill="LightGreen" Grid.Row="4"
+                   p:Additional.Operations="MouseLeftButtonDown.[MessageBox].Show('Hello, world!')"/>
+        
     </Grid>
 </UserControl>

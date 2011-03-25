@@ -1,3 +1,5 @@
+- after event/path merge/cleanup support multiple operations in operation converter
+- consider adding setter for attached operations for string syntax
 - decide whether engine even needs to know the differences between declaration and definition
 - clean up the rules, meaning and use of variable declaration, definition and assignment in statments and expressions
 - address difference between script depth 1 for scripts and 0 for expressions

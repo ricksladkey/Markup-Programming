@@ -1,14 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Markup.Programming.Core;
+﻿using System.ComponentModel;
 using System.Windows;
 
 namespace Markup.Programming
 {
     public static class Additional
     {
+        [TypeConverter(typeof(OperationsConverter))]
         public static OperationCollection GetOperations(DependencyObject obj)
         {
             return (OperationCollection)obj.GetValue(OperationsProperty);
