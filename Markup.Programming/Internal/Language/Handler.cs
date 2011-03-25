@@ -108,7 +108,11 @@ namespace Markup.Programming.Core
         protected override void ExecuteBody(Engine engine)
         {
             SetContext(engine);
+#if !INTERACTIVITY
             foreach (var statement in Body) statement.Execute(engine, State);
+#else
+            base.ExecuteBody(engine);
+#endif
         }
     }
 }
