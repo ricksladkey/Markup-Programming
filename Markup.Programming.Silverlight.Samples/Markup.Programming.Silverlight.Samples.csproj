@@ -113,6 +113,10 @@
       <Link>AllSamples.xaml.cs</Link>
       <DependentUpon>AllSamples.xaml</DependentUpon>
     </Compile>
+    <Compile Include="..\Markup.Programming.Samples\Calculator.xaml.cs">
+      <Link>Calculator.xaml.cs</Link>
+      <DependentUpon>Calculator.xaml</DependentUpon>
+    </Compile>
     <Compile Include="..\Markup.Programming.Samples\CallingChoices.xaml.cs">
       <Link>CallingChoices.xaml.cs</Link>
       <DependentUpon>CallingChoices.xaml</DependentUpon>
@@ -171,6 +175,11 @@
     </ApplicationDefinition>
     <Page Include="..\Markup.Programming.Samples\AllSamples.xaml">
       <Link>AllSamples.xaml</Link>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="..\Markup.Programming.Samples\Calculator.xaml">
+      <Link>Calculator.xaml</Link>
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

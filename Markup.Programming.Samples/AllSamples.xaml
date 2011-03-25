@@ -13,6 +13,7 @@
         <p:ResourceCollection x:Key="UserControls">
             <samples:HelloWorld/>
             <samples:TowerOfHanoi/>
+            <samples:Calculator/>
             <samples:CallingChoices/>
             <samples:SelectOnFocus/>
             <samples:ForLoops/>

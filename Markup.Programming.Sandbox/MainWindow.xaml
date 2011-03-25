@@ -4,28 +4,82 @@
     xmlns:p="http://markupprogramming.codeplex.com/markup/programming"
     Height="300" Width="300">
     <Grid>
-        <StackPanel>
-            <TextBlock Margin="4" TextWrapping="Wrap" Background="AntiqueWhite">
-                This sample demonstrates that each collection of attached
-                operations shares a dictionary of state variables that persist
-                between handler executions.  You can initialize variables when
-                you are attached to the associated object, manipulate them in
-                one or more handlers and report them in another.  If you don't
-                want this behavior just create a new scope, e.g. with p:Block.
-            </TextBlock>
-            <Rectangle Fill="Red">
+        <Grid.Resources>
+            <p:ResourceObject x:Key="ViewModel">
+                <p:Property PropertyName="Number" Path="999999.999"/>
+                <p:Property PropertyName="KeyCommand">
+                    <p:Command>
+                        var CanExecute()
+                        {
+                            return true;
+                        }
+                        var Execute($p)
+                        {
+                            if ($p == "C") { Number = 0.0; return; }
+                            if (($p.CompareTo("0") &gt;= 0) &amp;&amp; ($p.CompareTo("9") &lt;= 0))
+                            {
+                                Number = (Number*10.0) + [double].Parse($p);
+                                return;
+                            }
+                            if ($p == "=") { Number = @Op(Operator, Operand, Number); return; }
+                            Operand = Number;
+                            Number = 0.0;
+                            if ($p == "+") { Operator = [Op].Plus; return; }
+                            if ($p == "-") { Operator = [Op].Minus; return; }
+                            if ($p == "*") { Operator = [Op].Times; return; }
+                            if ($p == "/") { Operator = [Op].Divide; return; }
+                            [MessageBox].Show("Unknown key command: " + $p);
+                        }
+                    </p:Command>
+                </p:Property>
+                <p:Property PropertyName="Operand"/>
+                <p:Property PropertyName="Operator"/>
+            </p:ResourceObject>
+            <Style TargetType="Button">
+                <Setter Property="FontSize" Value="30"/>
+            </Style>
+        </Grid.Resources>
+        <Grid.DataContext>
+            <Binding Path="Value" Source="{StaticResource ViewModel}"/>
+        </Grid.DataContext>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Text="{Binding Number}"
+                       Margin="10" FontSize="30" FontWeight="Bold"
+                       TextAlignment="Right" VerticalAlignment="Center"
+                       Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="4">
                 <p:Attached.Operations>
-                    <p:ScriptHandler>
-                        var $clicks = 0;
-                    </p:ScriptHandler>
-                    <p:ScriptHandler Path="MouseLeftButtonDown" SetHandled="True">
-                        $clicks++;
-                    </p:ScriptHandler>
-                    <p:ScriptHandler Path="MouseRightButtonDown">
-                        [MessageBox].Show([String].Format("Total clicks: {0}", $clicks));
-                    </p:ScriptHandler>
+                    <p:CallHandler Path="Loaded.KeyCommand.Execute('C')"/>
                 </p:Attached.Operations>
-            </Rectangle>
-        </StackPanel>
+            </TextBlock>
+            <Button Content="7" Grid.Row="1" Grid.Column="0" Command="{Binding KeyCommand}" CommandParameter="7"/>
+            <Button Content="8" Grid.Row="1" Grid.Column="1" Command="{Binding KeyCommand}" CommandParameter="8"/>
+            <Button Content="9" Grid.Row="1" Grid.Column="2" Command="{Binding KeyCommand}" CommandParameter="9"/>
+            <Button Content="+" Grid.Row="1" Grid.Column="3" Command="{Binding KeyCommand}" CommandParameter="+"/>
+            <Button Content="4" Grid.Row="2" Grid.Column="0" Command="{Binding KeyCommand}" CommandParameter="4"/>
+            <Button Content="5" Grid.Row="2" Grid.Column="1" Command="{Binding KeyCommand}" CommandParameter="5"/>
+            <Button Content="6" Grid.Row="2" Grid.Column="2" Command="{Binding KeyCommand}" CommandParameter="6"/>
+            <Button Content="-" Grid.Row="2" Grid.Column="3" Command="{Binding KeyCommand}" CommandParameter="-"/>
+            <Button Content="1" Grid.Row="3" Grid.Column="0" Command="{Binding KeyCommand}" CommandParameter="1"/>
+            <Button Content="2" Grid.Row="3" Grid.Column="1" Command="{Binding KeyCommand}" CommandParameter="2"/>
+            <Button Content="3" Grid.Row="3" Grid.Column="2" Command="{Binding KeyCommand}" CommandParameter="3"/>
+            <Button Content="*" Grid.Row="3" Grid.Column="3" Command="{Binding KeyCommand}" CommandParameter="*"/>
+            <Button Content="0" Grid.Row="4" Grid.Column="0" Command="{Binding KeyCommand}" CommandParameter="0"/>
+            <Button Content="C" Grid.Row="4" Grid.Column="1" Command="{Binding KeyCommand}" CommandParameter="C"/>
+            <Button Content="=" Grid.Row="4" Grid.Column="2" Command="{Binding KeyCommand}" CommandParameter="="/>
+            <Button Content="/" Grid.Row="4" Grid.Column="3" Command="{Binding KeyCommand}" CommandParameter="/"/>
+        </Grid>
     </Grid>
 </UserControl>

@@ -50,50 +50,53 @@
                 <!-- view model's Posts property, which itself is a collection of three items -->
                 <!-- in true MVVM fashion, the command knows nothing at all about the view -->
                 <p:Command>
+                    <p:Command.Functions>
 
-                    <!-- CanExecute always says "OK" -->
-                    <p:Function Prototype="CanExecute()">
-                        <p:Return Path="true"/>
-                    </p:Function>
+                        <!-- CanExecute always says "OK" -->
+                        <p:Function Prototype="CanExecute()">
+                            <p:Return Path="true"/>
+                        </p:Function>
 
-                    <p:Function Prototype="Execute($parameter)">
+                        <p:Function Prototype="Execute($parameter)">
 
-                        <!-- first we create a local convenience function to move an item -->
-                        <!-- from one collection to another: this is C# 101 in markup programming -->
-                        <!-- The corresponding C# code looks like this: -->
-                        <!--
+                            <!-- first we create a local convenience function to move an item -->
+                            <!-- from one collection to another: this is C# 101 in markup programming -->
+                            <!-- The corresponding C# code looks like this: -->
+                            <!--
                         public static void MoveItem<T>(IList<T> fromCollection, IList<T> toCollection)
                         {
                             toCollection.Insert(0, fromCollection[0]);
                             fromCollection.RemoveAt(0);
                         }
                         -->
-                        <p:Function Prototype="$MoveItem($fromCollection, $toCollection)">
-                            <p:Call Path="$toCollection.Insert(0, $fromCollection[0])"/>
-                            <p:Call Path="$fromCollection.RemoveAt(0)"/>
-                        </p:Function>
+                            <p:Function Prototype="$MoveItem($fromCollection, $toCollection)">
+                                <p:Call Path="$toCollection.Insert(0, $fromCollection[0])"/>
+                                <p:Call Path="$fromCollection.RemoveAt(0)"/>
+                            </p:Function>
 
-                        <!-- this just implements the rules of the tower of hanoi game -->
-                        <!-- the logic is about as complex as the game is -->
-                        <p:Expr Path="SelectedPost = $parameter"/>
-                        <p:If Path="HoldingPost.Count == 0">
-                            <p:If.Then>
-                                <p:When Path="SelectedPost.Count != 0">
-                                    <p:Call Path="$MoveItem(SelectedPost, HoldingPost)"/>
-                                </p:When>
-                            </p:If.Then>
-                            <p:If.Else>
-                                <p:When>
-                                    <p:Operator Op="OrOr">
-                                        <p:Get Path="SelectedPost.Count == 0"/>
-                                        <p:Get Path="HoldingPost[0] &lt; SelectedPost[0]"/>
-                                    </p:Operator>
-                                    <p:Call Path="$MoveItem(HoldingPost, SelectedPost)"/>
-                                </p:When>
-                            </p:If.Else>
-                        </p:If>
+                            <!-- this just implements the rules of the tower of hanoi game -->
+                            <!-- the logic is about as complex as the game is -->
+                            <p:Expr Path="SelectedPost = $parameter"/>
+                            <p:If Path="HoldingPost.Count == 0">
+                                <p:If.Then>
+                                    <p:When Path="SelectedPost.Count != 0">
+                                        <p:Call Path="$MoveItem(SelectedPost, HoldingPost)"/>
+                                    </p:When>
+                                </p:If.Then>
+                                <p:If.Else>
+                                    <p:When>
+                                        <p:Operator Op="OrOr">
+                                            <p:Get Path="SelectedPost.Count == 0"/>
+                                            <p:Get Path="HoldingPost[0] &lt; SelectedPost[0]"/>
+                                        </p:Operator>
+                                        <p:Call Path="$MoveItem(HoldingPost, SelectedPost)"/>
+                                    </p:When>
+                                </p:If.Else>
+                            </p:If>
+
+                        </p:Function>
                         
-                    </p:Function>
+                    </p:Command.Functions>
                 </p:Command>
             </p:Property>
         </p:ResourceObject>

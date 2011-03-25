@@ -6,7 +6,7 @@ using Markup.Programming.Core;
 
 namespace Markup.Programming
 {
-    [ContentProperty("Functions")]
+    [ContentProperty("Script")]
     public class Command : HiddenExpression, IInteropHost
     {
         public Command()
@@ -15,6 +15,11 @@ namespace Markup.Programming
         }
 
         public ResourceComponent ParentResourceObject { get; set; }
+
+        public string Script { get; set; }
+
+        private CodeTree codeTree = new CodeTree();
+        protected CodeTree CodeTree { get { return codeTree; } }
 
         public FunctionCollection Functions
         {
@@ -39,6 +44,7 @@ namespace Markup.Programming
         private object CallFunction(object child, string function, object[] args, Engine engine)
         {
             engine.SetContext(ParentResourceObject.Value);
+            if (Script != null) engine.ExecuteScript(Script, CodeTree);
             Functions.Execute(engine);
             return engine.CallFunction(function, args);
         }

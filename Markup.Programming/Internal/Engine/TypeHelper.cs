@@ -209,6 +209,7 @@ namespace Markup.Programming.Core
             "System.Windows.Controls",
             "System.Collections.Generic",
             "System.Collections",
+            "Markup.Programming",
         };
  
 #if !SILVERLIGHT

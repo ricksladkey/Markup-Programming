@@ -1,3 +1,5 @@
+- high priority: operator precedence
+
 - after event/path merge/cleanup support multiple operations in operation converter
 - consider adding setter for attached operations for string syntax
 - decide whether engine even needs to know the differences between declaration and definition

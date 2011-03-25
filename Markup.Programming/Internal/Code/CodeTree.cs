@@ -172,7 +172,8 @@ namespace Markup.Programming.Core
         private StatementNode ParseVar()
         {
             ParseKeyword("var");
-            var name = ParseVariable();
+            var name = ParseIdentifierOrVariable();
+            if (name[0] == '`') name = name.Substring(1);
             if (PeekToken("("))
             {
                 return ParseFunction(name);
@@ -191,7 +192,7 @@ namespace Markup.Programming.Core
         {
             ParseToken("(");
             var parameters = new ParameterCollection();
-            parameters.Add(new Parameter { ParameterName = ParseVariable() });
+            if (!PeekToken(")")) parameters.Add(new Parameter { ParameterName = ParseVariable() });
             while (!PeekToken(")"))
             {
                 ParseToken(",");
@@ -655,6 +656,12 @@ namespace Markup.Programming.Core
         private string ParseVariable()
         {
             if (tokens.Count == 0 || tokens.Peek()[0] != '$') engine.Throw("expected variable");
+            return tokens.Dequeue();
+        }
+
+        private string ParseIdentifierOrVariable()
+        {
+            if (tokens.Count == 0 || !"`$".Contains(tokens.Peek()[0])) engine.Throw("expected variable");
             return tokens.Dequeue();
         }
 
