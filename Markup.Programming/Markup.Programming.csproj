@@ -135,6 +135,7 @@
     <Compile Include="Internal\Components\InterfaceComponent.cs" />
     <Compile Include="Internal\Components\LazyResourceComponent.cs" />
     <Compile Include="Internal\Code\CodeType.cs" />
+    <Compile Include="Internal\Diagnostics\CodeTreeDebugView.cs" />
     <Compile Include="Internal\Engine\IFunction.cs" />
     <Compile Include="Internal\Interop\CommandInterop.cs" />
     <Compile Include="Internal\Engine\IInteropHost.cs" />

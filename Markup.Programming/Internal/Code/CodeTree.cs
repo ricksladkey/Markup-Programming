@@ -11,10 +11,12 @@ namespace Markup.Programming.Core
     /// The CodeTree class compiles code into a tree structure that can be
     /// executed to produce side-effects or results.
     /// </summary>
+#if DEBUG
+    [DebuggerTypeProxy(typeof(CodeTreeDebugView))]
+#endif
     public class CodeTree
     {
         private Engine engine;
-        private TokenQueue tokens;
         private Node root;
         private static Dictionary<string, object> constantMap = new Dictionary<string, object>
         {
@@ -63,14 +65,15 @@ namespace Markup.Programming.Core
         private static IDictionary<string, object> ConstantMap { get { return constantMap; } }
         private static IDictionary<string, Op> OperatorMap { get { return operatorMap; } }
         private static IDictionary<string, AssignmentOp> AssignmentOperatorMap { get { return assignmentOperatorMap; } }
-        private bool IsCurrentCall { get { return IsCall && tokens != null && tokens.Count == 0 || PeekToken("("); } }
+        private bool IsCurrentCall { get { return IsCall && Tokens != null && Tokens.Count == 0 || PeekToken("("); } }
 
+        public TokenQueue Tokens { get; set; }
         public CodeType CodeType { get; private set; }
         public bool IsVariable { get { return CodeType == CodeType.Variable; } }
         public bool IsSet { get { return CodeType == CodeType.SetExpression; } }
         public bool IsCall { get { return CodeType == CodeType.Call; } }
         public bool IsScript { get { return CodeType == CodeType.Script; } }
-        public string Path { get; private set; }
+        public string Code { get; private set; }
 
         public CodeTree()
         {
@@ -78,53 +81,53 @@ namespace Markup.Programming.Core
 
         public string GetVariable(Engine engine)
         {
-            engine.Trace(TraceFlags.Path, "Path: Variable {0}", Path);
+            engine.Trace(TraceFlags.Path, "Code: Variable {0}", Code);
             return (root as VariableNode).VariableName;
         }
 
         public object Evaluate(Engine engine)
         {
-            engine.Trace(TraceFlags.Path, "Path: Get {0}", Path);
+            engine.Trace(TraceFlags.Path, "Code: Get {0}", Code);
             return (root as ExpressionNode).Evaluate(engine);
         }
         public object Set(Engine engine, object value)
         {
-            engine.Trace(TraceFlags.Path, "Path: Set {0} = {1}", Path, value);
+            engine.Trace(TraceFlags.Path, "Code: Set {0} = {1}", Code, value);
             return (root as ExpressionNode).Set(engine, value);
         }
         public object Call(Engine engine, IEnumerable<object> args)
         {
-            engine.Trace(TraceFlags.Path, "Path: Call: {0}", Path);
+            engine.Trace(TraceFlags.Path, "Code: Call: {0}", Code);
             var call = root as CallNode;
             if (call == null) engine.Throw("not a call node");
             return call.Call(engine, args);
         }
         public void Execute(Engine engine)
         {
-            engine.Trace(TraceFlags.Path, "Path: Execute {0}", Path);
+            engine.Trace(TraceFlags.Path, "Code: Execute {0}", Code);
             var block = root as ScriptNode;
             block.Execute(engine);
         }
 
         public CodeTree Compile(Engine engine, CodeType expressionType, string path)
         {
-            if (expressionType == CodeType && object.ReferenceEquals(Path, path)) return this;
+            if (expressionType == CodeType && object.ReferenceEquals(Code, path)) return this;
             this.engine = engine;
             CodeType = expressionType;
-            Path = path;
+            Code = path;
             Tokenize();
             if (IsVariable) root = ParseVariableExpression();
             else if (IsScript) root = ParseStatements();
             else root = ParseExpression();
-            if (tokens.Count > 0) engine.Throw("unexpected token: " + tokens.Dequeue());
+            if (Tokens.Count > 0) engine.Throw("unexpected token: " + Tokens.Dequeue());
             this.engine = null;
-            tokens = null;
+            Tokens = null;
             return this;
         }
 
         private StatementNode ParseStatement()
         {
-            if (tokens.Count == 0 || PeekToken("}")) return null;
+            if (Tokens.Count == 0 || PeekToken("}")) return null;
             if (PeekToken(";"))
             {
                 ParseToken(";");
@@ -154,7 +157,7 @@ namespace Markup.Programming.Core
 
         private void ParseSemicolon()
         {
-            if (tokens.Count > 0) ParseToken(";");
+            if (Tokens.Count > 0) ParseToken(";");
         }
 
         private StatementNode ParseStatements()
@@ -301,90 +304,88 @@ namespace Markup.Programming.Core
 
         private ExpressionNode ParseExpression(bool noComma)
         {
-            int start = tokens.Count;
-            var node = ParseExpressionInternal(noComma);
-            if (tokens.Count == start) engine.Throw("empty expression");
-            return node;
-        }
-
-        private ExpressionNode ParseExpressionInternal(bool noComma)
-        {
-            var node = new ContextNode() as ExpressionNode;
-            var nodeNext = true;
-            for (var token = tokens.Peek(); token != null; token = tokens.Peek())
+            var node = ParseAtom();
+            while (PeekToken(".") || PeekToken("["))
             {
-                if (OperatorMap.ContainsKey(token))
+                if (PeekToken("."))
                 {
-                    node = ParseOperator(node, nodeNext);
-                    nodeNext = true;
-                    continue;
-                }
-                if (AssignmentOperatorMap.ContainsKey(token))
-                {
-                    node = ParseAssignmentOperator(node, nodeNext);
-                    nodeNext = true;
-                    continue;
-                }
-                if ("=.?,".Contains(token[0]) && nodeNext) engine.Throw("unexpected operator: " + token);
-                if (token == ".")
-                {
-                    nodeNext = true;
-                    tokens.Dequeue();
-                    continue;
-                }
-                if (token == "?")
-                    node = ParseConditional(node);
-                if (token == "," && !noComma)
-                    node = ParseComma(node);
-                if (!nodeNext) return node;
-                char c = token[0];
-                if (char.IsDigit(c))
-                {
-                    tokens.Dequeue();
-                    node = new ValueNode { Value = token.Contains('.') ? ParseDouble(token) : ParseInt(token) };
-                }
-                else if (c == '"')
-                    node = new ValueNode { Value = tokens.Dequeue().Substring(1) };
-                else if ("`$@".Contains(c))
+                    ParseToken(".");
                     node = ParseIdentifierExpression(node);
-                else if (c == '[')
-                    node = ParseTypeExpression();
-                else if (c == '(')
-                {
-                    tokens.Dequeue();
-                    node = ParseExpression();
-                    ParseToken(")");
                 }
+                else if (PeekToken("["))
+                    node = ParseItem(node);
+            }
+
+            while (true)
+            {
+                var token = Tokens.Peek();
+                if (token == null) break;
+                if (OperatorMap.ContainsKey(token))
+                    node = ParseOperator(node, false);
+                else if (AssignmentOperatorMap.ContainsKey(token))
+                    node = ParseAssignmentOperator(node, false);
+                else if (token == "?")
+                    node = ParseConditional(node);
+                else if (token == "," && !noComma)
+                    node = ParseComma(node);
                 else
-                    return node;
-                node = ParseItems(node);
-                nodeNext = false;
+                    break;
             }
             return node;
         }
 
-        private ExpressionNode ParseOperator(ExpressionNode node, bool nodeNext)
+        private ExpressionNode ParseAtom()
         {
-            var token = tokens.Dequeue();
+            var token = Tokens.Peek();
+            if (token == null) engine.Throw("missing expression");
+            char c = token[0];
+            if (char.IsDigit(c))
+            {
+                Tokens.Dequeue();
+                return new ValueNode { Value = token.Contains('.') ? ParseDouble(token) : ParseInt(token) };
+            }
+            if (c == '"')
+                return new ValueNode { Value = Tokens.Dequeue().Substring(1) };
+            if ("`$@".Contains(c))
+                return ParseIdentifierExpression(new ContextNode());
+            if (c == '[')
+                return ParseTypeExpression();
+            if (c == '(')
+            {
+                Tokens.Dequeue();
+                var node = ParseExpression();
+                ParseToken(")");
+                return node;
+            }
+            if (OperatorMap.ContainsKey(token))
+                return ParseOperator(null, true);
+            if (AssignmentOperatorMap.ContainsKey(token))
+                return ParseAssignmentOperator(ParseAtom(), true);
+            return engine.Throw("unexpected token") as ExpressionNode;
+        }
+
+        private ExpressionNode ParseOperator(ExpressionNode node, bool prefix)
+        {
+            var token = Tokens.Dequeue();
             var op = OperatorMap[token];
+            if (op == Op.Minus && prefix) op = Op.Negate;
             var unary = op.GetArity() == 1;
-            var expression = ParseExpression();
-            if (op == Op.Minus && nodeNext) return new OpNode { Op = Op.Negate, Operands = { expression } };
-            if (nodeNext != unary) engine.Throw("unexpected operator" + op);
+            var expression = unary ? ParseAtom() : ParseExpression();
+            if (prefix != unary) engine.Throw("unexpected operator" + op);
             if (unary) return new OpNode { Op = op, Operands = { expression } };
             return new OpNode { Op = op, Operands = { node, expression } };
         }
 
-        private ExpressionNode ParseAssignmentOperator(ExpressionNode node, bool nodeNext)
+        private ExpressionNode ParseAssignmentOperator(ExpressionNode node, bool prefix)
         {
-            var token = tokens.Dequeue();
+            var token = Tokens.Dequeue();
             var op = AssignmentOperatorMap[token];
             if (op == AssignmentOp.Increment || op == AssignmentOp.Decrement)
             {
                 var increment = op == AssignmentOp.Increment ? 1 : 0;
-                return new IncrementNode { LValue = node, PostFix = nodeNext, Increment = increment };
+                return new IncrementNode { LValue = node, PostFix = !prefix, Increment = increment };
             }
-            if (nodeNext) engine.Throw("unexpected operator" + op);
+            if (prefix) engine.Throw("unexpected operator" + op);
             var expression = ParseExpression();
             if (op == AssignmentOp.Assign) return new SetNode { LValue = node, RValue = expression };
             return new SetNode { LValue = node, RValue = new OpNode { Op = (Op)op, Operands = { node, expression } } };
@@ -392,7 +393,7 @@ namespace Markup.Programming.Core
 
         private ExpressionNode ParseConditional(ExpressionNode node)
         {
-            tokens.Dequeue();
+            Tokens.Dequeue();
             var ifTrue = ParseExpression();
             ParseToken(":");
             var ifFalse = ParseExpression();
@@ -401,7 +402,7 @@ namespace Markup.Programming.Core
 
         private ExpressionNode ParseComma(ExpressionNode node)
         {
-            tokens.Dequeue();
+            Tokens.Dequeue();
             var value = ParseExpression();
             return new CommaNode { Operand1 = node, Operand2= value };
         }
@@ -425,7 +426,7 @@ namespace Markup.Programming.Core
 
         private ExpressionNode ParseIdentifierExpression(ExpressionNode node)
         {
-            var token = tokens.Peek();
+            var token = Tokens.Peek();
             if (token == "@iterator") return ParseIterator();
             if (token == "@block") return ParseBlock();
             if (token[0] == '`')
@@ -439,7 +440,7 @@ namespace Markup.Programming.Core
                 }
                 return new PropertyNode { Context = node, PropertyName = identifier };
             }
-            tokens.Dequeue();
+            Tokens.Dequeue();
             if (IsCurrentCall)
             {
                 var args = PeekToken("(") ? ParseArguments() : null;
@@ -453,21 +454,17 @@ namespace Markup.Programming.Core
             return new VariableNode { VariableName = ParseVariable() };
         }
 
-        private ExpressionNode ParseItems(ExpressionNode node)
+        private ExpressionNode ParseItem(ExpressionNode node)
         {
-            while (PeekToken("["))
-            {
-                tokens.Dequeue();
-                var index = ParseExpression(true);
-                ParseToken("]");
-                node = new ItemNode { Context = node, Index = index };
-            }
-            return node;
+            ParseToken("[");
+            var index = ParseExpression(true);
+            ParseToken("]");
+            return new ItemNode { Context = node, Index = index };
         }
 
         private ExpressionNode ParseTypeExpression()
         {
-            tokens.Dequeue();
+            Tokens.Dequeue();
             var typeNode = ParseType();
             ParseToken("]");
             if (PeekToken("."))
@@ -485,7 +482,7 @@ namespace Markup.Programming.Core
                 return new OpNode { Op = Op.New, Operands = new ExpressionNode[] { typeNode }.Concat(ParseArguments()).ToList() };
             if (PeekToken("{"))
             {
-                tokens.Dequeue();
+                Tokens.Dequeue();
                 return ParseInitializer(typeNode);
             }
             return typeNode;
@@ -499,15 +496,15 @@ namespace Markup.Programming.Core
             {
                 var property = new InitializerProperty();
                 if (PeekToken("{")) return ParseDictionaryInitializer(typeNode);
-                var token = tokens.Dequeue();
-                var isCollection = tokens.Peek() != "=";
-                tokens.Undequeue(token);
+                var token = Tokens.Dequeue();
+                var isCollection = Tokens.Peek() != "=";
+                Tokens.Undequeue(token);
                 if (isCollection) return ParseCollectionInitializer(typeNode);
                 property.PropertyName = ParseIdentifier();
                 ParseToken("=");
                 if (PeekToken("{"))
                 {
-                    tokens.Dequeue();
+                    Tokens.Dequeue();
                     if (PeekToken("{"))
                     {
                         property.IsDictionary = true;
@@ -522,7 +519,7 @@ namespace Markup.Programming.Core
                 else
                     property.Value = ParseExpression(true);
                 properties.Add(property);
-                token = tokens.Dequeue();
+                token = Tokens.Dequeue();
                 if (token == "}") break;
                 if (token != ",") engine.Throw("unexpected token: " + token);
             }
@@ -577,7 +574,7 @@ namespace Markup.Programming.Core
                 var value = ParseExpression(true);
                 ParseToken("}");
                 entries.Add(new PairNode { Key = key, Value = value });
-                var token = tokens.Dequeue();
+                var token = Tokens.Dequeue();
                 if (token == "}") break;
                 if (token != ",") engine.Throw("unexpected token: " + token);
             }
@@ -590,21 +587,21 @@ namespace Markup.Programming.Core
             var typeName = ParseIdentifier();
             while (PeekToken("."))
             {
-                tokens.Dequeue();
+                Tokens.Dequeue();
                 typeName += "." + ParseIdentifier();
             }
             var typeArgs = null as List<TypeNode>;
             if (PeekToken("<"))
             {
-                tokens.Dequeue();
+                Tokens.Dequeue();
                 typeArgs = new List<TypeNode>();
                 while (true)
                 {
                     typeArgs.Add(ParseType());
-                    var token = tokens.Dequeue();
+                    var token = Tokens.Dequeue();
                     if (token.StartsWith(">"))
                     {
-                        if (token == ">>") tokens.Undequeue(">");
+                        if (token == ">>") Tokens.Undequeue(">");
                         break;
                     }
                     if (token != ",") engine.Throw("unexpected token: " + token);
@@ -633,41 +630,41 @@ namespace Markup.Programming.Core
 
         private bool PeekToken(string token)
         {
-            return tokens.Peek() == token;
+            return Tokens.Peek() == token;
         }
 
         private bool PeekTokenStartsWith(string token)
         {
-            return tokens.Peek() != null && tokens.Peek().StartsWith(token);
+            return Tokens.Peek() != null && Tokens.Peek().StartsWith(token);
         }
 
         private string ParseToken(string token)
         {
-            if (tokens.Count == 0 || tokens.Peek() != token) engine.Throw("missing token: " + token);
-            return tokens.Dequeue();
+            if (Tokens.Count == 0 || Tokens.Peek() != token) engine.Throw("missing token: " + token);
+            return Tokens.Dequeue();
         }
 
         private string ParseIdentifier()
         {
-            if (tokens.Count == 0 || tokens.Peek()[0] != '`') engine.Throw("expected identifier");
-            return tokens.Dequeue().Substring(1);
+            if (Tokens.Count == 0 || Tokens.Peek()[0] != '`') engine.Throw("expected identifier");
+            return Tokens.Dequeue().Substring(1);
         }
 
         private string ParseVariable()
         {
-            if (tokens.Count == 0 || tokens.Peek()[0] != '$') engine.Throw("expected variable");
-            return tokens.Dequeue();
+            if (Tokens.Count == 0 || Tokens.Peek()[0] != '$') engine.Throw("expected variable");
+            return Tokens.Dequeue();
         }
 
         private string ParseIdentifierOrVariable()
         {
-            if (tokens.Count == 0 || !"`$".Contains(tokens.Peek()[0])) engine.Throw("expected variable");
-            return tokens.Dequeue();
+            if (Tokens.Count == 0 || !"`$".Contains(Tokens.Peek()[0])) engine.Throw("expected variable");
+            return Tokens.Dequeue();
         }
 
         private string PeekKeyword()
         {
-            return tokens.Peek() != null && tokens.Peek()[0] == '`' ? tokens.Peek().Substring(1) : tokens.Peek();
+            return Tokens.Peek() != null && Tokens.Peek()[0] == '`' ? Tokens.Peek().Substring(1) : Tokens.Peek();
         }
 
         private bool PeekKeyword(string keyword)
@@ -689,16 +686,16 @@ namespace Markup.Programming.Core
         private IList<ExpressionNode> ParseList(string expectedToken)
         {
             var nodes = new List<ExpressionNode>();
-            if (tokens.Count > 0 && tokens.Peek() == expectedToken)
+            if (Tokens.Count > 0 && Tokens.Peek() == expectedToken)
             {
-                tokens.Dequeue();
+                Tokens.Dequeue();
                 return nodes;
             }
-            while (tokens.Count > 0)
+            while (Tokens.Count > 0)
             {
                 nodes.Add(ParseExpression(true));
-                if (tokens.Count == 0) engine.Throw("missing token: " + expectedToken);
-                var token = tokens.Dequeue();
+                if (Tokens.Count == 0) engine.Throw("missing token: " + expectedToken);
+                var token = Tokens.Dequeue();
                 if (token == expectedToken) return nodes;
                 if (token != ",") engine.Throw("unexpected token: " + token);
             }
@@ -707,11 +704,11 @@ namespace Markup.Programming.Core
 
         private void Tokenize()
         {
-            tokens = new TokenQueue();
-            for (int i = 0; i < Path.Length; )
+            Tokens = new TokenQueue();
+            for (int i = 0; i < Code.Length; )
             {
-                char c = Path[i];
-                string c2 = Path.Substring(i, Math.Min(2, Path.Length - i));
+                char c = Code[i];
+                string c2 = Code.Substring(i, Math.Min(2, Code.Length - i));
                 if (char.IsWhiteSpace(c)) ++i;
                 else if (c2 == "/*")
                     i = EatMultiLineComment(i);
@@ -719,26 +716,26 @@ namespace Markup.Programming.Core
                     i = EatSingleLineComment(i);
                 else if (OperatorMap.ContainsKey(c2) || AssignmentOperatorMap.ContainsKey(c2))
                 {
-                    tokens.Enqueue(c2);
+                    Tokens.Enqueue(c2);
                     i += 2;
                 }
                 else if (OperatorMap.ContainsKey(c.ToString()) || "=.[](){},?:;".Contains(c))
                 {
-                    tokens.Enqueue(c.ToString());
+                    Tokens.Enqueue(c.ToString());
                     ++i;
                 }
                 else if (IsQuote(c))
                 {
                     var start = ++i;
-                    for (++i; i < Path.Length && Path[i] != c; ++i) continue;
-                    if (Path[i] == Path.Length) engine.Throw("missing closing quote: " + Path);
-                    tokens.Enqueue('"' + Path.Substring(start, i++ - start));
+                    for (++i; i < Code.Length && Code[i] != c; ++i) continue;
+                    if (Code[i] == Code.Length) engine.Throw("missing closing quote: " + Code);
+                    Tokens.Enqueue('"' + Code.Substring(start, i++ - start));
                 }
                 else if (char.IsDigit(c))
                 {
                     var start = i;
-                    for (++i; i < Path.Length && (char.IsDigit(Path[i]) || Path[i] == '.'); i++) continue;
-                    tokens.Enqueue(Path.Substring(start, i - start));
+                    for (++i; i < Code.Length && (char.IsDigit(Code[i]) || Code[i] == '.'); i++) continue;
+                    Tokens.Enqueue(Code.Substring(start, i - start));
                 }
                 else if (c == '$' || c == '@' || IsInitialIdChar(c))
                 {
@@ -747,34 +744,34 @@ namespace Markup.Programming.Core
                     if (c == '$' || c == '@')
                     {
                         ++i;
-                        if (i == Path.Length || !IsInitialIdChar(Path[i]))
+                        if (i == Code.Length || !IsInitialIdChar(Code[i]))
                         {
                             if (c == '$') engine.Throw("missing identifier");
-                            if (c == '@') { tokens.Enqueue("@"); continue; }
+                            if (c == '@') { Tokens.Enqueue("@"); continue; }
                         }
                     }
                     else
                         prefix = "`";
-                    for (++i; i < Path.Length && IsIdChar(Path[i]); ++i) continue;
-                    tokens.Enqueue(prefix + Path.Substring(start, i - start));
+                    for (++i; i < Code.Length && IsIdChar(Code[i]); ++i) continue;
+                    Tokens.Enqueue(prefix + Code.Substring(start, i - start));
                 }
                 else
-                    engine.Throw("invalid token: " + Path.Substring(i));
+                    engine.Throw("invalid token: " + Code.Substring(i));
             }
 
         }
 
         private int EatMultiLineComment(int i)
         {
-            for (i += 2; i < Path.Length - 1 && Path.Substring(i, 2) != "*/"; i++)
-                if (Path.Substring(i, 2) == "/*") i = EatMultiLineComment(i) - 1;
+            for (i += 2; i < Code.Length - 1 && Code.Substring(i, 2) != "*/"; i++)
+                if (Code.Substring(i, 2) == "/*") i = EatMultiLineComment(i) - 1;
             return i + 2;
         }
 
         private int EatSingleLineComment(int i)
         {
-            for (i += 2; i < Path.Length && Path[i] != ';'; i++) continue;
-            return Math.Min(Path.Length, i + 1);
+            for (i += 2; i < Code.Length && Code[i] != ';'; i++) continue;
+            return Math.Min(Code.Length, i + 1);
         }
 
         private static bool IsInitialIdChar(char c) { return char.IsLetter(c) || IdChars.Contains(c); }
