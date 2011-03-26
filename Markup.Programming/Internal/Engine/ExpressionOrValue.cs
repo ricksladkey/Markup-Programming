@@ -38,7 +38,7 @@ namespace Markup.Programming.Core
         public IExpression Expression { get { return expression; } }
         public object Value { get { return value; } }
 
-        public object Evaluate(Engine engine)
+        public object Get(Engine engine)
         {
             return (expression != null) ? expression.Get(engine) : value;
         }

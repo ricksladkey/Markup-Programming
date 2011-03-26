@@ -8,7 +8,7 @@
         protected override object OnGet(Engine engine)
         {
             if (Op == AssignmentOp.Assign) return LValue.Set(engine, RValue.Get(engine));
-            return LValue.Set(engine, engine.Evaluate(Op, LValue.Get(engine), RValue.Get(engine)));
+            return LValue.Set(engine, engine.Operator(Op, LValue.Get(engine), RValue.Get(engine)));
         }
     }
 }

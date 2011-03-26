@@ -71,7 +71,7 @@ namespace Markup.Programming.Core
 
         public object Op(Op op, params object[] operands)
         {
-            return engine.Evaluate(op, operands);
+            return engine.Operator(op, operands);
         }
 
         public object FindElement(string elementName)

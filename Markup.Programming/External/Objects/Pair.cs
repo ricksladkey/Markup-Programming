@@ -30,7 +30,7 @@ namespace Markup.Programming
 
         protected override object OnGet(Engine engine)
         {
-            return new DictionaryEntry(engine.Evaluate(KeyProperty, KeyPath, KeyCodeTree), engine.Evaluate(ValueProperty, ValuePath, CodeTree));
+            return new DictionaryEntry(engine.Get(KeyProperty, KeyPath, KeyCodeTree), engine.Get(ValueProperty, ValuePath, CodeTree));
         }
     }
 }

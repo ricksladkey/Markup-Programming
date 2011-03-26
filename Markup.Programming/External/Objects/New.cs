@@ -46,10 +46,10 @@ namespace Markup.Programming
 
         protected override object OnGet(Engine engine)
         {
-            var type = engine.EvaluateType(TypeProperty, Path, CodeTree);
+            var type = engine.GetType(TypeProperty, Path, CodeTree);
             if (TypeArguments.Count != 0)
-                type = type.MakeGenericType(TypeArguments.Evaluate(engine).Cast<Type>().ToArray());
-            return TypeHelper.CreateInstance(type, Arguments.Evaluate(engine));
+                type = type.MakeGenericType(TypeArguments.Get(engine).Cast<Type>().ToArray());
+            return TypeHelper.CreateInstance(type, Arguments.Get(engine));
         }
     }
 }

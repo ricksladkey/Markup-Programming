@@ -54,7 +54,7 @@ namespace Markup.Programming
 
         protected override object OnGet(Engine engine)
         {
-            var type = engine.EvaluateType(TypeProperty, Path, CodeTree);
+            var type = engine.GetType(TypeProperty, Path, CodeTree);
             if (type == null)
             {
                 var pairs = Properties.Select(property => new NameValuePair(property.PropertyName, property.Get(engine)));

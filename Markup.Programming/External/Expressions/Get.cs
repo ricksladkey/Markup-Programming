@@ -53,7 +53,7 @@ namespace Markup.Programming
         {
             if (Var != null) return engine.GetVariable(engine.GetVariable(Var, VarCodeTree));
             var context = engine.GetContext(Path, CodeTree);
-            var type = engine.EvaluateType(TypeProperty, TypePath, TypeCodeTree);
+            var type = engine.GetType(TypeProperty, TypePath, TypeCodeTree);
             if (PropertyName != null)
                 return PathHelper.GetProperty(engine, context, PropertyName);
             if (FieldName != null)
@@ -66,7 +66,7 @@ namespace Markup.Programming
                 return PathHelper.GetStaticField(engine, type, StaticFieldName);
             if (Path != null)
                 return context;
-            return engine.Evaluate(SourceProperty);
+            return engine.Get(SourceProperty);
         }
     }
 }

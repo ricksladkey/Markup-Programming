@@ -35,7 +35,7 @@ namespace Markup.Programming
         {
             TryToAttach();
             if (ConvertPath != null)
-                return Evaluate(ConvertPath, ConvertCodeTree, value, targetType, parameter, culture);
+                return DoConvert(ConvertPath, ConvertCodeTree, value, targetType, parameter, culture);
             return interop.Convert(value, targetType, parameter, culture);
         }
 
@@ -43,11 +43,11 @@ namespace Markup.Programming
         {
             TryToAttach();
             if (ConvertBackPath != null)
-                return Evaluate(ConvertBackPath, ConvertCodeTree, value, targetType, parameter, culture);
+                return DoConvert(ConvertBackPath, ConvertCodeTree, value, targetType, parameter, culture);
             return interop.ConvertBack(value, targetType, parameter, culture);
         }
 
-        public object Evaluate(string path, CodeTree codeTree,
+        public object DoConvert(string path, CodeTree codeTree,
             object value, Type targetType, object parameter, CultureInfo culture)
         {
             var parameters = new NameDictionary

@@ -77,27 +77,27 @@ namespace Markup.Programming
 
         protected override object OnGet(Engine engine)
         {
-            var value = engine.Evaluate(ValueProperty, ValuePath, ValueCodeTree);
+            var value = engine.Get(ValueProperty, ValuePath, ValueCodeTree);
             if (Var != null)
             {
                 var variable = engine.GetVariable(Var, VarCodeTree);
                 if (Op != AssignmentOp.Assign)
                 {
                     var oldValue = engine.GetVariable(variable);
-                    value = engine.Evaluate(Op, oldValue, value);
+                    value = engine.Operator(Op, oldValue, value);
                 }
                 engine.DefineVariableInParentScope(variable, value);
                 return value;
             }
             if (IsBareTarget)
             {
-                var target = engine.Evaluate(TargetProperty);
-                target = engine.Evaluate(Op, target, value);
+                var target = engine.Get(TargetProperty);
+                target = engine.Operator(Op, target, value);
                 Target = value;
                 return value;
             }
             var context = engine.Context;
-            var type = engine.EvaluateType(TypeProperty, TypePath, TypeCodeTree);
+            var type = engine.GetType(TypeProperty, TypePath, TypeCodeTree);
             if (Op != AssignmentOp.Assign)
             {
                 object oldValue = null;
@@ -115,7 +115,7 @@ namespace Markup.Programming
                     oldValue = engine.GetPath(Path, CodeTree);
                 else
                     oldValue = context;
-                value = engine.Evaluate(Op, oldValue, value);
+                value = engine.Operator(Op, oldValue, value);
             }
             if (DependencyProperty != null)
                 PathHelper.SetDependencyProperty(engine, context as DependencyObject, DependencyProperty, value);

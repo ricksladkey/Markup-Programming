@@ -68,17 +68,17 @@ namespace Markup.Programming
         protected override object OnGet(Engine engine)
         {
             if (Op == default(Op)) engine.Throw("missing operator");
-            var type = engine.EvaluateType(TypeProperty, TypePath, TypeCodeTree);
+            var type = engine.GetType(TypeProperty, TypePath, TypeCodeTree);
             if (Arguments.Count == 0)
             {
                 var arity = Op.GetArity();
                 if (arity == 1)
-                    return engine.Evaluate(Op, engine.Evaluate(ValueProperty, Path, CodeTree, type));
-                var value1 = engine.Evaluate(Value1Property, Path1, CodeTree1, type);
-                var value2 = engine.Evaluate(Value2Property, Path2, CodeTree2, type);
-                return engine.Evaluate(Op, value1, value2);
+                    return engine.Operator(Op, engine.Get(ValueProperty, Path, CodeTree, type));
+                var value1 = engine.Get(Value1Property, Path1, CodeTree1, type);
+                var value2 = engine.Get(Value2Property, Path2, CodeTree2, type);
+                return engine.Operator(Op, value1, value2);
             }
-            return engine.Evaluate(Op, Arguments);
+            return engine.Operator(Op, Arguments);
         }
     }
 }

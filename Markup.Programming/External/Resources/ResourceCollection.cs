@@ -48,7 +48,7 @@ namespace Markup.Programming
 
         private IList EvaluateItems(Engine engine, object value)
         {
-            var result = engine.EvaluateObject(value);
+            var result = engine.GetExpression(value);
             if (!(result is IList)) engine.Throw("value does not evaluate to a collection");
             return result as IList;
         }

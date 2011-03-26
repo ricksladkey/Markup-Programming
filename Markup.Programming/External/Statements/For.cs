@@ -94,7 +94,7 @@ namespace Markup.Programming
         {
             // Use the same name and type for the whole loop.
             var name = engine.GetVariable(Var, VarCodeTree);
-            var type = engine.EvaluateType(TypeProperty, TypePath, TypeCodeTree);
+            var type = engine.GetType(TypeProperty, TypePath, TypeCodeTree);
             if (type == null && (UpperLimit != null || Increment != null)) type = typeof(int);
 
             // If no name is specified then forever.
@@ -111,18 +111,18 @@ namespace Markup.Programming
             }
 
             // Normal loop processing.
-            SetLoopValue(name, engine.Evaluate(ValueProperty, Path, CodeTree, type), type, engine);
+            SetLoopValue(name, engine.Get(ValueProperty, Path, CodeTree, type), type, engine);
             engine.SetBreakFrame();
             while (true)
             {
                 if (While != null)
                 {
-                    if (!(bool)engine.Evaluate(WhileProperty, WhilePath, WhileCodeTree, typeof(bool))) break;
+                    if (!(bool)engine.Get(WhileProperty, WhilePath, WhileCodeTree, typeof(bool))) break;
                 }
                 else if (UpperLimit != null)
                 {
-                    var limit = engine.Evaluate(UpperLimitProperty, UpperLimitPath, UpperLimitCodeTree, type);
-                    if (!(bool)engine.Evaluate(Op.LessThan, GetLoopValue(name, type, engine), limit)) break;
+                    var limit = engine.Get(UpperLimitProperty, UpperLimitPath, UpperLimitCodeTree, type);
+                    if (!(bool)engine.Operator(Op.LessThan, GetLoopValue(name, type, engine), limit)) break;
                 }
                 Body.Execute(engine);
                 engine.ClearShouldContinue();
@@ -131,8 +131,8 @@ namespace Markup.Programming
                     Next.Execute(engine);
                 else if (Increment != null)
                 {
-                    var increment = engine.Evaluate(IncrementProperty, IncrementPath, IncrementCodeTree, type);
-                    SetLoopValue(name, engine.Evaluate(Op.Plus, GetLoopValue(name, type, engine), increment), type, engine);
+                    var increment = engine.Get(IncrementProperty, IncrementPath, IncrementCodeTree, type);
+                    SetLoopValue(name, engine.Operator(Op.Plus, GetLoopValue(name, type, engine), increment), type, engine);
                 }
             }
         }

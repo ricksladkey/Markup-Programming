@@ -23,11 +23,11 @@ namespace Markup.Programming.Tests.Tests
             public void Attach(DependencyObject dependencyObject) { throw new NotImplementedException(); }
             public void Detach() { throw new NotImplementedException(); }
             public DependencyObject AssociatedObject { get { return null; } }
-            public object Evaluate(IDictionary<string, object> variables, string path)
+            public object GetPath(IDictionary<string, object> variables, string path)
             {
                 return new Engine().FrameFunc(this, variables, engine => GetPath(variables, path, engine));
             }
-            public object Evaluate(IDictionary<string, object> variables, string path, object value)
+            public object SetPath(IDictionary<string, object> variables, string path, object value)
             {
                 return new Engine().FrameFunc(this, variables, engine => SetPath(variables, path, value, engine));
             }
@@ -47,7 +47,7 @@ namespace Markup.Programming.Tests.Tests
 
         private void PathTest(object expectedValue, IDictionary<string, object> variables, string path)
         {
-            TestHelper.AreStructurallyEqual(expectedValue, new PathEvaluator().Evaluate(variables, path));
+            TestHelper.AreStructurallyEqual(expectedValue, new PathEvaluator().GetPath(variables, path));
         }
 
         private void BasicGetTest(object expectedValue, string path)
@@ -58,7 +58,7 @@ namespace Markup.Programming.Tests.Tests
         private void BasicSetTest(Action<BasicViewModel, IDictionary<string, object>> action, string path, object value)
         {
             var variables = GetBasicVariables();
-            new PathEvaluator().Evaluate(variables, path, value);
+            new PathEvaluator().SetPath(variables, path, value);
             action(variables[Engine.ContextKey] as BasicViewModel, variables);
         }
 

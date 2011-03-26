@@ -34,8 +34,8 @@ namespace Markup.Programming
 
         protected override object OnGet(Engine engine)
         {
-            engine.DefineVariable(Var, engine.Evaluate(ValueProperty, Path, CodeTree));
-            return engine.Evaluate(ExpressionProperty);
+            engine.DefineVariable(Var, engine.Get(ValueProperty, Path, CodeTree));
+            return engine.Get(ExpressionProperty);
         }
     }
 }

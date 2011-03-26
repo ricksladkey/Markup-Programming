@@ -30,7 +30,7 @@ namespace Markup.Programming.Core
 
         protected bool ShouldExecute(Engine engine)
         {
-            var when = engine.Evaluate(WhenProperty, WhenPath, WhenCodeTree);
+            var when = engine.Get(WhenProperty, WhenPath, WhenCodeTree);
             if (when == null) return true;
             return TypeHelper.ConvertToBool(when);
         }

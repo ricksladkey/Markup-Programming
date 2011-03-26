@@ -32,8 +32,8 @@ namespace Markup.Programming
 
         protected override void OnExecute(Engine engine)
         {
-            var type = engine.EvaluateType(TypeProperty, TypePath, TypeCodeTree);
-            var value = engine.Evaluate(ValueProperty, Path, CodeTree, type);
+            var type = engine.GetType(TypeProperty, TypePath, TypeCodeTree);
+            var value = engine.Get(ValueProperty, Path, CodeTree, type);
             bool foundMatch = false;
             bool executedStatement = false;
             foreach (var statement in Body)
@@ -47,7 +47,7 @@ namespace Markup.Programming
                     {
                         var testValue = caseStatement.Get(engine);
                         if (engine.ShouldInterrupt) return;
-                        foundMatch = (bool)engine.Evaluate(Op.Equals, value, testValue);
+                        foundMatch = (bool)engine.Operator(Op.Equals, value, testValue);
                     }
                 }
                 else

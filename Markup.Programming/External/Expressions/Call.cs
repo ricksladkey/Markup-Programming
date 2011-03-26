@@ -80,14 +80,14 @@ namespace Markup.Programming
 
         protected override object OnGet(Engine engine)
         {
-            var args = Arguments.Evaluate(engine);
+            var args = Arguments.Get(engine);
             if (engine.HasBindingOrValue(ArgumentProperty, ArgumentPath))
             {
-                var parameter = engine.Evaluate(ArgumentProperty, ArgumentPath, ArgumentCodeTree);
-                args = new object[] { engine.EvaluateObject(parameter) }.Concat(args).ToArray();
+                var parameter = engine.Get(ArgumentProperty, ArgumentPath, ArgumentCodeTree);
+                args = new object[] { engine.GetExpression(parameter) }.Concat(args).ToArray();
             }
             return CallHelper.Call(Path, CodeTree, StaticMethodName, MethodName, FunctionName, BuiltinFunction,
-                engine.EvaluateType(TypeProperty, TypePath, TypeCodeTree), TypeArguments, args, engine);
+                engine.GetType(TypeProperty, TypePath, TypeCodeTree), TypeArguments, args, engine);
         }
     }
 }

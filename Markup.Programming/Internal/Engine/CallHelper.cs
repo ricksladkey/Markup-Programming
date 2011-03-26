@@ -16,7 +16,7 @@ namespace Markup.Programming.Core
                 return engine.CallFunction(functionName, args);
             if (builtinFunction != 0)
                 return engine.CallBuiltinFunction(builtinFunction, args);
-            var typeArgs = typeArguments.Count != 0 ? typeArguments.Evaluate(engine).Cast<Type>().ToArray() : null;
+            var typeArgs = typeArguments.Count != 0 ? typeArguments.Get(engine).Cast<Type>().ToArray() : null;
             if (staticMethodName != null)
                 return CallHelper.CallMethod(staticMethodName, true, type, null, args, typeArgs, engine);
             if (methodName != null)

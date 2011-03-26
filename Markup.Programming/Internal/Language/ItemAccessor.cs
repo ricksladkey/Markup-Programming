@@ -32,28 +32,28 @@ namespace Markup.Programming.Core
 
         protected object GetItem(Engine engine)
         {
-            return Evaluate(false, engine, null);
+            return AccessItem(false, engine, null);
         }
 
         protected object SetItem(Engine engine, object value)
         {
-            return Evaluate(true, engine, value);
+            return AccessItem(true, engine, value);
         }
 
-        private object Evaluate(bool isSet, Engine engine, object value)
+        private object AccessItem(bool isSet, Engine engine, object value)
         {
             var op = isSet ? Op.SetItem : Op.GetItem;
             var context = engine.GetContext(Path, CodeTree);
             if (Arguments.Count != 0)
             {
-                var combinedArgs = new object[] { context }.Concat(Arguments.Evaluate(engine));
+                var combinedArgs = new object[] { context }.Concat(Arguments.Get(engine));
                 if (isSet) combinedArgs.Concat(new object[] { value });
-                return engine.Evaluate(op, combinedArgs.ToArray());
+                return engine.Operator(op, combinedArgs.ToArray());
             }
-            var type = engine.EvaluateType(TypeProperty, TypePath, TypeCodeTree);
-            var index = engine.Evaluate(IndexProperty, IndexPath, IndexCodeTree, type);
-            if (!isSet) return engine.Evaluate(op, context, index);
-            return engine.Evaluate(op, context, index, value);
+            var type = engine.GetType(TypeProperty, TypePath, TypeCodeTree);
+            var index = engine.Get(IndexProperty, IndexPath, IndexCodeTree, type);
+            if (!isSet) return engine.Operator(op, context, index);
+            return engine.Operator(op, context, index, value);
         }
     }
 }

@@ -25,7 +25,7 @@ namespace Markup.Programming
 
         protected override object OnGet(Engine engine)
         {
-            return SetItem(engine, engine.Evaluate(ValueProperty, ValuePath, ValueCodeTree));
+            return SetItem(engine, engine.Get(ValueProperty, ValuePath, ValueCodeTree));
         }
     }
 }

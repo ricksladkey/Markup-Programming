@@ -376,7 +376,7 @@ namespace Markup.Programming.Core
         public void SetContext(DependencyProperty property, string path, CodeTree codeTree)
         {
             if (HasBindingOrValue(property, path))
-                SetContext(Evaluate(property, path, codeTree));
+                SetContext(Get(property, path, codeTree));
         }
 
         public void SetContext(object context)
@@ -448,44 +448,44 @@ namespace Markup.Programming.Core
             return ThrowHelper.Throw(new InvalidOperationException(formattedMessage), this);
         }
 
-        public object Evaluate(Op op, params object[] values)
+        public object Operator(Op op, params object[] values)
         {
-            return OperatorHelper.Evaluate(this, op, ExpressionOrValue.ValueArray(values));
+            return OperatorHelper.Operator(this, op, ExpressionOrValue.ValueArray(values));
         }
 
-        public object Evaluate(Op op, IEnumerable<IExpression> collection)
+        public object Operator(Op op, IEnumerable<IExpression> collection)
         {
-            return OperatorHelper.Evaluate(this, op, ExpressionOrValue.ExpressionArray(collection));
+            return OperatorHelper.Operator(this, op, ExpressionOrValue.ExpressionArray(collection));
         }
 
-        public object Evaluate(Op op, ExpressionOrValue[] expressions)
+        public object Operator(Op op, ExpressionOrValue[] expressions)
         {
-            return OperatorHelper.Evaluate(this, op, expressions);
+            return OperatorHelper.Operator(this, op, expressions);
         }
 
-        public object Evaluate(Op op, ExpressionCollection collection)
+        public object Operator(Op op, ExpressionCollection collection)
         {
-            return OperatorHelper.Evaluate(this, op, ExpressionOrValue.ExpressionArray(collection));
+            return OperatorHelper.Operator(this, op, ExpressionOrValue.ExpressionArray(collection));
         }
 
-        public object Evaluate(AssignmentOp op, object lhs, object rhs)
+        public object Operator(AssignmentOp op, object lhs, object rhs)
         {
             switch (op)
             {
                 case AssignmentOp.Assign:
                     return rhs;
                 case AssignmentOp.Increment:
-                    return Evaluate(Op.Plus, lhs, 1);
+                    return Operator(Op.Plus, lhs, 1);
                 case AssignmentOp.Decrement:
-                    return Evaluate(Op.Minus, lhs, 1);
+                    return Operator(Op.Minus, lhs, 1);
                 default:
                     break;
             }
 
-            return Evaluate((Op)op, lhs, rhs);
+            return Operator((Op)op, lhs, rhs);
         }
 
-        public object EvaluateObject(object value)
+        public object GetExpression(object value)
         {
             if (value is IProcessor)
                 return (value as IProcessor).Process(this);
@@ -494,26 +494,26 @@ namespace Markup.Programming.Core
             return value;
         }
 
-        public object Evaluate(DependencyProperty property)
+        public object Get(DependencyProperty property)
         {
             var parent = CurrentFrame.Caller as DependencyObject;
-            return EvaluateObject(parent.GetValue(property));
+            return GetExpression(parent.GetValue(property));
         }
 
-        public object Evaluate(DependencyProperty property, string path, CodeTree codeTree)
+        public object Get(DependencyProperty property, string path, CodeTree codeTree)
         {
-            return Evaluate(property, path, codeTree, null);
+            return Get(property, path, codeTree, null);
         }
 
-        public object Evaluate(DependencyProperty property, string path, CodeTree codeTree, Type type)
+        public object Get(DependencyProperty property, string path, CodeTree codeTree, Type type)
         {
-            var value = (path != null) ? GetPath(path, codeTree) : Evaluate(property);
+            var value = (path != null) ? GetPath(path, codeTree) : Get(property);
             return TypeHelper.Convert(value, type);
         }
 
-        public Type EvaluateType(DependencyProperty property, string path, CodeTree codeTree)
+        public Type GetType(DependencyProperty property, string path, CodeTree codeTree)
         {
-            return Evaluate(property, path, codeTree, typeof(Type)) as Type;
+            return Get(property, path, codeTree, typeof(Type)) as Type;
         }
 
         public object Quote(DependencyProperty property)

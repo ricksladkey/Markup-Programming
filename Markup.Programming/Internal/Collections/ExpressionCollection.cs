@@ -15,7 +15,7 @@ namespace Markup.Programming.Core
     /// </summary>
     public class ExpressionCollection : ComponentCollection<ExpressionBase>
     {
-        public object[] Evaluate(Engine engine)
+        public object[] Get(Engine engine)
         {
             return this.Select(expression => expression.Get(engine)).ToArray();
         }

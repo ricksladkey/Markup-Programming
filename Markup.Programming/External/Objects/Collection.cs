@@ -39,9 +39,9 @@ namespace Markup.Programming
 
         protected override object OnGet(Engine engine)
         {
-            var items = Arguments.Evaluate(engine);
-            var type = engine.EvaluateType(TypeProperty, TypePath, TypeCodeTree);
-            var typeArgument = engine.EvaluateType(TypeArgumentProperty, TypeArgumentPath, TypeArgumentCodeTree);
+            var items = Arguments.Get(engine);
+            var type = engine.GetType(TypeProperty, TypePath, TypeCodeTree);
+            var typeArgument = engine.GetType(TypeArgumentProperty, TypeArgumentPath, TypeArgumentCodeTree);
             return TypeHelper.CreateCollection(items, type, typeArgument);
         }
     }

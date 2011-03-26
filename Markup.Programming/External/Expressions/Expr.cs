@@ -37,8 +37,8 @@ namespace Markup.Programming
         protected override object OnGet(Engine engine)
         {
             if (Quote) return engine.Quote(ValueProperty);
-            var type = engine.EvaluateType(TypeProperty, TypePath, TypeCodeTree);
-            return engine.Evaluate(ValueProperty, Path, CodeTree, type);
+            var type = engine.GetType(TypeProperty, TypePath, TypeCodeTree);
+            return engine.Get(ValueProperty, Path, CodeTree, type);
         }
     }
 }

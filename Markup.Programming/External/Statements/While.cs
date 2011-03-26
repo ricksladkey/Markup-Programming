@@ -20,7 +20,7 @@ namespace Markup.Programming
             {
                 if (Value != null)
                 {
-                    var value = (bool)engine.Evaluate(ValueProperty, Path, CodeTree, typeof(bool));
+                    var value = (bool)engine.Get(ValueProperty, Path, CodeTree, typeof(bool));
                     if (!value) break;
                 }
                 Body.Execute(engine);

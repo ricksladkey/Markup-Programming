@@ -13,7 +13,7 @@ namespace Markup.Programming.Core
     /// </summary>
     public static class OperatorHelper
     {
-        public static object Evaluate(Engine engine, Op op, ExpressionOrValue[] expressions)
+        public static object Operator(Engine engine, Op op, ExpressionOrValue[] expressions)
         {
             // Get arity.
             var arity = GetArity(op);
@@ -25,7 +25,7 @@ namespace Markup.Programming.Core
                 // Short-circuit evaluation.
                 foreach (var expression in expressions)
                 {
-                    var value = TypeHelper.ConvertToBool(expression.Evaluate(engine));
+                    var value = TypeHelper.ConvertToBool(expression.Get(engine));
                     if (op == Op.AndAnd && !value) return false;
                     if (op == Op.OrOr && value) return true;
                 }
@@ -34,12 +34,12 @@ namespace Markup.Programming.Core
             if (op == Op.Conditional)
             {
                 if (n != 3) InvalidOperation(engine, op, n);
-                var condition = TypeHelper.ConvertToBool(expressions[0].Evaluate(engine));
-                return expressions[condition ? 1 : 2].Evaluate(engine);
+                var condition = TypeHelper.ConvertToBool(expressions[0].Get(engine));
+                return expressions[condition ? 1 : 2].Get(engine);
             }
 
             // Remaining operators use unconditional evaluation.
-            var operands = expressions.Select(expression => expression.Evaluate(engine)).ToArray();
+            var operands = expressions.Select(expression => expression.Get(engine)).ToArray();
 
             // Handle n-ary operators.
             switch (op)

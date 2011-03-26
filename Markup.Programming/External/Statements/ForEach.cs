@@ -19,8 +19,8 @@ namespace Markup.Programming
     {
         protected override void OnExecute(Engine engine)
         {
-            var type = engine.EvaluateType(TypeProperty, TypePath, TypeCodeTree);
-            var value = engine.Evaluate(ValueProperty, Path, CodeTree) as IEnumerable;
+            var type = engine.GetType(TypeProperty, TypePath, TypeCodeTree);
+            var value = engine.Get(ValueProperty, Path, CodeTree) as IEnumerable;
             var name = engine.GetVariable(Var, VarCodeTree);
             foreach (object item in value)
             {

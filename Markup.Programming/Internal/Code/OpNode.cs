@@ -10,7 +10,7 @@ namespace Markup.Programming.Core
         public IList<ExpressionNode> Operands { get; set; }
         protected override object OnGet(Engine engine)
         {
-            return engine.Evaluate(Op, Operands.Select(operand => operand.Get(engine)).ToArray());
+            return engine.Operator(Op, Operands.Select(operand => operand.Get(engine)).ToArray());
         }
     }
 }
