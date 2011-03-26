@@ -2,6 +2,6 @@
 {
     public class ContextNode : ExpressionNode
     {
-        protected override object OnEvaluate(Engine engine) { return engine.Context; }
+        protected override object OnGet(Engine engine) { return engine.Context; }
     }
 }

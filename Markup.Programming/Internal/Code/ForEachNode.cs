@@ -9,7 +9,7 @@ namespace Markup.Programming.Core
         protected override void OnExecuteFrame(Engine engine)
         {
             engine.SetBreakFrame();
-            foreach (var item in Collection.Evaluate(engine) as IEnumerable)
+            foreach (var item in Collection.Get(engine) as IEnumerable)
             {
                 engine.DefineVariable(VariableName, item);
                 Body.Execute(engine);

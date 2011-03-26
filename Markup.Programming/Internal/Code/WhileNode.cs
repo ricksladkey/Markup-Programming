@@ -6,7 +6,7 @@
         protected override void OnExecuteFrame(Engine engine)
         {
             engine.SetBreakFrame();
-            while (TypeHelper.ConvertToBool(Condition.Evaluate(engine)))
+            while (TypeHelper.ConvertToBool(Condition.Get(engine)))
             {
                 Body.Execute(engine);
                 engine.ClearShouldContinue();

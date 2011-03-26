@@ -14,7 +14,7 @@ namespace Markup.Programming.Core
         {
             foreach (var pair in Pairs)
             {
-                if (TypeHelper.ConvertToBool(pair.Expression.Evaluate(engine)))
+                if (TypeHelper.ConvertToBool(pair.Expression.Get(engine)))
                 {
                     pair.Statement.Execute(engine);
                     return;

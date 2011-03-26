@@ -130,8 +130,20 @@ namespace Markup.Programming.Core
         public bool IsScript { get { return CodeType == CodeType.Script; } }
         public string Code { get; private set; }
 
-        public CodeTree()
+        public CodeTree Compile(Engine engine, CodeType expressionType, string path)
         {
+            if (expressionType == CodeType && object.ReferenceEquals(Code, path)) return this;
+            this.engine = engine;
+            CodeType = expressionType;
+            Code = path;
+            Tokenize();
+            if (IsVariable) root = ParseVariableExpression();
+            else if (IsScript) root = ParseStatements();
+            else root = ParseExpression();
+            if (Tokens.Count > 0) engine.Throw("unexpected token: " + Tokens.Dequeue());
+            this.engine = null;
+            Tokens = null;
+            return this;
         }
 
         public string GetVariable(Engine engine)
@@ -140,10 +152,10 @@ namespace Markup.Programming.Core
             return (root as VariableNode).VariableName;
         }
 
-        public object Evaluate(Engine engine)
+        public object Get(Engine engine)
         {
             engine.Trace(TraceFlags.Path, "Code: Get {0}", Code);
-            return (root as ExpressionNode).Evaluate(engine);
+            return (root as ExpressionNode).Get(engine);
         }
         public object Set(Engine engine, object value)
         {
@@ -162,22 +174,6 @@ namespace Markup.Programming.Core
             engine.Trace(TraceFlags.Path, "Code: Execute {0}", Code);
             var block = root as ScriptNode;
             block.Execute(engine);
-        }
-
-        public CodeTree Compile(Engine engine, CodeType expressionType, string path)
-        {
-            if (expressionType == CodeType && object.ReferenceEquals(Code, path)) return this;
-            this.engine = engine;
-            CodeType = expressionType;
-            Code = path;
-            Tokenize();
-            if (IsVariable) root = ParseVariableExpression();
-            else if (IsScript) root = ParseStatements();
-            else root = ParseExpression();
-            if (Tokens.Count > 0) engine.Throw("unexpected token: " + Tokens.Dequeue());
-            this.engine = null;
-            Tokens = null;
-            return this;
         }
 
         private StatementNode ParseStatement()

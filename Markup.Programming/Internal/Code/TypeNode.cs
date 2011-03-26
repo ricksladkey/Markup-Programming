@@ -8,11 +8,11 @@ namespace Markup.Programming.Core
     {
         public string TypeName { get; set; }
         public IList<TypeNode> TypeArguments { get; set; }
-        protected override object OnEvaluate(Engine engine)
+        protected override object OnGet(Engine engine)
         {
             var type = engine.GetType(TypeName);
             if (TypeArguments == null || TypeArguments.Count == 0) return type;
-            var typeArgs = TypeArguments.Select(arg => arg.Evaluate(engine)).Cast<Type>().ToArray();
+            var typeArgs = TypeArguments.Select(arg => arg.Get(engine)).Cast<Type>().ToArray();
             return type.MakeGenericType(typeArgs);
         }
     }

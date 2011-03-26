@@ -9,12 +9,12 @@
         {
             engine.SetBreakFrame();
             Initial.Execute(engine);
-            while (Condition != null ? TypeHelper.ConvertToBool(Condition.Evaluate(engine)) : true)
+            while (Condition != null ? TypeHelper.ConvertToBool(Condition.Get(engine)) : true)
             {
                 Body.Execute(engine);
                 engine.ClearShouldContinue();
                 if (engine.ShouldInterrupt) break;
-                if (Next != null) Next.Evaluate(engine);
+                if (Next != null) Next.Get(engine);
             }
         }
     }

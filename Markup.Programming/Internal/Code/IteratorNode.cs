@@ -7,7 +7,7 @@ namespace Markup.Programming.Core
         protected override object  OnEvaluateFrame(Engine engine)
         {
             engine.SetYieldFrame();
-            var type = Type != null ? Type.Evaluate(engine) as Type : null;
+            var type = Type != null ? Type.Get(engine) as Type : null;
             Body.Execute(engine);
             return TypeHelper.CreateCollection(engine.GetYieldedValues(), type, null);
         }

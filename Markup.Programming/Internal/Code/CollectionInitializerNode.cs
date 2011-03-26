@@ -8,11 +8,11 @@ namespace Markup.Programming.Core
         public ExpressionNode Context { get; set; }
         public ExpressionNode Collection { get; set; }
         public IList<ExpressionNode> Items { get; set; }
-        protected override object OnEvaluate(Engine engine)
+        protected override object OnGet(Engine engine)
         {
-            var collection = Collection.Evaluate(engine) as IList;
-            foreach (var item in Items) collection.Add(item.Evaluate(engine));
-            return Context == Collection ? collection : Context.Evaluate(engine);
+            var collection = Collection.Get(engine) as IList;
+            foreach (var item in Items) collection.Add(item.Get(engine));
+            return Context == Collection ? collection : Context.Get(engine);
         }
     }
 }

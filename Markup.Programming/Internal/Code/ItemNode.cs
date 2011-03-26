@@ -4,13 +4,13 @@
     {
         public ExpressionNode Context { get; set; }
         public ExpressionNode Index { get; set; }
-        protected override object OnEvaluate(Engine engine)
+        protected override object OnGet(Engine engine)
         {
-            return PathHelper.GetItem(engine, Context.Evaluate(engine), Index.Evaluate(engine));
+            return PathHelper.GetItem(engine, Context.Get(engine), Index.Get(engine));
         }
         protected override void OnSet(Engine engine, object value)
         {
-            PathHelper.SetItem(engine, Context.Evaluate(engine), Index.Evaluate(engine), value);
+            PathHelper.SetItem(engine, Context.Get(engine), Index.Get(engine), value);
         }
     }
 }

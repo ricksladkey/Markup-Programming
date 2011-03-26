@@ -4,13 +4,13 @@
     {
         public ExpressionNode Context { get; set; }
         public string PropertyName { get; set; }
-        protected override object OnEvaluate(Engine engine)
+        protected override object OnGet(Engine engine)
         {
-            return PathHelper.GetProperty(engine, Context.Evaluate(engine), PropertyName);
+            return PathHelper.GetProperty(engine, Context.Get(engine), PropertyName);
         }
         protected override void OnSet(Engine engine, object value)
         {
-            PathHelper.SetProperty(engine, Context.Evaluate(engine), PropertyName, value);
+            PathHelper.SetProperty(engine, Context.Get(engine), PropertyName, value);
         }
     }
 }

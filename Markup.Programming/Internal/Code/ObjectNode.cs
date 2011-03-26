@@ -11,9 +11,9 @@ namespace Markup.Programming.Core
 
         public IList<InitializerProperty> Properties { get; set; }
         public ExpressionNode Type { get; set; }
-        protected override object OnEvaluate(Engine engine)
+        protected override object OnGet(Engine engine)
         {
-            if (Type != null) return TypeHelper.CreateInstance(Type.Evaluate(engine) as Type);
+            if (Type != null) return TypeHelper.CreateInstance(Type.Get(engine) as Type);
             var pairs = Properties.Select(property => new NameValuePair(property.PropertyName, null)).ToArray();
             var target = DynamicHelper.CreateObject(ref dynamicType, pairs) as IDynamicObject;
             foreach (var property in Properties)

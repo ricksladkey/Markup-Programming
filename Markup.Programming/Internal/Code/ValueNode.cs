@@ -3,6 +3,6 @@
     public class ValueNode : ExpressionNode
     {
         public object Value { get; set; }
-        protected override object OnEvaluate(Engine engine) { return Value; }
+        protected override object OnGet(Engine engine) { return Value; }
     }
 }

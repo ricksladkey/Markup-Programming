@@ -3,7 +3,7 @@
     public class VariableNode : ExpressionNode
     {
         public string VariableName { get; set; }
-        protected override object OnEvaluate(Engine engine)
+        protected override object OnGet(Engine engine)
         {
             return engine.GetVariable(VariableName);
         }

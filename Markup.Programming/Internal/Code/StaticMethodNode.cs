@@ -9,7 +9,7 @@ namespace Markup.Programming.Core
         public string MethodName { get; set; }
         public override object OnCall(Engine engine, IEnumerable<object> args)
         {
-            var type = Type.Evaluate(engine) as Type;
+            var type = Type.Get(engine) as Type;
             return CallHelper.CallMethod(MethodName, true, type, null, GetArguments(engine, args), null, engine);
         }
     }

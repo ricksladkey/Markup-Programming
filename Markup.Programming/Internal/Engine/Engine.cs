@@ -404,7 +404,7 @@ namespace Markup.Programming.Core
         public object GetPath(string path, CodeTree codeTree)
         {
             if (codeTree == null) codeTree = new CodeTree();
-            return codeTree.Compile(this, CodeType.GetExpression, path).Evaluate(this);
+            return codeTree.Compile(this, CodeType.GetExpression, path).Get(this);
         }
 
         public void ExecuteScript(string path, CodeTree codeTree)

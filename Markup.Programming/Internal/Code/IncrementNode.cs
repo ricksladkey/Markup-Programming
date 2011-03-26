@@ -11,9 +11,9 @@ namespace Markup.Programming.Core
         public AssignmentOp Op { get; set; }
         private int Increment { get { return Op == AssignmentOp.Increment || Op == AssignmentOp.PostIncrement ? 1 : -1; } }
         private bool IsPostfix { get { return Op == AssignmentOp.PostIncrement || Op == AssignmentOp.PostDecrement; } }
-        protected override object OnEvaluate(Engine engine)
+        protected override object OnGet(Engine engine)
         {
-            var oldValue = (int)TypeHelper.Convert(LValue.Evaluate(engine), typeof(int));
+            var oldValue = (int)TypeHelper.Convert(LValue.Get(engine), typeof(int));
             LValue.Set(engine, oldValue + Increment);
             return IsPostfix ? oldValue : oldValue + Increment;
         }

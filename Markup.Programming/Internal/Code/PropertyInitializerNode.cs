@@ -5,10 +5,10 @@
         public ExpressionNode Context { get; set; }
         public string PropertyName { get; set; }
         public ExpressionNode Value { get; set; }
-        protected override object OnEvaluate(Engine engine)
+        protected override object OnGet(Engine engine)
         {
-            var context = Context.Evaluate(engine);
-            PathHelper.SetProperty(engine, context, PropertyName, Value.Evaluate(engine));
+            var context = Context.Get(engine);
+            PathHelper.SetProperty(engine, context, PropertyName, Value.Get(engine));
             return context;
         }
     }
