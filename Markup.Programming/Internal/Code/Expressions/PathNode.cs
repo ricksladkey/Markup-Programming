@@ -10,7 +10,7 @@ namespace Markup.Programming.Core
         public ExpressionNode Path { get; set; }
         protected override object OnGet(Engine engine)
         {
-            return engine.FrameFunc(this, e => Path.Get(engine));
+            return engine.FrameFunc(this, Path.Get);
         }
         protected override void OnSet(Engine engine, object value)
         {
