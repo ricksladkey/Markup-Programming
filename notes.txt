@@ -1,5 +1,4 @@
 - add null coalescing operator
-- address difference between script depth 1 for scripts and 0 for expressions
 - clean up event/path interaction
 - add support for multiple indexers in path expression
 - after event/path merge/cleanup support multiple operations in operation converter

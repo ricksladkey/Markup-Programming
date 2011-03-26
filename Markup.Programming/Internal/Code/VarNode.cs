@@ -7,7 +7,7 @@
         protected override void OnExecute(Engine engine)
         {
             var value = Value != null ? Value.Get(engine) : null;
-            if (engine.ScriptDepth <= 1)
+            if (engine.ScriptDepth == 1)
                 engine.DefineVariableInParentScope(VariableName, value);
             else
                 engine.DefineVariable(VariableName, value);

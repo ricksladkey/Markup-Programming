@@ -2,7 +2,8 @@
 {
     public class BlockNode : FramedExpressionNode
     {
-        protected override object OnEvaluateFrame(Engine engine)
+        public StatementNode Body { get; set; }
+        protected override object OnFrameGet(Engine engine)
         {
             engine.SetReturnFrame();
             Body.Execute(engine);

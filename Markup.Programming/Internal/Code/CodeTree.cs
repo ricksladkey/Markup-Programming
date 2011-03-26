@@ -142,7 +142,7 @@ namespace Markup.Programming.Core
             Tokenize();
             if (IsVariable) Root = ParseVariableExpression();
             else if (IsScript) Root = ParseStatements();
-            else Root = ParseExpression();
+            else Root = ParsePath();
             if (Tokens.Count > 0) engine.Throw("unexpected token: " + Tokens.Dequeue());
             this.engine = null;
             Tokens = null;
@@ -158,28 +158,30 @@ namespace Markup.Programming.Core
         public object Get(Engine engine)
         {
             engine.Trace(TraceFlags.Path, "Code: Get {0}", Code);
-            return (Root as ExpressionNode).Get(engine);
+            return (Root as PathNode).Get(engine);
         }
 
         public object Set(Engine engine, object value)
         {
             engine.Trace(TraceFlags.Path, "Code: Set {0} = {1}", Code, value);
-            return (Root as ExpressionNode).Set(engine, value);
+            return (Root as PathNode).Set(engine, value);
         }
 
         public object Call(Engine engine, IEnumerable<object> args)
         {
             engine.Trace(TraceFlags.Path, "Code: Call: {0}", Code);
-            var call = Root as CallNode;
-            if (call == null) engine.Throw("not a call node");
-            return call.Call(engine, args);
+            return (Root as CallNode).Call(engine, args);
         }
 
         public void Execute(Engine engine)
         {
             engine.Trace(TraceFlags.Path, "Code: Execute {0}", Code);
-            var block = Root as ScriptNode;
-            block.Execute(engine);
+            (Root as ScriptNode).Execute(engine);
+        }
+
+        private PathNode ParsePath()
+        {
+            return new PathNode { Path = ParseExpression() };
         }
 
         private StatementNode ParseStatement()

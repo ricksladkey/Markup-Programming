@@ -9,7 +9,7 @@
     <ProjectGuid>{2F38FB9D-3F46-45A8-8976-9E79E80AB4EE}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Markup.Programming.Tests</RootNamespace>
+    <RootNamespace>Markup.Programming</RootNamespace>
     <AssemblyName>Markup.Programming.Tests</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -103,11 +103,13 @@
   <ItemGroup>
     <Compile Include="Tests\BasicViewModel.cs" />
     <Compile Include="Tests\BuiltinTests.cs" />
+    <Compile Include="Tests\CodeTreeHelper.cs" />
     <Compile Include="Tests\ControlFlowTests.cs" />
     <Compile Include="Tests\EvaluationTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tests\BasicTests.cs" />
     <Compile Include="Tests\CodeTests.cs" />
+    <Compile Include="Tests\PathEvaluator.cs" />
     <Compile Include="Tests\TestHelper.cs" />
   </ItemGroup>
   <ItemGroup>

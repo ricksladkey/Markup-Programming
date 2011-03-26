@@ -122,6 +122,7 @@
     <Compile Include="Internal\Code\FramedExpressionNode.cs" />
     <Compile Include="Internal\Code\FuncNode.cs" />
     <Compile Include="Internal\Code\IteratorNode.cs" />
+    <Compile Include="Internal\Code\PathNode.cs" />
     <Compile Include="Internal\Code\StaticPropertyNode.cs" />
     <Compile Include="Internal\Code\VarNode.cs" />
     <Compile Include="Internal\Code\ForNode.cs" />

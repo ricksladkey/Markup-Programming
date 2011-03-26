@@ -1,125 +1,17 @@
 ﻿using System;
-using System.Linq;
+using System.Collections;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Windows;
+using System.Windows.Input;
 using Markup.Programming.Core;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System.Collections;
-using System.Collections.ObjectModel;
-using System.Windows.Input;
-using System.Diagnostics;
 
 namespace Markup.Programming.Tests.Tests
 {
     [TestClass]
     public class CodeTests
     {
-        /// <summary>
-        /// THe PathEvaluator is sort of a hybrid between p:Get and p:Set
-        /// which allows us to retrieve the entire variable state after
-        /// evaluation.
-        /// </summary>
-        private class PathEvaluator : IComponent
-        {
-            public void Attach(DependencyObject dependencyObject) { throw new NotImplementedException(); }
-            public void Detach() { throw new NotImplementedException(); }
-            public DependencyObject AssociatedObject { get { return null; } }
-            public object GetPath(IDictionary<string, object> variables, string path)
-            {
-                return new Engine().FrameFunc(this, variables, engine => GetPath(variables, path, engine));
-            }
-            public object SetPath(IDictionary<string, object> variables, string path, object value)
-            {
-                return new Engine().FrameFunc(this, variables, engine => SetPath(variables, path, value, engine));
-            }
-            private object GetPath(IDictionary<string, object> variables, string path, Engine engine)
-            {
-                PrintCodeTree(new CodeTree().Compile(engine, CodeType.GetExpression, path));
-
-                var result = engine.GetPath(path, null);
-                foreach (var name in variables.Keys) variables[name] = engine.GetVariable(name);
-                return result;
-            }
-            private object SetPath(IDictionary<string, object> variables, string path, object value, Engine engine)
-            {
-                var result = engine.SetPath(path, null, value);
-                foreach (var name in variables.Keys) variables[name] = engine.GetVariable(name);
-                return result;
-            }
-
-            private void PrintCodeTree(CodeTree codeTree)
-            {
-                PrintNode(codeTree.Root);
-                Print(";\n");
-            }
-
-            private int indent = 0;
-
-            private void PrintNode(Node node)
-            {
-                bool nested = false;
-                foreach (var property in node.GetType().GetProperties())
-                {
-                    var value = property.GetValue(node, null);
-                    if (value is Node || value is IList && (value as IList).Count > 0 && (value as IList)[0] is Node)
-                    {
-                        nested = true;
-                        break;
-                    }
-                }
-                if (!nested)
-                {
-                    Print("\n", Spaces(indent), node.GetType().Name, " { ");
-                    bool first = true;
-                    foreach (var property in node.GetType().GetProperties())
-                    {
-                        if (first)
-                            first = false;
-                        else
-                            Print(", ");
-                        Print(property.Name, " = ", property.GetValue(node, null));
-                    }
-                    Print(" }");
-                }
-                else
-                {
-                    Print("\n", Spaces(indent), node.GetType().Name, "\n", Spaces(indent), "{");
-                    indent += 4;
-                    foreach (var property in node.GetType().GetProperties())
-                    {
-                        Print("\n", Spaces(indent));
-                        var value = property.GetValue(node, null);
-                        Print(property.Name, " = ");
-                        if (value is Node)
-                        {
-                            indent += 4;
-                            PrintNode(value as Node);
-                            Print(",");
-                            indent -= 4;
-                            continue;
-                        }
-                        if (value is IList && (value as IList).Count > 0 && (value as IList)[0] is Node)
-                        {
-                            indent += 4;
-                            Print("\n", Spaces(indent), "{");
-                            indent += 4;
-                            foreach (var item in value as IList) PrintNode(item as Node);
-                            Print(",\n");
-                            indent -= 4;
-                            Print("\n", Spaces(indent), "},");
-                            indent -= 4;
-                            continue;
-                        }
-                        Print(value, ",");
-                    }
-                    indent -= 4;
-                    Print("\n", Spaces(indent), "}");
-                }
-            }
-            private void Print(params object[] args) { foreach (var arg in args) Debug.Write(arg); }
-            private string Spaces(int n) { var spaces = ""; for (int i = 0; i < n; i++) spaces += " "; return spaces; }
-        }
-
         private void PathTest(object expectedValue, IDictionary<string, object> variables, string path)
         {
             TestHelper.AreStructurallyEqual(expectedValue, new PathEvaluator().GetPath(variables, path));
