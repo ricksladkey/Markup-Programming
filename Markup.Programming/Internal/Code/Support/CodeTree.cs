@@ -452,7 +452,10 @@ namespace Markup.Programming.Core
                     node = ParseIdentifierExpression(node);
                 }
                 else if (token == "[")
-                    node = ParseItem(node);
+                {
+                    ParseToken("[");
+                    node = new ItemNode { Context = node, Arguments = ParseList("]") };
+                }
                 else if (token == "++" || token == "--")
                 {
                     Tokens.Dequeue();
@@ -557,14 +560,6 @@ namespace Markup.Programming.Core
         private ExpressionNode ParseVariableExpression()
         {
             return new VariableNode { VariableName = ParseVariable() };
-        }
-
-        private ExpressionNode ParseItem(ExpressionNode node)
-        {
-            ParseToken("[");
-            var index = ParseExpressionNoComma();
-            ParseToken("]");
-            return new ItemNode { Context = node, Index = index };
         }
 
         private ExpressionNode ParseTypeExpression()

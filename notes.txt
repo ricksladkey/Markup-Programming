@@ -1,6 +1,5 @@
 - add null coalescing operator
 - clean up event/path interaction
-- add support for multiple indexers in path expression
 - after event/path merge/cleanup support multiple operations in operation converter
 - remove Additional.Operations and add setter for Attached.Operations
 - types and enums that can be resolved at compile time should be
