@@ -174,6 +174,18 @@ namespace Markup.Programming.Core
             }
         }
 
+        public static int GetArity(AssignmentOp op)
+        {
+            switch (op)
+            {
+                case AssignmentOp.Increment:
+                case AssignmentOp.Decrement:
+                    return 1;
+                default:
+                    return 2;
+            }
+        }
+
         private static bool IsTypeTransitive(Op op)
         {
             switch (op)

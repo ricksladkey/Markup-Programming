@@ -304,30 +304,77 @@ namespace Markup.Programming.Core
 
         private ExpressionNode ParseExpression(bool noComma)
         {
-            var node = ParseAtom();
-            while (PeekToken(".") || PeekToken("["))
-            {
-                if (PeekToken("."))
-                {
-                    ParseToken(".");
-                    node = ParseIdentifierExpression(node);
-                }
-                else if (PeekToken("["))
-                    node = ParseItem(node);
-            }
-
+            var node = ParseUnary();
             while (true)
             {
                 var token = Tokens.Peek();
                 if (token == null) break;
-                if (OperatorMap.ContainsKey(token))
-                    node = ParseOperator(node, false);
-                else if (AssignmentOperatorMap.ContainsKey(token))
-                    node = ParseAssignmentOperator(node, false);
+                if (AssignmentOperatorMap.ContainsKey(token))
+                {
+                    Tokens.Dequeue();
+                    node = new SetNode { LValue = node, Op = AssignmentOperatorMap[token], RValue = ParseExpression() };
+                }
+                else if (OperatorMap.ContainsKey(token))
+                {
+                    Tokens.Dequeue();
+                    node = new OpNode { Op = OperatorMap[token], Operands = { node, ParseUnary() } };
+                }
                 else if (token == "?")
                     node = ParseConditional(node);
                 else if (token == "," && !noComma)
                     node = ParseComma(node);
+                else
+                    break;
+            }
+            return node;
+        }
+
+        private ExpressionNode ParseUnary()
+        {
+            var token = Tokens.Peek();
+            if (token == "+")
+            {
+                Tokens.Dequeue();
+                return ParseUnary();
+            }
+            if (token == "-")
+            {
+                ParseToken("-");
+                return new OpNode { Op = Op.Negate, Operands = { ParseUnary() } };
+            }
+            if (OperatorMap.ContainsKey(token) && OperatorMap[token].GetArity() == 1)
+            {
+                Tokens.Dequeue();
+                return new OpNode { Op = OperatorMap[token], Operands = { ParseUnary() } };
+            }
+            if (token == "++" || token == "--")
+            {
+                Tokens.Dequeue();
+                var op = token == "++" ? AssignmentOp.Increment : AssignmentOp.Decrement;
+                return new IncrementNode { Op = op, LValue = ParseUnary() };
+            }
+            return ParsePrimary();
+        }
+
+        private ExpressionNode ParsePrimary()
+        {
+            var node = ParseAtom();
+            while (true)
+            {
+                var token = Tokens.Peek();
+                if (token == ".")
+                {
+                    ParseToken(".");
+                    node = ParseIdentifierExpression(node);
+                }
+                else if (token == "[")
+                    node = ParseItem(node);
+                else if (token == "++" || token == "--")
+                {
+                    Tokens.Dequeue();
+                    var op = token == "++" ? AssignmentOp.PostIncrement : AssignmentOp.PostDecrement;
+                    return new IncrementNode { Op = op, LValue = node };
+                }
                 else
                     break;
             }
@@ -357,38 +404,7 @@ namespace Markup.Programming.Core
                 ParseToken(")");
                 return node;
             }
-            if (OperatorMap.ContainsKey(token))
-                return ParseOperator(null, true);
-            if (AssignmentOperatorMap.ContainsKey(token))
-                return ParseAssignmentOperator(ParseAtom(), true);
             return engine.Throw("unexpected token") as ExpressionNode;
-        }
-
-        private ExpressionNode ParseOperator(ExpressionNode node, bool prefix)
-        {
-            var token = Tokens.Dequeue();
-            var op = OperatorMap[token];
-            if (op == Op.Minus && prefix) op = Op.Negate;
-            var unary = op.GetArity() == 1;
-            var expression = unary ? ParseAtom() : ParseExpression();
-            if (prefix != unary) engine.Throw("unexpected operator" + op);
-            if (unary) return new OpNode { Op = op, Operands = { expression } };
-            return new OpNode { Op = op, Operands = { node, expression } };
-        }
-
-        private ExpressionNode ParseAssignmentOperator(ExpressionNode node, bool prefix)
-        {
-            var token = Tokens.Dequeue();
-            var op = AssignmentOperatorMap[token];
-            if (op == AssignmentOp.Increment || op == AssignmentOp.Decrement)
-            {
-                var increment = op == AssignmentOp.Increment ? 1 : 0;
-                return new IncrementNode { LValue = node, PostFix = !prefix, Increment = increment };
-            }
-            if (prefix) engine.Throw("unexpected operator" + op);
-            var expression = ParseExpression();
-            if (op == AssignmentOp.Assign) return new SetNode { LValue = node, RValue = expression };
-            return new SetNode { LValue = node, RValue = new OpNode { Op = (Op)op, Operands = { node, expression } } };
         }
 
         private ExpressionNode ParseConditional(ExpressionNode node)

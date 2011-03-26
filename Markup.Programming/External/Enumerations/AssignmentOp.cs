@@ -26,5 +26,19 @@ namespace Markup.Programming
 
         Increment = 1000,
         Decrement,
+        PostIncrement,
+        PostDecrement,
+    }
+
+    /// <summary>
+    /// The AssignmentOperatorExtensions class extends the Operator
+    /// enumeration to to include methods to perform those operations.
+    /// </summary>
+    public static class AssignmentOperatorExtensions
+    {
+        public static int GetArity(this AssignmentOp op)
+        {
+            return OperatorHelper.GetArity(op);
+        }
     }
 }

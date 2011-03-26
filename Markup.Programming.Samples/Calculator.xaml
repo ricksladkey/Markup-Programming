@@ -22,14 +22,18 @@
                                 Number = (Number*10.0) + [double].Parse($p);
                                 return;
                             }
-                            if ($p == "=") { Number = @Op(Operator, Operand, Number); return; }
-                            Operand = Number;
-                            Number = 0.0;
-                            if ($p == "+") { Operator = [Op].Plus; return; }
-                            if ($p == "-") { Operator = [Op].Minus; return; }
-                            if ($p == "*") { Operator = [Op].Times; return; }
-                            if ($p == "/") { Operator = [Op].Divide; return; }
-                            [MessageBox].Show("Unknown key command: " + $p);
+                            if ($p != "=")
+                            {
+                                Operator = $p;
+                                Operand = Number;
+                                Number = 0.0;
+                                return;
+                            }
+                            if (Operator == "+") { Number += Operand; return; }
+                            if (Operator == "-") { Number -= Operand; return; }
+                            if (Operator == "*") { Number *= Operand; return; }
+                            if (Operator == "/") { Number /= Operand; return; }
+                            [MessageBox].Show("Unknown operator: " + Operator);
                         }
                     </p:Command>
                 </p:Property>
