@@ -60,7 +60,7 @@ namespace Markup.Programming.Core
             { "++", AssignmentOp.Increment },
             { "--", AssignmentOp.Increment },
         };
-        private IDictionary<string, int> precedenceMap = new Dictionary<string, int>()
+        private Dictionary<string, int> precedenceMap = new Dictionary<string, int>()
         {
             { "*", 20 },
             { "%", 20},
@@ -100,12 +100,26 @@ namespace Markup.Programming.Core
             { "&=", 0 },
             { "|=", 0 },
         };
+        private IDictionary<string, string> operatorAliasMap = new Dictionary<string, string>()
+        {
+            { "@gt", ">" },
+            { "@gteq", ">=" },
+            { "@lt", "<" },
+            { "@lteq", "<=" },
+            { "@eq", "==" },
+            { "@neq", "!=" },
+            { "@and", "&" },
+            { "@or", "|" },
+            { "@andand", "&&" },
+            { "@oror", "||" },
+        };
 
         private static string IdChars { get { return "_"; } }
         private static IDictionary<string, object> ConstantMap { get { return constantMap; } }
         private static IDictionary<string, Op> OperatorMap { get { return operatorMap; } }
         private static IDictionary<string, AssignmentOp> AssignmentOperatorMap { get { return assignmentOperatorMap; } }
         private IDictionary<string, int> PrecedenceMap { get { return precedenceMap; } }
+        private IDictionary<string, string> OperatorAliasMap { get { return operatorAliasMap; } }
         private bool IsCurrentCall { get { return IsCall && Tokens != null && Tokens.Count == 0 || PeekToken("("); } }
 
         public TokenQueue Tokens { get; set; }
@@ -450,6 +464,11 @@ namespace Markup.Programming.Core
             var token = Tokens.Peek();
             if (token == null) engine.Throw("missing expression");
             char c = token[0];
+            if (c == '`' && ConstantMap.ContainsKey(token.Substring(1)))
+            {
+                Tokens.Dequeue();
+                return new ValueNode { Value = ConstantMap[token.Substring(1)] };
+            }
             if (char.IsDigit(c))
             {
                 Tokens.Dequeue();
@@ -468,6 +487,7 @@ namespace Markup.Programming.Core
                 ParseToken(")");
                 return node;
             }
+
             return engine.Throw("unexpected token") as ExpressionNode;
         }
 
@@ -512,7 +532,6 @@ namespace Markup.Programming.Core
             if (token[0] == '`')
             {
                 var identifier = ParseIdentifier();
-                if (ConstantMap.ContainsKey(identifier)) return new ValueNode { Value = ConstantMap[identifier] };
                 if (IsCurrentCall)
                 {
                     var args = PeekToken("(") ? ParseArguments() : null;
@@ -833,7 +852,9 @@ namespace Markup.Programming.Core
                     else
                         prefix = "`";
                     for (++i; i < Code.Length && IsIdChar(Code[i]); ++i) continue;
-                    Tokens.Enqueue(prefix + Code.Substring(start, i - start));
+                    var identifier = prefix + Code.Substring(start, i - start);
+                    if (operatorAliasMap.ContainsKey(identifier)) Tokens.Enqueue(OperatorAliasMap[identifier]);
+                    else Tokens.Enqueue(identifier);
                 }
                 else
                     engine.Throw("invalid token: " + Code.Substring(i));

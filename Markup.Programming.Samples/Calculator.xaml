@@ -17,7 +17,7 @@
                         var Execute($p)
                         {
                             if ($p == "C") { Number = 0.0; return; }
-                            if ($p.CompareTo("0") &gt;= 0 &amp;&amp; $p.CompareTo("9") &lt;= 0)
+                            if ($p.CompareTo("0") @gteq 0 @andand $p.CompareTo("9") @lteq 0)
                             {
                                 Number = Number * 10.0 + [double].Parse($p);
                                 return;
@@ -29,10 +29,10 @@
                                 Number = 0.0;
                                 return;
                             }
-                            if (Operator == "+") { Number += Operand; return; }
-                            if (Operator == "-") { Number -= Operand; return; }
-                            if (Operator == "*") { Number *= Operand; return; }
-                            if (Operator == "/") { Number /= Operand; return; }
+                            if (Operator == "+") { Number = Operand + Number; return; }
+                            if (Operator == "-") { Number = Operand - Number; return; }
+                            if (Operator == "*") { Number = Operand * Number; return; }
+                            if (Operator == "/") { Number = Operand / Number; return; }
                             [MessageBox].Show("Unknown operator: " + Operator);
                         }
                     </p:Command>
