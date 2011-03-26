@@ -304,29 +304,47 @@ namespace Markup.Programming.Core
 
         private ExpressionNode ParseExpression(bool noComma)
         {
-            var node = ParseUnary();
+            var operands = new Stack<ExpressionNode>();
+            var operators = new Stack<string>();
+            operands.Push(ParseUnary());
             while (true)
             {
                 var token = Tokens.Peek();
                 if (token == null) break;
-                if (AssignmentOperatorMap.ContainsKey(token))
+                if (AssignmentOperatorMap.ContainsKey(token) || OperatorMap.ContainsKey(token))
                 {
                     Tokens.Dequeue();
-                    node = new SetNode { LValue = node, Op = AssignmentOperatorMap[token], RValue = ParseExpression() };
+                    operators.Push(token);
                 }
-                else if (OperatorMap.ContainsKey(token))
+                else if ((token == "," && !noComma) || token == "?" || token == ":")
                 {
                     Tokens.Dequeue();
-                    node = new OpNode { Op = OperatorMap[token], Operands = { node, ParseUnary() } };
+                    operators.Push(token);
                 }
-                else if (token == "?")
-                    node = ParseConditional(node);
-                else if (token == "," && !noComma)
-                    node = ParseComma(node);
                 else
                     break;
+                operands.Push(ParseUnary());
             }
-            return node;
+            while (operators.Count > 0)
+            {
+                var token = operators.Pop();
+                var operand2 = operands.Pop();
+                var operand1 = operands.Pop();
+                if (AssignmentOperatorMap.ContainsKey(token))
+                    operands.Push(new SetNode { LValue = operand1, Op = AssignmentOperatorMap[token], RValue = operand2 });
+                else if (OperatorMap.ContainsKey(token))
+                    operands.Push(new OpNode { Op = OperatorMap[token], Operands = { operand1, operand2 } });
+                else if (token == ",")
+                    operands.Push(new CommaNode { Operand1 = operand1, Operand2 = operand2 });
+                else if (token == ":")
+                {
+                    if (operators.Peek() != "?") engine.Throw("incomplete conditional operator");
+                    operators.Pop();
+                    var operand0 = operands.Pop();
+                    operands.Push(new ConditionalNode { Conditional = operand0, IfTrue = operand1, IfFalse = operand2 });
+                }
+            }
+            return operands.Pop();
         }
 
         private ExpressionNode ParseUnary()
@@ -420,7 +438,7 @@ namespace Markup.Programming.Core
         {
             Tokens.Dequeue();
             var value = ParseExpression();
-            return new CommaNode { Operand1 = node, Operand2= value };
+            return new CommaNode { Operand1 = node, Operand2 = value };
         }
 
         private ExpressionNode ParseIterator()

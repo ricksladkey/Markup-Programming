@@ -122,8 +122,7 @@ namespace Markup.Programming.Tests.Tests
         [TestMethod]
         public void PathTestSandbox()
         {
-            BasicGetTest(typeof(HorizontalAlignment), "[HorizontalAlignment]");
-            BasicGetTest("Left", "[Enum].GetValues([HorizontalAlignment])[0].ToString()");
+            BasicGetTest(42, "true ? 42 : 21");
         }
 
         [TestMethod]
