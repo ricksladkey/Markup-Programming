@@ -373,7 +373,7 @@ namespace Markup.Programming.Core
                     Tokens.Dequeue();
                 else
                     break;
-                while (operators.Count > 0 && ComparePrececence(token, operators.Peek()) <= 0)
+                while (operators.Count > 0 && ShouldPerformOperation(token, operators.Peek()))
                     PerformOperation(operators, operands);
                 operators.Push(token);
                 operands.Push(ParseUnary());
@@ -382,9 +382,11 @@ namespace Markup.Programming.Core
             return operands.Pop();
         }
 
-        private int ComparePrececence(string o1, string o2)
+        private bool ShouldPerformOperation(string o1, string o2)
         {
-            return PrecedenceMap[o1] - PrecedenceMap[o2];
+            var delta = PrecedenceMap[o1] - PrecedenceMap[o2];
+            bool rightAssociative = AssignmentOperatorMap.ContainsKey(o1) || o1 == ":";
+            return rightAssociative ? delta < 0 : delta <= 0;
         }
 
         private void PerformOperation(Stack<string> operators, Stack<ExpressionNode> operands)
@@ -646,20 +648,13 @@ namespace Markup.Programming.Core
         private ExpressionNode ParseCollectionInitializer(TypeNode typeNode)
         {
             var context = new OpNode { Op = Op.New, Operands = { typeNode } } as ExpressionNode;
-            return ParseCollectionInitializer(context, context);
-        }
-
-        private ExpressionNode ParseCollectionInitializer(ExpressionNode context, ExpressionNode collection)
-        {
-            return new CollectionInitializerNode { Context = context, Collection = collection, Items = ParseList("}") };
+            return new CollectionInitializerNode { Context = context, Collection = context, Items = ParseList("}") };
         }
 
         private ExpressionNode ParseDictionaryInitializer(TypeNode typeNode)
         {
-            //var context = new OpNode { Op = Op.New, Operands = { typeNode } } as ExpressionNode;
-            //return ParseDictionaryInitializer(context, context);
-            //return new DictionaryInitializerNode { Context = context, Dictionary = dictionary, Items = entries };
-            return null;
+            var context = new OpNode { Op = Op.New, Operands = { typeNode } } as ExpressionNode;
+            return new DictionaryInitializerNode { Context = context, Dictionary = context, Items = ParseDictionary() };
         }
 
         private List<ExpressionNode> ParseDictionary()
