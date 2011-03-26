@@ -60,11 +60,52 @@ namespace Markup.Programming.Core
             { "++", AssignmentOp.Increment },
             { "--", AssignmentOp.Increment },
         };
+        private IDictionary<string, int> precedenceMap = new Dictionary<string, int>()
+        {
+            { "*", 20 },
+            { "%", 20},
+            { "/", 20 },
+
+            { "+", 19 },
+            { "-", 19 },
+
+            { "<<", 18 },
+            { ">>", 18 },
+
+            { "<", 17 },
+            { "<=", 17 },
+            { ">", 17 },
+            { ">=", 17 },
+
+            { "==", 16 },
+            { "!=", 16 },
+
+            { "&", 15 },
+            { "^", 14 },
+            { "|", 13 },
+
+            { "&&", 12 },
+            { "||", 11 },
+
+
+            { ":", 10 },
+            { "?", 9 },
+
+            { "=", 0 },
+            { "+=", 0 },
+            { "-=", 0 },
+            { "*=", 0 },
+            { "%=", 0 },
+            { "/=", 0 },
+            { "&=", 0 },
+            { "|=", 0 },
+        };
 
         private static string IdChars { get { return "_"; } }
         private static IDictionary<string, object> ConstantMap { get { return constantMap; } }
         private static IDictionary<string, Op> OperatorMap { get { return operatorMap; } }
         private static IDictionary<string, AssignmentOp> AssignmentOperatorMap { get { return assignmentOperatorMap; } }
+        private IDictionary<string, int> PrecedenceMap { get { return precedenceMap; } }
         private bool IsCurrentCall { get { return IsCall && Tokens != null && Tokens.Count == 0 || PeekToken("("); } }
 
         public TokenQueue Tokens { get; set; }
@@ -300,51 +341,56 @@ namespace Markup.Programming.Core
             return new YieldNode { Value = value };
         }
 
-        private ExpressionNode ParseExpression() { return ParseExpression(false); }
+        private ExpressionNode ParseExpression() { return ParseBinary(false); }
+        private ExpressionNode ParseExpressionNoComma() { return ParseBinary(true); }
 
-        private ExpressionNode ParseExpression(bool noComma)
+        private ExpressionNode ParseBinary(bool noComma)
         {
-            var operands = new Stack<ExpressionNode>();
             var operators = new Stack<string>();
+            var operands = new Stack<ExpressionNode>();
             operands.Push(ParseUnary());
             while (true)
             {
                 var token = Tokens.Peek();
                 if (token == null) break;
                 if (AssignmentOperatorMap.ContainsKey(token) || OperatorMap.ContainsKey(token))
-                {
                     Tokens.Dequeue();
-                    operators.Push(token);
-                }
                 else if ((token == "," && !noComma) || token == "?" || token == ":")
-                {
                     Tokens.Dequeue();
-                    operators.Push(token);
-                }
                 else
                     break;
+                while (operators.Count > 0 && ComparePrececence(token, operators.Peek()) <= 0)
+                    PerformOperation(operators, operands);
+                operators.Push(token);
                 operands.Push(ParseUnary());
             }
-            while (operators.Count > 0)
-            {
-                var token = operators.Pop();
-                var operand2 = operands.Pop();
-                var operand1 = operands.Pop();
-                if (AssignmentOperatorMap.ContainsKey(token))
-                    operands.Push(new SetNode { LValue = operand1, Op = AssignmentOperatorMap[token], RValue = operand2 });
-                else if (OperatorMap.ContainsKey(token))
-                    operands.Push(new OpNode { Op = OperatorMap[token], Operands = { operand1, operand2 } });
-                else if (token == ",")
-                    operands.Push(new CommaNode { Operand1 = operand1, Operand2 = operand2 });
-                else if (token == ":")
-                {
-                    if (operators.Peek() != "?") engine.Throw("incomplete conditional operator");
-                    operators.Pop();
-                    var operand0 = operands.Pop();
-                    operands.Push(new ConditionalNode { Conditional = operand0, IfTrue = operand1, IfFalse = operand2 });
-                }
-            }
+            while (operators.Count > 0) PerformOperation(operators, operands);
             return operands.Pop();
+        }
+
+        private int ComparePrececence(string o1, string o2)
+        {
+            return PrecedenceMap[o1] - PrecedenceMap[o2];
+        }
+
+        private void PerformOperation(Stack<string> operators, Stack<ExpressionNode> operands)
+        {
+            var token = operators.Pop();
+            var operand2 = operands.Pop();
+            var operand1 = operands.Pop();
+            if (AssignmentOperatorMap.ContainsKey(token))
+                operands.Push(new SetNode { LValue = operand1, Op = AssignmentOperatorMap[token], RValue = operand2 });
+            else if (OperatorMap.ContainsKey(token))
+                operands.Push(new OpNode { Op = OperatorMap[token], Operands = { operand1, operand2 } });
+            else if (token == ",")
+                operands.Push(new CommaNode { Operand1 = operand1, Operand2 = operand2 });
+            else if (token == ":")
+            {
+                if (operators.Peek() != "?") engine.Throw("incomplete conditional operator");
+                operators.Pop();
+                var operand0 = operands.Pop();
+                operands.Push(new ConditionalNode { Conditional = operand0, IfTrue = operand1, IfFalse = operand2 });
+            }
         }
 
         private ExpressionNode ParseUnary()
@@ -491,7 +537,7 @@ namespace Markup.Programming.Core
         private ExpressionNode ParseItem(ExpressionNode node)
         {
             ParseToken("[");
-            var index = ParseExpression(true);
+            var index = ParseExpressionNoComma();
             ParseToken("]");
             return new ItemNode { Context = node, Index = index };
         }
@@ -551,7 +597,7 @@ namespace Markup.Programming.Core
                     }
                 }
                 else
-                    property.Value = ParseExpression(true);
+                    property.Value = ParseExpressionNoComma();
                 properties.Add(property);
                 token = Tokens.Dequeue();
                 if (token == "}") break;
@@ -603,9 +649,9 @@ namespace Markup.Programming.Core
             while (true)
             {
                 ParseToken("{");
-                var key = ParseExpression(true);
+                var key = ParseExpressionNoComma();
                 ParseToken(",");
-                var value = ParseExpression(true);
+                var value = ParseExpressionNoComma();
                 ParseToken("}");
                 entries.Add(new PairNode { Key = key, Value = value });
                 var token = Tokens.Dequeue();
@@ -727,7 +773,7 @@ namespace Markup.Programming.Core
             }
             while (Tokens.Count > 0)
             {
-                nodes.Add(ParseExpression(true));
+                nodes.Add(ParseExpressionNoComma());
                 if (Tokens.Count == 0) engine.Throw("missing token: " + expectedToken);
                 var token = Tokens.Dequeue();
                 if (token == expectedToken) return nodes;

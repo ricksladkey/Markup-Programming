@@ -110,6 +110,8 @@ namespace Markup.Programming.Tests.Tests
             BasicGetTest(true, "// comment; true");
             var foo = typeof(MouseButtonState);
             BasicGetTest(true, "[MouseButtonState].Pressed != [MouseButtonState].Released");
+            BasicGetTest(7, "1 + 2 * 3");
+            BasicGetTest(7, "2 * 3 + 1");
 
             BasicGetTest("Test1", "String1");
             BasicGetTest("Test2", "Object1.String1");
@@ -150,6 +152,7 @@ namespace Markup.Programming.Tests.Tests
         [TestMethod]
         public void ScriptTestSandbox()
         {
+            TestHelper.ScriptTest(5, "var $i = 0; while ($i < 5) $i = $i + 1; return $i;");
         }
     }
 }

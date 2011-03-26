@@ -17,9 +17,9 @@
                         var Execute($p)
                         {
                             if ($p == "C") { Number = 0.0; return; }
-                            if (($p.CompareTo("0") &gt;= 0) &amp;&amp; ($p.CompareTo("9") &lt;= 0))
+                            if ($p.CompareTo("0") &gt;= 0 &amp;&amp; $p.CompareTo("9") &lt;= 0)
                             {
-                                Number = (Number*10.0) + [double].Parse($p);
+                                Number = Number * 10.0 + [double].Parse($p);
                                 return;
                             }
                             if ($p != "=")

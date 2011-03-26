@@ -1,5 +1,3 @@
-- high priority: operator precedence
-
 - test kaxaml with markup programming
 - after event/path merge/cleanup support multiple operations in operation converter
 - consider adding setter for attached operations for string syntax
