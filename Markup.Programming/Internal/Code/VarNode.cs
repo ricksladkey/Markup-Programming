@@ -6,8 +6,11 @@
         public ExpressionNode Value { get; set; }
         protected override void OnExecute(Engine engine)
         {
-            if (Value == null) engine.DeclareScriptVariable(VariableName);
-            engine.DefineScriptVariable(VariableName, Value.Get(engine));
+            var value = Value != null ? Value.Get(engine) : null;
+            if (engine.ScriptDepth <= 1)
+                engine.DefineVariableInParentScope(VariableName, value);
+            else
+                engine.DefineVariable(VariableName, value);
         }
     }
 }

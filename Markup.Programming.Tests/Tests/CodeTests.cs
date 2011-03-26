@@ -7,6 +7,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Collections;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
+using System.Diagnostics;
 
 namespace Markup.Programming.Tests.Tests
 {
@@ -33,6 +34,8 @@ namespace Markup.Programming.Tests.Tests
             }
             private object GetPath(IDictionary<string, object> variables, string path, Engine engine)
             {
+                PrintCodeTree(new CodeTree().Compile(engine, CodeType.GetExpression, path));
+
                 var result = engine.GetPath(path, null);
                 foreach (var name in variables.Keys) variables[name] = engine.GetVariable(name);
                 return result;
@@ -43,6 +46,78 @@ namespace Markup.Programming.Tests.Tests
                 foreach (var name in variables.Keys) variables[name] = engine.GetVariable(name);
                 return result;
             }
+
+            private void PrintCodeTree(CodeTree codeTree)
+            {
+                PrintNode(codeTree.Root);
+                Print(";\n");
+            }
+
+            private int indent = 0;
+
+            private void PrintNode(Node node)
+            {
+                bool nested = false;
+                foreach (var property in node.GetType().GetProperties())
+                {
+                    var value = property.GetValue(node, null);
+                    if (value is Node || value is IList && (value as IList).Count > 0 && (value as IList)[0] is Node)
+                    {
+                        nested = true;
+                        break;
+                    }
+                }
+                if (!nested)
+                {
+                    Print("\n", Spaces(indent), node.GetType().Name, " { ");
+                    bool first = true;
+                    foreach (var property in node.GetType().GetProperties())
+                    {
+                        if (first)
+                            first = false;
+                        else
+                            Print(", ");
+                        Print(property.Name, " = ", property.GetValue(node, null));
+                    }
+                    Print(" }");
+                }
+                else
+                {
+                    Print("\n", Spaces(indent), node.GetType().Name, "\n", Spaces(indent), "{");
+                    indent += 4;
+                    foreach (var property in node.GetType().GetProperties())
+                    {
+                        Print("\n", Spaces(indent));
+                        var value = property.GetValue(node, null);
+                        Print(property.Name, " = ");
+                        if (value is Node)
+                        {
+                            indent += 4;
+                            PrintNode(value as Node);
+                            Print(",");
+                            indent -= 4;
+                            continue;
+                        }
+                        if (value is IList && (value as IList).Count > 0 && (value as IList)[0] is Node)
+                        {
+                            indent += 4;
+                            Print("\n", Spaces(indent), "{");
+                            indent += 4;
+                            foreach (var item in value as IList) PrintNode(item as Node);
+                            Print(",\n");
+                            indent -= 4;
+                            Print("\n", Spaces(indent), "},");
+                            indent -= 4;
+                            continue;
+                        }
+                        Print(value, ",");
+                    }
+                    indent -= 4;
+                    Print("\n", Spaces(indent), "}");
+                }
+            }
+            private void Print(params object[] args) { foreach (var arg in args) Debug.Write(arg); }
+            private string Spaces(int n) { var spaces = ""; for (int i = 0; i < n; i++) spaces += " "; return spaces; }
         }
 
         private void PathTest(object expectedValue, IDictionary<string, object> variables, string path)
@@ -113,6 +188,9 @@ namespace Markup.Programming.Tests.Tests
             BasicGetTest(7, "1 + 2 * 3");
             BasicGetTest(7, "2 * 3 + 1");
             BasicGetTest(2, "false ? 1 : false ? 1 : 2");
+            BasicGetTest(null, "$i");
+            BasicGetTest(1, "$i = 1");
+            BasicGetTest(3, "$i = 1, $i += 2");
 
             BasicGetTest("Test1", "String1");
             BasicGetTest("Test2", "Object1.String1");

@@ -49,9 +49,12 @@ namespace Markup.Programming.Core
         private int scriptDepth;
         private List<StackFrame> stack = new List<StackFrame>();
         private IDictionary<string, IFunction> functions;
+
+        private string FrameInfo { get { return string.Format("{0}/{1}", id, stack.Count); } }
+
+        public int ScriptDepth { get { return scriptDepth; } }
         public StackFrame CurrentFrame { get { return stack.Count >= 1 ? stack[stack.Count - 1] : null; } }
         private StackFrame ParentFrame { get { return stack.Count >= 2 ? stack[stack.Count - 2] : null; } }
-        private string FrameInfo { get { return string.Format("{0}/{1}", id, stack.Count); } }
 
         private BuiltinImplementor builtinImplementor;
         private BuiltinImplementor BuiltinImplementor
@@ -236,40 +239,24 @@ namespace Markup.Programming.Core
             return CurrentFrame.YieldedValues;
         }
 
-        public void DeclareVariable(string name)
-        {
-            DefineVariable(name, null, true, false, false);
-        }
-
         public void DefineVariable(string name, object value)
         {
-            DefineVariable(name, value, false, false, false);
+            DefineVariable(name, value, false, false);
         }
 
         public object DefineVariableInParentScope(string name, object value)
         {
-            DefineVariable(name, value, false, true, false);
+            DefineVariable(name, value, true, false);
             return value;
         }
 
-        public void DeclareScriptVariable(string name)
-        {
-            DefineVariable(name, null, true, scriptDepth <= 1, false);
-        }
-
-        public void DefineScriptVariable(string name, object value)
-        {
-            DefineVariable(name, value, false, scriptDepth <= 1, false);
-        }
-
-        private void DefineVariable(string name, object value, bool declare, bool parentFrame, bool noError)
+        private void DefineVariable(string name, object value, bool parentScope, bool noError)
         {
             if (!noError && !CodeTree.IsValidVariable(name)) Throw("invalid variable: " + name);
             Trace(TraceFlags.Variable, "DefineVariable: {0} = {1}", name, value);
-            var frame = parentFrame ? (ParentFrame ?? CurrentFrame) : CurrentFrame;
-            if (frame == null) Throw("no frame for variable: " + name);
+            var frame = parentScope ? (ParentFrame ?? CurrentFrame) : CurrentFrame;
             if (frame.Variables == null) frame.Variables = new NameDictionary();
-            if (!declare || !frame.Variables.ContainsKey(name)) frame.Variables[name] = value;
+            frame.Variables[name] = value;
         }
 
         public IDictionary<string, object> GetClosure()
@@ -302,27 +289,55 @@ namespace Markup.Programming.Core
 
         public object GetVariable(string name)
         {
+            return GetVariable(name, false);
+        }
+
+        public object GetVariableInParentScope(string name)
+        {
+            return GetVariable(name, true);
+        }
+
+        private object GetVariable(string name, bool parentScope)
+        {
             var value = null as object;
             if (TryGetVariable(name, out value))
             {
                 Trace(TraceFlags.Variable, "Get: {0} = {1}", name, value);
                 return value;
             }
-            return Throw("variable not found: " + name);
+            var frame = parentScope ? (ParentFrame ?? CurrentFrame) : CurrentFrame;
+            if (frame.Variables == null) frame.Variables = new NameDictionary();
+            frame.Variables[name] = null;
+            return null;
         }
 
-        public void SetVariable(string name, object value)
+        public object SetVariable(string name, object value)
+        {
+            return SetVariable(name, value, false);
+        }
+
+        public object SetVariableInParentScope(string name, object value)
+        {
+            return SetVariable(name, value, true);
+        }
+
+        private object SetVariable(string name, object value, bool parentScope)
         {
             foreach (var frame in StackBackwards)
             {
                 if (frame.Variables != null && frame.Variables.ContainsKey(name))
                 {
                     frame.Variables[name] = value;
-                    return;
+                    return value;
                 }
                 if (frame.ScopeFrame) break;
             }
-            Throw("variable not found: " + name);
+            {
+                var frame = parentScope ? (ParentFrame ?? CurrentFrame) : CurrentFrame;
+                if (frame.Variables == null) frame.Variables = new NameDictionary();
+                frame.Variables[name] = value;
+            }
+            return value;
         }
 
         public void DefineFunction(string name, IFunction value)
@@ -381,7 +396,7 @@ namespace Markup.Programming.Core
 
         public void SetContext(object context)
         {
-            DefineVariable(Engine.ContextKey, context, false, false, true);
+            DefineVariable(Engine.ContextKey, context, false, true);
         }
 
         public bool HasBindingOrValue(DependencyProperty property)
@@ -445,7 +460,7 @@ namespace Markup.Programming.Core
         public object Throw(string message, params object[] args)
         {
             var formattedMessage = args.Length == 0 ? message : string.Format(message, args);
-            return ThrowHelper.Throw(new InvalidOperationException(formattedMessage), this);
+                return ThrowHelper.Throw(new InvalidOperationException(formattedMessage), this);
         }
 
         public object Operator(Op op, params object[] values)

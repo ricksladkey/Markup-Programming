@@ -17,7 +17,6 @@ namespace Markup.Programming.Core
     public class CodeTree
     {
         private Engine engine;
-        private Node root;
         private static Dictionary<string, object> constantMap = new Dictionary<string, object>
         {
             { "true", true },
@@ -91,14 +90,17 @@ namespace Markup.Programming.Core
             { ":", 10 },
             { "?", 9 },
 
-            { "=", 0 },
-            { "+=", 0 },
-            { "-=", 0 },
-            { "*=", 0 },
-            { "%=", 0 },
-            { "/=", 0 },
-            { "&=", 0 },
-            { "|=", 0 },
+            { "=", 1 },
+            { "+=", 1 },
+            { "-=", 1 },
+            { "*=", 1 },
+            { "%=", 1 },
+            { "/=", 1 },
+            { "&=", 1 },
+            { "|=", 1 },
+
+            { ",", 0 },
+
         };
         private IDictionary<string, string> operatorAliasMap = new Dictionary<string, string>()
         {
@@ -122,7 +124,8 @@ namespace Markup.Programming.Core
         private IDictionary<string, string> OperatorAliasMap { get { return operatorAliasMap; } }
         private bool IsCurrentCall { get { return IsCall && Tokens != null && Tokens.Count == 0 || PeekToken("("); } }
 
-        public TokenQueue Tokens { get; set; }
+        public Node Root { get; private set; }
+        public TokenQueue Tokens { get; private set; }
         public CodeType CodeType { get; private set; }
         public bool IsVariable { get { return CodeType == CodeType.Variable; } }
         public bool IsSet { get { return CodeType == CodeType.SetExpression; } }
@@ -137,9 +140,9 @@ namespace Markup.Programming.Core
             CodeType = expressionType;
             Code = path;
             Tokenize();
-            if (IsVariable) root = ParseVariableExpression();
-            else if (IsScript) root = ParseStatements();
-            else root = ParseExpression();
+            if (IsVariable) Root = ParseVariableExpression();
+            else if (IsScript) Root = ParseStatements();
+            else Root = ParseExpression();
             if (Tokens.Count > 0) engine.Throw("unexpected token: " + Tokens.Dequeue());
             this.engine = null;
             Tokens = null;
@@ -149,30 +152,33 @@ namespace Markup.Programming.Core
         public string GetVariable(Engine engine)
         {
             engine.Trace(TraceFlags.Path, "Code: Variable {0}", Code);
-            return (root as VariableNode).VariableName;
+            return (Root as VariableNode).VariableName;
         }
 
         public object Get(Engine engine)
         {
             engine.Trace(TraceFlags.Path, "Code: Get {0}", Code);
-            return (root as ExpressionNode).Get(engine);
+            return (Root as ExpressionNode).Get(engine);
         }
+
         public object Set(Engine engine, object value)
         {
             engine.Trace(TraceFlags.Path, "Code: Set {0} = {1}", Code, value);
-            return (root as ExpressionNode).Set(engine, value);
+            return (Root as ExpressionNode).Set(engine, value);
         }
+
         public object Call(Engine engine, IEnumerable<object> args)
         {
             engine.Trace(TraceFlags.Path, "Code: Call: {0}", Code);
-            var call = root as CallNode;
+            var call = Root as CallNode;
             if (call == null) engine.Throw("not a call node");
             return call.Call(engine, args);
         }
+
         public void Execute(Engine engine)
         {
             engine.Trace(TraceFlags.Path, "Code: Execute {0}", Code);
-            var block = root as ScriptNode;
+            var block = Root as ScriptNode;
             block.Execute(engine);
         }
 

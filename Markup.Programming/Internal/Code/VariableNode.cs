@@ -5,11 +5,17 @@
         public string VariableName { get; set; }
         protected override object OnGet(Engine engine)
         {
-            return engine.GetVariable(VariableName);
+            if (engine.ScriptDepth <= 1)
+                return engine.GetVariableInParentScope(VariableName);
+            else
+                return engine.GetVariable(VariableName);
         }
         protected override void OnSet(Engine engine, object value)
         {
-            engine.SetVariable(VariableName, value);
+            if (engine.ScriptDepth <= 1)
+                engine.SetVariableInParentScope(VariableName, value);
+            else
+                engine.SetVariable(VariableName, value);
         }
     }
 }

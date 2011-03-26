@@ -1,10 +1,9 @@
+- add null coalescing operator
 - address difference between script depth 1 for scripts and 0 for expressions
 - clean up event/path interaction
 - add support for multiple indexers in path expression
 - after event/path merge/cleanup support multiple operations in operation converter
 - remove Additional.Operations and add setter for Attached.Operations
-- decide whether engine even needs to know the differences between declaration and definition
-- clean up the rules, meaning and use of variable declaration, definition and assignment in statments and expressions
 - types and enums that can be resolved at compile time should be
 - add relativeTo parameter to @FindElement, document @this and @FindElement
 - show call-stack within code tree
