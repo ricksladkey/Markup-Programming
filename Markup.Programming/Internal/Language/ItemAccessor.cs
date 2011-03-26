@@ -8,7 +8,7 @@ using System.Windows.Markup;
 namespace Markup.Programming.Core
 {
     [ContentProperty("Arguments")]
-    public abstract class Accessor : ArgumentsExpressionWithType
+    public abstract class ItemAccessor : ArgumentsExpressionWithType
     {
         public object Index
         {
@@ -17,7 +17,7 @@ namespace Markup.Programming.Core
         }
 
         public static readonly DependencyProperty IndexProperty =
-            DependencyProperty.Register("Index", typeof(object), typeof(Accessor), null);
+            DependencyProperty.Register("Index", typeof(object), typeof(ItemAccessor), null);
 
         public string IndexPath { get; set; }
 
@@ -30,12 +30,12 @@ namespace Markup.Programming.Core
             Attach(IndexProperty);
         }
 
-        protected object Get(Engine engine)
+        protected object GetItem(Engine engine)
         {
             return Evaluate(false, engine, null);
         }
 
-        protected object Set(Engine engine, object value)
+        protected object SetItem(Engine engine, object value)
         {
             return Evaluate(true, engine, value);
         }

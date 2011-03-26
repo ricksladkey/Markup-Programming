@@ -44,7 +44,7 @@ namespace Markup.Programming
             Attach(TypeProperty, TypeArgumentsProperty);
         }
 
-        protected override object OnEvaluate(Engine engine)
+        protected override object OnGet(Engine engine)
         {
             var type = engine.EvaluateType(TypeProperty, Path, CodeTree);
             if (TypeArguments.Count != 0)

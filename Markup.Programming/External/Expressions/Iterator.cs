@@ -47,7 +47,7 @@ namespace Markup.Programming
             Attach(TypeProperty, TypeArgumentProperty);
         }
 
-        protected override object OnEvaluate(Engine engine)
+        protected override object OnGet(Engine engine)
         {
             engine.SetYieldFrame();
             Body.Execute(engine);

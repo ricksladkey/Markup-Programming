@@ -13,9 +13,9 @@ namespace Markup.Programming
             engine.Throw("Case only supported in Switch");
         }
 
-        public object Evaluate(Engine engine)
+        public object Get(Engine engine)
         {
-            return engine.EvaluateFrame(this, EvaluateValue);
+            return engine.FrameFunc(this, EvaluateValue);
         }
 
         private object EvaluateValue(Engine engine)

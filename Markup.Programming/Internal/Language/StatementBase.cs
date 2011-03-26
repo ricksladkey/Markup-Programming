@@ -41,17 +41,17 @@ namespace Markup.Programming.Core
         public void Execute(Engine engine)
         {
             // Inline Process(engine);
-            engine.EvaluateFrame(this, OnProcess);
+            engine.FrameFunc(this, OnProcess);
         }
 
         public void Execute(Engine engine, IDictionary<string, object> state)
         {
-            engine.EvaluateFrame(this, state, OnProcess);
+            engine.FrameFunc(this, state, OnProcess);
         }
 
         public object Process(Engine engine)
         {
-            return engine.EvaluateFrame(this, OnProcess);
+            return engine.FrameFunc(this, OnProcess);
         }
 
         protected abstract object OnProcess(Engine engine);

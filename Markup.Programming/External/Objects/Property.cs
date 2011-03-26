@@ -51,17 +51,17 @@ namespace Markup.Programming
             Attach(TypeProperty, ValueProperty);
         }
 
-        public object Process(Engine engine) { return Evaluate(engine); }
-        public void Execute(Engine engine) { Evaluate(engine); }
+        public object Process(Engine engine) { return Get(engine); }
+        public void Execute(Engine engine) { Get(engine); }
 
         public Type GetType(Engine engine)
         {
-            return engine.EvaluateFrame(this, e => engine.EvaluateType(TypeProperty, TypePath, TypeCodeTree));
+            return engine.FrameFunc(this, e => engine.EvaluateType(TypeProperty, TypePath, TypeCodeTree));
         }
 
-        public object Evaluate(Engine engine)
+        public object Get(Engine engine)
         {
-            return engine.EvaluateFrame(this, e => engine.Evaluate(ValueProperty, Path, CodeTree));
+            return engine.FrameFunc(this, e => engine.Evaluate(ValueProperty, Path, CodeTree));
         }
     }
 }

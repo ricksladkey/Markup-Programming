@@ -7,7 +7,7 @@ namespace Markup.Programming.Core
     /// If the expression is evaluated as a statement, the
     /// expression is evaluated and the value is discarded.
     /// It would be called Expression  that conflicts with core
-    /// libraries.  Implementing classes must override OnEvaluate.
+    /// libraries.  Implementing classes must override OnGet.
     /// </summary>
     public abstract class ExpressionBase : Statement, IExpression
     {
@@ -21,18 +21,18 @@ namespace Markup.Programming.Core
             // Nothing happens.
         }
 
-        public object Evaluate(Engine engine)
+        public object Get(Engine engine)
         {
             // Inline Process(engine);
-            return engine.EvaluateFrame(this, OnProcess);
+            return engine.FrameFunc(this, OnProcess);
         }
 
         protected override object OnProcess(Engine engine)
         {
             engine.SetContext(ContextProperty, ContextPath, ContextCodeTree);
-            return OnEvaluate(engine);
+            return OnGet(engine);
         }
 
-        protected abstract object OnEvaluate(Engine engine);
+        protected abstract object OnGet(Engine engine);
     }
 }

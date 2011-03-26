@@ -7,7 +7,7 @@ using System.Windows;
 
 namespace Markup.Programming
 {
-    public class SetItem : Accessor
+    public class SetItem : ItemAccessor
     {
         public object Value
         {
@@ -23,9 +23,9 @@ namespace Markup.Programming
         private CodeTree valueCodeTree = new CodeTree();
         protected CodeTree ValueCodeTree { get { return valueCodeTree; } }
 
-        protected override object OnEvaluate(Engine engine)
+        protected override object OnGet(Engine engine)
         {
-            return Set(engine, engine.Evaluate(ValueProperty, ValuePath, ValueCodeTree));
+            return SetItem(engine, engine.Evaluate(ValueProperty, ValuePath, ValueCodeTree));
         }
     }
 }

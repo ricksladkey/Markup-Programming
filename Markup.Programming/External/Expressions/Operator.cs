@@ -65,7 +65,7 @@ namespace Markup.Programming
         private CodeTree codeTree2 = new CodeTree();
         protected CodeTree CodeTree2 { get { return codeTree2; } }
 
-        protected override object OnEvaluate(Engine engine)
+        protected override object OnGet(Engine engine)
         {
             if (Op == default(Op)) engine.Throw("missing operator");
             var type = engine.EvaluateType(TypeProperty, TypePath, TypeCodeTree);

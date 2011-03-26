@@ -57,7 +57,7 @@ namespace Markup.Programming
                 { "@Parameter", parameter },
                 { "@Culture", culture },
             };
-            return new Engine().EvaluateFrame(this, parameters, engine => engine.GetPath(path, codeTree));
+            return new Engine().FrameFunc(this, parameters, engine => engine.GetPath(path, codeTree));
         }
     }
 }

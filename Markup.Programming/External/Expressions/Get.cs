@@ -49,7 +49,7 @@ namespace Markup.Programming
             Attach(ContextProperty);
         }
 
-        protected override object OnEvaluate(Engine engine)
+        protected override object OnGet(Engine engine)
         {
             if (Var != null) return engine.GetVariable(engine.GetVariable(Var, VarCodeTree));
             var context = engine.GetContext(Path, CodeTree);

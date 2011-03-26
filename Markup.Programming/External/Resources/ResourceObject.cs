@@ -116,7 +116,7 @@ namespace Markup.Programming
                 propertyStore.Add(property.PropertyName, null);
             }
             dynamicProperties = Properties.Select(property => GetPair(engine, property)).ToArray();
-            engine.ExecuteFrame(this, new NameDictionary { { "@this", this } }, e => SetValues(engine));
+            engine.FrameAction(this, new NameDictionary { { "@this", this } }, e => SetValues(engine));
         }
 
         private NameTypePair GetPair(Engine engine, Property property)
@@ -132,7 +132,7 @@ namespace Markup.Programming
             foreach (var property in Properties)
             {
                 var type = property.GetType(engine);
-                var value = property.Evaluate(engine);
+                var value = property.Get(engine);
                 value = TypeHelper.Convert(value, type);
                 this[property.PropertyName] = value;
             }
@@ -165,13 +165,13 @@ namespace Markup.Programming
             var pairs = Properties.Select(property => new NameValuePair(property.PropertyName, null)).ToArray();
             Type dynamicType = null;
             value = DynamicHelper.CreateObject(ref dynamicType, pairs);
-            engine.ExecuteFrame(this, new NameDictionary { { "@this", value } }, e => SetValues(engine));
+            engine.FrameAction(this, new NameDictionary { { "@this", value } }, e => SetValues(engine));
         }
 
         private void SetValues(Engine engine)
         {
             // Phase II: initialize property values.
-            foreach (var property in Properties) this[property.PropertyName] = property.Evaluate(engine);
+            foreach (var property in Properties) this[property.PropertyName] = property.Get(engine);
         }
 
         public IEnumerable<NameTypePair> DynamicProperties

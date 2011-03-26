@@ -45,7 +45,7 @@ namespace Markup.Programming
                     var caseStatement = statement as Case;
                     if (!foundMatch)
                     {
-                        var testValue = caseStatement.Evaluate(engine);
+                        var testValue = caseStatement.Get(engine);
                         if (engine.ShouldInterrupt) return;
                         foundMatch = (bool)engine.Evaluate(Op.Equals, value, testValue);
                     }

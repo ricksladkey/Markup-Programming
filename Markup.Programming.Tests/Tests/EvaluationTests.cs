@@ -108,13 +108,13 @@ namespace Markup.Programming.Tests
         public void GetItemTest()
         {
             var array = new int[] { 1, 2, 3 };
-            var value1 = new GetItem { Context = array, Index = 1 }.Evaluate(new Engine());
+            var value1 = new GetItem { Context = array, Index = 1 }.Get(new Engine());
             Assert.AreEqual(2, value1);
             var list = new List<int> { 1, 2, 3 };
-            var value2 = new GetItem { Context = list, Index = 1 }.Evaluate(new Engine());
+            var value2 = new GetItem { Context = list, Index = 1 }.Get(new Engine());
             Assert.AreEqual(2, value2);
             var dictionary = new Dictionary<string, int> { { "a", 1 }, { "b", 2 } };
-            var value3 = new GetItem { Context = dictionary, Index = "b" }.Evaluate(new Engine());
+            var value3 = new GetItem { Context = dictionary, Index = "b" }.Get(new Engine());
             Assert.AreEqual(2, value2);
         }
 
@@ -122,13 +122,13 @@ namespace Markup.Programming.Tests
         public void SetItemTest()
         {
             var array = new List<int> { 1, 2, 3 };
-            new SetItem { Context = array, Index = 1, Value = 42 }.Evaluate(new Engine());
+            new SetItem { Context = array, Index = 1, Value = 42 }.Get(new Engine());
             Assert.AreEqual(42, array[1]);
             var list = new List<int> { 1, 2, 3 };
-            new SetItem { Context = list, Index = 1, Value = 42 }.Evaluate(new Engine());
+            new SetItem { Context = list, Index = 1, Value = 42 }.Get(new Engine());
             Assert.AreEqual(42, list[1]);
             var dictionary = new Dictionary<string, int> { { "a", 1 }, { "b", 2 } };
-            new SetItem { Context = dictionary, Index = "b", Value = 42 }.Evaluate(new Engine());
+            new SetItem { Context = dictionary, Index = "b", Value = 42 }.Get(new Engine());
             Assert.AreEqual(42, dictionary["b"]);
         }
     }

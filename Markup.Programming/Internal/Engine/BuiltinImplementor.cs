@@ -56,7 +56,7 @@ namespace Markup.Programming.Core
 
         public object Evaluate(IExpression expression)
         {
-            return expression.Evaluate(engine);
+            return expression.Get(engine);
         }
 
         public ResourceComponent GetResourceObject()

@@ -40,7 +40,7 @@ namespace Markup.Programming.Core
 
         public object Evaluate(Engine engine)
         {
-            return (expression != null) ? expression.Evaluate(engine) : value;
+            return (expression != null) ? expression.Get(engine) : value;
         }
     }
 }

@@ -38,7 +38,7 @@ namespace Markup.Programming
 
         public object Callback(object child, string function, object[] args, Engine engine)
         {
-            return engine.EvaluateFrame(this, e => CallFunction(child, function, args, engine));
+            return engine.FrameFunc(this, e => CallFunction(child, function, args, engine));
         }
 
         private object CallFunction(object child, string function, object[] args, Engine engine)
@@ -49,7 +49,7 @@ namespace Markup.Programming
             return engine.CallFunction(function, args);
         }
 
-        protected override object OnEvaluate(Engine engine)
+        protected override object OnGet(Engine engine)
         {
             ParentResourceObject = engine.ParentResourceObject;
             return new CommandInterop(this);

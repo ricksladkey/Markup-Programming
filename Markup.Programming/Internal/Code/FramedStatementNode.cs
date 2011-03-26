@@ -10,7 +10,7 @@ namespace Markup.Programming.Core
         public StatementNode Body { get; set; }
         protected override void OnExecute(Engine engine)
         {
-            engine.ExecuteFrame(this, OnExecuteFrame);
+            engine.FrameAction(this, OnExecuteFrame);
         }
         protected abstract void OnExecuteFrame(Engine engine);
     }

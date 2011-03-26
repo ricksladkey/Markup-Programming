@@ -32,7 +32,7 @@ namespace Markup.Programming
             Attach(ValueProperty, ExpressionProperty);
         }
 
-        protected override object OnEvaluate(Engine engine)
+        protected override object OnGet(Engine engine)
         {
             engine.DefineVariable(Var, engine.Evaluate(ValueProperty, Path, CodeTree));
             return engine.Evaluate(ExpressionProperty);

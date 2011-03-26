@@ -10,6 +10,6 @@ namespace Markup.Programming.Core
     /// </summary>
     public interface IExpression : IProcessor
     {
-        object Evaluate(Engine engine);
+        object Get(Engine engine);
     }
 }

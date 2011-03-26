@@ -78,7 +78,7 @@ namespace Markup.Programming
             Attach(TypeProperty, ArgumentsProperty, TypeArgumentsProperty);
         }
 
-        protected override object OnEvaluate(Engine engine)
+        protected override object OnGet(Engine engine)
         {
             var args = Arguments.Evaluate(engine);
             if (engine.HasBindingOrValue(ArgumentProperty, ArgumentPath))

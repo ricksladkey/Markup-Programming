@@ -17,7 +17,7 @@ namespace Markup.Programming.Core
     {
         public object[] Evaluate(Engine engine)
         {
-            return this.Select(expression => expression.Evaluate(engine)).ToArray();
+            return this.Select(expression => expression.Get(engine)).ToArray();
         }
     }
 }

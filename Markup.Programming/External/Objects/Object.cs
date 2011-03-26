@@ -52,19 +52,19 @@ namespace Markup.Programming
             Attach(TypeProperty);
         }
 
-        protected override object OnEvaluate(Engine engine)
+        protected override object OnGet(Engine engine)
         {
             var type = engine.EvaluateType(TypeProperty, Path, CodeTree);
             if (type == null)
             {
-                var pairs = Properties.Select(property => new NameValuePair(property.PropertyName, property.Evaluate(engine)));
+                var pairs = Properties.Select(property => new NameValuePair(property.PropertyName, property.Get(engine)));
                 return DynamicHelper.CreateObject(ref dynamicType, pairs.ToArray());
             }
 
             var target = Activator.CreateInstance(type);
             foreach (var property in Properties)
             {
-                var value = property.Evaluate(engine);
+                var value = property.Get(engine);
                 var propertyType = PathHelper.GetPropertyType(engine, target, property.PropertyName);
                 if (typeof(IList).IsAssignableFrom(propertyType) && property.Value is Collection)
                 {

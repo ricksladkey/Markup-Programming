@@ -25,11 +25,11 @@ namespace Markup.Programming.Tests.Tests
             public DependencyObject AssociatedObject { get { return null; } }
             public object Evaluate(IDictionary<string, object> variables, string path)
             {
-                return new Engine().EvaluateFrame(this, variables, engine => GetPath(variables, path, engine));
+                return new Engine().FrameFunc(this, variables, engine => GetPath(variables, path, engine));
             }
             public object Evaluate(IDictionary<string, object> variables, string path, object value)
             {
-                return new Engine().EvaluateFrame(this, variables, engine => SetPath(variables, path, value, engine));
+                return new Engine().FrameFunc(this, variables, engine => SetPath(variables, path, value, engine));
             }
             private object GetPath(IDictionary<string, object> variables, string path, Engine engine)
             {

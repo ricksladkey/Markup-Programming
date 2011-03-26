@@ -13,11 +13,11 @@ namespace Markup.Programming
     /// by its content expression arguments, if any, or Index for
     /// context optionally converting index to type Type.
     /// </summary>
-    public class GetItem : Accessor
+    public class GetItem : ItemAccessor
     {
-        protected override object OnEvaluate(Engine engine)
+        protected override object OnGet(Engine engine)
         {
-            return Get(engine);
+            return GetItem(engine);
         }
     }
 }

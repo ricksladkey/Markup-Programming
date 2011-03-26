@@ -8,7 +8,7 @@ namespace Markup.Programming
     {
         public string Expression { get; set; }
 
-        protected override object OnEvaluate(Engine engine)
+        protected override object OnGet(Engine engine)
         {
             if (Expression == null) engine.Throw("path expression not specified");
             return engine.GetPath(Expression, CodeTree);

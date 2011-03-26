@@ -23,7 +23,7 @@ namespace Markup.Programming
             if (Body.Count == 0) engine.Throw("missing condition");
             var expression = Body[0] as IExpression;
             if (expression == null) engine.Throw("missing expression");
-            if (!TypeHelper.ConvertToBool(expression.Evaluate(engine))) return;
+            if (!TypeHelper.ConvertToBool(expression.Get(engine))) return;
             Body.ExecuteSkipOne(engine);
         }
     }

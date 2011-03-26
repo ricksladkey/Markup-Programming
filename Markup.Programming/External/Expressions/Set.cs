@@ -75,7 +75,7 @@ namespace Markup.Programming
         private CodeTree setCodeTree = new CodeTree();
         protected CodeTree SetCodeTree { get { return setCodeTree; } }
 
-        protected override object OnEvaluate(Engine engine)
+        protected override object OnGet(Engine engine)
         {
             var value = engine.Evaluate(ValueProperty, ValuePath, ValueCodeTree);
             if (Var != null)

@@ -11,7 +11,7 @@ namespace Markup.Programming.Core
     /// In other words, in cannot belong to an ExpressionCollection but
     /// if assigned to a property of type object that is evaluated if will
     /// act like an ordinary expression.  Implementing classes must override
-    /// OnEvaluate.
+    /// OnGet.
     /// </summary>
     public abstract class HiddenExpression : Statement, IHiddenExpression
     {
@@ -20,17 +20,18 @@ namespace Markup.Programming.Core
             // Nothing happens.
         }
 
-        public object Evaluate(Engine engine)
+        public object Get(Engine engine)
         {
-            return Process(engine);
+            // Inline Process(engine);
+            return engine.FrameFunc(this, OnProcess);
         }
 
         protected override object OnProcess(Engine engine)
         {
             engine.SetContext(ContextProperty, ContextPath, ContextCodeTree);
-            return OnEvaluate(engine);
+            return OnGet(engine);
         }
 
-        protected abstract object OnEvaluate(Engine engine);
+        protected abstract object OnGet(Engine engine);
     }
 }

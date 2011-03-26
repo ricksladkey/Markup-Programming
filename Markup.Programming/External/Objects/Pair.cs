@@ -28,7 +28,7 @@ namespace Markup.Programming
             Attach(KeyProperty);
         }
 
-        protected override object OnEvaluate(Engine engine)
+        protected override object OnGet(Engine engine)
         {
             return new DictionaryEntry(engine.Evaluate(KeyProperty, KeyPath, KeyCodeTree), engine.Evaluate(ValueProperty, ValuePath, CodeTree));
         }

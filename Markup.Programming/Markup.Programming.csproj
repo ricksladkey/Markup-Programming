@@ -184,7 +184,7 @@
     <Compile Include="Internal\Engine\Configuration.cs" />
     <Compile Include="Internal\Diagnostics\DictionaryDebugView.cs" />
     <Compile Include="Internal\Components\IValueProvider.cs" />
-    <Compile Include="Internal\Language\Accessor.cs" />
+    <Compile Include="Internal\Language\ItemAccessor.cs" />
     <Compile Include="Internal\Components\ResourceComponent.cs" />
     <Compile Include="Internal\Components\BindingCapableObject.cs" />
     <Compile Include="Internal\Language\BlockExpression.cs" />

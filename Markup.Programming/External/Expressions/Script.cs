@@ -12,7 +12,7 @@ namespace Markup.Programming
     {
         public string Body { get; set; }
 
-        protected override object OnEvaluate(Engine engine)
+        protected override object OnGet(Engine engine)
         {
             engine.SetReturnFrame();
             if (Body == null) return null;

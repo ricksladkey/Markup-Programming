@@ -113,7 +113,7 @@ namespace Markup.Programming.Core
             stack.RemoveAt(stack.Count - 1);
         }
 
-        public void ExecuteFrame(IComponent caller, IDictionary<string, object> variables, Action<Engine> action)
+        public void FrameAction(IComponent caller, IDictionary<string, object> variables, Action<Engine> action)
         {
             PushFrame(caller, null);
             CurrentFrame.Variables = variables;
@@ -121,14 +121,14 @@ namespace Markup.Programming.Core
             PopFrame();
         }
 
-        public void ExecuteFrame(IComponent caller, Action<Engine> action)
+        public void FrameAction(IComponent caller, Action<Engine> action)
         {
             PushFrame(caller, null);
             action(this);
             PopFrame();
         }
 
-        public void ExecuteFrame(Node node, Action<Engine> action)
+        public void FrameAction(Node node, Action<Engine> action)
         {
             ++scriptDepth;
             PushFrame(CurrentFrame.Caller, node);
@@ -137,7 +137,7 @@ namespace Markup.Programming.Core
             --scriptDepth;
         }
 
-        public TResult EvaluateFrame<TResult>(IComponent caller, IDictionary<string, object> variables, Func<Engine, TResult> func)
+        public TResult FrameFunc<TResult>(IComponent caller, IDictionary<string, object> variables, Func<Engine, TResult> func)
         {
             PushFrame(caller, null);
             CurrentFrame.Variables = variables;
@@ -146,7 +146,7 @@ namespace Markup.Programming.Core
             return result;
         }
 
-        public TResult EvaluateFrame<TResult>(IComponent caller, Func<Engine, TResult> func)
+        public TResult FrameFunc<TResult>(IComponent caller, Func<Engine, TResult> func)
         {
             PushFrame(caller, null);
             var result = func(this);
@@ -154,7 +154,7 @@ namespace Markup.Programming.Core
             return result;
         }
 
-        public TResult EvaluateFrame<TResult>(Node node, Func<Engine, TResult> func)
+        public TResult FrameFunc<TResult>(Node node, Func<Engine, TResult> func)
         {
             ++scriptDepth;
             PushFrame(CurrentFrame.Caller, node);

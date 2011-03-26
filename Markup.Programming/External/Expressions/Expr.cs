@@ -34,7 +34,7 @@ namespace Markup.Programming
             if (!SuppressAttach) Attach(ValueProperty);
         }
 
-        protected override object OnEvaluate(Engine engine)
+        protected override object OnGet(Engine engine)
         {
             if (Quote) return engine.Quote(ValueProperty);
             var type = engine.EvaluateType(TypeProperty, TypePath, TypeCodeTree);

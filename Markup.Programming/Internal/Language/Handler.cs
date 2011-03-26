@@ -38,7 +38,7 @@ namespace Markup.Programming.Core
         {
             base.OnAttached();
             Attach(ContextProperty);
-            if (State != null) new Engine().EvaluateFrame(this, State, OnProcess);
+            if (State != null) new Engine().FrameFunc(this, State, OnProcess);
             var state = State;
         }
 
@@ -81,7 +81,7 @@ namespace Markup.Programming.Core
 
         public void EventHandler(object sender, object args)
         {
-            new Engine(sender, args).ExecuteFrame(this, State, EventHandler);
+            new Engine(sender, args).FrameAction(this, State, EventHandler);
             if (State != null)
             {
                 var state = State;

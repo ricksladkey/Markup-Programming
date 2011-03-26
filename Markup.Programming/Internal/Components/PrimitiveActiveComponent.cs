@@ -71,7 +71,7 @@ namespace Markup.Programming.Core
 
         public object Process(Engine engine)
         {
-            return engine.EvaluateFrame(this, OnProcess);
+            return engine.FrameFunc(this, OnProcess);
         }
 
         protected abstract object OnProcess(Engine engine);

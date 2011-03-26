@@ -11,7 +11,7 @@ namespace Markup.Programming
     [ContentProperty("Body")]
     public class Block : BlockExpression
     {
-        protected override object OnEvaluate(Engine engine)
+        protected override object OnGet(Engine engine)
         {
             engine.SetReturnFrame();
             Body.Execute(engine);
