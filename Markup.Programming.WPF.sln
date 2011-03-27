@@ -14,23 +14,15 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		notes.txt = notes.txt
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Markup.Programming.Silverlight", "Markup.Programming.Silverlight\Markup.Programming.Silverlight.csproj", "{B60944AD-D0A2-4636-B160-75EFBD71267C}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Markup.Programming.Silverlight.Samples", "Markup.Programming.Silverlight.Samples\Markup.Programming.Silverlight.Samples.csproj", "{962710DB-CD1E-40F0-9F7F-319030842B9A}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Markup.Programming.Silverlight.Sandbox", "Markup.Programming.Silverlight.Sandbox\Markup.Programming.Silverlight.Sandbox.csproj", "{3A8898CF-E04E-4534-8CF1-9649377C6DEA}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Markup.Programming.Sandbox", "Markup.Programming.Sandbox\Markup.Programming.Sandbox.csproj", "{3C78E129-1A68-4B3B-9374-F100845D5898}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Markup.Programming.Samples.WPF", "Markup.Programming.Samples.WPF\Markup.Programming.Samples.WPF.csproj", "{2FB153D9-B8A9-4D9B-8BF7-CB1DF54A3B36}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Markup.Programming.Interactivity", "Markup.Programming.Interactivity\Markup.Programming.Interactivity.csproj", "{A0150B3B-AC19-4B5F-9ECF-77BE3A00D873}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Markup.Programming.Documentation", "Markup.Programming.Documentation\Markup.Programming.Documentation.csproj", "{4FF9D950-A4CA-4A30-8F1A-82CB84CC92FA}"
 EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 11
+		SccNumberOfProjects = 7
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = https://tfs.codeplex.com/tfs/tfs21
 		SccLocalPath0 = .
@@ -46,31 +38,16 @@ Global
 		SccProjectUniqueName4 = Markup.Programming.Sandbox\\Markup.Programming.Sandbox.csproj
 		SccProjectName4 = Markup.Programming.Sandbox
 		SccLocalPath4 = Markup.Programming.Sandbox
-		SccProjectUniqueName5 = Markup.Programming.Silverlight\\Markup.Programming.Silverlight.csproj
-		SccProjectName5 = Markup.Programming.Silverlight
-		SccLocalPath5 = Markup.Programming.Silverlight
-		SccProjectUniqueName6 = Markup.Programming.Silverlight.Samples\\Markup.Programming.Silverlight.Samples.csproj
-		SccProjectName6 = Markup.Programming.Silverlight.Samples
-		SccLocalPath6 = Markup.Programming.Silverlight.Samples
-		SccProjectUniqueName7 = Markup.Programming.Silverlight.Sandbox\\Markup.Programming.Silverlight.Sandbox.csproj
-		SccProjectName7 = Markup.Programming.Silverlight.Sandbox
-		SccLocalPath7 = Markup.Programming.Silverlight.Sandbox
-		SccProjectUniqueName8 = Markup.Programming.Tests\\Markup.Programming.Tests.csproj
-		SccProjectName8 = Markup.Programming.Tests
-		SccLocalPath8 = Markup.Programming.Tests
-		SccProjectUniqueName9 = Markup.Programming.Interactivity\\Markup.Programming.Interactivity.csproj
-		SccProjectName9 = Markup.Programming.Interactivity
-		SccLocalPath9 = Markup.Programming.Interactivity
-		SccProjectUniqueName10 = Markup.Programming.Documentation\\Markup.Programming.Documentation.csproj
-		SccProjectName10 = Markup.Programming.Documentation
-		SccLocalPath10 = Markup.Programming.Documentation
+		SccProjectUniqueName5 = Markup.Programming.Tests\\Markup.Programming.Tests.csproj
+		SccProjectName5 = Markup.Programming.Tests
+		SccLocalPath5 = Markup.Programming.Tests
+		SccProjectUniqueName6 = Markup.Programming.Documentation\\Markup.Programming.Documentation.csproj
+		SccProjectName6 = Markup.Programming.Documentation
+		SccLocalPath6 = Markup.Programming.Documentation
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug - Emulate Silverlight|Any CPU = Debug - Emulate Silverlight|Any CPU
 		Debug - Full Tracing|Any CPU = Debug - Full Tracing|Any CPU
-		Debug - Silverlight|Any CPU = Debug - Silverlight|Any CPU
-		Debug - System.Windows.Interactivity|Any CPU = Debug - System.Windows.Interactivity|Any CPU
-		Debug - WPF|Any CPU = Debug - WPF|Any CPU
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
@@ -79,10 +56,6 @@ Global
 		{9F21204C-4A09-4D4A-9008-6678C55F8530}.Debug - Emulate Silverlight|Any CPU.Build.0 = Debug - Emulate Silverlight|Any CPU
 		{9F21204C-4A09-4D4A-9008-6678C55F8530}.Debug - Full Tracing|Any CPU.ActiveCfg = Debug - Full Tracing|Any CPU
 		{9F21204C-4A09-4D4A-9008-6678C55F8530}.Debug - Full Tracing|Any CPU.Build.0 = Debug - Full Tracing|Any CPU
-		{9F21204C-4A09-4D4A-9008-6678C55F8530}.Debug - Silverlight|Any CPU.ActiveCfg = Debug|Any CPU
-		{9F21204C-4A09-4D4A-9008-6678C55F8530}.Debug - System.Windows.Interactivity|Any CPU.ActiveCfg = Debug|Any CPU
-		{9F21204C-4A09-4D4A-9008-6678C55F8530}.Debug - WPF|Any CPU.ActiveCfg = Debug|Any CPU
-		{9F21204C-4A09-4D4A-9008-6678C55F8530}.Debug - WPF|Any CPU.Build.0 = Debug|Any CPU
 		{9F21204C-4A09-4D4A-9008-6678C55F8530}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{9F21204C-4A09-4D4A-9008-6678C55F8530}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9F21204C-4A09-4D4A-9008-6678C55F8530}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -91,10 +64,6 @@ Global
 		{2F38FB9D-3F46-45A8-8976-9E79E80AB4EE}.Debug - Emulate Silverlight|Any CPU.Build.0 = Debug - Emulate Silverlight|Any CPU
 		{2F38FB9D-3F46-45A8-8976-9E79E80AB4EE}.Debug - Full Tracing|Any CPU.ActiveCfg = Debug - Full Tracing|Any CPU
 		{2F38FB9D-3F46-45A8-8976-9E79E80AB4EE}.Debug - Full Tracing|Any CPU.Build.0 = Debug - Full Tracing|Any CPU
-		{2F38FB9D-3F46-45A8-8976-9E79E80AB4EE}.Debug - Silverlight|Any CPU.ActiveCfg = Debug|Any CPU
-		{2F38FB9D-3F46-45A8-8976-9E79E80AB4EE}.Debug - System.Windows.Interactivity|Any CPU.ActiveCfg = Debug|Any CPU
-		{2F38FB9D-3F46-45A8-8976-9E79E80AB4EE}.Debug - WPF|Any CPU.ActiveCfg = Debug|Any CPU
-		{2F38FB9D-3F46-45A8-8976-9E79E80AB4EE}.Debug - WPF|Any CPU.Build.0 = Debug|Any CPU
 		{2F38FB9D-3F46-45A8-8976-9E79E80AB4EE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{2F38FB9D-3F46-45A8-8976-9E79E80AB4EE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2F38FB9D-3F46-45A8-8976-9E79E80AB4EE}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -103,55 +72,14 @@ Global
 		{C3FA0F80-C208-40BA-B91A-0A0728658772}.Debug - Emulate Silverlight|Any CPU.Build.0 = Debug - Emulate Silverlight|Any CPU
 		{C3FA0F80-C208-40BA-B91A-0A0728658772}.Debug - Full Tracing|Any CPU.ActiveCfg = Debug - Full Tracing|Any CPU
 		{C3FA0F80-C208-40BA-B91A-0A0728658772}.Debug - Full Tracing|Any CPU.Build.0 = Debug - Full Tracing|Any CPU
-		{C3FA0F80-C208-40BA-B91A-0A0728658772}.Debug - Silverlight|Any CPU.ActiveCfg = Debug|Any CPU
-		{C3FA0F80-C208-40BA-B91A-0A0728658772}.Debug - System.Windows.Interactivity|Any CPU.ActiveCfg = Debug|Any CPU
-		{C3FA0F80-C208-40BA-B91A-0A0728658772}.Debug - WPF|Any CPU.ActiveCfg = Debug|Any CPU
-		{C3FA0F80-C208-40BA-B91A-0A0728658772}.Debug - WPF|Any CPU.Build.0 = Debug|Any CPU
 		{C3FA0F80-C208-40BA-B91A-0A0728658772}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{C3FA0F80-C208-40BA-B91A-0A0728658772}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C3FA0F80-C208-40BA-B91A-0A0728658772}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C3FA0F80-C208-40BA-B91A-0A0728658772}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B60944AD-D0A2-4636-B160-75EFBD71267C}.Debug - Emulate Silverlight|Any CPU.ActiveCfg = Debug|Any CPU
-		{B60944AD-D0A2-4636-B160-75EFBD71267C}.Debug - Full Tracing|Any CPU.ActiveCfg = Debug - Full Tracing|Any CPU
-		{B60944AD-D0A2-4636-B160-75EFBD71267C}.Debug - Full Tracing|Any CPU.Build.0 = Debug - Full Tracing|Any CPU
-		{B60944AD-D0A2-4636-B160-75EFBD71267C}.Debug - Silverlight|Any CPU.ActiveCfg = Debug|Any CPU
-		{B60944AD-D0A2-4636-B160-75EFBD71267C}.Debug - Silverlight|Any CPU.Build.0 = Debug|Any CPU
-		{B60944AD-D0A2-4636-B160-75EFBD71267C}.Debug - System.Windows.Interactivity|Any CPU.ActiveCfg = Release|Any CPU
-		{B60944AD-D0A2-4636-B160-75EFBD71267C}.Debug - WPF|Any CPU.ActiveCfg = Debug|Any CPU
-		{B60944AD-D0A2-4636-B160-75EFBD71267C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B60944AD-D0A2-4636-B160-75EFBD71267C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B60944AD-D0A2-4636-B160-75EFBD71267C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B60944AD-D0A2-4636-B160-75EFBD71267C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{962710DB-CD1E-40F0-9F7F-319030842B9A}.Debug - Emulate Silverlight|Any CPU.ActiveCfg = Debug|Any CPU
-		{962710DB-CD1E-40F0-9F7F-319030842B9A}.Debug - Full Tracing|Any CPU.ActiveCfg = Debug - Full Tracing|Any CPU
-		{962710DB-CD1E-40F0-9F7F-319030842B9A}.Debug - Full Tracing|Any CPU.Build.0 = Debug - Full Tracing|Any CPU
-		{962710DB-CD1E-40F0-9F7F-319030842B9A}.Debug - Silverlight|Any CPU.ActiveCfg = Debug|Any CPU
-		{962710DB-CD1E-40F0-9F7F-319030842B9A}.Debug - Silverlight|Any CPU.Build.0 = Debug|Any CPU
-		{962710DB-CD1E-40F0-9F7F-319030842B9A}.Debug - System.Windows.Interactivity|Any CPU.ActiveCfg = Release|Any CPU
-		{962710DB-CD1E-40F0-9F7F-319030842B9A}.Debug - WPF|Any CPU.ActiveCfg = Debug|Any CPU
-		{962710DB-CD1E-40F0-9F7F-319030842B9A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{962710DB-CD1E-40F0-9F7F-319030842B9A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{962710DB-CD1E-40F0-9F7F-319030842B9A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{962710DB-CD1E-40F0-9F7F-319030842B9A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{3A8898CF-E04E-4534-8CF1-9649377C6DEA}.Debug - Emulate Silverlight|Any CPU.ActiveCfg = Debug|Any CPU
-		{3A8898CF-E04E-4534-8CF1-9649377C6DEA}.Debug - Full Tracing|Any CPU.ActiveCfg = Debug - Full Tracing|Any CPU
-		{3A8898CF-E04E-4534-8CF1-9649377C6DEA}.Debug - Full Tracing|Any CPU.Build.0 = Debug - Full Tracing|Any CPU
-		{3A8898CF-E04E-4534-8CF1-9649377C6DEA}.Debug - Silverlight|Any CPU.ActiveCfg = Debug|Any CPU
-		{3A8898CF-E04E-4534-8CF1-9649377C6DEA}.Debug - Silverlight|Any CPU.Build.0 = Debug|Any CPU
-		{3A8898CF-E04E-4534-8CF1-9649377C6DEA}.Debug - System.Windows.Interactivity|Any CPU.ActiveCfg = Debug|Any CPU
-		{3A8898CF-E04E-4534-8CF1-9649377C6DEA}.Debug - WPF|Any CPU.ActiveCfg = Debug|Any CPU
-		{3A8898CF-E04E-4534-8CF1-9649377C6DEA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{3A8898CF-E04E-4534-8CF1-9649377C6DEA}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{3A8898CF-E04E-4534-8CF1-9649377C6DEA}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{3A8898CF-E04E-4534-8CF1-9649377C6DEA}.Release|Any CPU.Build.0 = Release|Any CPU
 		{3C78E129-1A68-4B3B-9374-F100845D5898}.Debug - Emulate Silverlight|Any CPU.ActiveCfg = Debug - Emulate Silverlight|Any CPU
 		{3C78E129-1A68-4B3B-9374-F100845D5898}.Debug - Emulate Silverlight|Any CPU.Build.0 = Debug - Emulate Silverlight|Any CPU
 		{3C78E129-1A68-4B3B-9374-F100845D5898}.Debug - Full Tracing|Any CPU.ActiveCfg = Debug - Full Tracing|Any CPU
 		{3C78E129-1A68-4B3B-9374-F100845D5898}.Debug - Full Tracing|Any CPU.Build.0 = Debug - Full Tracing|Any CPU
-		{3C78E129-1A68-4B3B-9374-F100845D5898}.Debug - Silverlight|Any CPU.ActiveCfg = Debug|Any CPU
-		{3C78E129-1A68-4B3B-9374-F100845D5898}.Debug - System.Windows.Interactivity|Any CPU.ActiveCfg = Release|Any CPU
-		{3C78E129-1A68-4B3B-9374-F100845D5898}.Debug - WPF|Any CPU.ActiveCfg = Debug|Any CPU
-		{3C78E129-1A68-4B3B-9374-F100845D5898}.Debug - WPF|Any CPU.Build.0 = Debug|Any CPU
 		{3C78E129-1A68-4B3B-9374-F100845D5898}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{3C78E129-1A68-4B3B-9374-F100845D5898}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3C78E129-1A68-4B3B-9374-F100845D5898}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -160,29 +88,12 @@ Global
 		{2FB153D9-B8A9-4D9B-8BF7-CB1DF54A3B36}.Debug - Emulate Silverlight|Any CPU.Build.0 = Debug - Emulate Silverlight|Any CPU
 		{2FB153D9-B8A9-4D9B-8BF7-CB1DF54A3B36}.Debug - Full Tracing|Any CPU.ActiveCfg = Debug - Full Tracing|Any CPU
 		{2FB153D9-B8A9-4D9B-8BF7-CB1DF54A3B36}.Debug - Full Tracing|Any CPU.Build.0 = Debug - Full Tracing|Any CPU
-		{2FB153D9-B8A9-4D9B-8BF7-CB1DF54A3B36}.Debug - Silverlight|Any CPU.ActiveCfg = Debug|Any CPU
-		{2FB153D9-B8A9-4D9B-8BF7-CB1DF54A3B36}.Debug - System.Windows.Interactivity|Any CPU.ActiveCfg = Release|Any CPU
-		{2FB153D9-B8A9-4D9B-8BF7-CB1DF54A3B36}.Debug - WPF|Any CPU.ActiveCfg = Debug|Any CPU
-		{2FB153D9-B8A9-4D9B-8BF7-CB1DF54A3B36}.Debug - WPF|Any CPU.Build.0 = Debug|Any CPU
 		{2FB153D9-B8A9-4D9B-8BF7-CB1DF54A3B36}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{2FB153D9-B8A9-4D9B-8BF7-CB1DF54A3B36}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2FB153D9-B8A9-4D9B-8BF7-CB1DF54A3B36}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2FB153D9-B8A9-4D9B-8BF7-CB1DF54A3B36}.Release|Any CPU.Build.0 = Release|Any CPU
-		{A0150B3B-AC19-4B5F-9ECF-77BE3A00D873}.Debug - Emulate Silverlight|Any CPU.ActiveCfg = Debug|Any CPU
-		{A0150B3B-AC19-4B5F-9ECF-77BE3A00D873}.Debug - Full Tracing|Any CPU.ActiveCfg = Debug|Any CPU
-		{A0150B3B-AC19-4B5F-9ECF-77BE3A00D873}.Debug - Silverlight|Any CPU.ActiveCfg = Debug|Any CPU
-		{A0150B3B-AC19-4B5F-9ECF-77BE3A00D873}.Debug - System.Windows.Interactivity|Any CPU.ActiveCfg = Debug|Any CPU
-		{A0150B3B-AC19-4B5F-9ECF-77BE3A00D873}.Debug - System.Windows.Interactivity|Any CPU.Build.0 = Debug|Any CPU
-		{A0150B3B-AC19-4B5F-9ECF-77BE3A00D873}.Debug - WPF|Any CPU.ActiveCfg = Debug|Any CPU
-		{A0150B3B-AC19-4B5F-9ECF-77BE3A00D873}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A0150B3B-AC19-4B5F-9ECF-77BE3A00D873}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A0150B3B-AC19-4B5F-9ECF-77BE3A00D873}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A0150B3B-AC19-4B5F-9ECF-77BE3A00D873}.Release|Any CPU.Build.0 = Release|Any CPU
 		{4FF9D950-A4CA-4A30-8F1A-82CB84CC92FA}.Debug - Emulate Silverlight|Any CPU.ActiveCfg = Debug|Any CPU
 		{4FF9D950-A4CA-4A30-8F1A-82CB84CC92FA}.Debug - Full Tracing|Any CPU.ActiveCfg = Debug|Any CPU
-		{4FF9D950-A4CA-4A30-8F1A-82CB84CC92FA}.Debug - Silverlight|Any CPU.ActiveCfg = Debug|Any CPU
-		{4FF9D950-A4CA-4A30-8F1A-82CB84CC92FA}.Debug - System.Windows.Interactivity|Any CPU.ActiveCfg = Debug|Any CPU
-		{4FF9D950-A4CA-4A30-8F1A-82CB84CC92FA}.Debug - WPF|Any CPU.ActiveCfg = Debug|Any CPU
 		{4FF9D950-A4CA-4A30-8F1A-82CB84CC92FA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{4FF9D950-A4CA-4A30-8F1A-82CB84CC92FA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 	EndGlobalSection
