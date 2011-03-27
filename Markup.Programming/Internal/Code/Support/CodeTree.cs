@@ -47,6 +47,7 @@ namespace Markup.Programming.Core
             { "<=", Op.LessThanOrEqual },
             { ">", Op.GreaterThan },
             { ">=", Op.GreaterThanOrEqual },
+            { "??", Op.FirstNonNull },
         };
         private static Dictionary<string, AssignmentOp> assignmentOperatorMap = new Dictionary<string, AssignmentOp>
         {
@@ -88,9 +89,10 @@ namespace Markup.Programming.Core
             { "&&", 12 },
             { "||", 11 },
 
+            { "??", 10 },
 
-            { ":", 10 },
-            { "?", 9 },
+            { ":", 9 },
+            { "?", 8 },
 
             { "=", 1 },
             { "+=", 1 },

@@ -58,6 +58,8 @@ namespace Markup.Programming.Core
                     return PathHelper.SetItem(engine, operands[0], operands.Skip(1).ToArray());
                 case Op.New:
                     return TypeHelper.CreateInstance(operands[0] as Type, operands.Skip(1).ToArray());
+                case Op.FirstNonNull:
+                    return operands.SkipWhile(operand => operand == null).FirstOrDefault();
                 default:
                     break;
             }
@@ -168,6 +170,7 @@ namespace Markup.Programming.Core
                 case Op.GetItem:
                 case Op.SetItem:
                 case Op.New:
+                case Op.FirstNonNull:
                     return 0;
                 default:
                     return 2;

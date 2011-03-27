@@ -42,6 +42,7 @@ namespace Markup.Programming
 
         Comma,
         Conditional,
+        FirstNonNull,
         As,
         Is,
         Equate,

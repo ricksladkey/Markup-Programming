@@ -83,6 +83,7 @@ namespace Markup.Programming.Tests.Tests
             BasicGetTest(null, "$i");
             BasicGetTest(1, "$i = 1");
             BasicGetTest(3, "$i = 1, $i += 2");
+            BasicGetTest(1, "null ?? null ?? 1 ?? 2");
 
             BasicGetTest("Test1", "String1");
             BasicGetTest("Test2", "Object1.String1");
