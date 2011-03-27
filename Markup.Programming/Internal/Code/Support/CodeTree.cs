@@ -17,6 +17,8 @@ namespace Markup.Programming.Core
     public class CodeTree
     {
         private Engine engine;
+        private bool haveEventOperator;
+
         private static Dictionary<string, object> constantMap = new Dictionary<string, object>
         {
             { "true", true },
@@ -59,7 +61,7 @@ namespace Markup.Programming.Core
             { "++", AssignmentOp.Increment },
             { "--", AssignmentOp.Increment },
         };
-        private Dictionary<string, int> precedenceMap = new Dictionary<string, int>()
+        private static Dictionary<string, int> precedenceMap = new Dictionary<string, int>()
         {
             { "*", 20 },
             { "%", 20},
@@ -102,7 +104,7 @@ namespace Markup.Programming.Core
             { ",", 0 },
 
         };
-        private IDictionary<string, string> operatorAliasMap = new Dictionary<string, string>()
+        private static IDictionary<string, string> operatorAliasMap = new Dictionary<string, string>()
         {
             { "@gt", ">" },
             { "@gteq", ">=" },
@@ -120,30 +122,32 @@ namespace Markup.Programming.Core
         private static IDictionary<string, object> ConstantMap { get { return constantMap; } }
         private static IDictionary<string, Op> OperatorMap { get { return operatorMap; } }
         private static IDictionary<string, AssignmentOp> AssignmentOperatorMap { get { return assignmentOperatorMap; } }
-        private IDictionary<string, int> PrecedenceMap { get { return precedenceMap; } }
-        private IDictionary<string, string> OperatorAliasMap { get { return operatorAliasMap; } }
-        private bool IsCurrentEvent { get { return IsEvent && Tokens != null && Tokens.Current == 0; } }
+        private static IDictionary<string, int> PrecedenceMap { get { return precedenceMap; } }
+        private static IDictionary<string, string> OperatorAliasMap { get { return operatorAliasMap; } }
+        private bool IsCurrentEvent { get { return IsEvent && Tokens != null && Tokens.Count == 0 && !haveEventOperator; } }
         private bool IsCurrentCall { get { return IsCall && Tokens != null && Tokens.Count == 0 || PeekToken("("); } }
 
         public Node Root { get; private set; }
         public TokenQueue Tokens { get; private set; }
         public CodeType CodeType { get; private set; }
-        public bool IsVariable { get { return CodeType == CodeType.Variable; } }
-        public bool IsEvent { get { return CodeType == CodeType.EventExpression; } }
-        public bool IsSet { get { return CodeType == CodeType.SetExpression; } }
-        public bool IsCall { get { return CodeType == CodeType.CallExpression; } }
-        public bool IsScript { get { return CodeType == CodeType.Script; } }
+        public bool IsVariable { get { return (CodeType & CodeType.Variable) == CodeType.Variable; } }
+        public bool IsEvent { get { return (CodeType & CodeType.EventExpression) == CodeType.EventExpression; } }
+        public bool IsSet { get { return (CodeType & CodeType.SetExpression) == CodeType.SetExpression; } }
+        public bool IsCall { get { return (CodeType & CodeType.CallExpression) == CodeType.CallExpression; } }
+        public bool IsScript { get { return (CodeType & CodeType.Script) == CodeType.Script; } }
         public string Code { get; private set; }
 
         public CodeTree Compile(Engine engine, CodeType expressionType, string path)
         {
             if (expressionType == CodeType && object.ReferenceEquals(Code, path)) return this;
             this.engine = engine;
+            haveEventOperator = false;
             CodeType = expressionType;
             Code = path;
             Tokenize();
             if (IsVariable) Root = ParseVariableExpression();
             else if (IsScript) Root = ParseStatements();
+            else if (IsEvent) Root = ParseEventExpression();
             else Root = ParsePath();
             if (Tokens.Count > 0) engine.Throw("unexpected token: " + Tokens.Dequeue());
             this.engine = null;
@@ -154,42 +158,55 @@ namespace Markup.Programming.Core
         public string GetVariable(Engine engine)
         {
             engine.Trace(TraceFlags.Path, "Code: GetVariable {0}", Code);
+            if (!(Root is VariableNode)) engine.Throw("not a variable expression");
             return (Root as VariableNode).VariableName;
         }
 
         public string GetEvent(Engine engine)
         {
             engine.Trace(TraceFlags.Path, "Code: GetEvent {0}", Code);
+            if (!(Root is EventNode)) engine.Throw("not an event expression");
             return (Root as EventNode).EventName;
         }
 
         public object Get(Engine engine)
         {
             engine.Trace(TraceFlags.Path, "Code: Get {0}", Code);
+            if (!(Root is PathNode)) engine.Throw("not a path expression");
             return (Root as PathNode).Get(engine);
         }
 
         public object Set(Engine engine, object value)
         {
             engine.Trace(TraceFlags.Path, "Code: Set {0} = {1}", Code, value);
+            if (!(Root is PathNode)) engine.Throw("not a path expression");
             return (Root as PathNode).Set(engine, value);
         }
 
         public object Call(Engine engine, IEnumerable<object> args)
         {
             engine.Trace(TraceFlags.Path, "Code: Call: {0}", Code);
+            if (!(Root is CallNode)) engine.Throw("not a call expression");
             return (Root as CallNode).Call(engine, args);
         }
 
         public void Execute(Engine engine)
         {
             engine.Trace(TraceFlags.Path, "Code: Execute {0}", Code);
+            if (!(Root is ScriptNode)) engine.Throw("not a script");
             (Root as ScriptNode).Execute(engine);
         }
 
         private PathNode ParsePath()
         {
             return new PathNode { Path = ParseExpression() };
+        }
+
+        private EventNode ParseEventExpression()
+        {
+            var eventNode = ParseExpression();
+            if (!(eventNode is EventNode)) engine.Throw("not an event expression");
+            return eventNode as EventNode;
         }
 
         private StatementNode ParseStatement()
@@ -549,11 +566,13 @@ namespace Markup.Programming.Core
             if (token[0] == '`')
             {
                 var identifier = ParseIdentifier();
-                if (IsCurrentEvent)
+                if (IsCurrentEvent || PeekToken("=>"))
                 {
-                    if (!PeekToken(".")) return new EventNode { EventName = identifier };
-                    ParseToken(".");
-                    return new EventNode { EventName = identifier, Handler = ParseExpression() };
+                    if (!PeekToken("=>")) return new EventNode { Context = node, EventName = identifier };
+                    ParseToken("=>");
+                    haveEventOperator = true;
+                    var handler = PeekToken("{") ? new BlockNode { Body = ParseStatement() } : ParseExpression();
+                    return new EventNode { EventName = identifier, Handler = handler };
                 }
                 if (IsCurrentCall)
                 {
@@ -821,7 +840,7 @@ namespace Markup.Programming.Core
                     i = EatMultiLineComment(i);
                 else if (c2 == "//")
                     i = EatSingleLineComment(i);
-                else if (OperatorMap.ContainsKey(c2) || AssignmentOperatorMap.ContainsKey(c2))
+                else if (OperatorMap.ContainsKey(c2) || AssignmentOperatorMap.ContainsKey(c2) | c2 == "=>")
                 {
                     Tokens.Enqueue(c2);
                     i += 2;

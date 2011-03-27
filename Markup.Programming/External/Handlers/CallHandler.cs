@@ -73,26 +73,16 @@ namespace Markup.Programming
 
         public BuiltinFunction BuiltinFunction { get; set; }
 
-        public string PathEventName { get { return GetFields()[0]; } }
-
-        public string PathBase { get { return GetFields()[1]; } }
-
         protected override void OnAttached()
         {
             base.OnAttached();
             Attach(TypeProperty, ArgumentsProperty, TypeArgumentsProperty);
         }
 
-        private string[] GetFields()
-        {
-            int m = Path.IndexOf("=>");
-            if (m == -1) ThrowHelper.Throw("missing event");
-            return new string[] { Path.Substring(0, m).TrimEnd(), Path.Substring(m + 2).TrimStart() };
-        }
-
         protected override void OnActiveExecute(Engine engine)
         {
-            RegisterHandler(engine, PathEventName);
+            CodeTree.Compile(engine, CodeType.EventExpression | CodeType.CallExpression, Path);
+            RegisterHandler(engine, CodeTree.GetEvent(engine));
         }
 
         protected override void OnEventHandler(Engine engine)
@@ -103,7 +93,8 @@ namespace Markup.Programming
                 var parameter = engine.Get(ArgumentProperty, ArgumentPath, ArgumentCodeTree);
                 args = new object[] { engine.GetExpression(parameter) }.Concat(args).ToArray();
             }
-            CallHelper.Call(PathBase, CodeTree, StaticMethodName, MethodName, FunctionName, BuiltinFunction,
+            if (Path != null) CodeTree.Call(engine, args);
+            else CallHelper.Call(Path, CodeTree, StaticMethodName, MethodName, FunctionName, BuiltinFunction,
                 engine.GetType(TypeProperty, TypePath, TypeCodeTree), TypeArguments, args, engine);
         }
     }

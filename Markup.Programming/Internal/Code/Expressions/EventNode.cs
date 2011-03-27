@@ -4,6 +4,7 @@ namespace Markup.Programming.Core
 {
     public class EventNode : CallNode
     {
+        public ExpressionNode Context { get; set; }
         public string EventName { get; set; }
         public ExpressionNode Handler { get; set; }
         protected override object OnGet(Engine engine)

@@ -1,3 +1,5 @@
+- set default context for event to associated object
+- get and evaulate context for event during registration
 - add null coalescing operator
 - clean up event/path interaction
 - after event/path merge/cleanup support multiple operations in operation converter
