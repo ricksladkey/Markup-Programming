@@ -160,7 +160,7 @@
                                 <p:Attached.Operations>
                                     <p:CallHandler
                                         Context="{Binding DataContext, ElementName=LayoutRoot}"
-                                        Path="MouseLeftButtonDown.SelectCommand.Execute"
+                                        Path="MouseLeftButtonDown => SelectCommand.Execute"
                                         Argument="{Binding}"/>
                                 </p:Attached.Operations>
                                 

@@ -3,7 +3,7 @@
 The *CallHandler* operation creates an association between the object it is attached to and the a method or function by using the [Path] supplied.   It is a form of syntactic sugar for a very common usage of a call inside an event handler.  Specifically:
 
 {code:html}
-    <p:CallHandler Path="EventPath.CallPath" Property1 Property2 Property3/>
+    <p:CallHandler Path="EventPath => CallPath" Property1 Property2 Property3/>
 {code:html}
 
 means exactly the same as:

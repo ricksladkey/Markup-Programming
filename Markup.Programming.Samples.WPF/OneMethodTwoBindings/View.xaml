@@ -13,7 +13,7 @@
     <StackPanel>
         <Button Content="Match Boy with Girl">
             <p:Attached.Operations>
-                <p:CallHandler Path="Click.Match" SetHandled="True">
+                <p:CallHandler Path="Click => Match" SetHandled="True">
                     <p:Get Source="{Binding SelectedValue, ElementName=Boys}"/>
                     <p:Get Source="{Binding SelectedValue, ElementName=Girls}"/>
                 </p:CallHandler>

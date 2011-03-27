@@ -7,7 +7,7 @@
     <Grid>
         <Grid.Resources>
             <p:OperationCollection x:Key="SelectOnFocusOperation" x:Shared="False">
-                <p:CallHandler Path="GotFocus.@AssociatedObject.SelectAll()"/>
+                <p:CallHandler Path="GotFocus => @AssociatedObject.SelectAll()"/>
             </p:OperationCollection>
             <Style x:Key="SelectOnFocusStyle" TargetType="{x:Type TextBox}">
                 <Setter Property="p:Additional.Operations" Value="{StaticResource SelectOnFocusOperation}"/>

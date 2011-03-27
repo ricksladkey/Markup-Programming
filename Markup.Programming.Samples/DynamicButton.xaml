@@ -10,7 +10,7 @@
                 <p:Attached.Operations>
                     <p:CallHandler Context="{Binding ElementName=ContentHost}">
                         <p:CallHandler.Path>
-                            Click.Children.Add([Button] { Content = "Click Me!", Opacity = 0.5 })
+                            Click => Children.Add([Button] { Content = "Click Me!", Opacity = 0.5 })
                         </p:CallHandler.Path>
                     </p:CallHandler>
                 </p:Attached.Operations>

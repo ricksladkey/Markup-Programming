@@ -11,7 +11,7 @@
             <StackPanel Name="ContentHost">
                 <Button Content="Add">
                     <p:Attached.Operations>
-                        <p:CallHandler Context="{Binding ElementName=ContentHost}" Path="Click.Children.Add">
+                        <p:CallHandler Context="{Binding ElementName=ContentHost}" Path="Click => Children.Add">
                             <p:Object Path="[Grid]">
                                 <p:Property PropertyName="Resources">
                                     <p:Collection>

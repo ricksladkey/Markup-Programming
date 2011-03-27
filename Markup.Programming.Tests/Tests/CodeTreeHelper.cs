@@ -15,7 +15,7 @@ namespace Markup.Programming.Tests
 
         private static void PrintNode(Node node, int indent)
         {
-            var properties = node.GetType().GetProperties().OrderBy(property => property.Name);
+            var properties = node.GetType().GetProperties();
             bool nested = false;
             foreach (var property in properties)
             {

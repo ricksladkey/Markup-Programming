@@ -115,6 +115,7 @@
     <Compile Include="External\Objects\Pair.cs" />
     <Compile Include="External\Statements\Continue.cs" />
     <Compile Include="Internal\Code\Expressions\BlockNode.cs" />
+    <Compile Include="Internal\Code\Expressions\EventNode.cs" />
     <Compile Include="Internal\Code\Statements\ContinueNode.cs" />
     <Compile Include="Internal\Code\Initializers\InitializerProperty.cs" />
     <Compile Include="Internal\Code\Initializers\ObjectNode.cs" />

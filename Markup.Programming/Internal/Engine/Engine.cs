@@ -416,6 +416,12 @@ namespace Markup.Programming.Core
             return codeTree.Compile(this, CodeType.Variable, path).GetVariable(this);
         }
 
+        public string GetEvent(string path, CodeTree codeTree)
+        {
+            if (codeTree == null) codeTree = new CodeTree();
+            return codeTree.Compile(this, CodeType.EventExpression, path).GetEvent(this);
+        }
+
         public object GetPath(string path, CodeTree codeTree)
         {
             if (codeTree == null) codeTree = new CodeTree();
@@ -437,7 +443,7 @@ namespace Markup.Programming.Core
         public object CallPath(string path, CodeTree codeTree, IEnumerable<object> args)
         {
             if (codeTree == null) codeTree = new CodeTree();
-            return codeTree.Compile(this, CodeType.Call, path).Call(this, args);
+            return codeTree.Compile(this, CodeType.CallExpression, path).Call(this, args);
         }
 
         public bool ShouldTrace(TraceFlags flags)

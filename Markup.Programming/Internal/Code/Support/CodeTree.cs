@@ -122,14 +122,16 @@ namespace Markup.Programming.Core
         private static IDictionary<string, AssignmentOp> AssignmentOperatorMap { get { return assignmentOperatorMap; } }
         private IDictionary<string, int> PrecedenceMap { get { return precedenceMap; } }
         private IDictionary<string, string> OperatorAliasMap { get { return operatorAliasMap; } }
+        private bool IsCurrentEvent { get { return IsEvent && Tokens != null && Tokens.Current == 0; } }
         private bool IsCurrentCall { get { return IsCall && Tokens != null && Tokens.Count == 0 || PeekToken("("); } }
 
         public Node Root { get; private set; }
         public TokenQueue Tokens { get; private set; }
         public CodeType CodeType { get; private set; }
         public bool IsVariable { get { return CodeType == CodeType.Variable; } }
+        public bool IsEvent { get { return CodeType == CodeType.EventExpression; } }
         public bool IsSet { get { return CodeType == CodeType.SetExpression; } }
-        public bool IsCall { get { return CodeType == CodeType.Call; } }
+        public bool IsCall { get { return CodeType == CodeType.CallExpression; } }
         public bool IsScript { get { return CodeType == CodeType.Script; } }
         public string Code { get; private set; }
 
@@ -151,8 +153,14 @@ namespace Markup.Programming.Core
 
         public string GetVariable(Engine engine)
         {
-            engine.Trace(TraceFlags.Path, "Code: Variable {0}", Code);
+            engine.Trace(TraceFlags.Path, "Code: GetVariable {0}", Code);
             return (Root as VariableNode).VariableName;
+        }
+
+        public string GetEvent(Engine engine)
+        {
+            engine.Trace(TraceFlags.Path, "Code: GetEvent {0}", Code);
+            return (Root as EventNode).EventName;
         }
 
         public object Get(Engine engine)
@@ -541,6 +549,12 @@ namespace Markup.Programming.Core
             if (token[0] == '`')
             {
                 var identifier = ParseIdentifier();
+                if (IsCurrentEvent)
+                {
+                    if (!PeekToken(".")) return new EventNode { EventName = identifier };
+                    ParseToken(".");
+                    return new EventNode { EventName = identifier, Handler = ParseExpression() };
+                }
                 if (IsCurrentCall)
                 {
                     var args = PeekToken("(") ? ParseArguments() : null;

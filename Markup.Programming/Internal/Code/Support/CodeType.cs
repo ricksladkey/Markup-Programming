@@ -8,9 +8,10 @@ namespace Markup.Programming.Core
     public enum CodeType
     {
         Variable,
+        EventExpression,
         GetExpression,
         SetExpression,
-        Call,
+        CallExpression,
         Script,
     }
 }

@@ -157,7 +157,7 @@
 
         <Button Content="Click Me">
             <p:Attached.Operations>
-                <p:CallHandler EventName="Click.[MessageBox].Show('Hello, world!')"/>
+                <p:CallHandler EventName="Click => MessageBox].Show('Hello, world!')"/>
             </p:Attached.Operations>
         </Button>
 

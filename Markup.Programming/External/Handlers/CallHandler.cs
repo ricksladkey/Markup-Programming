@@ -85,9 +85,9 @@ namespace Markup.Programming
 
         private string[] GetFields()
         {
-            int m = Path.IndexOf('.');
+            int m = Path.IndexOf("=>");
             if (m == -1) ThrowHelper.Throw("missing event");
-            return new string[] { Path.Substring(0, m), Path.Substring(m + 1) };
+            return new string[] { Path.Substring(0, m).TrimEnd(), Path.Substring(m + 2).TrimStart() };
         }
 
         protected override void OnActiveExecute(Engine engine)

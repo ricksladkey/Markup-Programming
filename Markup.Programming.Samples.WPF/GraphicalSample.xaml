@@ -74,8 +74,8 @@
                     <Ellipse Margin="-10,-10,0,0" Width="20" Height="20"
                              Stroke="DarkBlue" Fill="Transparent">
                         <p:Attached.Operations>
-                            <p:CallHandler Path="MouseLeftButtonDown.@AssociatedObject.CaptureMouse()"/>
-                            <p:CallHandler Path="MouseLeftButtonUp.@AssociatedObject.ReleaseMouseCapture()"/>
+                            <p:CallHandler Path="MouseLeftButtonDown => @AssociatedObject.CaptureMouse()"/>
+                            <p:CallHandler Path="MouseLeftButtonUp => @AssociatedObject.ReleaseMouseCapture()"/>
                             <p:ScriptHandler Path="MouseMove">
                                 if (@EventArgs.LeftButton != [MouseButtonState].Pressed) return;
                                 var $mouse = @EventArgs.GetPosition(@FindElement("LayoutRoot"));
