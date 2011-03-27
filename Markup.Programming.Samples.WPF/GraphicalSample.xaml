@@ -78,7 +78,7 @@
                             <p:CallHandler Path="MouseLeftButtonUp => @AssociatedObject.ReleaseMouseCapture()"/>
                             <p:ScriptHandler Path="MouseMove">
                                 if (@EventArgs.LeftButton != [MouseButtonState].Pressed) return;
-                                var $mouse = @EventArgs.GetPosition(@FindElement("LayoutRoot"));
+                                var $mouse = @EventArgs.GetPosition(@FindElement("LayoutRoot", null));
                                 X = $mouse.X; Y = $mouse.Y;
                             </p:ScriptHandler>
                         </p:Attached.Operations>

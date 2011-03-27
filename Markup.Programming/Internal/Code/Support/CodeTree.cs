@@ -121,11 +121,6 @@ namespace Markup.Programming.Core
         };
 
         private static string IdChars { get { return "_"; } }
-        private static IDictionary<string, object> ConstantMap { get { return constantMap; } }
-        private static IDictionary<string, Op> OperatorMap { get { return operatorMap; } }
-        private static IDictionary<string, AssignmentOp> AssignmentOperatorMap { get { return assignmentOperatorMap; } }
-        private static IDictionary<string, int> PrecedenceMap { get { return precedenceMap; } }
-        private static IDictionary<string, string> OperatorAliasMap { get { return operatorAliasMap; } }
         private bool IsCurrentEvent { get { return IsEvent && Tokens != null && Tokens.Count == 0 && !haveEventOperator; } }
         private bool IsCurrentCall { get { return IsCall && Tokens != null && Tokens.Count == 0 || PeekToken("("); } }
 
@@ -405,7 +400,7 @@ namespace Markup.Programming.Core
             {
                 var token = Tokens.Peek();
                 if (token == null) break;
-                if (AssignmentOperatorMap.ContainsKey(token) || OperatorMap.ContainsKey(token))
+                if (assignmentOperatorMap.ContainsKey(token) || operatorMap.ContainsKey(token))
                     Tokens.Dequeue();
                 else if ((token == "," && !noComma) || token == "?" || token == ":")
                     Tokens.Dequeue();
@@ -422,8 +417,8 @@ namespace Markup.Programming.Core
 
         private bool ShouldPerformOperation(string o1, string o2)
         {
-            var delta = PrecedenceMap[o1] - PrecedenceMap[o2];
-            bool rightAssociative = AssignmentOperatorMap.ContainsKey(o1) || o1 == ":";
+            var delta = precedenceMap[o1] - precedenceMap[o2];
+            bool rightAssociative = assignmentOperatorMap.ContainsKey(o1) || o1 == ":";
             return rightAssociative ? delta < 0 : delta <= 0;
         }
 
@@ -432,10 +427,10 @@ namespace Markup.Programming.Core
             var token = operators.Pop();
             var operand2 = operands.Pop();
             var operand1 = operands.Pop();
-            if (AssignmentOperatorMap.ContainsKey(token))
-                operands.Push(new SetNode { LValue = operand1, Op = AssignmentOperatorMap[token], RValue = operand2 });
-            else if (OperatorMap.ContainsKey(token))
-                operands.Push(new OpNode { Op = OperatorMap[token], Operands = { operand1, operand2 } });
+            if (assignmentOperatorMap.ContainsKey(token))
+                operands.Push(new SetNode { LValue = operand1, Op = assignmentOperatorMap[token], RValue = operand2 });
+            else if (operatorMap.ContainsKey(token))
+                operands.Push(new OpNode { Op = operatorMap[token], Operands = { operand1, operand2 } });
             else if (token == ",")
                 operands.Push(new CommaNode { Operand1 = operand1, Operand2 = operand2 });
             else if (token == ":")
@@ -460,10 +455,10 @@ namespace Markup.Programming.Core
                 ParseToken("-");
                 return new OpNode { Op = Op.Negate, Operands = { ParseUnary() } };
             }
-            if (OperatorMap.ContainsKey(token) && OperatorMap[token].GetArity() == 1)
+            if (operatorMap.ContainsKey(token) && operatorMap[token].GetArity() == 1)
             {
                 Tokens.Dequeue();
-                return new OpNode { Op = OperatorMap[token], Operands = { ParseUnary() } };
+                return new OpNode { Op = operatorMap[token], Operands = { ParseUnary() } };
             }
             if (token == "++" || token == "--")
             {
@@ -507,10 +502,10 @@ namespace Markup.Programming.Core
             var token = Tokens.Peek();
             if (token == null) engine.Throw("missing expression");
             char c = token[0];
-            if (c == '`' && ConstantMap.ContainsKey(token.Substring(1)))
+            if (c == '`' && constantMap.ContainsKey(token.Substring(1)))
             {
                 Tokens.Dequeue();
-                return new ValueNode { Value = ConstantMap[token.Substring(1)] };
+                return new ValueNode { Value = constantMap[token.Substring(1)] };
             }
             if (char.IsDigit(c))
             {
@@ -754,7 +749,7 @@ namespace Markup.Programming.Core
 
         private bool PeekToken(string token)
         {
-            return Tokens.Peek() == token;
+            return Tokens != null && Tokens.Peek() == token;
         }
 
         private bool PeekTokenStartsWith(string token)
@@ -838,12 +833,12 @@ namespace Markup.Programming.Core
                     i = EatMultiLineComment(i);
                 else if (c2 == "//")
                     i = EatSingleLineComment(i);
-                else if (OperatorMap.ContainsKey(c2) || AssignmentOperatorMap.ContainsKey(c2) | c2 == "=>")
+                else if (operatorMap.ContainsKey(c2) || assignmentOperatorMap.ContainsKey(c2) | c2 == "=>")
                 {
                     Tokens.Enqueue(c2);
                     i += 2;
                 }
-                else if (OperatorMap.ContainsKey(c.ToString()) || "=.[](){},?:;".Contains(c))
+                else if (operatorMap.ContainsKey(c.ToString()) || "=.[](){},?:;".Contains(c))
                 {
                     Tokens.Enqueue(c.ToString());
                     ++i;
@@ -878,7 +873,7 @@ namespace Markup.Programming.Core
                         prefix = "`";
                     for (++i; i < Code.Length && IsIdChar(Code[i]); ++i) continue;
                     var identifier = prefix + Code.Substring(start, i - start);
-                    if (operatorAliasMap.ContainsKey(identifier)) Tokens.Enqueue(OperatorAliasMap[identifier]);
+                    if (operatorAliasMap.ContainsKey(identifier)) Tokens.Enqueue(operatorAliasMap[identifier]);
                     else Tokens.Enqueue(identifier);
                 }
                 else

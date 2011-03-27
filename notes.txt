@@ -1,7 +1,7 @@
+- fix the way that haveEventOperator is used
 - support multiple operations in operation converter
 - remove Additional.Operations and add setter for Attached.Operations
 - types and enums that can be resolved at compile time should be
-- add relativeTo parameter to @FindElement, document @this and @FindElement
 - show call-stack within code tree
 - add switch/case to scripting
 - allow context to be set from scripting
