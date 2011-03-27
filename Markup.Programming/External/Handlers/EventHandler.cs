@@ -7,7 +7,13 @@ namespace Markup.Programming
     {
         protected override void OnActiveExecute(Engine engine)
         {
-            RegisterHandler(engine, Path);
+            if (Path != null)
+            {
+                CodeTree.Compile(engine, CodeType.EventExpression, Path);
+                RegisterHandler(engine, CodeTree.GetContext(engine), CodeTree.GetEvent(engine));
+            }
+            else
+                RegisterHandler(engine, null, null);
         }
     }
 }

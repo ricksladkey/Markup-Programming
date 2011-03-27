@@ -254,7 +254,6 @@
     <Compile Include="Internal\Code\Statements\ScriptNode.cs" />
     <Compile Include="Internal\Code\Support\CallNode.cs" />
     <Compile Include="Internal\Code\Initializers\CollectionInitializerNode.cs" />
-    <Compile Include="Internal\Code\Expressions\ContextNode.cs" />
     <Compile Include="Internal\Code\Initializers\DictionaryInitalizerNode.cs" />
     <Compile Include="Internal\Code\Expressions\FunctionNode.cs" />
     <Compile Include="Internal\Code\Operators\ItemNode.cs" />

@@ -64,9 +64,9 @@ namespace Markup.Programming.Core
         private string registeredEventName;
         private static MethodInfo handlerMethodInfo = typeof(Handler).GetMethod("EventHandler");
 
-        protected void RegisterHandler(Engine engine, string alternateEventName)
+        protected void RegisterHandler(Engine engine, object alternateContext, string alternateEventName)
         {
-            var context = AssociatedObject;
+            var context = alternateContext ?? AssociatedObject;
             registeredEventName = EventName ?? alternateEventName ?? AttachedKey;
             if (registeredEventName == AttachedKey)
             {

@@ -1,8 +1,5 @@
-- set default context for event to associated object
-- get and evaulate context for event during registration
 - add null coalescing operator
-- clean up event/path interaction
-- after event/path merge/cleanup support multiple operations in operation converter
+- support multiple operations in operation converter
 - remove Additional.Operations and add setter for Attached.Operations
 - types and enums that can be resolved at compile time should be
 - add relativeTo parameter to @FindElement, document @this and @FindElement

@@ -81,8 +81,13 @@ namespace Markup.Programming
 
         protected override void OnActiveExecute(Engine engine)
         {
-            CodeTree.Compile(engine, CodeType.EventExpression | CodeType.CallExpression, Path);
-            RegisterHandler(engine, CodeTree.GetEvent(engine));
+            if (Path != null)
+            {
+                CodeTree.Compile(engine, CodeType.EventExpression | CodeType.CallExpression, Path);
+                RegisterHandler(engine, CodeTree.GetContext(engine), CodeTree.GetEvent(engine));
+            }
+            else
+                RegisterHandler(engine, null, null);
         }
 
         protected override void OnEventHandler(Engine engine)

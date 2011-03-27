@@ -169,6 +169,13 @@ namespace Markup.Programming.Core
             return (Root as EventNode).EventName;
         }
 
+        public object GetContext(Engine engine)
+        {
+            engine.Trace(TraceFlags.Path, "Code: GetContext {0}", Code);
+            if (!(Root is EventNode)) engine.Throw("not an event expression");
+            return (Root as EventNode).Context.Get(engine);
+        }
+
         public object Get(Engine engine)
         {
             engine.Trace(TraceFlags.Path, "Code: Get {0}", Code);
@@ -511,7 +518,7 @@ namespace Markup.Programming.Core
             if (c == '"')
                 return new ValueNode { Value = Tokens.Dequeue().Substring(1) };
             if ("`$@".Contains(c))
-                return ParseIdentifierExpression(new ContextNode());
+                return ParseIdentifierExpression(new VariableNode { VariableName = Engine.ContextKey });
             if (c == '[')
                 return ParseTypeExpression();
             if (c == '(')
@@ -523,22 +530,6 @@ namespace Markup.Programming.Core
             }
 
             return engine.Throw("unexpected token") as ExpressionNode;
-        }
-
-        private ExpressionNode ParseConditional(ExpressionNode node)
-        {
-            Tokens.Dequeue();
-            var ifTrue = ParseExpression();
-            ParseToken(":");
-            var ifFalse = ParseExpression();
-            return new ConditionalNode { Conditional = node, IfTrue = ifTrue, IfFalse = ifFalse };
-        }
-
-        private ExpressionNode ParseComma(ExpressionNode node)
-        {
-            Tokens.Dequeue();
-            var value = ParseExpression();
-            return new CommaNode { Operand1 = node, Operand2 = value };
         }
 
         private ExpressionNode ParseIterator()
@@ -563,17 +554,10 @@ namespace Markup.Programming.Core
             var token = Tokens.Peek();
             if (token == "@iterator") return ParseIterator();
             if (token == "@block") return ParseBlock();
-            if (token[0] == '`')
+            if (token[0] == '`' || token == Handler.AttachedKey)
             {
-                var identifier = ParseIdentifier();
-                if (IsCurrentEvent || PeekToken("=>"))
-                {
-                    if (!PeekToken("=>")) return new EventNode { Context = node, EventName = identifier };
-                    ParseToken("=>");
-                    haveEventOperator = true;
-                    var handler = PeekToken("{") ? new BlockNode { Body = ParseStatement() } : ParseExpression();
-                    return new EventNode { EventName = identifier, Handler = handler };
-                }
+                var identifier = token == Handler.AttachedKey ? ParseToken(Handler.AttachedKey) : ParseIdentifier();
+                if (IsCurrentEvent || PeekToken("=>")) return ParseEventExpression(node, identifier);
                 if (IsCurrentCall)
                 {
                     var args = PeekToken("(") ? ParseArguments() : null;
@@ -588,6 +572,18 @@ namespace Markup.Programming.Core
                 return new FunctionNode { FunctionName = token, Arguments = args };
             }
             return new VariableNode { VariableName = token };
+        }
+
+        private ExpressionNode ParseEventExpression(ExpressionNode node, string identifier)
+        {
+            var context = node;
+            if (node is VariableNode && (node as VariableNode).VariableName == Engine.ContextKey)
+                context = new VariableNode { VariableName = Engine.AssociatedObjectKey };
+            if (!PeekToken("=>")) return new EventNode { Context = context, EventName = identifier };
+            ParseToken("=>");
+            haveEventOperator = true; // won't work when we support handlers in the script
+            var handler = PeekToken("{") ? new BlockNode { Body = ParseStatement() } : ParseExpression();
+            return new EventNode { Context = context, EventName = identifier, Handler = handler };
         }
 
         private ExpressionNode ParseVariableExpression()
