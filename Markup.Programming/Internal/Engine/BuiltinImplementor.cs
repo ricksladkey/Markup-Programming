@@ -74,6 +74,11 @@ namespace Markup.Programming.Core
             return engine.Operator(op, operands);
         }
 
+        public object FindElement(string elementName)
+        {
+            return FindElement(elementName, null);
+        }
+
         public object FindElement(string elementName, DependencyObject context)
         {
             if (context == null) context = engine.CurrentFrame.Caller.AssociatedObject;

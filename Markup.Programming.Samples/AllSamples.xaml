@@ -47,13 +47,11 @@
         <TextBlock Text="Markup Programming Samples" FontSize="20"/>
         <ComboBox ItemsSource="{Binding Samples}" Grid.Row="1">
             <p:Attached.Operations>
-                <p:EventHandler Path="SelectionChanged">
-                    <p:Set Var="$children">
-                        <p:Get Context="{Binding ElementName=ContentHost}" PropertyName="Children"/>
-                    </p:Set>
-                    <p:Call Path="$children.Clear()"/>
-                    <p:Call Path="$children.Add(Samples[@AssociatedObject.SelectedIndex].Control)"/>
-                </p:EventHandler>
+                <p:ScriptHandler Path="SelectionChanged">
+                    var $children = @FindElement("ContentHost").Children;
+                    $children.Clear();
+                    $children.Add(Samples[@AssociatedObject.SelectedIndex].Control);
+                </p:ScriptHandler>
             </p:Attached.Operations>
             <ComboBox.ItemTemplate>
                 <DataTemplate>

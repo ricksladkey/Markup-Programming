@@ -1,3 +1,4 @@
+- extend EventHandler.Path and ScriptHandler.Path to support handlers
 - fix the way that haveEventOperator is used
 - support multiple operations in operation converter
 - remove Additional.Operations and add setter for Attached.Operations
