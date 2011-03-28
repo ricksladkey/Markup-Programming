@@ -114,6 +114,7 @@
     <Compile Include="External\Handlers\ScriptHandler.cs" />
     <Compile Include="External\Objects\Pair.cs" />
     <Compile Include="External\Statements\Continue.cs" />
+    <Compile Include="External\Support\Additional.cs" />
     <Compile Include="Internal\Code\Expressions\BlockNode.cs" />
     <Compile Include="Internal\Code\Expressions\EventNode.cs" />
     <Compile Include="Internal\Code\Statements\ContinueNode.cs" />
@@ -157,7 +158,6 @@
     <Compile Include="Internal\Code\Operators\ConditionalNode.cs" />
     <Compile Include="Internal\Code\Statements\IfNode.cs" />
     <Compile Include="Internal\Code\Support\CodeTree.cs" />
-    <Compile Include="External\Support\Additional.cs" />
     <Compile Include="External\Handlers\EventHandler.cs" />
     <Compile Include="External\Support\Attached.cs" />
     <Compile Include="Internal\Language\Handler.cs" />

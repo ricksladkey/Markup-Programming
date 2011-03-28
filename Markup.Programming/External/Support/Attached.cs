@@ -1,27 +1,33 @@
-﻿using System.Windows;
+﻿using System.ComponentModel;
+using System.Windows;
 using Markup.Programming.Core;
 
 namespace Markup.Programming
 {
     public static class Attached
     {
+        [TypeConverter(typeof(OperationsConverter))]
         public static HandlerCollection GetOperations(DependencyObject obj)
         {
-            var value = (HandlerCollection)obj.GetValue(OperationsProperty);
+            var value = obj.GetValue(OperationsProperty) as HandlerCollection;
             if (value == null) value = new HandlerCollection();
             obj.SetValue(OperationsProperty, value);
             return value;
         }
 
-        internal static readonly DependencyProperty OperationsProperty =
-            DependencyProperty.RegisterAttached("InternalOperations", typeof(HandlerCollection), typeof(Attached),
-             new PropertyMetadata(null, Attached.OnOperationsChanged));
-
-        private static void OnOperationsChanged(object sender, DependencyPropertyChangedEventArgs e)
+        public static void SetOperations(DependencyObject obj, HandlerCollection value)
         {
-            var dependencyObject = sender as DependencyObject;
-            var collection = e.NewValue as HandlerCollection;
-            collection.AttachOperations(dependencyObject);
+            var operations = GetOperations(obj);
+            foreach (var handler in value) operations.Add(handler);
+        }
+
+        internal static readonly DependencyProperty OperationsProperty =
+            DependencyProperty.RegisterAttached("HiddenOperations", typeof(HandlerCollection), typeof(Attached),
+             new PropertyMetadata(null, OnPropertyOperationsChanged));
+
+        private static void OnPropertyOperationsChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            (e.NewValue as HandlerCollection).AttachOperations(d);
         }
     }
 }

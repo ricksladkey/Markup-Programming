@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Globalization;
 using System.Linq;
 using System.Text;
-using System.ComponentModel;
 using Markup.Programming.Core;
 
 namespace Markup.Programming
@@ -15,9 +16,11 @@ namespace Markup.Programming
             return base.CanConvertFrom(context, sourceType);
         }
 
-        public override object ConvertFrom(ITypeDescriptorContext context, System.Globalization.CultureInfo culture, object value)
+        public override object ConvertFrom(ITypeDescriptorContext context, CultureInfo culture, object value)
         {
-            return new OperationCollection { new EventHandler { Path = value as string } };
+            if (value is string)
+                return new HandlerCollection { new EventHandler { Path = value as string } };
+            return base.ConvertFrom(context, culture, value);
         }
     }
 }
