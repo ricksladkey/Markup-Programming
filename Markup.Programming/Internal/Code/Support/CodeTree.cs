@@ -233,6 +233,7 @@ namespace Markup.Programming.Core
             if (token == "foreach") return ParseForEach();
             if (token == "return") return ParseReturn();
             if (token == "yield") return ParseYield();
+            if (token == "@context") return ParseContext();
             if (token == "{")
             {
                 ParseToken("{");
@@ -328,10 +329,20 @@ namespace Markup.Programming.Core
         {
             ParseKeyword("while");
             ParseToken("(");
-            var expression = ParseExpression();
+            var condition = ParseExpression();
             ParseToken(")");
-            var statement = ParseStatement();
-            return new WhileNode { Condition = expression, Body = statement };
+            var body = ParseStatement();
+            return new WhileNode { Condition = condition, Body = body };
+        }
+
+        private StatementNode ParseContext()
+        {
+            ParseToken("@context");
+            ParseToken("(");
+            var context = ParseExpression();
+            ParseToken(")");
+            var body = ParseStatement();
+            return new ContexteNode { Context= context, Body = body };
         }
 
         private StatementNode ParseContinue()

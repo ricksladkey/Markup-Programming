@@ -117,6 +117,7 @@
     <Compile Include="External\Support\Additional.cs" />
     <Compile Include="Internal\Code\Expressions\BlockNode.cs" />
     <Compile Include="Internal\Code\Expressions\EventNode.cs" />
+    <Compile Include="Internal\Code\Statements\ContextNode.cs" />
     <Compile Include="Internal\Code\Statements\ContinueNode.cs" />
     <Compile Include="Internal\Code\Initializers\InitializerProperty.cs" />
     <Compile Include="Internal\Code\Initializers\ObjectNode.cs" />

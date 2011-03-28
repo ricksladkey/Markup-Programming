@@ -1,11 +1,10 @@
-- allow context to be set from scripting
 - figure out why Loaded event is treated specially
-- types and enums that can be resolved at compile time should be
 - show call-stack within code tree
 - add switch/case to scripting
 - consider how to call extension methods
 - test designer errors, e.g. syntax error in script
 -----------------------
+- types and enums that can be resolved at compile time should be
 - test kaxaml with markup programming
 - Parse number dot identifier as an integer
 - write converter sample
