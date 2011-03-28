@@ -24,7 +24,7 @@
             <p:Attached.Operations>
                 <p:EventHandler Path="MouseLeftButtonDown">
                     <p:Call Path="[MessageBox].Show">
-                        <p:Path>'Hello, world!'</p:Path>
+                        <p:Expr Value="Hello, world!"/>
                     </p:Call>
                 </p:EventHandler>
             </p:Attached.Operations>
@@ -58,7 +58,7 @@
             <!-- properties, context, lots of options -->
 
             <p:Attached.Operations>
-                <p:CallHandler Path="MouseLeftButtonDown => [MessageBox].Show('Hello, world!')"/>
+                <p:EventHandler Path="MouseLeftButtonDown => [MessageBox].Show('Hello, world!')"/>
             </p:Attached.Operations>
 
         </Rectangle>

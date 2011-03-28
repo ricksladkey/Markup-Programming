@@ -1,6 +1,5 @@
 - allow context to be set from scripting
 - figure out why Loaded event is treated specially
-- support multiple operations in operation converter
 - types and enums that can be resolved at compile time should be
 - show call-stack within code tree
 - add switch/case to scripting
