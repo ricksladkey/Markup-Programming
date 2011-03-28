@@ -127,12 +127,14 @@ namespace Markup.Programming.Core
         public Node Root { get; private set; }
         public TokenQueue Tokens { get; private set; }
         public CodeType CodeType { get; private set; }
+        public string Code { get; private set; }
+
         public bool IsVariable { get { return (CodeType & CodeType.Variable) == CodeType.Variable; } }
         public bool IsEvent { get { return (CodeType & CodeType.EventExpression) == CodeType.EventExpression; } }
         public bool IsSet { get { return (CodeType & CodeType.SetExpression) == CodeType.SetExpression; } }
         public bool IsCall { get { return (CodeType & CodeType.CallExpression) == CodeType.CallExpression; } }
         public bool IsScript { get { return (CodeType & CodeType.Script) == CodeType.Script; } }
-        public string Code { get; private set; }
+        public bool HasHandler { get { return Root is EventNode && (Root as EventNode).Handler != null; } }
 
         public CodeTree Compile(Engine engine, CodeType expressionType, string path)
         {
@@ -176,15 +178,15 @@ namespace Markup.Programming.Core
         public object Get(Engine engine)
         {
             engine.Trace(TraceFlags.Path, "Code: Get {0}", Code);
-            if (!(Root is PathNode)) engine.Throw("not a path expression");
-            return (Root as PathNode).Get(engine);
+            if (!(Root is ExpressionNode)) engine.Throw("not an expression");
+            return (Root as ExpressionNode).Get(engine);
         }
 
         public object Set(Engine engine, object value)
         {
             engine.Trace(TraceFlags.Path, "Code: Set {0} = {1}", Code, value);
-            if (!(Root is PathNode)) engine.Throw("not a path expression");
-            return (Root as PathNode).Set(engine, value);
+            if (!(Root is ExpressionNode)) engine.Throw("not an expression");
+            return (Root as ExpressionNode).Set(engine, value);
         }
 
         public object Call(Engine engine, IEnumerable<object> args)

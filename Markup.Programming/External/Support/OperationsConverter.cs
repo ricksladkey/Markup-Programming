@@ -17,7 +17,7 @@ namespace Markup.Programming
 
         public override object ConvertFrom(ITypeDescriptorContext context, System.Globalization.CultureInfo culture, object value)
         {
-            return new OperationCollection { new CallHandler { Path = value as string } };
+            return new OperationCollection { new EventHandler { Path = value as string } };
         }
     }
 }

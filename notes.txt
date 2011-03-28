@@ -1,5 +1,4 @@
-- extend EventHandler.Path and ScriptHandler.Path to support handlers
-- fix the way that haveEventOperator is used
+- fix the way that haveEventOperator is used (currently needed so that Match in "Click => Match" is not parsed as an event)
 - support multiple operations in operation converter
 - remove Additional.Operations and add setter for Attached.Operations
 - types and enums that can be resolved at compile time should be

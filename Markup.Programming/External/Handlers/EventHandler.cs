@@ -15,5 +15,13 @@ namespace Markup.Programming
             else
                 RegisterHandler(engine, null, null);
         }
+
+        protected override void OnEventHandler(Engine engine)
+        {
+            if (Path != null && CodeTree.HasHandler)
+                CodeTree.Get(engine);
+            else
+                base.OnEventHandler(engine);
+        }
     }
 }
