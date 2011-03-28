@@ -10,7 +10,9 @@ namespace Markup.Programming
             if (Path != null)
             {
                 CodeTree.Compile(engine, CodeType.EventExpression, Path);
-                RegisterHandler(engine, CodeTree.GetContext(engine), CodeTree.GetEvent(engine));
+                var context = CodeTree.GetContext(engine);
+                if (context == null) engine.Throw("context cannot be null");
+                RegisterHandler(engine, context, CodeTree.GetEvent(engine));
             }
             else
                 RegisterHandler(engine, null, null);

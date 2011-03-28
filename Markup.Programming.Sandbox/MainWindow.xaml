@@ -4,7 +4,14 @@
     xmlns:p="http://markupprogramming.codeplex.com/markup/programming"
     Height="300" Width="300">
     <Grid Background="White">
-        <Rectangle Fill="LightGreen"
-                   p:Additional.Operations="MouseLeftButtonDown => Show"/>
+<Button Content="Click Me!">
+    <p:Attached.Operations>
+        <p:EventHandler Path="Loaded">
+            <p:EventHandler Path="@FindAncestor([Window]).LocationChanged">
+                <p:Call Path="[MessageBox].Show('Window Moved!')"/>
+            </p:EventHandler>
+        </p:EventHandler>
+    </p:Attached.Operations>
+</Button>
     </Grid>
 </Window>

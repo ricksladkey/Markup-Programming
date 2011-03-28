@@ -84,12 +84,28 @@ namespace Markup.Programming.Core
             if (context == null) context = engine.CurrentFrame.Caller.AssociatedObject;
             while (context != null)
             {
-                System.Diagnostics.Debug.WriteLine("context = {0}", context);
-                if (!(context is FrameworkElement)) return null;
-                var frameworkElement = context as FrameworkElement;
-                var element = frameworkElement.FindName(elementName);
-                if (element != null) return element;
-                context = VisualTreeHelper.GetParent(frameworkElement);
+                if (context is FrameworkElement)
+                {
+                    var element = (context as FrameworkElement).FindName(elementName);
+                    if (element != null) return element;
+                }
+                context = VisualTreeHelper.GetParent(context);
+            }
+            return null;
+        }
+
+        public object FindAncestor(Type type)
+        {
+            return FindAncestor(type, null);
+        }
+
+        public object FindAncestor(Type type, DependencyObject context)
+        {
+            if (context == null) context = engine.CurrentFrame.Caller.AssociatedObject;
+            while (context != null)
+            {
+                if (context.GetType().IsAssignableFrom(type)) return context;
+                context = VisualTreeHelper.GetParent(context);
             }
             return null;
         }

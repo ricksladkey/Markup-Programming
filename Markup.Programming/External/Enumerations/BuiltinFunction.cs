@@ -18,5 +18,6 @@ namespace Markup.Programming
         Convert,
         Op,
         FindElement,
+        FindAncestor,
     }
 }

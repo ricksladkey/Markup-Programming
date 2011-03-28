@@ -848,7 +848,7 @@ namespace Markup.Programming.Core
                 {
                     var start = ++i;
                     for (++i; i < Code.Length && Code[i] != c; ++i) continue;
-                    if (Code[i] == Code.Length) engine.Throw("missing closing quote: " + Code);
+                    if (i == Code.Length) engine.Throw("missing closing quote: " + Code);
                     Tokens.Enqueue('"' + Code.Substring(start, i++ - start));
                 }
                 else if (char.IsDigit(c))
