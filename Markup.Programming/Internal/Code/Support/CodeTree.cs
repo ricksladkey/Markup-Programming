@@ -17,7 +17,6 @@ namespace Markup.Programming.Core
     public class CodeTree
     {
         private Engine engine;
-        private bool haveEventOperator;
 
         private static Dictionary<string, object> constantMap = new Dictionary<string, object>
         {
@@ -121,8 +120,8 @@ namespace Markup.Programming.Core
         };
 
         private static string IdChars { get { return "_"; } }
-        private bool IsCurrentEvent { get { return IsEvent && Tokens != null && Tokens.Count == 0 && !haveEventOperator; } }
-        private bool IsCurrentCall { get { return IsCall && Tokens != null && Tokens.Count == 0 || PeekToken("("); } }
+        private bool IsCurrentEvent { get { return IsEvent && Tokens.Count == 0; } }
+        private bool IsCurrentCall { get { return IsCall && Tokens.Count == 0 || PeekToken("("); } }
 
         public Node Root { get; private set; }
         public TokenQueue Tokens { get; private set; }
@@ -140,7 +139,6 @@ namespace Markup.Programming.Core
         {
             if (expressionType == CodeType && object.ReferenceEquals(Code, path)) return this;
             this.engine = engine;
-            haveEventOperator = false;
             CodeType = expressionType;
             Code = path;
             Tokenize();
@@ -205,12 +203,12 @@ namespace Markup.Programming.Core
 
         private PathNode ParsePath()
         {
-            return new PathNode { Path = ParseExpression() };
+            return new PathNode { Path = ParseExpression(0) };
         }
 
         private EventNode ParseEventExpression()
         {
-            var eventNode = ParseExpression();
+            var eventNode = ParseExpression(0);
             if (!(eventNode is EventNode)) engine.Throw("not an event expression");
             return eventNode as EventNode;
         }
@@ -390,14 +388,16 @@ namespace Markup.Programming.Core
             return new YieldNode { Value = value };
         }
 
-        private ExpressionNode ParseExpression() { return ParseBinary(false); }
-        private ExpressionNode ParseExpressionNoComma() { return ParseBinary(true); }
+        private ExpressionNode ParseExpression() { return ParseBinary(1, false); }
+        private ExpressionNode ParseExpressionNoComma() { return ParseBinary(1, true); }
 
-        private ExpressionNode ParseBinary(bool noComma)
+        private ExpressionNode ParseExpression(int level) { return ParseBinary(level, false); }
+
+        private ExpressionNode ParseBinary(int level, bool noComma)
         {
             var operators = new Stack<string>();
             var operands = new Stack<ExpressionNode>();
-            operands.Push(ParseUnary());
+            operands.Push(ParseUnary(level));
             while (true)
             {
                 var token = Tokens.Peek();
@@ -411,7 +411,7 @@ namespace Markup.Programming.Core
                 while (operators.Count > 0 && ShouldPerformOperation(token, operators.Peek()))
                     PerformOperation(operators, operands);
                 operators.Push(token);
-                operands.Push(ParseUnary());
+                operands.Push(ParseUnary(level + 1));
             }
             while (operators.Count > 0) PerformOperation(operators, operands);
             return operands.Pop();
@@ -444,43 +444,43 @@ namespace Markup.Programming.Core
             }
         }
 
-        private ExpressionNode ParseUnary()
+        private ExpressionNode ParseUnary(int level)
         {
             var token = Tokens.Peek();
             if (token == "+")
             {
                 Tokens.Dequeue();
-                return ParseUnary();
+                return ParseUnary(level);
             }
             if (token == "-")
             {
                 ParseToken("-");
-                return new OpNode { Op = Op.Negate, Operands = { ParseUnary() } };
+                return new OpNode { Op = Op.Negate, Operands = { ParseUnary(level) } };
             }
             if (operatorMap.ContainsKey(token) && operatorMap[token].GetArity() == 1)
             {
                 Tokens.Dequeue();
-                return new OpNode { Op = operatorMap[token], Operands = { ParseUnary() } };
+                return new OpNode { Op = operatorMap[token], Operands = { ParseUnary(level) } };
             }
             if (token == "++" || token == "--")
             {
                 Tokens.Dequeue();
                 var op = token == "++" ? AssignmentOp.Increment : AssignmentOp.Decrement;
-                return new IncrementNode { Op = op, LValue = ParseUnary() };
+                return new IncrementNode { Op = op, LValue = ParseUnary(level) };
             }
-            return ParsePrimary();
+            return ParsePrimary(level);
         }
 
-        private ExpressionNode ParsePrimary()
+        private ExpressionNode ParsePrimary(int level)
         {
-            var node = ParseAtom();
+            var node = ParseAtom(level);
             while (true)
             {
                 var token = Tokens.Peek();
                 if (token == ".")
                 {
                     ParseToken(".");
-                    node = ParseIdentifierExpression(node);
+                    node = ParseIdentifierExpression(level, node);
                 }
                 else if (token == "[")
                 {
@@ -499,7 +499,7 @@ namespace Markup.Programming.Core
             return node;
         }
 
-        private ExpressionNode ParseAtom()
+        private ExpressionNode ParseAtom(int level)
         {
             var token = Tokens.Peek();
             if (token == null) engine.Throw("missing expression");
@@ -517,7 +517,7 @@ namespace Markup.Programming.Core
             if (c == '"')
                 return new ValueNode { Value = Tokens.Dequeue().Substring(1) };
             if ("`$@".Contains(c))
-                return ParseIdentifierExpression(new VariableNode { VariableName = Engine.ContextKey });
+                return ParseIdentifierExpression(level, new VariableNode { VariableName = Engine.ContextKey });
             if (c == '[')
                 return ParseTypeExpression();
             if (c == '(')
@@ -548,7 +548,7 @@ namespace Markup.Programming.Core
             return new BlockNode { Body = body };
         }
 
-        private ExpressionNode ParseIdentifierExpression(ExpressionNode node)
+        private ExpressionNode ParseIdentifierExpression(int level, ExpressionNode node)
         {
             var token = Tokens.Peek();
             if (token == "@iterator") return ParseIterator();
@@ -556,7 +556,7 @@ namespace Markup.Programming.Core
             if (token[0] == '`' || token == Handler.AttachedKey)
             {
                 var identifier = token == Handler.AttachedKey ? ParseToken(Handler.AttachedKey) : ParseIdentifier();
-                if (IsCurrentEvent || PeekToken("=>")) return ParseEventExpression(node, identifier);
+                if ((IsCurrentEvent && level == 0) || PeekToken("=>")) return ParseEventExpression(level, node, identifier);
                 if (IsCurrentCall)
                 {
                     var args = PeekToken("(") ? ParseArguments() : null;
@@ -573,14 +573,13 @@ namespace Markup.Programming.Core
             return new VariableNode { VariableName = token };
         }
 
-        private ExpressionNode ParseEventExpression(ExpressionNode node, string identifier)
+        private ExpressionNode ParseEventExpression(int level, ExpressionNode node, string identifier)
         {
             var context = node;
             if (node is VariableNode && (node as VariableNode).VariableName == Engine.ContextKey)
                 context = new VariableNode { VariableName = Engine.AssociatedObjectKey };
             if (!PeekToken("=>")) return new EventNode { Context = context, EventName = identifier };
             ParseToken("=>");
-            haveEventOperator = true; // won't work when we support handlers in the script
             var handler = PeekToken("{") ? new BlockNode { Body = ParseStatement() } : ParseExpression();
             return new EventNode { Context = context, EventName = identifier, Handler = handler };
         }

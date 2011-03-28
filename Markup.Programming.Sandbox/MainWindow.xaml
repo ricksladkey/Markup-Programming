@@ -5,6 +5,6 @@
     Height="300" Width="300">
     <Grid Background="White">
         <Rectangle Fill="LightGreen"
-                   p:Additional.Operations="MouseLeftButtonDown => [MessageBox].Show('Hello, world!')"/>
+                   p:Additional.Operations="MouseLeftButtonDown => Show"/>
     </Grid>
 </Window>
