@@ -253,15 +253,14 @@
     <Compile Include="Internal\Collections\HandlerCollection.cs" />
     <Compile Include="Internal\Code\Statements\ScriptNode.cs" />
     <Compile Include="Internal\Code\Support\CallNode.cs" />
-    <Compile Include="Internal\Code\Initializers\CollectionInitializerNode.cs" />
-    <Compile Include="Internal\Code\Initializers\DictionaryInitalizerNode.cs" />
+    <Compile Include="Internal\Code\Initializers\CollectionNode.cs" />
+    <Compile Include="Internal\Code\Initializers\DictionaryNode.cs" />
     <Compile Include="Internal\Code\Expressions\FunctionNode.cs" />
     <Compile Include="Internal\Code\Operators\ItemNode.cs" />
     <Compile Include="Internal\Code\Expressions\MethodNode.cs" />
     <Compile Include="Internal\Code\Operators\OpNode.cs" />
     <Compile Include="Internal\Code\Initializers\PairNode.cs" />
     <Compile Include="Internal\Code\Support\ExpressionNode.cs" />
-    <Compile Include="Internal\Code\Initializers\PropertyInitializerNode.cs" />
     <Compile Include="Internal\Code\Expressions\PropertyNode.cs" />
     <Compile Include="Internal\Code\Statements\ReturnNode.cs" />
     <Compile Include="Internal\Code\Operators\SetNode.cs" />

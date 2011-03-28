@@ -617,16 +617,15 @@ namespace Markup.Programming.Core
 
         private ExpressionNode ParseInitializer(TypeNode typeNode)
         {
-            // Phase I: collect all the properties.
             var properties = new List<InitializerProperty>();
             while (true)
             {
                 var property = new InitializerProperty();
-                if (PeekToken("{")) return ParseDictionaryInitializer(typeNode);
+                if (PeekToken("{")) return new DictionaryNode { Type = typeNode, Items = ParseDictionary() };
                 var token = Tokens.Dequeue();
                 var isCollection = Tokens.Peek() != "=";
                 Tokens.Undequeue(token);
-                if (isCollection) return ParseCollectionInitializer(typeNode);
+                if (isCollection) return new CollectionNode { Type = typeNode, Items = ParseList("}") };
                 property.PropertyName = ParseIdentifier();
                 ParseToken("=");
                 if (PeekToken("{"))
@@ -650,37 +649,7 @@ namespace Markup.Programming.Core
                 if (token == "}") break;
                 if (token != ",") engine.Throw("unexpected token: " + token);
             }
-
-            // Phase II: apply all the properties.
-            var context = new ObjectNode { Type = typeNode, Properties = properties } as ExpressionNode;
-            foreach (var property in properties)
-            {
-                if (property.IsCollection || property.IsDictionary)
-                {
-                    var propertyNode = new PropertyNode { Context = context, PropertyName = property.PropertyName };
-                    if (property.IsDictionary)
-                        context = new DictionaryInitializerNode { Context = context, Dictionary = propertyNode, Items = property.Values };
-                    else
-                        context = new CollectionInitializerNode { Context = context, Collection = propertyNode, Items = property.Values };
-                }
-                else
-                    context = new PropertyInitializerNode { Context = context, PropertyName = property.PropertyName, Value = property.Value };
-                property.Value = null;
-                property.Values = null;
-            }
-            return context;
-        }
-
-        private ExpressionNode ParseCollectionInitializer(TypeNode typeNode)
-        {
-            var context = new OpNode { Op = Op.New, Operands = { typeNode } } as ExpressionNode;
-            return new CollectionInitializerNode { Context = context, Collection = context, Items = ParseList("}") };
-        }
-
-        private ExpressionNode ParseDictionaryInitializer(TypeNode typeNode)
-        {
-            var context = new OpNode { Op = Op.New, Operands = { typeNode } } as ExpressionNode;
-            return new DictionaryInitializerNode { Context = context, Dictionary = context, Items = ParseDictionary() };
+            return new ObjectNode { Type = typeNode, Properties = properties } as ExpressionNode;
         }
 
         private List<ExpressionNode> ParseDictionary()

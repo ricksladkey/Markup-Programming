@@ -1,11 +1,11 @@
+- allow context to be set from scripting
+- eliminate PropertyInitializerNode
 - figure out why Loaded event is treated specially
 - support multiple operations in operation converter
 - remove Additional.Operations and add setter for Attached.Operations
 - types and enums that can be resolved at compile time should be
 - show call-stack within code tree
 - add switch/case to scripting
-- allow context to be set from scripting
-- eliminate PropertyInitializerNode
 - consider how to call extension methods
 - test designer errors, e.g. syntax error in script
 -----------------------
