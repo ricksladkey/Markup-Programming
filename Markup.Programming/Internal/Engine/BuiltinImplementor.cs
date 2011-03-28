@@ -96,15 +96,20 @@ namespace Markup.Programming.Core
 
         public object FindAncestor(Type type)
         {
-            return FindAncestor(type, null);
+            return FindAncestor(type, null, 1);
         }
 
         public object FindAncestor(Type type, DependencyObject context)
         {
+            return FindAncestor(type, context, 1);
+        }
+
+        public object FindAncestor(Type type, DependencyObject context, int level)
+        {
             if (context == null) context = engine.CurrentFrame.Caller.AssociatedObject;
             while (context != null)
             {
-                if (context.GetType().IsAssignableFrom(type)) return context;
+                if (type.IsAssignableFrom(context.GetType()) && --level == 0) return context;
                 context = VisualTreeHelper.GetParent(context);
             }
             return null;
