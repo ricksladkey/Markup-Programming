@@ -77,6 +77,8 @@ namespace Markup.Programming
 
         protected override object OnGet(Engine engine)
         {
+            if (Path != null && CodeTree.Compile(engine, CodeType.GetExpression, Path).IsSetOrIncrement)
+                return CodeTree.Get(engine);
             var value = engine.Get(ValueProperty, ValuePath, ValueCodeTree);
             if (Var != null)
             {

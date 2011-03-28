@@ -134,6 +134,8 @@ namespace Markup.Programming.Core
         public bool IsCall { get { return (CodeType & CodeType.CallExpression) == CodeType.CallExpression; } }
         public bool IsScript { get { return (CodeType & CodeType.Script) == CodeType.Script; } }
         public bool HasHandler { get { return Root is EventNode && (Root as EventNode).Handler != null; } }
+        public bool IsSetOrIncrement { get { return Root is PathNode &&
+            ((Root as PathNode).Path is SetNode || (Root as PathNode).Path is IncrementNode); } }
 
         public CodeTree Compile(Engine engine, CodeType expressionType, string path)
         {

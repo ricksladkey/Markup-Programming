@@ -76,7 +76,7 @@
 
                             <!-- this just implements the rules of the tower of hanoi game -->
                             <!-- the logic is about as complex as the game is -->
-                            <p:Expr Path="SelectedPost = $parameter"/>
+                            <p:Set Path="SelectedPost = $parameter"/>
                             <p:If Path="HoldingPost.Count == 0">
                                 <p:If.Then>
                                     <p:When Path="SelectedPost.Count != 0">
