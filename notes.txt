@@ -1,3 +1,4 @@
+- EventHandler: if there is no body, path should be treated as an attached handler
 - figure out why Loaded event is treated specially
 - show call-stack within code tree
 - add switch/case to scripting

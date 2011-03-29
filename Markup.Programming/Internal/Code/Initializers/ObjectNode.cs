@@ -14,20 +14,33 @@ namespace Markup.Programming.Core
         public IList<InitializerProperty> Properties { get; set; }
         protected override object OnGet(Engine engine)
         {
-            var context = null as object;
-            if (Type != null)
-                context = TypeHelper.CreateInstance(Type.Get(engine) as Type);
-            else
+            if (Type == null)
             {
                 var pairs = Properties.Select(property => new NameValuePair(property.PropertyName, null)).ToArray();
                 var dynamicObject = DynamicHelper.CreateObject(ref dynamicType, pairs) as IDynamicObject;
                 foreach (var property in Properties)
                 {
-                    if (property.IsCollection) dynamicObject[property.PropertyName] = new ObservableCollection<object>();
-                    if (property.IsDictionary) dynamicObject[property.PropertyName] = new Dictionary<object, object>();
+                    if (property.IsCollection)
+                    {
+                        var values = property.Values.Select(value => value.Get(engine)).ToArray();
+                        dynamicObject[property.PropertyName] = TypeHelper.CreateCollection(values);
+                    }
+                    else if (property.IsDictionary)
+                    {
+                        var dictionary = new Dictionary<object, object>();
+                        foreach (var value in property.Values)
+                        {
+                            var entry = (DictionaryEntry)value.Get(engine);
+                            dictionary.Add(entry.Key, entry.Value);
+                        }
+                        dynamicObject[property.PropertyName] = dictionary;
+                    }
+                    else
+                        dynamicObject[property.PropertyName] = property.Value.Get(engine);
                 }
-                context = dynamicObject;
+                return dynamicObject;
             }
+            var context = TypeHelper.CreateInstance(Type.Get(engine) as Type);
             foreach (var property in Properties)
             {
                 if (property.IsCollection)
