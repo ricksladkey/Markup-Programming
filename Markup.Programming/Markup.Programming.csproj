@@ -110,7 +110,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="External\Expressions\Script.cs" />
-    <Compile Include="External\Expressions\With.cs" />
     <Compile Include="External\Handlers\ScriptHandler.cs" />
     <Compile Include="External\Objects\Pair.cs" />
     <Compile Include="External\Statements\Continue.cs" />

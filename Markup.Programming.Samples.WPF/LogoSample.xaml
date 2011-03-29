@@ -30,18 +30,21 @@
             </p:ResourceCollection>
             <p:ResourceObject x:Key="ViewModel">
                 <p:Property PropertyName="LogoData">
-                    <p:With Var="$angle" Path="-90.0">
-                        <p:Iterator>
-                            <p:ForEach Var="$brush" Value="{StaticResource Brushes}">
-                                <p:Yield>
-                                    <p:Object>
-                                        <p:Property PropertyName="Angle" Path="$angle += 90"/>
-                                        <p:Property PropertyName="Brush" Path="$brush"/>
-                                    </p:Object>
-                                </p:Yield>
-                            </p:ForEach>
-                        </p:Iterator>
-                    </p:With>
+                    <p:Block>
+                        <p:Set Var="$angle" ValuePath="-90.0"/>
+                        <p:Return>
+                            <p:Iterator>
+                                <p:ForEach Var="$brush" Value="{StaticResource Brushes}">
+                                    <p:Yield>
+                                        <p:Object>
+                                            <p:Property PropertyName="Angle" Path="$angle += 90"/>
+                                            <p:Property PropertyName="Brush" Path="$brush"/>
+                                        </p:Object>
+                                    </p:Yield>
+                                </p:ForEach>
+                            </p:Iterator>
+                        </p:Return>
+                    </p:Block>
                 </p:Property>
             </p:ResourceObject>
         </Canvas.Resources>
