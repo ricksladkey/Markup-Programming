@@ -1,0 +1,138 @@
+﻿!! Anatomy of an Event Handler
+One of the most common uses for markup programming is event handlers.  To understand how the syntax for adding event handlers see [Attached Operations].  This article will focus on what actually happens in a markup programming event handler so you can understand how to use that information to write better event handlers.
+
+!!! EventHandler Example
+Let's jump right in.  Here's a simple example of a button click handler:
+{code:html}
+<Button Content="Click Me!">
+    <p:Attached.Operations>
+        <p:EventHandler Path="Click">
+            <p:Call Path="[MessageBox].Show('Clicked!)"/>
+        </p:EventHandler>
+    </p:Attached.Operations>
+</Button>
+{code:html}
+In this article we will be focusing on what the EventHandler.Path property means and what the Call.Path property means in the context of an EventHandler.
+
+!!! The Associated Object
+In an attached operation, the operations (which include the event handler and all of the code elements contained inside the event handler) all have a concept of an associated object which is the "thing" that the operations are attached to.  It is the element or object "just outside" the *p:Attached.Operations* tag.  Here is an example:
+
+{code:html}
+<Button Content="Click Me!">
+    <p:Attached.Operations>
+        <p:CallHandler Path="Click => [MessageBox].Show(@AssociatedObject.Content)"/>
+    </p:Attached.Operations>
+</Button>
+{code:html}
+
+For brevity we've used a combined EventHandler/Call aka CallHandler but it does the same thing.  Notice that we've supplied the MessageBox.Show call with an argument and that argument uses the path mechanism to start at a special builtin variable called @AssociatedObject (which refers to the button) and retrieves its Content property (which contains the text "Click Me!").
+
+!!! Event Path
+When we say {{Path="Click"}}, why don't we say {{EventName="Click"}}?  Because Path is an *expression* that evaluates to an event.  For example, {{Path="Click"}} means the same thing as {{@AssociatedObject.Click}}, or the Click event of the associated object.  You can specified any expression that results in an object that has events, it doesn't have to be the associated object, and EventHandler will happily subscribe to that object's event instead.
+
+Here's an example that uses a button as an associated object but actually subscribes to the LocationChanged event on the window that contains the button:
+
+{code:html}
+<Button Content="Click Me!">
+    <p:Attached.Operations>
+        <p:EventHandler Path="Loaded">
+            <p:EventHandler Path="@FindAncestor([Window]).LocationChanged">
+                <p:Call Path="[MessageBox].Show('Window Moved!')"/>
+            </p:EventHandler>
+        </p:EventHandler>
+    </p:Attached.Operations>
+</Button>
+{code:html}
+
+!!! Traditional Event Handler Parameters
+As a matter of fact if you are an attached operation, you always have an @AssociatedObject, even if you aren't in an event handler, since there are other kinds of operations, but we won't dwell on that now since we are focusing on event handlers.  But if you *are* in an event handler, you will have access to two other traditional  event handler parameters: @Sender and @EventArgs.  Here's an example using @EventArgs:
+
+{code:html}
+<Button Content="Handle Me!">
+    <p:Attached.Operations>
+        <p:EventHandler Path="Click">
+            <p:Set Path="@EventArgs.Handled" ValuePath="true"/>
+        </p:EventHandler>
+    </p:Attached.Operations>
+</Button>
+{code:html}
+
+This just "handles" the routed event so that it won't bubble up.
+
+!!! Calling Options
+This is not strictly related to event handlers but one of the most common things to do from an event handler is to "call out" from XAML to managed code, CLR library, view-model, etc.  So this is a good place to discuss calling options.  There are many different ways to do the related things.  This sample shows the variations on a theme for event handlers and calling a method and the combination of the two, which are very common uses of markup programming.
+
+{code:html}
+<UserControl
+    x:Class="Markup.Programming.Samples.CallingChoices"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    
+    
+    xmlns:p="http://markupprogramming.codeplex.com/markup/programming"
+    
+    
+    Height="300" Width="300">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="60"/>
+            <RowDefinition Height="60"/>
+            <RowDefinition Height="60"/>
+            <RowDefinition Height="60"/>
+            <RowDefinition Height="60"/>
+        </Grid.RowDefinitions>
+        <Rectangle Fill="Red" Grid.Row="0">
+
+            <!-- Standard way: most flexible for binding multiple arguments, -->
+            <!-- using multiple static resources, etc. -->
+
+            <p:Attached.Operations>
+                <p:EventHandler Path="MouseLeftButtonDown">
+                    <p:Call Path="[MessageBox].Show">
+                        <p:Expr Value="Hello, world!"/>
+                    </p:Call>
+                </p:EventHandler>
+            </p:Attached.Operations>
+
+        </Rectangle>
+        <Rectangle Fill="Orange" Grid.Row="1">
+
+            <!-- Short form: a single argument (like commands!) can be specified -->
+            <!-- the same line and supports, binding, static resources, etc. -->
+
+            <p:Attached.Operations>
+                <p:EventHandler Path="MouseLeftButtonDown">
+                    <p:Call Path="[MessageBox].Show" Argument="Hello, world!"/>
+                </p:EventHandler>
+            </p:Attached.Operations>
+
+        </Rectangle>
+        <Rectangle Fill="Yellow" Grid.Row="2">
+
+            <!-- Shorter form: if the body is just a call combine the event handler -->
+            <!-- and the call into a single call handler -->
+
+            <p:Attached.Operations>
+                <p:CallHandler Path="MouseLeftButtonDown => [MessageBox].Show" Argument="Hello, world!"/>
+            </p:Attached.Operations>
+
+        </Rectangle>
+        <Rectangle Fill="Green" Grid.Row="3">
+
+            <!-- Shorter form still, no binding but unlimited arguments, associated object, -->
+            <!-- properties, context, lots of options -->
+
+            <p:Attached.Operations>
+                <p:EventHandler Path="MouseLeftButtonDown => [MessageBox].Show('Hello, world!')"/>
+            </p:Attached.Operations>
+
+        </Rectangle>
+
+        <!-- Shortest form, same options as before but limited to one event -->
+        
+        <Rectangle Fill="LightGreen" Grid.Row="4"
+                   p:Attached.Operations="MouseLeftButtonDown => [MessageBox].Show('Hello, world!')"/>
+        
+    </Grid>
+</UserControl>
+{code:html}

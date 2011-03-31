@@ -204,12 +204,19 @@ namespace Markup.Programming.Core
         private static string[] namespaces =
         {
             "System",
-            "System.Windows",
-            "System.Windows.Input",
-            "System.Windows.Controls",
-            "System.Collections.Generic",
             "System.Collections",
+            "System.Collections.Generic",
+            "System.Text",
+            "System.Windows",
+            "System.Windows.Controls",
+            "System.Windows.Data",
+            "System.Windows.Documents",
+            "System.Windows.Input",
+            "System.Windows.Media",
+            "System.Windows.Media.Imaging",
+            "System.Windows.Shapes",
             "Markup.Programming",
+            "Markup.Programming.Core",
         };
  
 #if !SILVERLIGHT

@@ -1,0 +1,58 @@
+! Heading One
+!! Heading Two
+!!! Heading Three
+
+*bold*
+_italics_
++underline+
+~~strikethrough~~
+^^superscript^^
+,,subscript,,
+---- (Horizontal rule - 4 dashes on a single line)
+
+Formatted code block:
+
+{code:c#}
+    private static IEnumerable<Assembly> Assemblies
+    {
+        get { return AppDomain.CurrentDomain.GetAssemblies(); }
+    }
+{code:c#}
+
+* bullet item one
+* bullet item two
+
+This is a link: go to [Operations]
+
+This is a table:
+
+|| Table Heading 1 || Table Heading 2 || Table Heading 3 ||
+| Row 1 - Cell 1 | Row 1 - Cell 2 | Row 1 - Cell 3 |
+| Row 2 - Cell 1 | Row 2 - Cell 2 | Row 2 - Cell 3 |
+
+Here is a code block:
+{{
+        private String Quote(string input)
+        {
+            string output = "";
+            foreach (char c in input)
+            {
+                switch (c)
+                {
+                    case '<':
+                        output += "&lt;";
+                        break;
+                    case '>':
+                        output += "&gt;";
+                        break;
+                    case '&':
+                        output += "&amp;";
+                        break;
+                    default:
+                        output += c;
+                        break;
+                }
+            }
+            return output;
+        }
+}}

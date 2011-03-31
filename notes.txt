@@ -1,5 +1,6 @@
+- add constructors to script syntax
 - validate parameters, e.g. Set if Var, then Path must be unset
-- address Set Path/ValuePath problem
+- address Set Path/ValuePath problem: use SetPath and Path instead of Path and ValuePath
 - EventHandler: if there is no body, path should be treated as an attached handler
 - figure out why Loaded event is treated specially
 - show call-stack within code tree

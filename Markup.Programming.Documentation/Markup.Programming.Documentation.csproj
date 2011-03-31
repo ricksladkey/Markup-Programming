@@ -102,6 +102,12 @@
     <Resource Include="wiki\Set.txt" />
     <Resource Include="wiki\Type Legend.txt" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="wiki\Wiki Syntax.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="wiki\Anatomy of an Event Handler.txt" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
