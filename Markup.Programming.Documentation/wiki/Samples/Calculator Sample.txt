@@ -1,0 +1,97 @@
+﻿!!! Calculator Sample
+This is just a fun little program that practically runs by itself, it just needs twenty easy lines of scripting to bring it to life.  Believe it or not, this is really MVVM, the real deal, just on a very small scale, perfect for people just learning the concepts.  We have a view-model that consists of data and operations.  Well, operation.  It just has a number and a key command that takes the text of the calculator key that was pressed.  The command works by turning the keys into abstract mathematical operations on the number.  The view just tries to look good and wires up the entry screen to the number and the keypad buttons to the key command.  We even have a little designability wired in: we you look at the entry screen in the designer it has a big number filled in but when it run it it's 0 as expected.  That's it.  No classes; no code-behind.
+
+This sample demonstrated/emphasizes scripting syntax over element syntax:
+
+{code:html}
+<UserControl
+    x:Class="Markup.Programming.Samples.Calculator"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:p="http://markupprogramming.codeplex.com/markup/programming"
+    Height="300" Width="300">
+    <Grid Background="White">
+        <Grid.Resources>
+            <p:ResourceObject x:Key="ViewModel">
+                <p:Property PropertyName="Number" Path="999999.999"/>
+                <p:Property PropertyName="KeyCommand">
+                    <p:Command>
+                        var CanExecute()
+                        {
+                            return true;
+                        }
+                        var Execute($p)
+                        {
+                            if ($p == "C") { Number = 0.0; return; }
+                            if ($p.CompareTo("0") @gteq 0 @andand $p.CompareTo("9") @lteq 0)
+                            {
+                                Number = Number * 10.0 + [double].Parse($p);
+                                return;
+                            }
+                            if ($p != "=")
+                            {
+                                Operator = $p;
+                                Operand = Number;
+                                Number = 0.0;
+                                return;
+                            }
+                            if (Operator == "+") { Number = Operand + Number; return; }
+                            if (Operator == "-") { Number = Operand - Number; return; }
+                            if (Operator == "*") { Number = Operand * Number; return; }
+                            if (Operator == "/") { Number = Operand / Number; return; }
+                            [MessageBox].Show("Unknown operator: " + Operator);
+                        }
+                    </p:Command>
+                </p:Property>
+                <p:Property PropertyName="Operand"/>
+                <p:Property PropertyName="Operator"/>
+            </p:ResourceObject>
+            <Style TargetType="Button">
+                <Setter Property="FontSize" Value="30"/>
+            </Style>
+        </Grid.Resources>
+        <Grid.DataContext>
+            <Binding Path="Value" Source="{StaticResource ViewModel}"/>
+        </Grid.DataContext>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Text="{Binding Number}"
+                       Margin="10" FontSize="30" FontWeight="Bold"
+                       TextAlignment="Right" VerticalAlignment="Center"
+                       Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="4">
+                <p:Attached.Operations>
+                    <p:CallHandler Path="Loaded => KeyCommand.Execute('C')"/>
+                </p:Attached.Operations>
+            </TextBlock>
+            <Button Content="7" Grid.Row="1" Grid.Column="0" Command="{Binding KeyCommand}" CommandParameter="7"/>
+            <Button Content="8" Grid.Row="1" Grid.Column="1" Command="{Binding KeyCommand}" CommandParameter="8"/>
+            <Button Content="9" Grid.Row="1" Grid.Column="2" Command="{Binding KeyCommand}" CommandParameter="9"/>
+            <Button Content="+" Grid.Row="1" Grid.Column="3" Command="{Binding KeyCommand}" CommandParameter="+"/>
+            <Button Content="4" Grid.Row="2" Grid.Column="0" Command="{Binding KeyCommand}" CommandParameter="4"/>
+            <Button Content="5" Grid.Row="2" Grid.Column="1" Command="{Binding KeyCommand}" CommandParameter="5"/>
+            <Button Content="6" Grid.Row="2" Grid.Column="2" Command="{Binding KeyCommand}" CommandParameter="6"/>
+            <Button Content="-" Grid.Row="2" Grid.Column="3" Command="{Binding KeyCommand}" CommandParameter="-"/>
+            <Button Content="1" Grid.Row="3" Grid.Column="0" Command="{Binding KeyCommand}" CommandParameter="1"/>
+            <Button Content="2" Grid.Row="3" Grid.Column="1" Command="{Binding KeyCommand}" CommandParameter="2"/>
+            <Button Content="3" Grid.Row="3" Grid.Column="2" Command="{Binding KeyCommand}" CommandParameter="3"/>
+            <Button Content="*" Grid.Row="3" Grid.Column="3" Command="{Binding KeyCommand}" CommandParameter="*"/>
+            <Button Content="0" Grid.Row="4" Grid.Column="0" Command="{Binding KeyCommand}" CommandParameter="0"/>
+            <Button Content="C" Grid.Row="4" Grid.Column="1" Command="{Binding KeyCommand}" CommandParameter="C"/>
+            <Button Content="=" Grid.Row="4" Grid.Column="2" Command="{Binding KeyCommand}" CommandParameter="="/>
+            <Button Content="/" Grid.Row="4" Grid.Column="3" Command="{Binding KeyCommand}" CommandParameter="/"/>
+        </Grid>
+    </Grid>
+</UserControl>
+{code:html}

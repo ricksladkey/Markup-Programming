@@ -1,0 +1,186 @@
+!! Tower of Hanoi MVVM Sample
+
+No programming language would be a programming language if you couldn't write programs.  Although markup programming is not primarily for writing programs, it is complete enough to do so.  In fact, you can write MVVM programs all or part in markup programming.
+
+This intentionally simple sample demonstrates the Tower of Hanoi puzzle written in the MVVM style.  One of the striking things about this example is just how simple the MVVM concepts can be when all of the obstacles have been removed: the view model consists of data and operations and the view binds to data and binds to operations.  Also nothing special is needed to make to make the view-model data show up and be designable; it just works automatically.
+
+
+{code:html}
+<!--
+    The Tower of Hanoi is a classic but simple puzzle.  You have three
+    posts with disks of various sizes.  Only disks of a smaller
+    size can be placed on top of a larger size.  The disks are initially
+    stacked in descending order on the first post and the goal is
+    to move all the disks to the last post.  You are free to write
+    your own version of this game in whatever language for whatever
+    platform you want.  If you want to use WPF you can try it
+    old-school WPF and code-behind or MVVM-style or Blend with
+    behaviors or whatever else you can think of.  After you have
+    done that or at least pondered how you would do it, take a
+    look at this example.
+    -->
+
+<UserControl
+    x:Class="Markup.Programming.Samples.TowerOfHanoi"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:p="http://markupprogramming.codeplex.com/markup/programming"
+    Height="300" Width="300">
+    <UserControl.Resources>
+
+        <!-- add an the view model of our prototype: pure data and operations -->
+        <!-- we have a Posts property that a a collection of three collections -->
+        <!-- the first collection is initialized with disks -->
+        <!-- we have another property called HoldingPost that stores a disk -->
+        <!-- after they have moved it off of one of the main posts -->
+        <!-- our disks are represented by small integers: 1, 2, 3, etc. -->
+        <p:ResourceObject x:Key="ViewModel">
+            <p:Property PropertyName="Posts">
+                <p:Collection>
+                    <p:Iterator>
+                        <p:For Var="$i" Value="0" UpperLimit="4" Increment="1">
+                            <p:Yield Path="$i + 1"/>
+                        </p:For>
+                    </p:Iterator>
+                    <p:Collection/>
+                    <p:Collection/>
+                </p:Collection>
+            </p:Property>
+            <p:Property PropertyName="HoldingPost">
+                <p:Collection/>
+            </p:Property>
+            <p:Property PropertyName="SelectedPost"/>
+            <p:Property PropertyName="SelectCommand">
+
+                <!-- create a command that only processes data, i.e. operates on the view model -->
+                <!-- the command, like many commands, takes an argument, the selected post -->
+                <!-- the post is *not* a UI object, which is an ItemsControl, but an item in the -->
+                <!-- view model's Posts property, which itself is a collection of three items -->
+                <!-- in true MVVM fashion, the command knows nothing at all about the view -->
+                <p:Command>
+                    <p:Command.Functions>
+
+                        <!-- CanExecute always says "OK" -->
+                        <p:Function Prototype="CanExecute()">
+                            <p:Return Path="true"/>
+                        </p:Function>
+
+                        <p:Function Prototype="Execute($parameter)">
+
+                            <!-- first we create a local convenience function to move an item -->
+                            <!-- from one collection to another: this is C# 101 in markup programming -->
+                            <!-- The corresponding C# code looks like this: -->
+                            <!--
+                        public static void MoveItem<T>(IList<T> fromCollection, IList<T> toCollection)
+                        {
+                            toCollection.Insert(0, fromCollection[0]);
+                            fromCollection.RemoveAt(0);
+                        }
+                        -->
+                            <p:Function Prototype="$MoveItem($fromCollection, $toCollection)">
+                                <p:Call Path="$toCollection.Insert(0, $fromCollection[0])"/>
+                                <p:Call Path="$fromCollection.RemoveAt(0)"/>
+                            </p:Function>
+
+                            <!-- this just implements the rules of the tower of hanoi game -->
+                            <!-- the logic is about as complex as the game is -->
+                            <p:Expr Path="SelectedPost = $parameter"/>
+                            <p:If Path="HoldingPost.Count == 0">
+                                <p:If.Then>
+                                    <p:When Path="SelectedPost.Count != 0">
+                                        <p:Call Path="$MoveItem(SelectedPost, HoldingPost)"/>
+                                    </p:When>
+                                </p:If.Then>
+                                <p:If.Else>
+                                    <p:When>
+                                        <p:Operator Op="OrOr">
+                                            <p:Get Path="SelectedPost.Count == 0"/>
+                                            <p:Get Path="HoldingPost[0] &lt; SelectedPost[0]"/>
+                                        </p:Operator>
+                                        <p:Call Path="$MoveItem(HoldingPost, SelectedPost)"/>
+                                    </p:When>
+                                </p:If.Else>
+                            </p:If>
+
+                        </p:Function>
+                        
+                    </p:Command.Functions>
+                </p:Command>
+            </p:Property>
+        </p:ResourceObject>
+        
+    </UserControl.Resources>
+
+    <!-- IMPORTANT: ABOVE THIS LINE THERE IS NO VIEW SPECIFIC CODE: LOOSE COUPLING -->
+
+    <!-- add our view with its data context bound to the view model -->
+    <!-- no MVVM application worth its salt is complete without something like this -->
+    <Grid Name="LayoutRoot" DataContext="{Binding Value, Source={StaticResource ViewModel} }">
+
+        <!-- this is standard (if spartan) markup but this is not meant to demonstrate that -->
+        <!-- the imporant thing to observe is that everything below this line looks, -->
+        <!-- smells and tastes like a standard MVVM application.  note there is no XPath -->
+        <!-- even though the data is entirely dynamic and there is no data store -->
+        <StackPanel>
+
+            <!-- add traditional page resources -->
+            <StackPanel.Resources>
+                <DataTemplate x:Key="DiskTemplate">
+                    <Rectangle Margin="1" Height="10" Fill="Red" Stroke="White" HorizontalAlignment="Center">
+                        <Rectangle.Width>
+                            <Binding>
+                                <Binding.Converter>
+
+                                    <!-- Holy cow, how many times have I wanted to be able to do this! -->
+                                    <p:ResourceConverter ConvertPath="@Value * 20"/>
+                                    
+                                </Binding.Converter>
+                            </Binding>
+                        </Rectangle.Width>
+                    </Rectangle>
+                </DataTemplate>
+                <ItemsPanelTemplate x:Key="PanelTemplate">
+                    <StackPanel/>
+                </ItemsPanelTemplate>
+            </StackPanel.Resources>
+
+            <Grid Background="PaleTurquoise">
+                <TextBlock Text="Tower of Hanoi" FontSize="20" TextAlignment="Center"/>
+            </Grid>
+            <Grid Margin="0,3,0,0" Background="PaleGreen" Height="25">
+                <ItemsControl ItemsSource="{Binding HoldingPost}" ItemsPanel="{StaticResource PanelTemplate}"
+                              ItemTemplate="{StaticResource DiskTemplate}" VerticalAlignment="Center"/>
+            </Grid>
+            <ItemsControl ItemsSource="{Binding Posts}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel Orientation="Horizontal"/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Border Margin="3" BorderThickness="5" BorderBrush="LightGray" Height="100" Width="94">
+                            <Grid Background="Pink">
+
+                                <!-- this says: using the data context for the layout root, -->
+                                <!-- call SelectCommand.Execute when the MouseLeftButtonDown -->
+                                <!-- event is raised, passing it the selected post -->
+                                <p:Attached.Operations>
+                                    <p:CallHandler
+                                        Context="{Binding DataContext, ElementName=LayoutRoot}"
+                                        Path="MouseLeftButtonDown => SelectCommand.Execute"
+                                        Argument="{Binding}"/>
+                                </p:Attached.Operations>
+                                
+                                <Rectangle Margin="0,5,0,0" Width="10" Fill="Brown" HorizontalAlignment="Center"/>
+                                <ItemsControl ItemsSource="{Binding}" ItemsPanel="{StaticResource PanelTemplate}"
+                                              ItemTemplate="{StaticResource DiskTemplate}" VerticalAlignment="Bottom"/>
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </StackPanel>
+    </Grid>
+</UserControl>
+{code:html}

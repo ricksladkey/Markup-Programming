@@ -1,0 +1,72 @@
+﻿!! Hello, world!
+
+To get started using Markup Programming, we are going to tackle the classic "Hello, world!" program.  This is easy to do but we're trying to demonstrate principles.  It's not hard but if you follow it step-by-step then less can go wrong.
+
+First things first.  You have two choices, use one of the releases or build it yourself.  If you just want to try it out fast then I recommend a release.
+
+To use the preview release:
+
+* Download [url:Markup Programming Preview Release|http://markupprogramming.codeplex.com/releases/view/62661] from the Downloads tab.
+
+To build Markup.Programming.dll from source for yourself:
+
+* Download  [url:Markup Programming Source Code|http://markupprogramming.codeplex.com/SourceControl/list/changesets]
+* Open the solution, choose the "Debug - WPF" configuration and build it Ctrl-Shift-B
+
+Now onto your first Markup Programming program.
+
+* Create a brand new WPF4 project
+* Add a reference by browsing to (where-you-installed-the-source)\Markup.Programming\bin\WPF4\Markup.Programming.DLL
+
+Now your project is all set you and you can start coding, oops, I mean writing markup.  OK, so we've got a main window with a little XAML already in it.  Let's throw in a rectangle and make it red.
+
+{code:html}
+        <Rectangle Fill="Red">
+            <!-- to do -->
+        </Rectangle>
+{code:html}
+
+Now run the program with F5.  It should compile and run and show a big red square.
+
+Next we want to add the XML namespace for Markup.Programming like this:
+
+{{
+    xmlns:p="http://markupprogramming.codeplex.com/markup/programming"
+}}
+
+The "p" prefix is for "programming" of course!
+
+OK, so the plan is to show a message box when we click on the rectangle.  Now, traditionally, at this point we would add an event handler for the MouseLeftButtonDown event, click "Navigate to Event Handler" which would take us to the code-behind for main window and we would be in C# land.
+
+Instead, by using Markup.Programming we are going to define an event handler and what to do in that event handler all in markup.  OK, so the moment of truth is at hand.  We are standing at the top of the mountain ready to say hello world.  How do we do it?
+
+{code:html}
+        <Rectangle Fill="Red">
+            <p:Attached.Operations>
+                <p:CallHandler Path="MouseLeftButtonDown => [MessageBox].Show('Hello, world!')"/>
+            </p:Attached.Operations>
+        </Rectangle>
+{code:html}
+
+Paste the code in, press F5 to run and then left-click the red rectangle to trigger the event handler and sit back and listen for the echo!
+
+Hopefully that worked.  If it did, then you are all set to try your hand at markup programming. Please check out some of the other samples.
+
+Here is the complete HelloWorld.xaml sample included with the source distribution:
+
+{code:html}
+<UserControl
+    x:Class="Markup.Programming.Samples.HelloWorld"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:p="http://markupprogramming.codeplex.com/markup/programming"
+    Height="300" Width="300">
+    <Grid>
+        <Rectangle Fill="Red">
+            <p:Attached.Operations>
+                <p:CallHandler Path="MouseLeftButtonDown => [MessageBox].Show('Hello, world!')"/>
+            </p:Attached.Operations>
+        </Rectangle>
+    </Grid>
+</UserControl>
+{code:html}

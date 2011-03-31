@@ -1,0 +1,7 @@
+﻿!! Handlers
+Markup programming provides several core handlers.  Handlers are active operations that "do something" of their own accord simply by being attached to another object.  The most popular handler operation is [EventHandler] but in situations where markup programming is being used to bind view operations to a view-model the workhorse operation might be [CallHandler].  The [CallHandler] operation is a special form of syntactic sugar that combines [EventHandler] and [Call].
+
+* [AttachedHandler]
+* [CallHandler]
+* [ChangedHandler]
+* [EventHandler]

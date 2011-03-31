@@ -1,0 +1,48 @@
+!! Table of Squares Sample
+
+Remember your Computer Science 101 Class?  Remember the "Table of Squares"?  Maybe it was in C?  Or ... Fortran?  Jump ahead to the modern era with markup programming.  This sample shows the beautiful simplicity of iterators, collections, and anonymous object initializers for sample data.  Forget the fancy stuff; I love sample data!
+
+Here's what the app looks like *even in the designer*.  Sample data in the designer means you can actually see the fonts and foreground colors, etc without running the program.
+
+{code:html}
+<UserControl
+    x:Class="Markup.Programming.Samples.TableOfSquares"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:p="http://markupprogramming.codeplex.com/markup/programming"
+    Height="300" Width="300">
+    <UserControl.Resources>
+        <p:ResourceObject x:Key="ViewModel">
+            <p:Property Prop="Table">
+                <p:Iterator>
+                    <p:For Var="i" Value="0" UpperLimit="5" Increment="1">
+                        <p:Yield>
+                            <p:Object>
+                                <p:Property Prop="Number" Path="$i"/>
+                                <p:Property Prop="Square" Path="$i * $i"/>
+                                <p:Property Prop="Sqrt" Path="[Math].Sqrt($i)"/>
+                            </p:Object>
+                        </p:Yield>
+                    </p:For>
+                </p:Iterator>
+            </p:Property>
+        </p:ResourceObject>
+    </UserControl.Resources>
+    <Grid DataContext="{StaticResource ViewModel}">
+        <StackPanel>
+            <ListView ItemsSource="{Binding Table}">
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn DisplayMemberBinding="{Binding Number}"/>
+                        <GridViewColumn DisplayMemberBinding="{Binding Square}"/>
+                        <GridViewColumn DisplayMemberBinding="{Binding Sqrt}"/>
+                    </GridView>
+                </ListView.View>
+            </ListView>
+            <DataGrid ItemsSource="{Binding Table}"/>
+        </StackPanel>
+    </Grid>
+</UserControl>
+{code:html}
+
+Look, ma!  No, classes!  Waddya know, DataGrid even auto-generated the columns.  Markup programming's collections default to smart observable generic typed collections that work out-of-the-box with item sources and list views like ListBox and DataGrid.

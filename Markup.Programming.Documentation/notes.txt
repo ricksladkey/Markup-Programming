@@ -1,0 +1,16 @@
+﻿- add suport for [url:...]
+- add supprt for [image:...]
+- add support for DoEvents for background thread
+- cache postid somewhere, registry or disk
+- detect click navigation and redirect
+- add include mechanism to include source files
+
+!!! Play the game now! Read the XAML later!
+{silverlight:url=http://home.foliage.com/~jrs/Markup.Programming/TowerOfHanoi/TowerOfHanoi.xap,height=200,width=300,version=4}
+
+http://download.codeplex.com/Project/Download/FileDownload.aspx?ProjectName=markupprogramming&amp;DownloadId=222682
+
+[image:GraphicalSample.png]
+
+[image:TableOfSquares.png]
+

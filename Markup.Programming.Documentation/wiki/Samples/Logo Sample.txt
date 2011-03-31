@@ -1,0 +1,119 @@
+﻿!! Logo Sample
+XAML is truly incredible sometimes; the things you can do in markup only.  This sample displays the raw power of XAML combined with the ease of markup programming's dynamic sample data to create a loose XAML logo for markup programming.  For the logo, see above.  For the XAML, see below.
+
+{code:html}
+<UserControl
+    x:Class="Markup.Programming.Samples.LogoSample"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:p="http://markupprogramming.codeplex.com/markup/programming"
+    Height="300" Width="300">
+    <Canvas x:Name="LayoutRoot">
+        <Canvas.Resources>
+            <p:ResourceCollection x:Key="Brushes">
+                <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                    <GradientStop Color="Red" Offset="0"/>
+                    <GradientStop Color="Yellow" Offset="0.5"/>
+                    <GradientStop Color="Blue" Offset="1"/>
+                </LinearGradientBrush>
+                <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                    <GradientStop Color="Blue" Offset="0"/>
+                    <GradientStop Color="Green" Offset="0.5"/>
+                    <GradientStop Color="Red" Offset="1"/>
+                </LinearGradientBrush>
+                <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                    <GradientStop Color="Red" Offset="0"/>
+                    <GradientStop Color="Yellow" Offset="0.5"/>
+                    <GradientStop Color="Blue" Offset="1"/>
+                </LinearGradientBrush>
+                <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                    <GradientStop Color="Blue" Offset="0"/>
+                    <GradientStop Color="Green" Offset="0.5"/>
+                    <GradientStop Color="Red" Offset="1"/>
+                </LinearGradientBrush>
+            </p:ResourceCollection>
+            <p:ResourceObject x:Key="ViewModel">
+                <p:Property PropertyName="LogoData">
+                    <p:With Var="$angle" Path="-90.0">
+                        <p:Iterator>
+                            <p:ForEach Var="$brush" Value="{StaticResource Brushes}">
+                                <p:Yield>
+                                    <p:Object>
+                                        <p:Property PropertyName="Angle" Path="$angle += 90"/>
+                                        <p:Property PropertyName="Brush" Path="$brush"/>
+                                    </p:Object>
+                                </p:Yield>
+                            </p:ForEach>
+                        </p:Iterator>
+                    </p:With>
+                </p:Property>
+            </p:ResourceObject>
+        </Canvas.Resources>
+        <ItemsControl ItemsSource="{Binding Value.LogoData, Source={StaticResource ViewModel}}">
+            <ItemsControl.OpacityMask>
+                <RadialGradientBrush>
+                    <GradientStop Color="Transparent" Offset="0.95"/>
+                    <GradientStop Color="White" Offset="0.949"/>
+                    <GradientStop Color="White" Offset="0.501"/>
+                    <GradientStop Color="Transparent" Offset="0.5"/>
+                </RadialGradientBrush>
+            </ItemsControl.OpacityMask>
+            <ItemsControl.Template>
+                <ControlTemplate TargetType="ItemsControl">
+                    <ItemsPresenter/>
+                </ControlTemplate>
+            </ItemsControl.Template>
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <Canvas/>
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <Canvas Width="1" Height="1">
+                        <Canvas.RenderTransform>
+                            <RotateTransform
+                                Angle="{Binding Angle}" CenterX="145" CenterY="145"/>
+                        </Canvas.RenderTransform>
+                        <Viewport3D Width="290" Height="290">
+                            <ModelVisual3D>
+                                <ModelVisual3D.Content>
+                                    <Model3DGroup>
+                                        <GeometryModel3D>
+                                            <GeometryModel3D.Geometry>
+                                                <MeshGeometry3D
+                                                    Positions="0 0 0, 0 1 0, 1 0 0, 1 1 0"
+                                                    TextureCoordinates="0 1, 0 0, 1 1, 1 0"
+                                                    TriangleIndices="0 2 1, 2 3 1"/>
+                                            </GeometryModel3D.Geometry>
+                                            <GeometryModel3D.Material>
+                                                <DiffuseMaterial Brush="{Binding Brush}"/>
+                                            </GeometryModel3D.Material>
+                                            <GeometryModel3D.Transform>
+                                                <MatrixTransform3D>
+                                                    <MatrixTransform3D.Matrix>
+                                                        0.002,0,0,0,-0.499,-0.498,0,-0.998,
+                                                        0,0,1,0,0.499,0.5,0,1
+                                                    </MatrixTransform3D.Matrix>
+                                                </MatrixTransform3D>
+                                            </GeometryModel3D.Transform>
+                                        </GeometryModel3D>
+                                        <AmbientLight Color="White" />
+                                    </Model3DGroup>
+                                </ModelVisual3D.Content>
+                            </ModelVisual3D>
+                            <Viewport3D.Camera>
+                                <OrthographicCamera
+                                    Position="0.5 0.5 1"
+                                    LookDirection="0 0 -1"
+                                    UpDirection="0 1 0"
+                                    Width="1"/>
+                            </Viewport3D.Camera>
+                        </Viewport3D>
+                    </Canvas>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+    </Canvas>
+</UserControl>
+{code:html}

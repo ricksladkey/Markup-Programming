@@ -84,29 +84,86 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="wiki\Expressions.txt" />
+    <Resource Include="wiki\Reference\Expressions.txt" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="wiki\Call.txt" />
-    <Resource Include="wiki\CallHandler.txt" />
-    <Resource Include="wiki\ChangedHandler.txt" />
-    <Resource Include="wiki\Content Property.txt" />
-    <Resource Include="wiki\Dependency Property.txt" />
-    <Resource Include="wiki\EventHandler.txt" />
-    <Resource Include="wiki\Get.txt" />
-    <Resource Include="wiki\Operations.txt" />
-    <Resource Include="wiki\Path.txt" />
-    <Resource Include="wiki\Paths.txt" />
-    <Resource Include="wiki\Property Legend.txt" />
-    <Resource Include="wiki\Scripts.txt" />
-    <Resource Include="wiki\Set.txt" />
-    <Resource Include="wiki\Type Legend.txt" />
+    <Resource Include="wiki\Reference\Expressions\Call.txt" />
+    <Resource Include="wiki\Reference\Handlers\CallHandler.txt" />
+    <Resource Include="wiki\Reference\Handlers\ChangedHandler.txt" />
+    <Resource Include="wiki\Reference\Guide\Content Property.txt" />
+    <Resource Include="wiki\Reference\Guide\Dependency Property.txt" />
+    <Resource Include="wiki\Reference\Handlers\EventHandler.txt" />
+    <Resource Include="wiki\Reference\Expressions\Get.txt" />
+    <Resource Include="wiki\Reference\Operations.txt" />
+    <Resource Include="wiki\Reference\Expressions\Path.txt" />
+    <Resource Include="wiki\Reference\Paths.txt" />
+    <Resource Include="wiki\Reference\Guide\Property Legend.txt" />
+    <Resource Include="wiki\Reference\Scripts.txt" />
+    <Resource Include="wiki\Reference\Expressions\Set.txt" />
+    <Resource Include="wiki\Reference\Guide\Type Legend.txt" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="wiki\Wiki Syntax.txt" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="wiki\Anatomy of an Event Handler.txt" />
+    <Resource Include="wiki\Tutorial\Anatomy of an Event Handler.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="wiki\Reference\Two Syntaxes - One Language.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="wiki\Reference Manual.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="wiki\Reference\Handlers.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="wiki\Samples\Password Sample.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="wiki\Reference\Statements.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="wiki\Reference\Functions.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="wiki\Reference\Handlers\AttachedHandler.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="wiki\Tutorial\What is Markup Programming.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="wiki\Tutorial\Getting Started.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="wiki\Documentation.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="wiki\Samples\Tower of Hanoi Sample.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="wiki\Samples\Calculator Sample.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="wiki\Samples\One Method Two Bindings Sample.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="wiki\Samples\Logo Sample.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="wiki\Samples\Graphical Sample.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="wiki\Samples\Sounds Easy Sample.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="wiki\Samples\Style Sample.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="wiki\Samples\Table of Squares Sample.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="notes.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

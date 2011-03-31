@@ -1,0 +1,7 @@
+﻿!!! AttachedHandler
+|| Property ^^[legend|Property Legend]^^ || Type ^^[legend|Type Legend]^^ || Description ||
+| {{Context}} ^^dp^^ | {{object}} ^^expr*^^ | base context |
+| {{ContextPath}} | {{string}} ^^path^^ | a path to use for the value of {{Context}} |
+| *{{Body}}* ^^dp^^ ^^cp^^ | {{StatementCollection}} | the body of the handler |
+!!! Description
+AttachedHandler simply executes its Body when it is attached to its associated object.  This in effect turns all of the statements in the body of the handler into handlers themselves!  Another way to say this is that the AttachedHandler converts its contained passive components into active components.  Yet another way is to say: "If you want to run code as early as possible, before the Loaded event, before the Initalized event, at no event at all, use the AttachedHandler.

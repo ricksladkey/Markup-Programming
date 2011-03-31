@@ -1,0 +1,29 @@
+﻿!! Style Sample
+Usually in MVVM programming you know what operation you want to perform right where you want to perform it.  For example, you have one button that does one thing and you bind that button to one operation.  Or if the element recurs, it usually recurs in a template and that is the right place to bind the operation.  But sometimes you would like to *add* an operation to an element without anyone really knowing it's there.  Or you want to _decorate_ the behavior of an element with an operation.  That's what styles are for and you can use operation binding with syles; here's a sample.  We create a select-on-focus style and apply selectively to two out of four text boxes.  The sample principle can be used on a much larger scale.  Please *note carefully* the x:Shared="False" which you must use as well as the indirection of the named _p:OperationCollection_.  Also note this technique does not work on Silverlight4.
+
+{code:html}
+<UserControl
+    x:Class="Markup.Programming.Samples.StyleSample"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:p="http://markupprogramming.codeplex.com/markup/programming"
+    Height="300" Width="300">
+    <Grid>
+        <Grid.Resources>
+            <p:OperationCollection x:Key="SelectOnFocusOperation" x:Shared="False">
+                <p:CallHandler Path="GotFocus => @AssociatedObject.SelectAll()"/>
+            </p:OperationCollection>
+            <Style x:Key="SelectOnFocusStyle" TargetType="{x:Type TextBox}">
+                <Setter Property="p:Additional.Operations" Value="{StaticResource SelectOnFocusOperation}"/>
+            </Style>
+        </Grid.Resources>
+        <StackPanel>
+            <TextBlock Text="Markup Programming using Styles" FontSize="20"/>
+            <TextBox Text="Normal TextBox"/>
+            <TextBox Text="SelectOnFocus TextBox" Style="{StaticResource SelectOnFocusStyle}"/>
+            <TextBox Text="Normal TextBox"/>
+            <TextBox Text="SelectOnFocus TextBox" Style="{StaticResource SelectOnFocusStyle}"/>
+        </StackPanel>
+    </Grid>
+</UserControl>
+{code:html}

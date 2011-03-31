@@ -1,0 +1,54 @@
+﻿!! Sounds Easy Sample
+* *The problem:* _We want an editable combo box to select all its text when it receive the focus.  Sounds easy, right?_
+
+!!! Background
+Every time you turn around, something in XAML  is composed of lesser parts.  This is the power of composition and templating.  Don't like how something appears?  Restyle it.  Want to go further?  Retemplate it.  But oh so many times you just want to change some little thing in an interior part of a larger control and the only way using the standard mechanism is to retemplate it.  Our problem is just such a case and it is a huge violation of [url:DRY|http://en.wikipedia.org/wiki/Don't_repeat_yourself].  First, developers don't even have the proper tools to retemplate anything and second, once you do, you have to manage hundreds of lines of XAML that is now theme specific and can go out of date.  For little things designers retemplate something on a whim; developers would rather eat sand.
+
+!!! The Code-Behind Method
+Not to worry, we're programmers and we can solve this problem with code-behind.  Just subscribe to the _Loaded_ event of the _ComboBox_, in that handler look up the template part of the "{"PART_EditableComboBox"}", subscribe to the _GotFocus_ event on that element, and when that event is raised call _SelectAll()_.  The problem with this is that, well, it uses code-behind.  We cannot put the functionality into a style nor can we reuse it for another _ComboBox_ in a different window.
+
+!!! The Interactivity Method
+We can solve this problem by using System.Windows.Interactivity, but because it is limited to doing what it is already capable of or canned actions you tell it to do, you'll have to write a very specialized _SelectOnFocusComboBoxBehavior_, put it in a library, remember that it's there, remember how to use, etc.  Every ten minutes we'll need to add something new to the library.  It addresses the code-behind problem but more broadly it is impossible to write a general purpose library with System.Windows.Interactivity because the interface is so limited and our needs are so diverse. 
+
+!!! The Markup Programming Method
+The markup programming method is a synthesis of the two methods.  We use exactly the same programming steps that the code-behind programmer uses but we use the code-behind-less approach of the interactivity method.  As a result:
+* It doesn't use code-behind
+* It can be reused or applied with styles
+* It can put the code right where the programmer wants to read it, and
+* *It makes non-reusable code easy not to reuse*
+
+The important thing to observe from this sample is even though it is only a few lines of code *we need and are using the full power of a programming language* to do what we are doing.  Markup programming even creates a closure in one handler to bridge parameters over to the nested handler just like a lambda expression.
+
+{code:html}
+<UserControl
+    x:Class="Markup.Programming.Samples.SelectOnFocusComboBox"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:p="http://markupprogramming.codeplex.com/markup/programming"
+    Height="300" Width="300">
+    <Grid>
+        <StackPanel>
+            <TextBlock Margin="4" TextWrapping="Wrap" Background="AntiqueWhite">
+                This sample demonstrates the "fancy" stuff you can do with
+                markup programming: the stuff I couldn't do with the other
+                methods.  It is impossible to write a resuable component
+                to solve this simple problem without solving the whole markup
+                programming problem.
+            </TextBlock>
+            <TextBox Text="An ordinary TextBox"/>
+            <ComboBox Text="SelectOnFocus ComboBox" IsEditable="True">
+                <p:Attached.Operations>
+                    <p:EventHandler Path="Loaded">
+                        <p:CallHandler>
+                            <p:CallHandler.Path>
+                                GotFocus => @Sender.Template.FindName("PART_EditableTextBox", @Sender).SelectAll()
+                            </p:CallHandler.Path>
+                        </p:CallHandler>
+                    </p:EventHandler>
+                </p:Attached.Operations>
+            </ComboBox>
+            <TextBox Text="Another ordinary TextBox"/>
+        </StackPanel>
+    </Grid>
+</UserControl>
+{code:html}

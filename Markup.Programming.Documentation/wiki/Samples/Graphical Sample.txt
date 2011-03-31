@@ -1,0 +1,104 @@
+!!! Graphical Sample
+
+MVVM is only good for business applications, right?  Right, because everybody's programming style goes straight out the window when they try to write graphical applications with mouse moves and shapes instead of boring forms with buttons and list boxes!  But seriously, here' is a tiny MVVM poly-line editor.  There is a line on the screen with control points that you can drag around.  This is just a small sample to demonstrate how easy it is to construct the pure-data view-model and manipulate it an all-XAML view, complete with mouse capture and not a single line of code-behind or even a class in sight.
+
+The reason this all works is:
+
+* XAML's data binding subsystem is already completely dynamic, it doesn't mind that we're dynamic
+* Markup programming's dynamic objects automatically implement INotifyPropertyChanged and INotifyCollectionChanged, no work
+* wtih XAML powerful templating, all that's left is it tiny bit of wiring up: the three mouse events with about one line of code each
+
+What this really shows is not that you should write the next killer app CAD program in markup prorgramming, but that there is this middle ground in the app space where MVVM programmers need to do more than "Click" and it's really messy with the current tools.
+
+{code:html}
+<UserControl
+    x:Class="Markup.Programming.Samples.GraphicalSample"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:p="http://markupprogramming.codeplex.com/markup/programming"
+    Height="300" Width="300" Background="AliceBlue">
+    <Grid Name="LayoutRoot">
+        <Grid.Resources>
+            <p:ResourceObject x:Key="ViewModel">
+                <p:Property PropertyName="ControlPoints">
+                    <p:Collection>
+                        <p:Path>[] { X = 50., Y = 50. }</p:Path>
+                        <p:Path>[] { X = 100., Y = 100. }</p:Path>
+                        <p:Path>[] { X = 50., Y = 150. }</p:Path>
+                    </p:Collection>
+                </p:Property>
+                <p:Property PropertyName="Segments">
+                    <p:Collection>
+                        <p:Path>[] { Start = @this.ControlPoints[0], End = @this.ControlPoints[1] }</p:Path>
+                        <p:Path>[] { Start = @this.ControlPoints[1], End = @this.ControlPoints[2] }</p:Path>
+                    </p:Collection>
+                </p:Property>
+            </p:ResourceObject>
+        </Grid.Resources>
+        <Grid.DataContext>
+            <Binding Path="Value" Source="{StaticResource ViewModel}"/>
+        </Grid.DataContext>
+        <Grid.Background>
+            <DrawingBrush x:Name="GridBrush" Viewport="0,0,10,10" ViewportUnits="Absolute" TileMode="Tile">
+                <DrawingBrush.Drawing>
+                    <DrawingGroup>
+                        <GeometryDrawing Brush="#CCCCFF">
+                            <GeometryDrawing.Geometry>
+                                <RectangleGeometry Rect="0,0 10,1"/>
+                            </GeometryDrawing.Geometry>
+                        </GeometryDrawing>
+                        <GeometryDrawing Brush="#CCCCFF">
+                            <GeometryDrawing.Geometry>
+                                <RectangleGeometry Rect="0,0 1,10"/>
+                            </GeometryDrawing.Geometry>
+                        </GeometryDrawing>
+                    </DrawingGroup>
+                </DrawingBrush.Drawing>
+            </DrawingBrush>
+        </Grid.Background>
+        <ItemsControl ItemsSource="{Binding Segments}">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <Canvas/>
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <Line X1="{Binding Start.X}" Y1="{Binding Start.Y}"
+                          X2="{Binding End.X}" Y2="{Binding End.Y}"
+                          Stroke="Black" StrokeThickness="2"/>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+        <ItemsControl ItemsSource="{Binding ControlPoints}">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <Canvas/>
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemContainerStyle>
+                <Style TargetType="ContentPresenter">
+                    <Setter Property="Canvas.Left" Value="{Binding X}"/>
+                    <Setter Property="Canvas.Top" Value="{Binding Y}"/>
+                </Style>
+            </ItemsControl.ItemContainerStyle>
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <Ellipse Margin="-10,-10,0,0" Width="20" Height="20"
+                             Stroke="DarkBlue" Fill="Transparent">
+                        <p:Attached.Operations>
+                            <p:CallHandler Path="MouseLeftButtonDown => @AssociatedObject.CaptureMouse()"/>
+                            <p:CallHandler Path="MouseLeftButtonUp => @AssociatedObject.ReleaseMouseCapture()"/>
+                            <p:ScriptHandler Path="MouseMove">
+                                if (@EventArgs.LeftButton != [MouseButtonState].Pressed) return;
+                                var $mouse = @EventArgs.GetPosition(@FindElement("LayoutRoot"));
+                                X = $mouse.X; Y = $mouse.Y;
+                            </p:ScriptHandler>
+                        </p:Attached.Operations>
+                    </Ellipse>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+    </Grid>
+</UserControl>
+{code:html}

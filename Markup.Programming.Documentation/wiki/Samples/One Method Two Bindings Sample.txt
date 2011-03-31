@@ -1,0 +1,80 @@
+﻿!! One Method - Two Bindings Sample
+
+In the real world many people write large MVVM applications in C# and XAML.  The view-model contains data and operations and is view-neutral.  The view contains UI objects and consumes the view-model.  In many MVVM patterns the view-model operations are commands.  In fact we should say "ICommands" which are a very limited form of one way function call with exactly one parameter but are powerful enough to "get the job done".  Or are they?
+
+The reason for this limited interface is simply because supporting a more complex interface is not realistic.  Each element that implements ICommand (such as Button) would need new properties like CommandParameter1, CommandParameter2, CommandParameter3,  etc.  No, ICommand is intentionally simple.  But now there is an alternative.
+
+In this sample we have stripped a real-world MVVM app down to its bare essentials so we can see the problem.  Let's say we are producing a play and we need to pick the male and female lead and they need to be compatible.  Here is our C# view-model.  We have two collection properties, Boys and Girls, which we initialize to some sample data.  We have one very "command-like" looking method.  The difference is that it takes two arguments and it isn't buried inside another class (i.e. it isn't "relayed").  But it is a very normal view-model, and in fact a little cleaner than usual without the relaying and soft-typing of ICommand.
+
+{code:c#}
+using System.Windows;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+
+namespace Markup.Programmability.Samples.OneMethodTwoBindings
+{
+    public class ViewModel
+    {
+        public ViewModel()
+        {
+            Boys = new ObservableCollection<string> { "Bill", "Mike", "Fred" };
+            Girls = new ObservableCollection<string> { "Jill", "Ann", "Jane" };
+        }
+
+        public IEnumerable<string> Boys { get; set; }
+        public IEnumerable<string> Girls { get; set; }
+
+        public void Match(string boy, string girl)
+        {
+            // TODO: Put the real matching code here instead of this line.
+            MessageBox.Show(string.Format("Match: {0} with {1}", boy, girl));
+        }
+    }
+}
+{code:c#}
+
+Now we need a view.  No fancy dependency injection, this just plain good old-fashioned MVVM: create the view-model, set the data context to the view-model and bind to paths in the data context.  Everything else is the view's problem, e.g. element bindings.  Here we use one list box for the boys and one for the girls and we have a match button.  Everything is straightforward except what to do with the button click.
+
+{code:html}
+<UserControl x:Class="Markup.Programming.Samples.OneMethodTwoBindings.View"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:p="http://markupprogramming.codeplex.com/markup/programming"
+    xmlns:local="clr-namespace:Markup.Programming.Samples.OneMethodTwoBindings"
+    Height="300" Width="300">
+    <UserControl.Resources>
+        <local:ViewModel x:Key="ViewModel"/>
+    </UserControl.Resources>
+    <UserControl.DataContext>
+        <Binding Source="{StaticResource ViewModel}"/>
+    </UserControl.DataContext>
+    <StackPanel>
+        <Button Content="Match Boy with Girl">
+            <p:Attached.Operations>
+                <p:CallHandler Path="Click => Match" SetHandled="True">
+                    <p:Get Source="{Binding SelectedValue, ElementName=Boys}"/>
+                    <p:Get Source="{Binding SelectedValue, ElementName=Girls}"/>
+                </p:CallHandler>
+            </p:Attached.Operations>
+        </Button>
+        <UniformGrid Columns="2">
+            <ListBox Name="Boys" ItemsSource="{Binding Boys}"/>
+            <ListBox Name="Girls" ItemsSource="{Binding Girls}"/>
+        </UniformGrid>
+    </StackPanel>
+</UserControl>
+{code:html}
+
+The only thing unusual here to any MVVM programmer is the four lines beginning with p:CallHandler, but even those you can practically read for yourself what it means even without knowing markup programming: when the "Click" event is raised call the method named "Match" on the view-model passing two arguments with the specified bindings.  To use the demonstration program just pick one boy and one girl and then click the match button.  Voila, the message box will show the formatted message.
+
+The only thing mysterious is how Call manages to call the ViewModel when it isn't specified.  The answer is that Call has a default Context that corresponds to the DataContext of its AssociatedObject, which is the Button, hence the ViewModel.
+
+!! Interpretation
+
+This is the kind of freedom that MVVM has never known because the language infrastructure wasn't expressive enough.  Now if the operation your view-model requires naturally requires two parameters, then so be it, use two parameters.  Use as many as you like!
+
+But you say: The problem you just described isn't in fact a problem because the current architecture already has MultiBinding, right?  Sort of, but that only helps in the small set of circumstances where ICommand is supported, basically for buttons and couple of other places.  The approach used above is fully general and works for *any element* and *any event* with no code-behind.
+
+The System.Window and System.Windows.Data support for data is strong and that's makes MVVM even possible.  But the support for operations is weak: just commands and only here and there.  The current architecture wasn't designed for separation of concerns with respect to complex operations like it is for data because it is based on the code-behind model.  Command not good enough?  Write an event handler.  If data-binding is what MVVM possible then the lack of operation-binding is what makes it hard.  Now you can have both.
+
+Look, I'm not knocking the system here: it has proved to be revolutionary and brilliant in its design and architecture for data.  But if we take an honest look at some of the gyrations that we MVVM programmers have to undertake to make a simple function call, a monosyllabic utterance at that, then you have to admit that something important is missing.  Let's take the next step and bind to operations in the view model as easily as we now bind to data.

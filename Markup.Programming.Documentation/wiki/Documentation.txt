@@ -1,0 +1,18 @@
+﻿!! Documentation
+If you want to:
+* Read the manual, go to [Reference Manual]
+* Find out what markup programming is, go to [What is Markup Programming]
+* Follow a brief step-by-step walk through, go to [Getting Started]
+* Understand how event handlers work, see [Anatomy of an Event Handler]
+
+!!! Samples
+If you want to:
+* See and use a complete markup-only program, go to [Tower of Hanoi Sample]
+* See a programing using scripting syntax, go to [Calculator Sample]
+* See a real world MVVM problem, go to [One Method Two Bindings Sample]
+* See loose XAML in action, go to [Logo Sample]
+* See an application with mouse and shapes, got to [Graphical Sample] 
+* See a seemingly simple problem solved, go to [Sounds Easy Sample]
+* See a changed handler in action, go to [Password Sample]
+* See how to bind operations using styles, go to [Style Sample]
+* See a sample data / designability problem go to [Table of Squares Sample]

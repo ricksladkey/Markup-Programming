@@ -1,0 +1,17 @@
+﻿!!! Two Syntaxes - One Language
+Markup programming is one programming language but it comes in two syntax flavors: element syntax and script syntax.  The reason for this is because both syntaxes serve different purposes and different people have different preferences.
+
+Element syntax:
+
+* is like traditional XAML
+* is supported by XAML IntelliSense
+* has native support for traditional databinding and resources
+* is very verbose for complex expressions and statements
+
+Script syntax:
+
+* is similar to Powershell or C#
+* is compiled into a pseudo-code machine
+* is as concise and cryptic as you want it to be
+
+Nevertheless, except for noted differences and the occasional difference due to their inherent differences, both syntaxes access and implement the same language.  The difference is often a matter of style.  For example, you might just like the look of more XAML in your XAML.  Or you may like the sheer readability of short scripts.  Which one you use is up to you.
