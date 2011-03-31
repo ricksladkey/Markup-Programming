@@ -20,6 +20,16 @@ namespace WikiWriter
         {
         }
 
+        private Task StartNewTask(Action action)
+        {
+            return Task.Factory.StartNew(action, CancellationToken.None, TaskCreationOptions.None, TaskScheduler.Default);
+        }
+
+        private Task<TResult> StartNewTask<TResult>(Func<TResult> func)
+        {
+            return Task.Factory.StartNew<TResult>(func, CancellationToken.None, TaskCreationOptions.None, TaskScheduler.Default);
+        }
+
         public static string RegistryKey = @"Software\WikiWriter";
 
         public IDictionary<string, object> Storage { get; set; }
@@ -90,7 +100,7 @@ namespace WikiWriter
 
         public Task LoadArticlesAsync()
         {
-            return Task.Factory.StartNew(LoadArticles, CancellationToken.None, TaskCreationOptions.None, TaskScheduler.Default);
+            return StartNewTask(LoadArticles);
         }
 
         private bool IsUpToDate(Article article)
@@ -120,7 +130,7 @@ namespace WikiWriter
 
         public Task<bool> IsUpToDateAsync(Article article)
         {
-            return Task.Factory.StartNew<bool>(() => IsUpToDate(article), CancellationToken.None, TaskCreationOptions.None, TaskScheduler.Default);
+            return StartNewTask<bool>(() => IsUpToDate(article));
         }
 
         private void Process(Article article)
@@ -134,7 +144,7 @@ namespace WikiWriter
 
         public Task ProcessAsync(Article article)
         {
-            return Task.Factory.StartNew(() => Process(article), CancellationToken.None, TaskCreationOptions.None, TaskScheduler.Default);
+            return StartNewTask(() => Process(article));
         }
 
         private void Publish(Article article)
@@ -169,7 +179,7 @@ namespace WikiWriter
 
         public Task PublishAsync(Article article)
         {
-            return Task.Factory.StartNew(() => Publish(article), CancellationToken.None, TaskCreationOptions.None, TaskScheduler.Default);
+            return StartNewTask(() => Publish(article));
         }
 
         private bool Edit(Article article)
@@ -187,7 +197,7 @@ namespace WikiWriter
 
         public Task<bool> EditAsync(Article article)
         {
-            return Task.Factory.StartNew<bool>(() => Edit(article), CancellationToken.None, TaskCreationOptions.None, TaskScheduler.Default);
+            return StartNewTask<bool>(() => Edit(article));
         }
 
         public bool Save(Article article)

@@ -1,6 +1,6 @@
 !!! Call
 
-The Call element is most commonly used into call into the CLR, the user's application or support libraries.  Most calls can be made using the path syntax and Call can be used with the method call fully specified within the path supplied to call for clarity.  But Call also supports unusual situations, call particular method overloads, calling through particular interfaces, and providing the call arguments using element syntax.
+The Call element is most commonly used to call into the CLR, the user's application or support libraries.  Most calls can be made using the path syntax and Call can be used with the method call fully specified within the path supplied to call for clarity.  But Call also supports unusual situations, call particular method overloads, calling through particular interfaces, and providing the call arguments using element syntax.
 
 || Property ^^[legend|Property Legend]^^ || Type ^^[legend|Type Legend]^^ || Description ||
 | {{Context}} ^^dp^^ | {{object}} ^^expr*^^ | base context |

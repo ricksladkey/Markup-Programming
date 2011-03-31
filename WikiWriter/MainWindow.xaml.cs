@@ -11,21 +11,21 @@ namespace WikiWriter
         public MainWindow()
         {
             InitializeComponent();
-            View = new View { Status = Status };
+            View = new View
+            {
+                ArticleSelector = ArticleSelector,
+                Text = Text,
+                Browser = Browser,
+                Status = Status
+            };
             DataContext = View.ViewModel;
         }
 
         public View View { get; set; }
-        public ViewModel ViewModel { get { return View.ViewModel; } }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            var ui = TaskScheduler.FromCurrentSynchronizationContext();
-            ViewModel.LoadArticlesAsync().ContinueWith(task =>
-                {
-                    ArticleSelector.ItemsSource = ViewModel.Articles;
-                    ArticleSelector.SelectedItem = ViewModel.SelectedArticle;
-                }, ui);
+            View.LoadArticles();
         }
 
         private void Save_CanExecute(object sender, CanExecuteRoutedEventArgs e)
@@ -40,18 +40,12 @@ namespace WikiWriter
 
         private void ArticleSelector_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            ViewModel.SelectedArticle = ArticleSelector.SelectedItem as Article;
-            Text.Text = ViewModel.SelectedArticle.Text;
-            Preview(sender, e);
+            View.SelectArticle(ArticleSelector.SelectedItem as Article);
         }
 
         private void Preview(object sender, RoutedEventArgs e)
         {
-            var ui = TaskScheduler.FromCurrentSynchronizationContext();
-            ViewModel.ProcessAsync(ViewModel.SelectedArticle).ContinueWith(task =>
-                {
-                    Browser.NavigateToString(ViewModel.SelectedArticle.HtmlWithHash);
-                }, ui);
+            View.Preview();
         }
 
         private void Save(object sender, RoutedEventArgs e)
@@ -61,17 +55,12 @@ namespace WikiWriter
 
         private void Publish(object sender, RoutedEventArgs e)
         {
-            Save(sender, e);
-            View.SetPublishArticles(new List<Article> { ViewModel.SelectedArticle });
-            View.PublishOneArticle();
-            Browser.NavigateToString(ViewModel.SelectedArticle.HtmlWithHash);
+            View.Publish();
         }
 
         private void PublishAll(object sender, RoutedEventArgs e)
         {
-            View.PublishArticles = ViewModel.Articles;
-            View.CurrentPublishArticle = 0;
-            View.PublishOneArticle();
+            View.PublishAll();
         }
 
         private void Edit(object sender, RoutedEventArgs e)
@@ -81,16 +70,12 @@ namespace WikiWriter
 
         private void Check(object sender, RoutedEventArgs e)
         {
-            Save(sender, e);
-            View.SetPublishArticles(new List<Article> { ViewModel.SelectedArticle });
-            View.CheckOneArticle();
-            Browser.NavigateToString(ViewModel.SelectedArticle.HtmlWithHash);
+            View.Check();
         }
 
         private void CheckAll(object sender, RoutedEventArgs e)
         {
-            View.SetPublishArticles(ViewModel.Articles);
-            View.CheckOneArticle();
+            View.CheckAll();
         }
     }
 }

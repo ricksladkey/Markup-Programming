@@ -14,18 +14,75 @@ namespace WikiWriter
             SaveCommand = new RelayCommand(p => true, p => Save());
         }
 
+        public ComboBox ArticleSelector { get; set; }
+        public TextBox Text { get; set; }
+        public WebBrowser Browser { get; set; }
         public TextBlock Status { get; set; }
+
         public ICommand SaveCommand { get; set; }
 
         public ViewModel ViewModel { get; set; }
         public IList<Article> PublishArticles { get; set; }
         public int CurrentPublishArticle { get; set; }
+        public TaskScheduler Scheduler { get { return TaskScheduler.FromCurrentSynchronizationContext(); } }
+
+        public void LoadArticles()
+        {
+            ViewModel.LoadArticlesAsync().ContinueWith(task =>
+            {
+                ArticleSelector.ItemsSource = ViewModel.Articles;
+                ArticleSelector.SelectedItem = ViewModel.SelectedArticle;
+            }, Scheduler);
+        }
+
+        public void SelectArticle(Article article)
+        {
+            ViewModel.SelectedArticle = article;
+            Text.Text = ViewModel.SelectedArticle.Text;
+            Preview();
+        }
+
+        public void Preview()
+        {
+            ViewModel.ProcessAsync(ViewModel.SelectedArticle).ContinueWith(task =>
+            {
+                Browser.NavigateToString(ViewModel.SelectedArticle.HtmlWithHash);
+            }, Scheduler);
+        }
+
+        public void Publish()
+        {
+            Save();
+            SetPublishArticles(new List<Article> { ViewModel.SelectedArticle });
+            PublishOneArticle();
+            Browser.NavigateToString(ViewModel.SelectedArticle.HtmlWithHash);
+        }
+
+        public void PublishAll()
+        {
+            PublishArticles = ViewModel.Articles;
+            CurrentPublishArticle = 0;
+            PublishOneArticle();
+        }
+
+        public void Check()
+        {
+            Save();
+            SetPublishArticles(new List<Article> { ViewModel.SelectedArticle });
+            CheckOneArticle();
+            Browser.NavigateToString(ViewModel.SelectedArticle.HtmlWithHash);
+        }
+
+        public void CheckAll()
+        {
+            SetPublishArticles(ViewModel.Articles);
+            CheckOneArticle();
+        }
 
         public void Save()
         {
             if (!ViewModel.Save(ViewModel.SelectedArticle))
             {
-                var ui = TaskScheduler.FromCurrentSynchronizationContext();
                 ViewModel.EditAsync(ViewModel.SelectedArticle).ContinueWith(task =>
                 {
                     if (!task.Result) MessageBox.Show("Check out failed: " + ViewModel.SelectedArticle.Name);
@@ -36,18 +93,17 @@ namespace WikiWriter
                         else
                             Status.Text = "Checked out: " + ViewModel.SelectedArticle.Name;
                     }
-                }, ui);
+                }, Scheduler);
             }
         }
 
         public void Edit()
         {
-            var ui = TaskScheduler.FromCurrentSynchronizationContext();
             ViewModel.EditAsync(ViewModel.SelectedArticle).ContinueWith(task =>
             {
                 if (!task.Result) MessageBox.Show("Check out failed: " + ViewModel.SelectedArticle.Name);
                 else Status.Text = "Checked out " + ViewModel.SelectedArticle.Name;
-            }, ui);
+            }, Scheduler);
         }
 
         public void SetPublishArticles(IList<Article> articles)
@@ -58,7 +114,6 @@ namespace WikiWriter
 
         public void PublishOneArticle()
         {
-            var ui = TaskScheduler.FromCurrentSynchronizationContext();
             if (CurrentPublishArticle == PublishArticles.Count) return;
             var article = PublishArticles[CurrentPublishArticle];
             ViewModel.ProcessAsync(article)
@@ -78,9 +133,9 @@ namespace WikiWriter
                             Status.Text = "Article published: " + article.Name;
                             ++CurrentPublishArticle;
                             PublishOneArticle();
-                        }, ui);
+                        }, Scheduler);
                     }
-                }, ui);
+                }, Scheduler);
         }
 
         public void CheckOneArticle()
@@ -88,14 +143,13 @@ namespace WikiWriter
             if (CurrentPublishArticle == PublishArticles.Count) return;
             var article = PublishArticles[CurrentPublishArticle];
             var task1 = ViewModel.ProcessAsync(article);
-            var ui = TaskScheduler.FromCurrentSynchronizationContext();
             var task2 = task1.ContinueWith(t1 => ViewModel.IsUpToDateAsync(article));
             task2.Unwrap<bool>().ContinueWith(t2 =>
             {
                 Status.Text = string.Format("Article {0}: {1}", t2.Result ? "up-to-date" : "out-of-date", article.Name);
                 ++CurrentPublishArticle;
                 CheckOneArticle();
-            }, ui);
+            }, Scheduler);
         }
     }
 }
