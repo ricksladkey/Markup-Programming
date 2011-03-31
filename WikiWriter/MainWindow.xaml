@@ -2,11 +2,11 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:local="clr-namespace:WikiWriter"
-        Title="Wiki Writer" Loaded="Window_Loaded" Height="800" Width="800"
+        Name="Window" Title="Wiki Writer" Loaded="Window_Loaded" Height="800" Width="800"
         local:WindowSettings.Save="True">
-    <Window.InputBindings>
-        <KeyBinding Modifiers="Control" Key="S" Command="{Binding SaveCommand}"/>
-    </Window.InputBindings>
+    <Window.CommandBindings>
+        <CommandBinding Command="Save" CanExecute="Save_CanExecute" Executed="Save_Execute"/>
+    </Window.CommandBindings>
     <DockPanel>
         <ToolBarTray DockPanel.Dock="Top" Background="White">
             <ToolBar Band="1">
@@ -39,7 +39,8 @@
             </Grid.RowDefinitions>
             <ScrollViewer>
                 <TextBox Grid.Row="0" Name="Text" AcceptsReturn="True" TextWrapping="Wrap"
-                     FontFamily="Lucida Console" FontSize="14"/>
+                         FontFamily="Lucida Console" FontSize="14"
+                         Text="{Binding SelectedText, UpdateSourceTrigger=PropertyChanged}"/>
             </ScrollViewer>
             <GridSplitter Grid.Row="1" HorizontalAlignment="Stretch"/>
             <WebBrowser Grid.Row="2" Name="Browser"/>

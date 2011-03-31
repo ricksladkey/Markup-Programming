@@ -1,31 +1,29 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Windows;
-using System.IO;
-using CodePlexApi;
-using System.Windows.Input;
 using System.Diagnostics;
-using System.Threading.Tasks;
+using System.IO;
+using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Input;
+using CodePlexApi;
 
 namespace WikiWriter
 {
     public class ViewModel
     {
         private Article selectedArticle;
+        private string selectedText;
 
         public ViewModel()
         {
-            SaveCommand = new RelayCommand(p => true, p => Save(SelectedArticle));
         }
 
         public static string RegistryKey = @"Software\WikiWriter";
 
         public IDictionary<string, object> Storage { get; set; }
 
-        public ICommand SaveCommand { get; set; }
         public List<Article> Articles { get; set; }
         public List<Post> Posts { get; set; }
         public Article SelectedArticle
@@ -33,11 +31,25 @@ namespace WikiWriter
             get { return selectedArticle; }
             set { selectedArticle = value; OnSelectedArticleChanged(); }
         }
+        public string SelectedText
+        {
+            get { return selectedText; }
+            set { selectedText = value; OnSelectedTextChanged(); }
+        }
 
         private void OnSelectedArticleChanged()
         {
             Storage["SelectedArticle"] = SelectedArticle.Name;
             Utils.SetUserRegistry(RegistryKey, Storage);
+        }
+
+        private void OnSelectedTextChanged()
+        {
+            if (SelectedArticle.Text != SelectedText)
+            {
+                SelectedArticle.Text = SelectedText;
+                SelectedArticle.TextTime = DateTime.Now;
+            }
         }
 
         private void LoadArticles()
@@ -123,15 +135,6 @@ namespace WikiWriter
         public Task ProcessAsync(Article article)
         {
             return Task.Factory.StartNew(() => Process(article), CancellationToken.None, TaskCreationOptions.None, TaskScheduler.Default);
-        }
-
-        public void UpdateSelectedArticleText(string text)
-        {
-            if (SelectedArticle.Text != text)
-            {
-                SelectedArticle.Text = text;
-                SelectedArticle.TextTime = DateTime.Now;
-            }
         }
 
         private void Publish(Article article)
