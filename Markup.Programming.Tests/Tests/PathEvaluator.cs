@@ -27,14 +27,14 @@ namespace Markup.Programming.Tests.Tests
         }
         private object GetPath(IDictionary<string, object> variables, string path, Engine engine)
         {
-            CodeTreeHelper.Print(new CodeTree().Compile(engine, CodeType.GetExpression, path));
+            CodeTreeHelper.Print(new CodeTree().Compile(engine, CodeType.Get, path));
             var result = engine.GetPath(path, null);
             foreach (var name in variables.Keys) variables[name] = engine.GetVariable(name);
             return result;
         }
         private object SetPath(IDictionary<string, object> variables, string path, object value, Engine engine)
         {
-            CodeTreeHelper.Print(new CodeTree().Compile(engine, CodeType.SetExpression, path));
+            CodeTreeHelper.Print(new CodeTree().Compile(engine, CodeType.Set, path));
             var result = engine.SetPath(path, null, value);
             foreach (var name in variables.Keys) variables[name] = engine.GetVariable(name);
             return result;

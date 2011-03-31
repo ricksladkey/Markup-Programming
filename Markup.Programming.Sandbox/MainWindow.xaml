@@ -4,10 +4,26 @@
     xmlns:p="http://markupprogramming.codeplex.com/markup/programming"
     Height="300" Width="300">
     <Grid Background="White">
-        <Button Content="Click Me!">
-            <p:Attached.Operations>
-                <p:CallHandler Path="Click => [MessageBox].Show('Hello')"/>
-            </p:Attached.Operations>
-        </Button>
+        <!--<p:Attached.Operations>
+            <p:EventHandler Path="Loaded">
+                <p:Script>
+                    var $message = 'Clicked!';
+                </p:Script>
+                <p:ScriptHandler Path="@FindElement('Button').Click">
+                    [MessageBox].Show($message);
+                </p:ScriptHandler>
+            </p:EventHandler>
+        </p:Attached.Operations>-->
+        <p:Attached.Operations>
+            <p:EventHandler Path="Loaded">
+                <p:Script>
+                    var $message = 'Clicked!';
+                </p:Script>
+                <p:ScriptHandler>
+                    @FindElement('Button').Click => [MessageBox].Show($message);
+                </p:ScriptHandler>
+            </p:EventHandler>
+        </p:Attached.Operations>
+        <Button Name="Button" Content="Click Me!"/>
     </Grid>
 </Window>

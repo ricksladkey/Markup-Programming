@@ -87,6 +87,8 @@ namespace Markup.Programming.Tests.Tests
             BasicGetTest(new ObservableCollection<int> { 1, 2, 3 }, "[] { 1, 2, 3 }");
             BasicGetTest(2, "$i = [] { Items = { 1, 2, 3 } }, $i.Items[1]");
             BasicGetTest("value2", "$i = [] { { 1, 'value1' }, { 2, 'value2' } }, $i[2]");
+            BasicGetTest(3.0, "$point = [System.Windows.Point] { X = 1, Y = 2 }, $point.X + $point.Y");
+            BasicGetTest(3.0, "$point = [System.Windows.Point] { X = 1, Y = 2, }, $point.X + $point.Y");
 
             BasicGetTest("Test1", "String1");
             BasicGetTest("Test2", "Object1.String1");
@@ -121,6 +123,7 @@ namespace Markup.Programming.Tests.Tests
             TestHelper.ScriptTest(null, "for (;;) break;");
             TestHelper.ScriptTest(3, "var $Add($a, $b) { return $a + $b; }; return $Add(1, 2);");
             TestHelper.ScriptTest(3, "var $point = [] { X = 1, Y = 2 }; return $point.X + $point.Y;");
+            TestHelper.ScriptTest(3.0, "var $point = [Point] { X = 1, Y = 2 }; return $point.X + $point.Y;");
         }
 
         [TestMethod]

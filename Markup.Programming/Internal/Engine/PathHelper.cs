@@ -54,7 +54,7 @@ namespace Markup.Programming.Core
 
         public static object GetStaticProperty(Engine engine, Type type, string propertyName)
         {
-            if (type == null) engine.Throw("type cannot be null");
+            if (type == null) engine.Throw("type cannot be null for property: " + propertyName);
             if (type.IsEnum) return GetEnumValue(engine, type, propertyName);
             var propInfo = type.GetProperty(propertyName, BindingFlags.Static | BindingFlags.Public | BindingFlags.FlattenHierarchy);
             var value = propInfo.GetValue(null, null);
@@ -63,7 +63,7 @@ namespace Markup.Programming.Core
 
         public static object GetEnumValue(Engine engine, Type type, string enumName)
         {
-            if (!type.IsEnum) engine.Throw("not an enum");
+            if (!type.IsEnum) engine.Throw("not an enum: " + type.FullName);
             try
             {
                 return Enum.Parse(type, enumName, false);
@@ -76,7 +76,7 @@ namespace Markup.Programming.Core
 
         public static Type GetPropertyType(Engine engine, object context, string propertyName)
         {
-            if (context == null) engine.Throw("context cannot be null");
+            if (context == null) engine.Throw("context cannot be null for property: " + propertyName);
             var propertyInfo = context.GetType().GetProperty(propertyName);
             if (propertyInfo != null) return propertyInfo.PropertyType;
 
@@ -106,7 +106,7 @@ namespace Markup.Programming.Core
 
         public static object GetProperty(Engine engine, object context, string propertyName)
         {
-            if (context == null) engine.Throw("context cannot be null");
+            if (context == null) engine.Throw("context cannot be null for property: " + propertyName);
             object value = null;
             var propertyInfo = context.GetType().GetProperty(propertyName);
             if (propertyInfo != null)
@@ -138,7 +138,7 @@ namespace Markup.Programming.Core
 
         public static object GetStaticField(Engine engine, Type type, string fieldName)
         {
-            engine.Throw("type cannot be null");
+            engine.Throw("type cannot be null for field: " + fieldName);
             var fieldInfo = type.GetField(fieldName, BindingFlags.Static | BindingFlags.Public | BindingFlags.FlattenHierarchy);
             if (fieldInfo != null) return fieldInfo.GetValue(null);
             return engine.Throw("no such field: " + fieldName);
@@ -146,7 +146,7 @@ namespace Markup.Programming.Core
 
         public static object GetField(Engine engine, object context, string fieldName)
         {
-            if (context == null) engine.Throw("context cannot be null");
+            if (context == null) engine.Throw("context cannot be null for field: " + fieldName);
             var fieldInfo = context.GetType().GetField(fieldName);
             if (fieldInfo != null) return fieldInfo.GetValue(context);
             return engine.Throw("no such field: " + fieldName);
@@ -163,7 +163,7 @@ namespace Markup.Programming.Core
 
         public static object SetProperty(Engine engine, object context, string propertyName, object value)
         {
-            if (context == null) engine.Throw("context cannot be null");
+            if (context == null) engine.Throw("context cannot be null for property: " + propertyName);
             var propertyInfo = context.GetType().GetProperty(propertyName);
             if (propertyInfo != null)
             {
@@ -211,7 +211,7 @@ namespace Markup.Programming.Core
 
         public static void SetStaticProperty(Engine engine, Type type, string propertyName, object value)
         {
-            if (type == null) engine.Throw("type cannot be null");
+            if (type == null) engine.Throw("type cannot be null for property: " + propertyName);
             var propertyInfo = type.GetProperty(propertyName, BindingFlags.Static | BindingFlags.Public | BindingFlags.FlattenHierarchy);
             if (propertyInfo != null)
             {
@@ -223,7 +223,7 @@ namespace Markup.Programming.Core
 
         public static void SetField(Engine engine, object context, string fieldName, object value)
         {
-            if (context == null) engine.Throw("context cannot be null");
+            if (context == null) engine.Throw("context cannot be null for field: " + fieldName);
             var fieldInfo = context.GetType().GetField(fieldName);
             if (fieldInfo != null)
             {
@@ -235,7 +235,7 @@ namespace Markup.Programming.Core
 
         public static void SetStaticField(Engine engine, Type type, string fieldName, object value)
         {
-            engine.Throw("type cannot be null");
+            engine.Throw("type cannot be null for field: " + fieldName);
             var fieldInfo = type.GetField(fieldName, BindingFlags.Static | BindingFlags.Public | BindingFlags.FlattenHierarchy);
             if (fieldInfo != null)
             {
@@ -278,7 +278,7 @@ namespace Markup.Programming.Core
 
         public static object CallAccessor(Engine engine, bool isSet, object context, params object[] rawArgs)
         {
-            if (context == null) engine.Throw("context cannot be null");
+            if (context == null) engine.Throw("context cannot be null for item accessor");
             var contextType = context.GetType();
             var propertyInfo = contextType.GetProperty("Item");
             if (propertyInfo == null && context is IList) propertyInfo = typeof(IList).GetProperty("Item");

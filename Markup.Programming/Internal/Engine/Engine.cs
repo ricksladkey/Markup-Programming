@@ -419,13 +419,13 @@ namespace Markup.Programming.Core
         public string GetEvent(string path, CodeTree codeTree)
         {
             if (codeTree == null) codeTree = new CodeTree();
-            return codeTree.Compile(this, CodeType.EventExpression, path).GetEvent(this);
+            return codeTree.Compile(this, CodeType.Event, path).GetEvent(this);
         }
 
         public object GetPath(string path, CodeTree codeTree)
         {
             if (codeTree == null) codeTree = new CodeTree();
-            return codeTree.Compile(this, CodeType.GetExpression, path).Get(this);
+            return codeTree.Compile(this, CodeType.Get, path).Get(this);
         }
 
         public void ExecuteScript(string path, CodeTree codeTree)
@@ -437,13 +437,13 @@ namespace Markup.Programming.Core
         public object SetPath(string path, CodeTree codeTree, object value)
         {
             if (codeTree == null) codeTree = new CodeTree();
-            return codeTree.Compile(this, CodeType.SetExpression, path).Set(this, value);
+            return codeTree.Compile(this, CodeType.Set, path).Set(this, value);
         }
 
         public object CallPath(string path, CodeTree codeTree, IEnumerable<object> args)
         {
             if (codeTree == null) codeTree = new CodeTree();
-            return codeTree.Compile(this, CodeType.CallExpression, path).Call(this, args);
+            return codeTree.Compile(this, CodeType.Call, path).Call(this, args);
         }
 
         public bool ShouldTrace(TraceFlags flags)

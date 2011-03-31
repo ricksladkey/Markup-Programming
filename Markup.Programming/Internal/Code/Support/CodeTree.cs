@@ -128,10 +128,11 @@ namespace Markup.Programming.Core
         public CodeType CodeType { get; private set; }
         public string Code { get; private set; }
 
+        public bool IsStatement { get { return (CodeType & CodeType.Statement) == CodeType.Statement; } }
         public bool IsVariable { get { return (CodeType & CodeType.Variable) == CodeType.Variable; } }
-        public bool IsEvent { get { return (CodeType & CodeType.EventExpression) == CodeType.EventExpression; } }
-        public bool IsSet { get { return (CodeType & CodeType.SetExpression) == CodeType.SetExpression; } }
-        public bool IsCall { get { return (CodeType & CodeType.CallExpression) == CodeType.CallExpression; } }
+        public bool IsEvent { get { return (CodeType & CodeType.Event) == CodeType.Event; } }
+        public bool IsSet { get { return (CodeType & CodeType.Set) == CodeType.Set; } }
+        public bool IsCall { get { return (CodeType & CodeType.Call) == CodeType.Call; } }
         public bool IsScript { get { return (CodeType & CodeType.Script) == CodeType.Script; } }
         public bool HasHandler { get { return Root is EventNode && (Root as EventNode).Handler != null; } }
         public bool IsSetOrIncrement { get { return Root is PathNode &&
@@ -146,6 +147,7 @@ namespace Markup.Programming.Core
             Tokenize();
             if (IsVariable) Root = ParseVariableExpression();
             else if (IsScript) Root = ParseStatements();
+            else if (IsEvent && IsStatement) Root = ParseEventStatement();
             else if (IsEvent) Root = ParseEventExpression();
             else Root = ParsePath();
             if (Tokens.Count > 0) engine.Throw("unexpected token: " + Tokens.Dequeue());
@@ -212,6 +214,13 @@ namespace Markup.Programming.Core
         {
             var eventNode = ParseExpression(0);
             if (!(eventNode is EventNode)) engine.Throw("not an event expression");
+            return eventNode as EventNode;
+        }
+
+        private EventNode ParseEventStatement()
+        {
+            var eventNode = ParseStatement();
+            if (!(eventNode is EventNode)) engine.Throw("not an event statement");
             return eventNode as EventNode;
         }
 
@@ -661,6 +670,11 @@ namespace Markup.Programming.Core
                 token = Tokens.Dequeue();
                 if (token == "}") break;
                 if (token != ",") engine.Throw("unexpected token: " + token);
+                if (PeekToken("}"))
+                {
+                    ParseToken("}");
+                    break;
+                }
             }
             return new ObjectNode { Type = typeNode, Properties = properties } as ExpressionNode;
         }

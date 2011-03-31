@@ -19,5 +19,6 @@ namespace Markup.Programming
         Op,
         FindElement,
         FindAncestor,
+        FindResource,
     }
 }

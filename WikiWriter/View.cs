@@ -10,7 +10,6 @@ namespace WikiWriter
     {
         public View()
         {
-            ViewModel = new ViewModel();
             SaveCommand = new RelayCommand(p => true, p => Save());
         }
 

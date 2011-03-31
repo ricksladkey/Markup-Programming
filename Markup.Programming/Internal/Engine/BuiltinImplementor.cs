@@ -114,5 +114,16 @@ namespace Markup.Programming.Core
             }
             return null;
         }
+
+        public object FindResource(object resourceKey)
+        {
+            return FindResource(resourceKey, null);
+        }
+
+        public object FindResource(object resourceKey, FrameworkElement context)
+        {
+            if (context == null) context = engine.CurrentFrame.Caller.AssociatedObject as FrameworkElement;
+            return context.TryFindResource(resourceKey);
+        }
     }
 }

@@ -83,7 +83,7 @@ namespace Markup.Programming
         {
             if (Path != null)
             {
-                CodeTree.Compile(engine, CodeType.EventExpression | CodeType.CallExpression, Path);
+                CodeTree.Compile(engine, CodeType.Event | CodeType.Call, Path);
                 RegisterHandler(engine, CodeTree.GetContext(engine), CodeTree.GetEvent(engine));
             }
             else

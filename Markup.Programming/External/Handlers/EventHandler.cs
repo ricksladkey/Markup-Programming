@@ -9,13 +9,14 @@ namespace Markup.Programming
         {
             if (Path != null)
             {
-                CodeTree.Compile(engine, CodeType.EventExpression, Path);
+                CodeTree.Compile(engine, CodeType.Event, Path);
                 var context = CodeTree.GetContext(engine);
-                if (context == null) engine.Throw("context cannot be null");
+                if (context == null) engine.Throw("context cannot be null for event: " + Path);
                 RegisterHandler(engine, context, CodeTree.GetEvent(engine));
             }
             else
                 RegisterHandler(engine, null, null);
+            if (State == null) State = engine.GetClosure();
         }
 
         protected override void OnEventHandler(Engine engine)

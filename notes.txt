@@ -1,3 +1,4 @@
+- consider how to extend script handler to support multipler handlers in the body
 - add constructors to script syntax
 - validate parameters, e.g. Set if Var, then Path must be unset
 - address Set Path/ValuePath problem: use SetPath and Path instead of Path and ValuePath
