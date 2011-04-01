@@ -8,17 +8,10 @@ namespace WikiWriter
 {
     public class View
     {
-        public View()
-        {
-            SaveCommand = new RelayCommand(p => true, p => Save());
-        }
-
         public ComboBox ArticleSelector { get; set; }
         public TextBox Text { get; set; }
         public WebBrowser Browser { get; set; }
         public TextBlock Status { get; set; }
-
-        public ICommand SaveCommand { get; set; }
 
         public ViewModel ViewModel { get; set; }
         public IList<Article> PublishArticles { get; set; }

@@ -7,13 +7,18 @@ using System.Windows;
 
 namespace Markup.Programming.Core
 {
-    [ContentProperty("Functions")]
-    public abstract class InterfaceComponent: ResourceComponent, IInteropHost
+    [ContentProperty("Script")]
+    public abstract class InterfaceComponent : ResourceComponent, IInteropHost
     {
         public InterfaceComponent()
         {
             Functions = new FunctionCollection();
         }
+
+        public string Script { get; set; }
+
+        private CodeTree codeTree = new CodeTree();
+        protected CodeTree CodeTree { get { return codeTree; } }
 
         public FunctionCollection Functions
         {
@@ -38,6 +43,7 @@ namespace Markup.Programming.Core
         private object CallFunction(object child, string function, object[] args, Engine engine)
         {
             engine.SetContext(null);
+            if (Script != null) engine.ExecuteScript(Script, CodeTree);
             Functions.Execute(engine);
             return engine.CallFunction(function, args);
         }

@@ -8,6 +8,7 @@ namespace Markup.Programming.Core
     [Flags]
     public enum CodeType
     {
+        Expression = 0x00,
         Statement = 0x01,
         Variable = 0x02,
         Event = 0x04,

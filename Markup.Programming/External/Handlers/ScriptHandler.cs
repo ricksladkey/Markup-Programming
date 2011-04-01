@@ -27,29 +27,15 @@ namespace Markup.Programming
 
         protected override void OnActiveExecute(Engine engine)
         {
-            if (Path != null && Script != null)
+            if (Path != null)
             {
-                combinationType = CombinationType.PathAndScript;
-                CodeTree.Compile(engine, CodeType.Event, Path);
-                var context = CodeTree.GetContext(engine);
-                if (context == null) engine.Throw("context cannot be null for event: " + Path);
-                RegisterHandler(engine, context, CodeTree.GetEvent(engine));
-            }
-            else if (Path != null)
-            {
-                combinationType = CombinationType.PathOnly;
-                CodeTree.Compile(engine, CodeType.Event, Path);
-                var context = CodeTree.GetContext(engine);
-                if (context == null) engine.Throw("context cannot be null for event: " + Path);
-                RegisterHandler(engine, context, CodeTree.GetEvent(engine));
+                combinationType = Script != null ? CombinationType.PathAndScript : CombinationType.PathOnly;
+                RegisterEvent(engine, Path, CodeTree, CodeType.Expression);
             }
             else if (Script != null)
             {
                 combinationType = CombinationType.ScriptOnly;
-                ScriptCodeTree.Compile(engine, CodeType.Event | CodeType.Statement, Script);
-                var context = ScriptCodeTree.GetContext(engine);
-                if (context == null) engine.Throw("context cannot be null for event: " + Script);
-                RegisterHandler(engine, context, ScriptCodeTree.GetEvent(engine));
+                RegisterEvent(engine, Script, ScriptCodeTree, CodeType.Statement);
             }
             else
             {
@@ -57,6 +43,14 @@ namespace Markup.Programming
                 RegisterHandler(engine, null, null);
             }
             if (State == null) State = engine.GetClosure();
+        }
+
+        private void RegisterEvent(Engine engine, string path, CodeTree codeTree, CodeType codeType)
+        {
+            codeTree.Compile(engine, CodeType.Event | codeType, path);
+            var context = codeTree.GetContext(engine);
+            if (context == null) engine.Throw("context cannot be null for event: " + path);
+            RegisterHandler(engine, context, codeTree.GetEvent(engine));
         }
 
         protected override void OnEventHandler(Engine engine)

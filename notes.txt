@@ -1,3 +1,6 @@
+- change Command so that CanExecute defaults to true if missing
+- interop should only look at functions defined locally
+- functions need the be scoped like variables
 - consider how to extend script handler to support multipler handlers in the body
 - add constructors to script syntax
 - validate parameters, e.g. Set if Var, then Path must be unset
