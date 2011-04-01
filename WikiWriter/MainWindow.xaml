@@ -9,8 +9,8 @@
         <local:ViewModel x:Key="ViewModel"/>
         <local:View x:Key="View"/>
         <p:ResourceCommand x:Key="SaveCommand">
-            var CanExecute() { return true; }
-            var Execute($parameter) { @FindResource('View').Save(); }
+            var CanExecute() return true;
+            var Execute($parameter) @FindResource('View').Save();
         </p:ResourceCommand>
     </Window.Resources>
     <Window.DataContext>
