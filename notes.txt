@@ -1,3 +1,4 @@
+- figure out why draggable popup sample
 - change Command so that CanExecute defaults to true if missing
 - interop should only look at functions defined locally
 - functions need the be scoped like variables

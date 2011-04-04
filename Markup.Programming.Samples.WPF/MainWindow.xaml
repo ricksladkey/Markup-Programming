@@ -13,6 +13,7 @@
             <samples:SelectOnFocusComboBox/>
             <samples:StyleSample/>
             <samples:LogoSample/>
+            <samples:DraggablePopup/>
             <om2b:View/>
         </p:ResourceCollection>
         <p:ResourceObject x:Key="ViewModel">
