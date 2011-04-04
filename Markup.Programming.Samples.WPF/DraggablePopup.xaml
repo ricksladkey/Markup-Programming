@@ -6,9 +6,9 @@
     Height="300" Width="300" Background="AliceBlue">
     <Grid>
         <StackPanel>
-            <TextBox x:Name="textBox1" Width="200" Height="20"/>
+            <TextBox Name="textBox1" Width="200" Height="20"/>
         </StackPanel>
-        <Popup Name="popup" PlacementTarget="{Binding ElementName=textBox1}"
+        <Popup PlacementTarget="{Binding ElementName=textBox1}"
                IsOpen="{Binding IsKeyboardFocused, ElementName=textBox1, Mode=OneWay}">
             <StackPanel Orientation="Horizontal">
                 <TextBlock Background="White" Text="Sample Popup content."/>
