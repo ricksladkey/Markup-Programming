@@ -123,7 +123,8 @@ namespace Markup.Programming.Core
         public object FindResource(object resourceKey, FrameworkElement context)
         {
             if (context == null) context = engine.CurrentFrame.Caller.AssociatedObject as FrameworkElement;
-            return context.TryFindResource(resourceKey);
+            if (context.Resources.Contains(resourceKey)) return context.Resources[resourceKey];
+            return null;
         }
     }
 }
