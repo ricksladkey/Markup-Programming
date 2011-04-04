@@ -11,24 +11,19 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Markup.Programming.Document
 EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 3
+		SccNumberOfProjects = 4
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = https://tfs.codeplex.com/tfs/tfs21
 		SccProjectUniqueName0 = Markup.Programming\\Markup.Programming.csproj
 		SccProjectName0 = Markup.Programming
-		SccAuxPath0 = https://tfs.codeplex.com/tfs/tfs21
 		SccLocalPath0 = Markup.Programming
-		SccProvider0 = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccProjectUniqueName1 = Markup.Programming.Documentation\\Markup.Programming.Documentation.csproj
 		SccProjectName1 = Markup.Programming.Documentation
-		SccAuxPath1 = https://tfs.codeplex.com/tfs/tfs21
 		SccLocalPath1 = Markup.Programming.Documentation
-		SccProvider1 = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccProjectUniqueName2 = WikiWriter\\WikiWriter.csproj
 		SccProjectName2 = WikiWriter
-		SccAuxPath2 = https://tfs.codeplex.com/tfs/tfs21
 		SccLocalPath2 = WikiWriter
-		SccProvider2 = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccLocalPath3 = .
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
