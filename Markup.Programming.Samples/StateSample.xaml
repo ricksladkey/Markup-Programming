@@ -19,7 +19,7 @@
             <TextBlock FontSize="20" FontWeight="Bold" TextWrapping="Wrap" Foreground="Beige">
                 Left click a few times, then right click.
                 <p:Attached.Operations>
-                    <p:ScriptHandler>
+                    <p:ScriptHandler Path="@Attached">
                         var $clicks = 0;
                     </p:ScriptHandler>
                     <p:ScriptHandler Path="MouseLeftButtonDown" SetHandled="True">
