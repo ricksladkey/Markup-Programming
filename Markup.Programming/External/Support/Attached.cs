@@ -27,6 +27,7 @@ namespace Markup.Programming
 
         private static void OnPropertyOperationsChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
+            if (e.NewValue == e.OldValue) return;
             (e.NewValue as HandlerCollection).AttachOperations(d);
         }
     }
