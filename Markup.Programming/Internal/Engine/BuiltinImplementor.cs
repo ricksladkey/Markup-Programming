@@ -122,8 +122,16 @@ namespace Markup.Programming.Core
 
         public object FindResource(object resourceKey, FrameworkElement context)
         {
-            if (context == null) context = engine.CurrentFrame.Caller.AssociatedObject as FrameworkElement;
-            if (context.Resources.Contains(resourceKey)) return context.Resources[resourceKey];
+            if (context == null)
+                context = engine.CurrentFrame.Caller.AssociatedObject as FrameworkElement;
+            while (context != null)
+            {
+                if (context.Resources.Contains(resourceKey))
+                    return context.Resources[resourceKey];
+                context = VisualTreeHelper.GetParent(context) as FrameworkElement;
+            }
+            if (Application.Current.Resources.Contains(resourceKey))
+                return Application.Current.Resources[resourceKey];
             return null;
         }
     }

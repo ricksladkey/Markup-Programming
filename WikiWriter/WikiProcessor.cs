@@ -183,6 +183,58 @@ namespace WikiWriter
             int i = 0;
             while (i < input.Length)
             {
+                if (i < input.Length - 1)
+                {
+                    var c2 = input.Substring(i, 2);
+                    if (c2 == "{\"")
+                    {
+                        int start = i += 2;
+                        while (i < input.Length - 1 && input.Substring(i, 2) != "\"}") ++i;
+                        output += Quote(input.Substring(start, i - start));
+                        if (i < input.Length - 1) i += 2;
+                        continue;
+                    }
+                    if (c2 == "~~")
+                    {
+                        int start = i += 2;
+                        while (i < input.Length - 1 && input.Substring(i, 2) != "~~") ++i;
+                        output += "<del>" + Subst(input.Substring(start, i - start)) + "</del>";
+                        if (i < input.Length - 1) i += 2;
+                        continue;
+                    }
+                    if (c2 == "^^")
+                    {
+                        int start = i += 2;
+                        while (i < input.Length - 1 && input.Substring(i, 2) != "^^") ++i;
+                        output += "<sup>" + Subst(input.Substring(start, i - start)) + "</sup>";
+                        if (i < input.Length - 1) i += 2;
+                        continue;
+                    }
+                    if (c2 == ",,")
+                    {
+                        int start = i += 2;
+                        while (i < input.Length - 1 && input.Substring(i, 2) != ",,") ++i;
+                        output += "<sub>" + Subst(input.Substring(start, i - start)) + "</sub>";
+                        if (i < input.Length - 1) i += 2;
+                        continue;
+                    }
+                    if (c2 == "{{")
+                    {
+                        int start = i += 2;
+                        while (i < input.Length - 1 && input.Substring(i, 2) != "}}") ++i;
+                        output += "<span class=\"codeInline\">" + input.Substring(start, i - start) + "</span>";
+                        if (i < input.Length - 1) i += 2;
+                        continue;
+                    }
+                    if (c2 == "{*")
+                    {
+                        int start = i += 2;
+                        while (i < input.Length - 1 && input.Substring(i, 2) != "*}") ++i;
+                        output += input.Substring(start, i - start);
+                        if (i < input.Length - 1) i += 2;
+                        continue;
+                    }
+                }
                 char c = input[i];
                 if (c == '*')
                 {
@@ -231,50 +283,6 @@ namespace WikiWriter
                     output += "<a href=\"" + href + "\">" + Subst(link) + "</a>";
                     if (i < input.Length) ++i;
                     continue;
-                }
-                if (i < input.Length - 1)
-                {
-                    var c2 = input.Substring(i, 2);
-                    if (c2 == "~~")
-                    {
-                        int start = i += 2;
-                        while (i < input.Length - 1 && input.Substring(i, 2) != "~~") ++i;
-                        output += "<del>" + Subst(input.Substring(start, i - start)) + "</del>";
-                        if (i < input.Length - 1) i += 2;
-                        continue;
-                    }
-                    if (c2 == "^^")
-                    {
-                        int start = i += 2;
-                        while (i < input.Length - 1 && input.Substring(i, 2) != "^^") ++i;
-                        output += "<sup>" + Subst(input.Substring(start, i - start)) + "</sup>";
-                        if (i < input.Length - 1) i += 2;
-                        continue;
-                    }
-                    if (c2 == ",,")
-                    {
-                        int start = i += 2;
-                        while (i < input.Length - 1 && input.Substring(i, 2) != ",,") ++i;
-                        output += "<sub>" + Subst(input.Substring(start, i - start)) + "</sub>";
-                        if (i < input.Length - 1) i += 2;
-                        continue;
-                    }
-                    if (c2 == "{{")
-                    {
-                        int start = i += 2;
-                        while (i < input.Length - 1 && input.Substring(i, 2) != "}}") ++i;
-                        output += "<span class=\"codeInline\">" + input.Substring(start, i - start) + "</span>";
-                        if (i < input.Length - 1) i += 2;
-                        continue;
-                    }
-                    if (c2 == "{*")
-                    {
-                        int start = i += 2;
-                        while (i < input.Length - 1 && input.Substring(i, 2) != "*}") ++i;
-                        output += input.Substring(start, i - start);
-                        if (i < input.Length - 1) i += 2;
-                        continue;
-                    }
                 }
                 output += c;
                 ++i;
