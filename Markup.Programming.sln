@@ -29,42 +29,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Markup.Programming.Documentation", "Markup.Programming.Documentation\Markup.Programming.Documentation.csproj", "{4FF9D950-A4CA-4A30-8F1A-82CB84CC92FA}"
 EndProject
 Global
-	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 11
-		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccTeamFoundationServer = https://tfs.codeplex.com/tfs/tfs21
-		SccLocalPath0 = .
-		SccProjectUniqueName1 = Markup.Programming\\Markup.Programming.csproj
-		SccProjectName1 = Markup.Programming
-		SccLocalPath1 = Markup.Programming
-		SccProjectUniqueName2 = Markup.Programming.Samples\\Markup.Programming.Samples.csproj
-		SccProjectName2 = Markup.Programming.Samples
-		SccLocalPath2 = Markup.Programming.Samples
-		SccProjectUniqueName3 = Markup.Programming.Samples.WPF\\Markup.Programming.Samples.WPF.csproj
-		SccProjectName3 = Markup.Programming.Samples.WPF
-		SccLocalPath3 = Markup.Programming.Samples.WPF
-		SccProjectUniqueName4 = Markup.Programming.Sandbox\\Markup.Programming.Sandbox.csproj
-		SccProjectName4 = Markup.Programming.Sandbox
-		SccLocalPath4 = Markup.Programming.Sandbox
-		SccProjectUniqueName5 = Markup.Programming.Silverlight\\Markup.Programming.Silverlight.csproj
-		SccProjectName5 = Markup.Programming.Silverlight
-		SccLocalPath5 = Markup.Programming.Silverlight
-		SccProjectUniqueName6 = Markup.Programming.Silverlight.Samples\\Markup.Programming.Silverlight.Samples.csproj
-		SccProjectName6 = Markup.Programming.Silverlight.Samples
-		SccLocalPath6 = Markup.Programming.Silverlight.Samples
-		SccProjectUniqueName7 = Markup.Programming.Silverlight.Sandbox\\Markup.Programming.Silverlight.Sandbox.csproj
-		SccProjectName7 = Markup.Programming.Silverlight.Sandbox
-		SccLocalPath7 = Markup.Programming.Silverlight.Sandbox
-		SccProjectUniqueName8 = Markup.Programming.Tests\\Markup.Programming.Tests.csproj
-		SccProjectName8 = Markup.Programming.Tests
-		SccLocalPath8 = Markup.Programming.Tests
-		SccProjectUniqueName9 = Markup.Programming.Interactivity\\Markup.Programming.Interactivity.csproj
-		SccProjectName9 = Markup.Programming.Interactivity
-		SccLocalPath9 = Markup.Programming.Interactivity
-		SccProjectUniqueName10 = Markup.Programming.Documentation\\Markup.Programming.Documentation.csproj
-		SccProjectName10 = Markup.Programming.Documentation
-		SccLocalPath10 = Markup.Programming.Documentation
-	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug - Emulate Silverlight|Any CPU = Debug - Emulate Silverlight|Any CPU
 		Debug - Full Tracing|Any CPU = Debug - Full Tracing|Any CPU

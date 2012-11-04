@@ -16,10 +16,14 @@
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <WarningLevel>4</WarningLevel>
-    <SccProjectName>SAK</SccProjectName>
-    <SccLocalPath>SAK</SccLocalPath>
-    <SccAuxPath>SAK</SccAuxPath>
-    <SccProvider>SAK</SccProvider>
+    <SccProjectName>
+    </SccProjectName>
+    <SccLocalPath>
+    </SccLocalPath>
+    <SccAuxPath>
+    </SccAuxPath>
+    <SccProvider>
+    </SccProvider>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
     <DebugSymbols>true</DebugSymbols>
@@ -89,9 +93,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="CodePlexApi.cs">
-      <SubType>Component</SubType>
-    </Compile>
+    <Compile Include="CodePlexApi.cs" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">
@@ -119,13 +121,13 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\xml-rpc.net\src\xmlrpc.csproj">
+      <Project>{1B4B0A58-0AFB-4090-91DD-18912CC7DE65}</Project>
+      <Name>xmlrpc</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Markup.Programming\Markup.Programming.csproj">
       <Project>{9F21204C-4A09-4D4A-9008-6678C55F8530}</Project>
       <Name>Markup.Programming</Name>
-    </ProjectReference>
-    <ProjectReference Include="xml-rpc.net\src\xmlrpc.csproj">
-      <Project>{1B4B0A58-0AFB-4090-91DD-18912CC7DE65}</Project>
-      <Name>xmlrpc</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
