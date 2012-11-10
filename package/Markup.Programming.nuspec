@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>Markup.Programming</id>
+    <version>0.9.0</version>
+    <authors>Rick Sladkey</authors>
+    <owners>ricksladkey</owners>
+    <licenseUrl>http://markupprogramming.codeplex.com/license</licenseUrl>
+    <projectUrl>http://markupprogramming.codeplex.com</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>XAML Operations Binding Library</description>
+    <copyright>Copyright 2012</copyright>
+    <tags>XAML WPF</tags>
+  </metadata>
+</package>

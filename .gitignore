@@ -166,3 +166,5 @@ pip-log.txt
 packages/*
 !packages/repositories.config
 
+package/*
+!package/Markup.Programming.nuspec
