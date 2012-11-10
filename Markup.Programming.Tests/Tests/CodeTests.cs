@@ -5,11 +5,10 @@ using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Input;
 using Markup.Programming.Core;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 
 namespace Markup.Programming.Tests.Tests
 {
-    [TestClass]
     public class CodeTests
     {
         private void PathTest(object expectedValue, IDictionary<string, object> variables, string path)
@@ -44,7 +43,7 @@ namespace Markup.Programming.Tests.Tests
             return names;
         }
 
-        [TestMethod]
+        [Fact]
         public void BasicPathTests()
         {
             BasicGetTest("abc", "'abc'");
@@ -95,15 +94,15 @@ namespace Markup.Programming.Tests.Tests
             BasicGetTest(true, "@VariableIsDefined('$variable1')");
             BasicGetTest("Value1", "$variable1");
             BasicGetTest(256.0, "[System.Math].Pow(2, 8)");
-            BasicSetTest((vm, p) => Assert.AreEqual(p["$variable1"], 42), "$variable1", 42);
+            BasicSetTest((vm, p) => Assert.Equal(p["$variable1"], 42), "$variable1", 42);
         }
 
-        [TestMethod]
+        [Fact]
         public void PathTestSandbox()
         {
         }
 
-        [TestMethod]
+        [Fact]
         public void ScriptTests()
         {
             TestHelper.ScriptTest(21, "var $x = 1 + 2; return 42 / 2;");
@@ -126,7 +125,7 @@ namespace Markup.Programming.Tests.Tests
             TestHelper.ScriptTest(3.0, "var $point = [Point] { X = 1, Y = 2 }; return $point.X + $point.Y;");
         }
 
-        [TestMethod]
+        [Fact]
         public void ScriptTestSandbox()
         {
         }

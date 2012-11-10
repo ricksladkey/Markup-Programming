@@ -2,17 +2,16 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Windows.Data;
 using Markup.Programming.Core;
 using System.Collections.ObjectModel;
+using Xunit;
 
 namespace Markup.Programming.Tests
 {
-    [TestClass]
     public class EvaluationTests
     {
-        [TestMethod]
+        [Fact]
         public void NewGenericListTest()
         {
             TestHelper.ExpressionTest(new List<string>(),
@@ -23,7 +22,7 @@ namespace Markup.Programming.Tests
                 });
         }
 
-        [TestMethod]
+        [Fact]
         public void IsTest()
         {
             TestHelper.ExpressionTest(true, new Operator { Value1 = 1, Op = Op.Is, Value2 = typeof(int) });
@@ -32,14 +31,14 @@ namespace Markup.Programming.Tests
             TestHelper.ExpressionTest(false, new Operator { Value1 = new Animal(), Op = Op.Is, Value2 = typeof(Dog) });
         }
 
-        [TestMethod]
+        [Fact]
         public void ExpressionTests()
         {
             TestHelper.ExpressionTest(3, new Operator { Op = Op.Plus,
                 Arguments = { new Expr { Value = 1 }, new Expr { Value = 2 } } });
         }
 
-        [TestMethod]
+        [Fact]
         public void CallCosTest()
         {
             TestHelper.StatementTest(0.0, 1.0,
@@ -61,7 +60,7 @@ namespace Markup.Programming.Tests
                     TestHelper.TargetBinder));
         }
 
-        [TestMethod]
+        [Fact]
         public void FormatTest()
         {
             // Call the static String.Format method with explicit
@@ -85,7 +84,7 @@ namespace Markup.Programming.Tests
                 });
         }
 
-        [TestMethod]
+        [Fact]
         public void IteratorTest()
         {
             // Create an collection with an iterator and check that
@@ -104,32 +103,32 @@ namespace Markup.Programming.Tests
                 });
         }
 
-        [TestMethod]
+        [Fact]
         public void GetItemTest()
         {
             var array = new int[] { 1, 2, 3 };
             var value1 = new GetItem { Context = array, Index = 1 }.Get(new Engine());
-            Assert.AreEqual(2, value1);
+            Assert.Equal(2, value1);
             var list = new List<int> { 1, 2, 3 };
             var value2 = new GetItem { Context = list, Index = 1 }.Get(new Engine());
-            Assert.AreEqual(2, value2);
+            Assert.Equal(2, value2);
             var dictionary = new Dictionary<string, int> { { "a", 1 }, { "b", 2 } };
             var value3 = new GetItem { Context = dictionary, Index = "b" }.Get(new Engine());
-            Assert.AreEqual(2, value2);
+            Assert.Equal(2, value2);
         }
 
-        [TestMethod]
+        [Fact]
         public void SetItemTest()
         {
             var array = new List<int> { 1, 2, 3 };
             new SetItem { Context = array, Index = 1, Value = 42 }.Get(new Engine());
-            Assert.AreEqual(42, array[1]);
+            Assert.Equal(42, array[1]);
             var list = new List<int> { 1, 2, 3 };
             new SetItem { Context = list, Index = 1, Value = 42 }.Get(new Engine());
-            Assert.AreEqual(42, list[1]);
+            Assert.Equal(42, list[1]);
             var dictionary = new Dictionary<string, int> { { "a", 1 }, { "b", 2 } };
             new SetItem { Context = dictionary, Index = "b", Value = 42 }.Get(new Engine());
-            Assert.AreEqual(42, dictionary["b"]);
+            Assert.Equal(42, dictionary["b"]);
         }
     }
 }

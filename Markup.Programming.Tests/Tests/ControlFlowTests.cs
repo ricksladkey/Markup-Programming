@@ -1,19 +1,18 @@
 ﻿using System.Windows;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 
 namespace Markup.Programming.Tests
 {
-    [TestClass]
     public class ControlFlowTests
     {
-        [TestMethod]
+        [Fact]
         public void BreakTest()
         {
             // Create a infinite loop containing a break preceded by an statement and followed
             // an statement and check that only the former is executed.
             var viewModel = new BasicViewModel();
-            Assert.AreEqual(null, viewModel.String1);
-            Assert.AreEqual(null, viewModel.String2);
+            Assert.Equal(null, viewModel.String1);
+            Assert.Equal(null, viewModel.String2);
             TestHelper.AttachAndExecute(new Window { DataContext = viewModel },
                 new While
                 {
@@ -26,11 +25,11 @@ namespace Markup.Programming.Tests
                             TestHelper.TargetBinder),
                     }
                 });
-            Assert.AreEqual("Test1", viewModel.String1);
-            Assert.AreEqual(null, viewModel.String2);
+            Assert.Equal("Test1", viewModel.String1);
+            Assert.Equal(null, viewModel.String2);
         }
 
-        [TestMethod]
+        [Fact]
         public void BlockTest()
         {
             // Set X = 21 and then return X * 2 and check that the result is 42.
@@ -54,7 +53,7 @@ namespace Markup.Programming.Tests
                 });
         }
 
-        [TestMethod]
+        [Fact]
         public void SwitchTest()
         {
             TestHelper.ExpressionTest(42,

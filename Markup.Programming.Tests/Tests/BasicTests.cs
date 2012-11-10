@@ -1,14 +1,13 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Data;
 using Markup.Programming.Core;
+using Xunit;
 
 namespace Markup.Programming.Tests
 {
-    [TestClass]
     public class BasicTests
     {
-        [TestMethod]
+        [Fact]
         public void StandAloneTest()
         {
             // Use Set to copy String1 to String2 using the DataContext of a Window.
@@ -22,38 +21,38 @@ namespace Markup.Programming.Tests
                 }
             }.Value as IDynamicObject;
             var window = new Window { DataContext = viewModel };
-            Assert.AreEqual("Test", viewModel["String1"]);
-            Assert.AreEqual(null, viewModel["String2"]);
+            Assert.Equal("Test", viewModel["String1"]);
+            Assert.Equal(null, viewModel["String2"]);
             var statement = new Set { PropertyName = "String2" };
             BindingOperations.SetBinding(statement, Set.ContextProperty, new Binding());
             BindingOperations.SetBinding(statement, Set.ValueProperty, new Binding("String1"));
             Attached.GetOperations(window).Add(new AttachedHandler { Actions = { statement } });
-            Assert.AreEqual("Test", viewModel["String1"]);
-            Assert.AreEqual("Test", viewModel["String2"]);
+            Assert.Equal("Test", viewModel["String1"]);
+            Assert.Equal("Test", viewModel["String2"]);
         }
 
-        [TestMethod]
+        [Fact]
         public void BasicBindingTest()
         {
             // Use Set to copy String1 to String2 using the DataContext of a Window.
             var viewModel = new BasicViewModel { String1 = "Test" };
-            Assert.AreEqual("Test", viewModel.String1);
-            Assert.AreEqual(null, viewModel.String2);
+            Assert.Equal("Test", viewModel.String1);
+            Assert.Equal(null, viewModel.String2);
             TestHelper.AttachAndExecute(new Window { DataContext = viewModel },
                 TestHelper.Configure(new Set { PropertyName = "String2" },
                     TestHelper.TargetBinder,
                     value => BindingOperations.SetBinding(value, Set.ValueProperty, new Binding("String1"))));
-            Assert.AreEqual("Test", viewModel.String1);
-            Assert.AreEqual("Test", viewModel.String2);
+            Assert.Equal("Test", viewModel.String1);
+            Assert.Equal("Test", viewModel.String2);
         }
 
-        [TestMethod]
+        [Fact]
         public void IndirectBindingTest()
         {
             // Use Set to copy String1 to String2 using the DataContext of a Window.
             var viewModel = new BasicViewModel { String1 = "Test" };
-            Assert.AreEqual("Test", viewModel.String1);
-            Assert.AreEqual(null, viewModel.String2);
+            Assert.Equal("Test", viewModel.String1);
+            Assert.Equal(null, viewModel.String2);
             TestHelper.AttachAndExecute(new Window { DataContext = viewModel },
                 TestHelper.Configure(new Set
                 {
@@ -62,11 +61,11 @@ namespace Markup.Programming.Tests
                         value => BindingOperations.SetBinding(value, Expr.ValueProperty, new Binding("String1"))),
                 },
                 TestHelper.TargetBinder));
-            Assert.AreEqual("Test", viewModel.String1);
-            Assert.AreEqual("Test", viewModel.String2);
+            Assert.Equal("Test", viewModel.String1);
+            Assert.Equal("Test", viewModel.String2);
         }
 
-        [TestMethod]
+        [Fact]
         public void NotifyPropertyChangedTest()
         {
             // Copy String1 to String2 and then copy String2 to String3.  If property
@@ -81,9 +80,9 @@ namespace Markup.Programming.Tests
                         new Property { PropertyName = "String3", Value = null },
                     }
             }.Value as IDynamicObject;
-            Assert.AreEqual("Test", viewModel["String1"]);
-            Assert.AreEqual(null, viewModel["String2"]);
-            Assert.AreEqual(null, viewModel["String3"]);
+            Assert.Equal("Test", viewModel["String1"]);
+            Assert.Equal(null, viewModel["String2"]);
+            Assert.Equal(null, viewModel["String3"]);
             TestHelper.AttachAndExecute(new Window { DataContext = viewModel },
                 TestHelper.Configure(new Set { PropertyName = "String2" },
                     TestHelper.TargetBinder,
@@ -91,12 +90,12 @@ namespace Markup.Programming.Tests
                 TestHelper.Configure(new Set { PropertyName = "String3" },
                     TestHelper.TargetBinder,
                     value => BindingOperations.SetBinding(value, Set.ValueProperty, new Binding("String2"))));
-            Assert.AreEqual("Test", viewModel["String1"]);
-            Assert.AreEqual("Test", viewModel["String2"]);
-            Assert.AreEqual("Test", viewModel["String3"]);
+            Assert.Equal("Test", viewModel["String1"]);
+            Assert.Equal("Test", viewModel["String2"]);
+            Assert.Equal("Test", viewModel["String3"]);
         }
 
-        [TestMethod]
+        [Fact]
         public void InheritanceContextTest()
         {
             // When MarkupObjects try to find their inheritance context,
@@ -110,9 +109,9 @@ namespace Markup.Programming.Tests
                         new Property { PropertyName = "String3", Value = null },
                     }
             }.Value as IDynamicObject;
-            Assert.AreEqual("Test", viewModel["String1"]);
-            Assert.AreEqual(null, viewModel["String2"]);
-            Assert.AreEqual(null, viewModel["String3"]);
+            Assert.Equal("Test", viewModel["String1"]);
+            Assert.Equal(null, viewModel["String2"]);
+            Assert.Equal(null, viewModel["String3"]);
             var resource = new ResourceObject
             {
                 Properties =
@@ -130,9 +129,9 @@ namespace Markup.Programming.Tests
                 TestHelper.Configure(new Set { PropertyName = "String3" },
                     TestHelper.TargetBinder,
                     value => BindingOperations.SetBinding(value, Set.ValueProperty, new Binding("String2"))));
-            Assert.AreEqual("Test", viewModel["String1"]);
-            Assert.AreEqual("Test", viewModel["String2"]);
-            Assert.AreEqual("Test", viewModel["String3"]);
+            Assert.Equal("Test", viewModel["String1"]);
+            Assert.Equal("Test", viewModel["String2"]);
+            Assert.Equal("Test", viewModel["String3"]);
         }
     }
 }

@@ -1,13 +1,12 @@
 ﻿using System.Windows;
 using Markup.Programming.Core;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 
 namespace Markup.Programming.Tests
 {
-    [TestClass]
     public class BuiltinTests
     {
-        [TestMethod]
+        [Fact]
         public void IsDefinedTest()
         {
             TestHelper.ExpressionTest(true,
@@ -24,7 +23,7 @@ namespace Markup.Programming.Tests
                 });
         }
 
-        [TestMethod]
+        [Fact]
         public void GetResourceObjectTest()
         {
             var window = new Window
@@ -48,7 +47,7 @@ namespace Markup.Programming.Tests
                 }
             };
             var viewModel = window.FindResource("ViewModel") as IDynamicObject;
-            Assert.AreEqual(viewModel, viewModel["ResourceObject"]);
+            Assert.Equal(viewModel, viewModel["ResourceObject"]);
         }
     }
 }

@@ -3,8 +3,8 @@ using System.Collections;
 using System.Windows.Data;
 using System.Windows;
 using Markup.Programming.Core;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Collections.Generic;
+using Xunit;
 
 namespace Markup.Programming.Tests
 {
@@ -32,23 +32,23 @@ namespace Markup.Programming.Tests
         {
             if (expected is IList)
             {
-                Assert.AreEqual(expected.GetType(), actual.GetType());
+                Assert.Equal(expected.GetType(), actual.GetType());
                 var expectedList = expected as IList;
                 var actualList = actual as IList;
-                Assert.IsNotNull(actualList);
-                Assert.AreEqual(expectedList.Count, actualList.Count);
+                Assert.NotNull(actualList);
+                Assert.Equal(expectedList.Count, actualList.Count);
                 for (int i = 0; i < expectedList.Count; i++)
-                    Assert.AreEqual(expectedList[i], actualList[i]);
+                    Assert.Equal(expectedList[i], actualList[i]);
                 return;
             }
-            Assert.AreEqual(expected, actual);
+            Assert.Equal(expected, actual);
         }
 
         public static void StatementTest(object initialValue, object expectedValue, Statement statement)
         {
             var viewModel = new BasicViewModel { Object1 = initialValue };
             var window = new Window { DataContext = viewModel };
-            Assert.AreEqual(initialValue, viewModel.Object1);
+            Assert.Equal(initialValue, viewModel.Object1);
             AttachAndExecute(window, statement);
             TestHelper.AreStructurallyEqual(expectedValue, viewModel.Object1);
         }
