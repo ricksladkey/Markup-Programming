@@ -2,21 +2,26 @@
 
 To get started using Markup Programming, we are going to tackle the classic "Hello, world!" program.  This is easy to do but we're trying to demonstrate principles.  It's not hard but if you follow it step-by-step then less can go wrong.
 
-First things first.  You have two choices, use one of the releases or build it yourself.  If you just want to try it out fast then I recommend a release.
+* Create a brand new WPF4 project
+
+Now you have three choices, use NuGet to reference the package, use one of the releases or build it yourself.  If you just want to try it out fast then I recommend NuGet.
+
+To use the NuGet package:
+
+* In your WPF project use Tools -> Library Package Manager -> Manage NuGet Packages for Solution...
+* Search for Markup.Programming
+* Add it!
 
 To use the preview release:
 
 * Download [url:Markup Programming Preview Release|http://markupprogramming.codeplex.com/releases/view/62661] from the Downloads tab.
+* Add a reference to your WPF project by browsing to (where-you-downloaded-it)\Markup.Programming.DLL
 
 To build Markup.Programming.dll from source for yourself:
 
 * Download  [url:Markup Programming Source Code|http://markupprogramming.codeplex.com/SourceControl/list/changesets]
 * Open the solution, choose the "Debug - WPF" configuration and build it Ctrl-Shift-B
-
-Now onto your first Markup Programming program.
-
-* Create a brand new WPF4 project
-* Add a reference by browsing to (where-you-installed-the-source)\Markup.Programming\bin\WPF4\Markup.Programming.DLL
+* Add a reference to your WPF project by browsing to (where-you-installed-the-source)\Markup.Programming\bin\WPF4\Markup.Programming.DLL
 
 Now your project is all set you and you can start coding, oops, I mean writing markup.  OK, so we've got a main window with a little XAML already in it.  Let's throw in a rectangle and make it red.
 

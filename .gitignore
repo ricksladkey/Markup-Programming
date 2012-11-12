@@ -168,3 +168,6 @@ packages/*
 
 package/*
 !package/Markup.Programming.nuspec
+
+# Geshi
+WikiWriter/geshi
